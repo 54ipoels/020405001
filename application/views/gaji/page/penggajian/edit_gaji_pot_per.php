@@ -5,7 +5,7 @@
 			foreach($showdata as $sd){}
 			foreach($pot_perusahaan as $pr){}
 			$attributes = array('class'=>'form');
-			echo form_open('gaji/submit_edit_pot_per', $attributes);
+			echo form_open('gaji/submit_edit_pot_perusahaan/'.$pr['id_pot_gaji_perusahaan'], $attributes);
 			echo form_hidden('id_pgj', $sd['id_pgj']);
 			
 			?>
@@ -15,7 +15,7 @@
                         <div class="formRight">
 							<div id="tampil_data2">
                             <?php 
-								echo form_hidden('id_peg', $sd['pgj_id_peg']); 
+								echo form_hidden('id_peg', $this->uri->segment(6)); 
 								echo $sd['peg_nipp']; ?><br/>
                             </div>
                             </div>
@@ -25,6 +25,8 @@
                         <label>BULAN:<span class="req">*</span></label>
                         <div class="formRight">
 							<?php
+							echo form_hidden('month', $this->uri->segment(4));
+							echo form_hidden('year',$this->uri->segment(5));
 							echo $bulan.' '. $sd['pgj_tahun'];
 							?>
                         </div>

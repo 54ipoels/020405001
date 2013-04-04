@@ -3,9 +3,8 @@
             <div class="title"><img src="<?php echo base_url()?>images/icons/dark/pencil.png" alt="" class="titleIcon" /><h6>Edit Gaji Pegawai</h6></div>
 			<?php
 			foreach($showdata as $sd){}
-			$this->load->view('asset/v_asset');
 			$attributes = array('class'=>'form');
-			echo form_open('gaji/submit_penggajian', $attributes);
+			echo form_open('gaji/submit_edit_penggajian/'.$sd['id_pgj'], $attributes);
 			echo form_hidden('id_pgj', $sd['id_pgj']);
 			
 			?>
@@ -15,7 +14,7 @@
                         <div class="formRight">
 							<div id="tampil_data2">
                             <?php 
-								echo form_hidden('id_peg', $sd['pgj_id_peg']); 
+								echo form_hidden('id_peg', $sd['id_pgj']); 
 								echo $sd['peg_nipp']; ?><br/>
                             </div>
                             </div>
@@ -25,6 +24,8 @@
                         <label>BULAN:<span class="req">*</span></label>
                         <div class="formRight">
 							<?php
+							echo form_hidden('month',$sd['pgj_bulan']);
+							echo form_hidden('year',$sd['pgj_tahun']);
 							echo $bulan.' '. $sd['pgj_tahun'];
 							?>
                         </div>

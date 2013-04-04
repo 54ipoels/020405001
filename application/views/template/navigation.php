@@ -1,46 +1,54 @@
 <!-- Left navigation -->
     <ul id="menu" class="nav">
-        <li class="dash"><?php echo anchor('pekerja','<span>Kepegawaian</span>',array('class'=>'active'))?></li>
-        <li class="charts"><a href="charts.html" title=""><span>Statistics and charts</span></a></li>
-        <li class="forms"><a href="#" title="" class="exp"><span>Forms stuff</span><strong>4</strong></a>
+	<?php if (isset($page_karyawan)){$page_karyawan = 'current';} else {$page_karyawan = '';}?>
+        <li class="ui"><?php echo anchor('pekerja','<span>Kepegawaian</span>',array('class'=>'exp', 'title'=>'', 'id'=>$page_karyawan));?>
+		<ul class="sub">
+				 <li <?php if(isset($view_pekerja)){ echo $view_pekerja; } ?>><?php echo anchor('pekerja/', 'List Pegawai' ); ?></li>
+                <li <?php if(isset($view_add_pekerja)){ echo $view_add_pekerja; } ?>><?php echo anchor('pekerja/add_pegawai', 'Add Pegawai' ); ?></li>
+				<li <?php if(isset($view_pensiun)){ echo $view_pensiun; } ?>><?php echo anchor('pekerja/pegawai_pensiun', 'Pensiun' ); ?></li>
+				<li <?php if(isset($view_supervisor)){ echo $view_supervisor; } ?>><?php echo anchor('pekerja/get_supervisor', 'Supervisor' ); ?></li>
+            </ul>
+		</li>
+	<?php if (isset($page_diklat)){$page_diklat = 'current';} else {$page_diklat = '';}?>
+	<li class="charts"><?php echo anchor('diklat','<span>Diklat</span>', array('class'=>'exp', 'title'=>'', 'id'=>$page_diklat))?>
+		<ul class="sub">
+                <li <?php if(isset($view_stkp)){ echo $view_stkp; } ?>><?php echo anchor('diklat/get_stkp','Report STKP');?></li>
+				<li <?php if(isset($view_nstkp)){ echo $view_nstkp; } ?>><?php echo anchor('diklat/get_non_stkp', 'Report Non STKP' ); ?></li>
+				<li <?php if(isset($view_input_stkp)){ echo $view_input_stkp; } ?>><?php echo anchor('diklat/input_stkp_bulanan/part_one', 'Input Training Bulanan' ); ?></li>
+            </ul></li>
+		<!-- hari libur -->
+        <li class="dash"><a href="#" title="" class="exp" <?php if(isset($form_master)){ echo $form_master; } ?>>
+        <span>Master</span></a>
             <ul class="sub">
-                <li><a href="forms.html" title="">Form elements</a></li>
-                <li><a href="form_validation.html" title="">Validation</a></li>
-                <li><a href="form_editor.html" title="">WYSIWYG and file uploader</a></li>
-                <li class="last"><a href="form_wizards.html" title="">Wizards</a></li>
+                <li <?php if(isset($view_hari_libur)){ echo $view_hari_libur; } ?>><?php echo anchor('c_absensi/hari_libur', 'HARI LIBUR' ); ?></li>
+                <li <?php if(isset($view_format_schedule)){ echo $view_format_schedule; } ?>><?php echo anchor('c_absensi/format_schedule', 'FORMAT SCHEDULE' ); ?></li>
+                <li <?php if(isset($view_cuti_pegawai)){ echo $view_cuti_pegawai; } ?>><?php echo anchor('c_absensi/cuti_pegawai', 'CUTI PEGAWAI' ); ?></li>
+                <li <?php if(isset($view_master_gaji)){ echo $view_master_gaji; } ?>><?php echo anchor('c_absensi/master_gaji', 'MASTER GAJI' ); ?></li>
             </ul>
         </li>
-        <li class="ui"><a href="ui_elements.html" title=""><span>Interface elements</span></a></li>
-        <li class="tables"><a href="tables.html" title="" class="exp"><span>Tables</span><strong>3</strong></a>
+      <!-- absensi -->
+        <li class="files"><a href="#" title="" class="exp" <?php if(isset($form_absensi)){ echo $form_absensi; } ?>>
+        <span>ABSENSI</span><strong></strong></a>
             <ul class="sub">
-                <li><a href="table_static.html" title="">Static tables</a></li>
-                <li><a href="table_dynamic.html" title="">Dynamic table</a></li>
-                <li class="last"><a href="table_sortable_resizable.html" title="">Sortable &amp; resizable tables</a></li>
+                <li <?php if(isset($view_schedule_pegawai)){ echo $view_schedule_pegawai; } ?>><?php echo anchor('c_absensi/schedule_pegawai', 'SCHEDULE PEGAWAI' ); ?></li>
+                <li <?php if(isset($view_cuti)){ echo $view_cuti; } ?>><?php echo anchor('c_absensi/add_pakai_cuti_pegawai', 'PENGGUNAAN CUTI' ); ?></li>
+                <li><?php //echo anchor('c_absensi/tarik_absensi', 'TARIK ABSENSI' ); 
+						echo anchor('#', 'TARIK ABSENSI' ); 
+				?></li>
+                <li <?php if(isset($view_absensi)){ echo $view_absensi; } ?>><?php echo anchor('c_absensi/absensi', 'ABSENSI' ); ?></li>
             </ul>
         </li>
-        <li class="widgets"><a href="#" title="" class="exp"><span>Widgets and grid</span><strong>2</strong></a>
+        
+        
+      <!-- Gaji -->
+        <li class="widgets"><a href="#" title="" class="exp" <?php if(isset($form_gaji)){ echo $form_gaji; } ?>>
+        <span>GAJI</span><strong></strong></a>
             <ul class="sub">
-                <li><a href="widgets.html" title="">Widgets</a></li>
-                <li class="last"><a href="grid.html" title="">Grid</a></li>
+                <li <?php if(isset($view_gaji_pegawai)){ echo $view_gaji_pegawai; } ?>><?php echo anchor('gaji/gaji_pegawai', 'GAJI PEGAWAI' ); ?></li>
+                <li <?php if(isset($view_lembur_pegawai)){ echo $view_lembur_pegawai; } ?>><?php echo anchor('gaji/lembur_pegawai', 'LEMBUR PEGAWAI' ); ?></li>
             </ul>
-        </li>
-        <li class="errors"><a href="#" title="" class="exp"><span>Error pages</span><strong>6</strong></a>
-            <ul class="sub">
-                <li><a href="403.html" title="">403 page</a></li>
-                <li><a href="404.html" title="">404 page</a></li>
-                <li><a href="405.html" title="">405 page</a></li>
-                <li><a href="500.html" title="">500 page</a></li>
-                <li><a href="503.html" title="">503 page</a></li>
-                <li class="last"><a href="offline.html" title="">Website is offline</a></li>
-            </ul>
-        </li>
-        <li class="files"><a href="file_manager.html" title=""><span>File manager</span></a></li>
-        <li class="typo"><a href="#" title="" class="exp"><span>Other pages</span><strong>3</strong></a>
-            <ul class="sub">
-                <li><a href="typography.html" title="">Typography</a></li>
-                <li><a href="calendar.html" title="">Calendar</a></li>
-                <li class="last"><a href="gallery.html" title="">Gallery</a></li>
-            </ul>
+			
         </li>
     </ul>
+	
 </div>

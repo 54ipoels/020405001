@@ -95,10 +95,22 @@ class Gaji extends Application {
 		$data['showdata'] = $this->m_asset->ambil_data_penggajian_by_id($id); 
 		$show = $data['showdata'];
 		foreach ($show as $row){}
-		$data['terbilang']= $this->terbilang($row['pgj_terima']);
+		$data['pot_pegawai'] = $this->m_gaji->ambil_data_pot_pegawai_id($row['pgj_id_peg']); 
+		$data['pot_perusahaan'] = $this->m_gaji->ambil_data_pot_perusahaan_id($row['pgj_id_peg']); 
+		$pot_pegawai = $data['pot_pegawai'];
+		foreach ($data['pot_perusahaan'] as $pr){
+			$data['pot_per'] = $pr['pot_per_as_jiwa'] + $pr['pot_per_jk'] + $pr['pot_per_siharta'] + $pr['pot_per_other'] + $pr['pot_per_jht'] + $pr['pot_per_tht'] + $pr['pot_per_pensiun'];
+		}
+		foreach ($pot_pegawai as $pp){
+			$data['pot_peg'] = $pp['pot_peg_siperkasa'] + $pp['pot_peg_kokarga'] + $pp['pot_peg_kosigarden'] + $pp['pot_peg_flexy'] + $pp['pot_peg_other'] + $pp['pot_peg_ggc'] + $pp['pot_peg_jht'] + $pp['pot_peg_tht'] + $pp['pot_peg_pensiun'];
+		}
+		$gaji = $row['pgj_gaji_bruto'] + $row['pgj_insentive'] - round($data['pot_peg'],0);
+		$data['gaji_nett'] = ceil($gaji/100)*100;
+		$data['terbilang']= $this->terbilang($data['gaji_nett']);
 		$data['month']=	$this->namabulan($this->uri->segment(4));
 		$data['year']=$this->uri->segment(5);
-		$data['penerimaan'] = $row['pgj_terima'];
+		$data['pembulatan'] = $data['gaji_nett'] - $gaji;
+		//$data['penerimaan'] = $row['pgj_terima'];
 		$data['page'] = 'view_detail_gaji_peg';		
 		$data['view_detail_gaji_peg'] = 'class="this"';
 		$data['form_gaji'] = 'id="current"';
@@ -122,6 +134,15 @@ class Gaji extends Application {
 		$this->load->view('gaji/index',$data);	
 	}
 	
+	function submit_edit_penggajian($id)
+	{
+		$master_potongan = $this->m_gaji->ambil_master_potongan();
+		foreach ($master_potongan as $mp){}
+		$this->m_gaji->submit_edit_penggajian($id, $mp);
+		
+		redirect('gaji/edit_penggajian/'.$this->input->post('id_peg').'/'.$this->input->post('month').'/'.$this->input->post('year'));
+	}
+	
 	function edit_pot_pegawai($id_peg)
 	{
 		$data['showdata'] = $this->m_gaji->ambil_data_penggajian_id($this->uri->segment(6)); 
@@ -135,9 +156,10 @@ class Gaji extends Application {
 		$this->load->view('gaji/index',$data);
 	}
 	
-	function submit_edit_pot_pegawai()
+	function submit_edit_pot_pegawai($id)
 	{
-		
+		$this->m_gaji->submit_edit_pot_pegawai($id);
+		redirect('gaji/edit_penggajian/'.$this->input->post('id_peg').'/'.$this->input->post('month').'/'.$this->input->post('year'));
 	}
 	
 	function edit_pot_perusahaan($id_peg)
@@ -151,6 +173,12 @@ class Gaji extends Application {
 		$data['bulan'] = $this->namabulan($this->uri->segment(4));
 		
 		$this->load->view('gaji/index',$data);
+	}
+	
+	function submit_edit_pot_perusahaan($id)
+	{
+		$this->m_gaji->submit_edit_pot_perusahaan($id);
+		redirect('gaji/edit_penggajian/'.$this->input->post('id_peg').'/'.$this->input->post('month').'/'.$this->input->post('year'));
 	}
 	
 	function view_penggajian_list()
@@ -171,6 +199,7 @@ class Gaji extends Application {
 		$gaji_temp = $this->m_gaji->ambil_data_penggajian($unit,$month,$year);
 		$this->m_gaji->insert_gaji_sementara($gaji_temp);
 		$data['showdata'] = $this->m_gaji->get_gaji();
+		$data['view_gaji_pegawai'] = 'class="this"';
 		$this->m_gaji->drop_table();
 		
 		//print_r($data['showdata']);
@@ -195,6 +224,8 @@ class Gaji extends Application {
 		} else {
 			$this->m_gaji->input_data_gaji($id_peg, $mp);
 		}
+		
+		redirect('gaji/gaji_pegawai');
 	}
 	
 	function terbilang($angka) {

@@ -43,19 +43,19 @@
                         <td rowspan="2">No</td>
                         <td rowspan="2">NIPP</td>
                         <td rowspan="2">Nama</td>
-                        <td rowspan="2">STKP</td>
 						<td rowspan="2">Rating</td>
-                        <td rowspan="2">No Sertifikat</td>
+                        <td rowspan="2">No License / STKP</td>
                         <td colspan="2">Validitas</td>
                         <td rowspan="2">Lembaga</td>
-                        <td rowspan="2">Tanggal Pelaksanaan</td>
+                        <td colspan="2">Tanggal Pelaksanaan</td>
 						<td rowspan="2">Jenis STKP</td>
+						<td rowspan="2">Action</td>
                     </tr>
 					<tr>
-					<td>From</td><td>Until</td></tr>
+					<td>From</td><td>Until</td><td>From</td><td>Until</td></tr>
                 </thead>
 				<tfoot>
-					<tr><td colspan=11><center><div class="pagination"><?php echo $this->pagination->create_links();?></div></center></td></td></tr>
+					<tr><td colspan=12><center><div class="pagination"><?php echo $this->pagination->create_links();?></div></center></td></td></tr>
 				</tfoot>
 				<tbody>
 				<?php 
@@ -115,13 +115,14 @@
 						<td><center><?php echo $nipp; ?></center></td>
 						<td><?php echo $nama; ?></td>
 						<td><?php echo $row_pegawai['p_stkp_jenis']; ?></td>
-						<td><center><?php echo $row_pegawai['p_stkp_rating']; ?></center></td>
 						<td><center><?php echo $row_pegawai['p_stkp_no_license']; ?></center></td>
 						<td><center><?php echo $stkp_mulai; ?></center></td>
 						<td><center><?php echo $stkp_selesai; ?></center></td>
 						<td><center><?php echo $row_pegawai['p_stkp_lembaga']; ?></center></td>
 						<td><center><?php echo $pelaksanaan; ?></center></td>
+						<td><center><?php echo $pelaksanaan; ?></center></td>
 						<td><center><?php echo $row_pegawai['p_stkp_type']; ?></center></td>
+						<td><center></center></td>
                     </tr> <?php
 					$number++;
 					$nipp = $row_pegawai['peg_nipp'];

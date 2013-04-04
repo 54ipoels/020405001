@@ -99,6 +99,8 @@ class M_gaji extends CI_Model
 				LEFT JOIN (SELECT * FROM v3_peg_unit ORDER BY id_peg_unit DESC) AS unit ON unit.p_unt_nipp = pegawai.peg_nipp
 				LEFT JOIN (SELECT * FROM v3_peg_grade ORDER BY id_peg_grade DESC)AS grade ON grade.p_grd_nipp = pegawai.peg_nipp
 				LEFT JOIN (SELECT id_peg_jabatan ,p_jbt_nipp, p_jbt_jabatan FROM v3_peg_jabatan ORDER BY id_peg_jabatan DESC) AS jabatan ON jabatan.p_jbt_nipp = pegawai.peg_nipp
+				LEFT JOIN (SELECT * FROM v3_pot_gaji_pegawai) AS pot_peg ON pegawai.id_pegawai = pot_peg.id_peg_pot_peg_gaji
+				LEFT JOIN (SELECT * FROM v3_pot_gaji_perusahaan) AS pot_per ON pegawai.id_pegawai = pot_per.id_peg_pot_per_gaji
 				WHERE unit.p_unt_kode_unit LIKE '$unit'
 				AND pgj_bulan='$month' AND pgj_tahun='$year'
 		";
@@ -169,6 +171,8 @@ class M_gaji extends CI_Model
 			 `temp_jabatan` VARCHAR( 255 ) NOT NULL ,
 			 `temp_gaji_bruto` DOUBLE NOT NULL ,
 			 `temp_insentive` DOUBLE NULL,
+			 `temp_pot_peg` DOUBLE NOT NULL,
+			 `temp_pot_per` DOUBLE NOT NULL,
 			 `temp_bulan` INT NOT NULL,
 			 `temp_tahun` INT NOT NULL
 			) ENGINE = INNODB;
@@ -187,6 +191,8 @@ class M_gaji extends CI_Model
 		$nipp = '';
 		foreach ($data as $row_penggajian) :
 		{
+			$pot_peg = $row_penggajian['pot_peg_siperkasa'] + $row_penggajian['pot_peg_kokarga'] + $row_penggajian['pot_peg_kosigarden'] + $row_penggajian['pot_peg_flexy'] + $row_penggajian['pot_peg_other'] + $row_penggajian['pot_peg_ggc'] + $row_penggajian['pot_peg_jht'] + $row_penggajian['pot_peg_tht'] + $row_penggajian['pot_peg_pensiun'];
+			$pot_per = $row_penggajian['pot_per_as_jiwa'] + $row_penggajian['pot_per_jk'] + $row_penggajian['pot_per_siharta'] + $row_penggajian['pot_per_other'] + $row_penggajian['pot_per_jht'] + $row_penggajian['pot_per_tht'] + $row_penggajian['pot_per_pensiun'];
 			$data = array(
 					'id_pgj'	=> $row_penggajian['id_pgj'],
 					'temp_nama' => $row_penggajian['peg_nama'],
@@ -195,6 +201,8 @@ class M_gaji extends CI_Model
 					'temp_jabatan' => $row_penggajian['p_jbt_jabatan'],
 					'temp_gaji_bruto' => $row_penggajian['pgj_gaji_bruto'],
 					'temp_insentive' => $row_penggajian['pgj_insentive'],
+					'temp_pot_peg' => $pot_peg,
+					'temp_pot_per' => $pot_per,
 					'temp_bulan' => $row_penggajian['pgj_bulan'],
 					'temp_tahun' => $row_penggajian['pgj_tahun'],
 				);
@@ -208,5 +216,72 @@ class M_gaji extends CI_Model
 				$nipp = $row_penggajian['peg_nipp'];
 			}
 		} endforeach;
+	}
+	
+	function submit_edit_pot_pegawai($id)
+	{
+		$data_pot_peg = array(
+				'pot_peg_siperkasa' => $this->input->post('siperkasa'),
+				'pot_peg_kokarga' => $this->input->post('kokarga'),
+				'pot_peg_kosigarden' => $this->input->post('kosigarden'),
+				'pot_peg_flexy' => $this->input->post('flexy'),
+				'pot_peg_ggc' => $this->input->post('ggc'),
+				'pot_peg_other' => $this->input->post('other'),
+				'pot_peg_jht' => $this->input->post('jht'),
+				'pot_peg_tht' => $this->input->post('tht'),
+				'pot_peg_pensiun' => $this->input->post('pensiun'),
+				'pot_peg_update_by' => 'adminems',
+			);
+		$this->db->where('id_pot_gaji_pegawai',$id);
+		$this->db->update('v3_pot_gaji_pegawai', $data_pot_peg);
+	}
+	
+	function submit_edit_pot_perusahaan($id)
+	{
+		$data_pot_per = array(
+				'pot_per_jht' => $this->input->post('jht'),
+				'pot_per_tht' => $this->input->post('tht'),
+				'pot_per_jk' => $this->input->post('jk'),
+				'pot_per_jkk' => $this->input->post('jkk'),
+				'pot_per_as_jiwa' => $this->input->post('as_jiwa'),
+				'pot_per_pensiun' => $this->input->post('pensiun'),
+				'pot_per_siharta' => $this->input->post('siharta'),
+				'pot_per_other' => $this->input->post('other'),
+				'pot_per_update_by' => 'adminems',
+			);
+		$this->db->where('id_pot_gaji_perusahaan',$id);
+		$this->db->update('v3_pot_gaji_perusahaan', $data_pot_per);
+	}
+	
+	function submit_edit_penggajian($id, $mp)
+	{
+		$data = array(
+				'pgj_gaji_bruto' => $this->input->post('gaji_bruto'),
+				'pgj_insentive' => $this->input->post('insentive'),
+				'pgj_update_by' =>"admin",
+				);
+		$this->db->where('id_pgj',$id);
+		$this->db->update('v3_penggajian', $data); 
+		
+		$data_pot_peg = array(
+				'pot_peg_jht' => $mp['peg_jht']*$this->input->post('gaji_bruto'),
+				'pot_peg_tht' => $mp['peg_tht']*$this->input->post('gaji_bruto'),
+				'pot_peg_pensiun' => $mp['peg_pensiun']*$this->input->post('gaji_bruto'),
+				'pot_peg_update_by' => 'adminems',
+			);
+		$this->db->where('id_pot_gaji_pegawai',$id);
+		$this->db->update('v3_pot_gaji_pegawai', $data_pot_peg);
+						
+		$data_pot_per = array(
+				'pot_per_jht' => $mp['per_jht']*$this->input->post('gaji_bruto'),
+				'pot_per_tht' => $mp['per_tht']*$this->input->post('gaji_bruto'),
+				'pot_per_jk' => $mp['per_jk']*$this->input->post('gaji_bruto'),
+				'pot_per_jkk' => $mp['per_jkk']*$this->input->post('gaji_bruto'),
+				'pot_per_as_jiwa' => $mp['per_as_jiwa']*$this->input->post('gaji_bruto'),
+				'pot_per_pensiun' => $mp['per_pensiun']*$this->input->post('gaji_bruto'),
+				'pot_per_update_by' => 'adminems',
+			);
+		$this->db->where('id_pot_gaji_perusahaan',$id);
+		$this->db->update('v3_pot_gaji_perusahaan', $data_pot_per);
 	}
 }

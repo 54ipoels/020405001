@@ -42,13 +42,10 @@ echo form_input('license');?></div><td width="410px">
                         <td rowspan="2">No</td>
                         <td rowspan="2">NIPP</td>
                         <td rowspan="2">Nama</td>
-                        <td rowspan="2">STKP</td>
-						<td rowspan="2">Rating</td>
+                        <td rowspan="2">Training</td>
                         <td rowspan="2">No Sertifikat</td>
-                        <td colspan="2">Validitas</td>
+                        <td colspan="2">Pelaksanaan</td>
                         <td rowspan="2">Lembaga</td>
-                        <td rowspan="2">Tanggal Pelaksanaan</td>
-						<td rowspan="2">Jenis STKP</td>
 						<td rowspan="2">Actions</td>
                     </tr>
 					<tr>
@@ -92,22 +89,6 @@ echo form_input('license');?></div><td width="410px">
 					{
 						$pelaksanaan = $row_pegawai['p_nstkp_pelaksanaan'];
 					}
-					if ($row_pegawai['p_nstkp_mulai'] == '0000-00-00')
-					{
-						$stkp_mulai = '-';
-					}
-					else
-					{
-						$stkp_mulai = mdate($datestring,strtotime($row_pegawai['p_nstkp_mulai']));
-					}
-					if ($row_pegawai['p_nstkp_finish'] == '0000-00-00')
-					{
-						$stkp_selesai = '-';
-					}
-					else
-					{
-						$stkp_selesai = mdate($datestring,strtotime($row_pegawai['p_nstkp_finish']));
-					}
 					
 					$detail = anchor('pekerja/get_pegawai/'.$row_pegawai['peg_nipp'],'Detail'); ?>
 					<tr>
@@ -115,13 +96,10 @@ echo form_input('license');?></div><td width="410px">
 						<td><center><?php echo $nipp; ?></center></td>
 						<td><?php echo $nama; ?></td>
 						<td><?php echo $row_pegawai['p_nstkp_jenis']; ?></td>
-						<td><center><?php echo $row_pegawai['p_nstkp_rating']; ?></center></td>
 						<td><center><?php echo $row_pegawai['p_nstkp_no_license']; ?></center></td>
-						<td><center><?php echo $stkp_mulai; ?></center></td>
-						<td><center><?php echo $stkp_selesai; ?></center></td>
+						<td><center><?php echo '-'; ?></center></td>
+						<td><center><?php echo '-'; ?></center></td>
 						<td><center><?php echo $row_pegawai['p_nstkp_lembaga']; ?></center></td>
-						<td><center><?php echo $pelaksanaan; ?></center></td>
-						<td><center><?php echo $row_pegawai['p_nstkp_type']; ?></center></td>
 						<td><center><?php echo anchor('diklat/edit_non_stkp/'.$row_pegawai['id_peg_non_stkp'], 'edit');
 										echo " | ";
 										echo anchor('diklat/delete_non_stkp/'.$row_pegawai['id_peg_non_stkp'], 'delete'); ?>
