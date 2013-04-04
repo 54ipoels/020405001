@@ -131,3 +131,5 @@
             </table>
 			
         </div>
+		<?php $attr= array('target' => '_blank');
+			echo anchor('diklat/excel_stkp','Export to Excel',$attr); ?>

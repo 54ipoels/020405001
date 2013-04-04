@@ -11,7 +11,8 @@
     <div class="sidebarSep mt0"></div>
     
     
-    <?php $this->load->view('kepegawaian/template/navigation') ?>
+    <?php 
+	$this->load->view('template/navigation') ?>
 
 
 <!-- Right side -->

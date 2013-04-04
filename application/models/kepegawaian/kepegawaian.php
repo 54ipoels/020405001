@@ -546,6 +546,54 @@ class kepegawaian extends CI_Model
 		$this->db->delete('v3_peg_unit');
 	}
 
+	function get_data_pegawai_unlimited()
+	{
+		$query="
+			SELECT * FROM `v3_pegawai`
+			LEFT JOIN `v3_peg_agama` ON `v3_pegawai`.`peg_nipp` = `v3_peg_agama`.`p_ag_nipp` 
+			LEFT JOIN `v3_peg_alamat` ON `v3_pegawai`.`peg_nipp` = `v3_peg_alamat`.`p_al_nipp` 
+		";
+		$query = $this->db->query($query);
+		return $query->result_array();
+	}
+	
+	function get_data_pensiun_unlimited($tahun, $type, $limit)
+	{
+		$query='
+			SELECT * FROM v3_pegawai AS peg 
+			LEFT JOIN (SELECT p_jbt_nipp, p_jbt_jabatan FROM v3_peg_jabatan) AS peg_jbt 
+			ON peg.peg_nipp = peg_jbt.p_jbt_nipp 
+			LEFT JOIN (SELECT p_tmt_nipp, p_tmt_tmt, p_tmt_end FROM v3_peg_tmt) AS peg_tmt 
+			ON peg.peg_nipp = peg_tmt.p_tmt_nipp 
+			WHERE \''.$tahun.'\' - YEAR(peg.peg_tgl_lahir) > \''.$type.'\'
+			AND \''.$tahun.'\' - YEAR(peg.peg_tgl_lahir) < \''.$limit.'\'
+			AND peg_tmt.p_tmt_end = \'0000-00-00\'
+			ORDER BY peg.peg_tgl_lahir DESC
+		';
+		$query = $this->db->query($query);
+		return $query->result_array();
+	}
+	
+	function get_data_spv_unlimited()
+	{
+		$supervisor = '%Supervisor%';
+		$query = ('SELECT peg_nipp, peg_nama, peg_jns_kelamin, peg_tgl_lahir, p_jbt_jabatan, p_unt_kode_unit, p_tmt_tmt, p_grd_grade FROM v3_pegawai AS peg
+			LEFT JOIN (SELECT p_jbt_nipp, p_jbt_jabatan FROM v3_peg_jabatan) AS peg_jbt
+			ON peg.peg_nipp = peg_jbt.p_jbt_nipp 
+			LEFT JOIN (SELECT p_unt_nipp, p_unt_kode_unit FROM v3_peg_unit) AS peg_unt
+			ON peg.peg_nipp = peg_unt.p_unt_nipp 
+			LEFT JOIN (SELECT p_tmt_nipp, p_tmt_end, p_tmt_tmt FROM v3_peg_tmt) AS peg_tmt
+			ON peg.peg_nipp = peg_tmt.p_tmt_nipp 
+			LEFT JOIN (SELECT p_grd_nipp, p_grd_grade FROM v3_peg_grade) AS peg_grd
+			ON peg.peg_nipp = peg_grd.p_grd_nipp 
+			WHERE peg_jbt.p_jbt_jabatan LIKE \''.$supervisor.'\'
+			AND peg_tmt.p_tmt_end = \'0000-00-00\'
+			ORDER BY peg_unt.p_unt_kode_unit
+			');
+		$query = $this->db->query($query);
+		return $query->result_array();
+	}
+	
 }
 /* End of file myfile.php */
 /* Location: ./system/modules/mymodule/myfile.php */

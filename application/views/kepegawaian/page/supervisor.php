@@ -11,7 +11,7 @@
                         <td width="1%">M.K.A</td>
                         <td>T.M.T GA / GS</td>
                         <td width="1%">Jenis Kelamin</td>
-                        <td>Tgl Lagir</td>
+                        <td>Tgl Lahir</td>
                         <td>Umur</td>
                         <td>T.M.T Mutasi</td>
                         <td>Jabatan</td>
@@ -33,7 +33,8 @@
 				{ 
 					$datestring = "%d-%m-%Y" ;
 					$tgl_lahir = mdate($datestring,strtotime($row_supervisor['peg_tgl_lahir']));
-					
+					$umur=floor(($time - strtotime($row_supervisor['peg_tgl_lahir']))/(365*24*60*60));
+			
 					if ($row_supervisor['p_grd_grade'] == NULL)
 					{
 						$grade = '-';
@@ -42,19 +43,21 @@
 					{
 						$grade = $row_supervisor['p_grd_grade'];
 					}
-					if ($row_supervisor['p_tmt_tmt'] == NULL)
+					if (($row_supervisor['p_tmt_tmt'] == NULL) OR ($row_supervisor['p_tmt_tmt'] == '0000-00-00'))
 					{
 						$tmt = '-';
+						$mka = '-';
 					}
 					else
 					{
 						$tmt = mdate($datestring,strtotime($row_supervisor['p_tmt_tmt']));
+						$mka = floor(($time-strtotime($row_supervisor['p_tmt_tmt']))/(365*24*60*60));
 					}
 					  ?>
 					<tr>
                         <td><center><?php echo $number; ?></center></td>
 						<td><center><?php echo ''; ?></center></td>
-						<td><?php echo $row_supervisor['peg_nama']; ?></td>
+						<td><?php echo strtoupper($row_supervisor['peg_nama']); ?></td>
 						<td><?php echo $row_supervisor['peg_nipp']; ?></td>
 						<td><center><?php echo $grade; ?></center></td>
 						<td><?php echo 'MKA'; ?></td>
@@ -63,7 +66,7 @@
 						<td><?php echo $tgl_lahir; ?></center></td>
 						<td><center><?php echo '20'; ?></center></td>
 						<td><center><?php echo '12-12-2012'; ?></center></td>
-						<td><?php echo $row_supervisor['p_jbt_jabatan']; ?></td>
+						<td><?php echo strtoupper($row_supervisor['p_jbt_jabatan']); ?></td>
 						<td><?php echo ' '; ?></td>
                     </tr> <?php
 					$number++;
@@ -73,3 +76,7 @@
             </table>
 			
         </div>
+		<?php $attr= array('target' => '_blank');
+				echo anchor('pekerja/excel_data_supervisor','Export to Excel',$attr); ?>
+		
+		

@@ -279,6 +279,64 @@ class pendidikan extends CI_Model
 		$query = $this->db->query($query); 
 		return $query->num_rows();
 	}
+	
+	function update_data_non_stkp($id)
+	{
+		$datestring = "%Y-%m-%d" ;
+		$time = time();
+		$tanggal = mdate($datestring, $time);
+	
+		$data_non_stkp = array(
+					//'p_nstkp_nipp' 			=> $this->input->post('nipp'),
+					'p_nstkp_type' 			=> $this->input->post('type'),
+					'p_nstkp_jenis' 		=> $this->input->post('non_stkp'),
+					'p_nstkp_lembaga'		=> $this->input->post('lembaga'),
+					'p_nstkp_no_license'	=> $this->input->post('license'),
+					'p_nstkp_pelaksanaan'	=> mdate($datestring, strtotime($this->input->post('pelaksanaan'))),
+					'p_nstkp_mulai'			=> mdate($datestring, strtotime($this->input->post('validitas_awal'))),
+					'p_nstkp_finish'		=> mdate($datestring, strtotime($this->input->post('validitas_akhir'))),
+					'p_nstkp_rating'		=> $this->input->post('rating'),
+					'p_nstkp_update_on'		=> $tanggal,
+					'p_nstkp_update_by'		=> 'admin'
+				);
+		
+		$this->db->where('id_peg_non_stkp',$id);
+		$this->db->update('v3_peg_non_stkp',$data_non_stkp);
+	}
+	
+	function delete_data_non_stkp($id)
+	{
+		$this->db->where('id_peg_non_stkp', $id);
+		$this->db->delete('v3_peg_non_stkp'); 
+	}
+	
+	function get_data_nstkp_with_unit_and_name_unlimited()
+	{
+		$query = ('
+			SELECT * FROM v3_peg_non_stkp AS peg_stkp
+			LEFT JOIN (SELECT p_unt_nipp, p_unt_kode_unit FROM v3_peg_unit) AS peg_unt 
+			ON peg_stkp.p_nstkp_nipp = peg_unt.p_unt_nipp 
+			LEFT JOIN (SELECT peg_nipp,peg_nama FROM v3_pegawai) AS peg
+			ON peg_stkp.p_nstkp_nipp = peg.peg_nipp
+			ORDER BY peg_stkp.p_nstkp_nipp
+		');
+		$query = $this->db->query($query); 
+		return $query->result_array();
+	}
+	
+	function get_data_stkp_with_unit_and_name_unlimited()
+	{
+		$query = ('
+			SELECT * FROM v3_peg_stkp AS peg_stkp
+			LEFT JOIN (SELECT p_unt_nipp, p_unt_kode_unit FROM v3_peg_unit) AS peg_unt 
+			ON peg_stkp.p_stkp_nipp = peg_unt.p_unt_nipp 
+			LEFT JOIN (SELECT peg_nipp,peg_nama FROM v3_pegawai) AS peg
+			ON peg_stkp.p_stkp_nipp = peg.peg_nipp
+			ORDER BY peg_stkp.p_stkp_nipp
+		');
+		$query = $this->db->query($query); 
+		return $query->result_array();
+	}
 }
 /* End of file myfile.php */
 /* Location: ./system/modules/mymodule/myfile.php */

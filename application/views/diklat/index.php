@@ -40,7 +40,7 @@
     
     <div class="sidebarSep"></div> -->
     
-    <?php $this->load->view('diklat/template/navigation') ?>
+    <?php $this->load->view('template/navigation') ?>
 
 
 <!-- Right side -->
@@ -145,7 +145,13 @@
 		if ($page == 'Add Data Bahasa')
 		{
 			$this->load->view('diklat/page/add/add_data_bahasa');
-		}?>
+		}
+		else
+		if ($page == 'Edit non STKP')
+		{
+			$this->load->view('diklat/page/edit/edit_non_stkp');
+		}
+		?>
 	</div>
     <!-- Footer line -->
     <div id="footer">

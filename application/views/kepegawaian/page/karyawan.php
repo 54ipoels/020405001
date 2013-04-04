@@ -65,7 +65,8 @@
 				{
 					$number = 1;
 				} else {
-					$number = $this->uri->segment(3)+1;
+					if($this->uri->segment(2) == 'sort_unit_pegawai') {$number = $this->uri->segment(4)+1;} else {
+					$number = $this->uri->segment(3)+1;}
 				}
 				foreach ($pegawai as $row_pegawai) :
 				{ 
@@ -91,10 +92,10 @@
 					<tr>
                         <td><center><?php echo $number; ?></center></td>
 						<td><center><?php echo $row_pegawai['peg_nipp']; ?></center></td>
-						<td><?php echo $row_pegawai['peg_nama']; ?></td>
-						<td><?php echo $row_pegawai['peg_tmpt_lahir']; ?></td>
+						<td><?php echo strtoupper($row_pegawai['peg_nama']); ?></td>
+						<td><?php echo strtoupper($row_pegawai['peg_tmpt_lahir']); ?></td>
 						<td><center><?php echo $tgl_lahir; ?></center></td>
-						<td><center><?php echo $kelamin; ?></center></td>
+						<td><center><?php echo strtoupper($kelamin); ?></center></td>
 						<td><center><?php echo $gol_darah; ?></center></td>
 						<td><center><?php echo $detail ?></center></td>
                     </tr> <?php
@@ -105,3 +106,5 @@
             </table>
 			
         </div>
+		<?php $attr= array('target' => '_blank');
+			echo anchor('pekerja/excel_data_pegawai','Export to Excel',$attr); ?>

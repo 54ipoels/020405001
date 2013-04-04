@@ -122,7 +122,10 @@ echo form_input('license');?></div><td width="410px">
 						<td><center><?php echo $row_pegawai['p_nstkp_lembaga']; ?></center></td>
 						<td><center><?php echo $pelaksanaan; ?></center></td>
 						<td><center><?php echo $row_pegawai['p_nstkp_type']; ?></center></td>
-						<td><center><?php echo anchor('diklat/edit_non_stkp/'.$row_pegawai['id_peg_non_stkp'], 'edit'); ?></center></td>
+						<td><center><?php echo anchor('diklat/edit_non_stkp/'.$row_pegawai['id_peg_non_stkp'], 'edit');
+										echo " | ";
+										echo anchor('diklat/delete_non_stkp/'.$row_pegawai['id_peg_non_stkp'], 'delete'); ?>
+							</center></td>
                     </tr> <?php
 					$number++;
 					$nipp = $row_pegawai['peg_nipp'];
@@ -132,3 +135,5 @@ echo form_input('license');?></div><td width="410px">
             </table>
 			
         </div>
+		<?php $attr= array('target' => '_blank');
+			echo anchor('diklat/excel_non_stkp','Export to Excel',$attr); ?>

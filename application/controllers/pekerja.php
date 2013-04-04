@@ -40,6 +40,8 @@ class pekerja extends Application {
 		$data['pegawai'] = $this->kepegawaian->get_data_pegawai($config['per_page'],$page);
 		$data['list_unit'] = $this->kepegawaian->get_list_unit();
 		$data['page'] = 'Pegawai';
+		$data['view_pekerja'] = 'class="this"';
+		$data['page_karyawan'] = 'yes';
 		#calling view
 		$this->load->view('kepegawaian/index',$data);
 	}
@@ -67,6 +69,7 @@ class pekerja extends Application {
 		$data['tanggal'] = $tanggal;
 		$data['type'] = 'ALL';
 		$data['view_pensiun'] = 'class="this"';
+		$data['page_karyawan'] = 'yes';
 		#calling view
 		$this->load->view('kepegawaian/index',$data);
 	}
@@ -81,7 +84,7 @@ class pekerja extends Application {
 		}
 		#pagination config
 		$config['base_url'] = base_url().'index.php/pekerja/sort_jenis_pegawai/'.$type.'/'; //set the base url for pagination
-		$config['total_rows'] = $this->kepegawaian->count_jenis_Pegawai($tahun); //total rows
+		$config['total_rows'] = $this->kepegawaian->count_jenis_Pegawai($type); //total rows
 		$config['per_page'] = 10; //the number of per page for pagination
 		$config['uri_segment'] = 4; //see from base_url. 3 for this case
 		$this->pagination->initialize($config);
@@ -91,6 +94,7 @@ class pekerja extends Application {
 		$data['pegawai'] = $this->kepegawaian->get_data_jenis_pegawai($config['per_page'],$page,$type);
 		$data['list_unit'] = $this->kepegawaian->get_list_unit();
 		$data['page'] = 'Pegawai';
+		$data['page_karyawan'] = 'yes';
 		
 		#calling view
 		if ($type=='all')
@@ -115,6 +119,7 @@ class pekerja extends Application {
 		//print_r($data['supervisor']);
 		$data['page'] = 'Data Supervisor';
 		$data['view_supervisor'] = 'class="this"';
+		$data['page_karyawan'] = 'yes';
 		$this->load->view('kepegawaian/index',$data);
 	}
 	
@@ -154,7 +159,7 @@ class pekerja extends Application {
 			$limit = '54';
 		}
 		
-		print_r($type);print_r($jenis);print_r($limit);
+		//print_r($type);print_r($jenis);print_r($limit);
 		#pagination config
 		$config['base_url'] = base_url().'index.php/pekerja/sort_tahun_pensiun/'.$tanggal.'/'.$type.'/'; //set the base url for pagination
 		$config['total_rows'] = $this->kepegawaian->countPegawaiPensiun($tanggal, $jenis, $limit); //total rows
@@ -168,6 +173,8 @@ class pekerja extends Application {
 		$data['tanggal'] = $tanggal;
 		$data['type']	 = $type;
 		$data['page'] = 'Data Pensiun';
+		$data['page_karyawan'] = 'yes';
+		$data['view_pensiun'] = 'class="this"';
 		
 		#calling view
 		$this->load->view('kepegawaian/index',$data);
@@ -193,6 +200,7 @@ class pekerja extends Application {
 		$data['pegawai'] = $this->kepegawaian->get_data_unit_pegawai($config['per_page'], $page, $unit);
 		$data['list_unit'] = $this->kepegawaian->get_list_unit();
 		$data['page'] = 'Pegawai';
+		$data['page_karyawan'] = 'yes';
 		
 		#calling view
 		$this->load->view('kepegawaian/index',$data);
@@ -202,6 +210,7 @@ class pekerja extends Application {
 	{
 		$data['NIPP'] = $this->uri->segment(3);
 		$data['page'] = 'Delete Pegawai';
+		$data['page_karyawan'] = 'yes';
 		
 		$this->load->view('kepegawaian/index', $data);
 	}
@@ -226,6 +235,7 @@ class pekerja extends Application {
 		$data['pegawai'] = $this->kepegawaian->search_data_pegawai($config['per_page'], $page, $search_data);
 		$data['list_unit'] = $this->kepegawaian->get_list_unit();
 		$data['page'] = 'Search Result';
+		$data['page_karyawan'] = 'yes';
 		
 		#calling view
 		$this->load->view('kepegawaian/index', $data);
@@ -256,6 +266,7 @@ class pekerja extends Application {
 		
 		#count data
 		$data['jumlah_bahasa'] = $this->kepegawaian->count_result_bahasa($nipp);
+		$data['page_karyawan'] = 'yes';
 		
 		$this->load->view('kepegawaian/index',$data);
 		
@@ -268,30 +279,35 @@ class pekerja extends Application {
 		$data['list_jabatan'] = $this->kepegawaian->get_list_jabatan();
 		$data['view_add_pekerja'] = 'class="this"';
 		$data['page'] = 'Input Data Diri';
+		$data['page_karyawan'] = 'yes';
 		$this->load->view('kepegawaian/index',$data);
 	}
 	
 	public function add_pegawai_pasangan()
 	{
 		$data['page'] = 'Input Data Pasangan';
+		$data['page_karyawan'] = 'yes';
 		$this->load->view('kepegawaian/index',$data);
 	}
 	
 	public function add_pegawai_ortu()
 	{
 		$data['page'] = 'Input Data Ortu';
+		$data['page_karyawan'] = 'yes';
 		$this->load->view('kepegawaian/index',$data);
 	}
 	
 	public function add_pegawai_mertua()
 	{
 		$data['page'] = 'Input Data Mertua';
+		$data['page_karyawan'] = 'yes';
 		$this->load->view('kepegawaian/index',$data);
 	}
 	
 	public function add_bahasa_pegawai()
 	{
 		$data['page'] = 'Add Data Bahasa';
+		$data['page_karyawan'] = 'yes';
 		$this->load->view('kepegawaian/index',$data);
 	}
 	
@@ -318,6 +334,7 @@ class pekerja extends Application {
 		if ($this->form_validation->run() == FALSE)
 		{
 			$data['page'] = 'Input Data Diri';
+			$data['page_karyawan'] = 'yes';
 			$this->load->view('kepegawaian/index',$data);
 		}
 		else
@@ -646,6 +663,7 @@ class pekerja extends Application {
 		$data['fisik'] = $this->kepegawaian->get_detail_pegawai_fisik($nipp);
 		$data['status_keluarga'] = $this->kepegawaian->get_detail_pegawai_status_keluarga($nipp);
 		$data['page'] = 'Edit Data Diri';
+		$data['page_karyawan'] = 'yes';
 		$this->load->view('kepegawaian/index',$data);
 	}
 	
@@ -653,6 +671,7 @@ class pekerja extends Application {
 	{
 		$data['alamat'] = $this->kepegawaian->get_detail_pegawai_alamat($nipp);
 		$data['page'] = 'Edit Data Alamat';
+		$data['page_karyawan'] = 'yes';
 		$this->load->view('kepegawaian/index',$data);
 	}
 	
@@ -660,6 +679,7 @@ class pekerja extends Application {
 	{
 		$data['pasangan'] = $this->kepegawaian->get_detail_pegawai_pasangan($nipp);
 		$data['page'] = 'Edit Data Pasangan';
+		$data['page_karyawan'] = 'yes';
 		$this->load->view('kepegawaian/index',$data);
 	}
 	
@@ -668,6 +688,7 @@ class pekerja extends Application {
 		$data['ayah'] = $this->kepegawaian->get_detail_pegawai_ayah($nipp);
 		$data['ibu'] = $this->kepegawaian->get_detail_pegawai_ibu($nipp);
 		$data['page'] = 'Edit Data Ortu';
+		$data['page_karyawan'] = 'yes';
 		$this->load->view('kepegawaian/index',$data);
 	}
 	
@@ -676,6 +697,7 @@ class pekerja extends Application {
 		$data['mertua_ayah'] = $this->kepegawaian->get_detail_pegawai_mert_ayah($nipp);
 		$data['mertua_ibu'] = $this->kepegawaian->get_detail_pegawai_mert_ibu($nipp);
 		$data['page'] = 'Edit Data Mertua';
+		$data['page_karyawan'] = 'yes';
 		$this->load->view('kepegawaian/index',$data);
 	}
 	
@@ -683,6 +705,7 @@ class pekerja extends Application {
 	{		
 		$data['anak'] = $this->kepegawaian->get_detail_pegawai_anak($nipp);
 		$data['page'] = 'Edit Data Anak';
+		$data['page_karyawan'] = 'yes';
 		$this->load->view('kepegawaian/index',$data);
 	}
 	
@@ -694,6 +717,7 @@ class pekerja extends Application {
 		$data['unit'] = $this->kepegawaian->get_detail_pegawai_unit($nipp);
 		$data['grade'] = $this->kepegawaian->get_detail_pegawai_grade($nipp);
 		$data['page'] = 'Edit Data Jabatan';
+		$data['page_karyawan'] = 'yes';
 		$this->load->view('kepegawaian/index',$data);
 	}
 	
@@ -702,12 +726,14 @@ class pekerja extends Application {
 		$data['bahasa'] = $this->kepegawaian->get_detail_pegawai_bahasa($nipp);
 		$data['pendidikan'] = $this->kepegawaian->get_detail_pegawai_pendidikan($nipp);
 		$data['page'] = 'Edit Data Pendidikan';
+		$data['page_karyawan'] = 'yes';
 		$this->load->view('kepegawaian/index',$data);
 	}
 	
 	public function add_anak_pegawai($nipp)
 	{
 		$data['page'] = 'Add Data Anak';
+		$data['page_karyawan'] = 'yes';
 		$this->load->view('kepegawaian/index',$data);
 	}
 	
@@ -978,6 +1004,294 @@ class pekerja extends Application {
 		$this->kepegawaian->update_data_pendidikan($data_pendidikan);
 		redirect('pekerja/get_pegawai/'.$nipp);
 	}
+	
+	function excel_data_pegawai()
+	{
+		$datestring = "%Y-%m-%d" ;
+		$time = time();
+		$tanggal = mdate($datestring, $time);
+		
+		$pegawai = $this->kepegawaian->get_data_pegawai_unlimited();
+				
+		//load our new PHPExcel library
+		$this->load->library('excel');
+		//activate worksheet number 1
+		$this->excel->setActiveSheetIndex(0);
+		//name the worksheet
+		$this->excel->getActiveSheet()->setTitle("Data Pegawai ");
+		//set cell A1 content with some text
+		
+		$this->excel->getActiveSheet()->setCellValue('A1', 'No');
+		$this->excel->getActiveSheet()->setCellValue('B1', 'NIPP');
+		$this->excel->getActiveSheet()->setCellValue('C1', 'Nama');
+		$this->excel->getActiveSheet()->setCellValue('D1', 'Tempat Lahir');
+		$this->excel->getActiveSheet()->setCellValue('E1', 'Tanggal Lahir');
+		$this->excel->getActiveSheet()->setCellValue('F1', 'Jenis Kelamin');
+		$this->excel->getActiveSheet()->setCellValue('G1', 'Golongan Darah');
+		$this->excel->getActiveSheet()->setCellValue('H1', 'Agama');
+		$this->excel->getActiveSheet()->setCellValue('I1', 'No Telepon');
+		$this->excel->getActiveSheet()->setCellValue('J1', 'Email');
+		$this->excel->getActiveSheet()->setCellValue('K1', 'Alamat');
+		
+		$this->excel->getActiveSheet()->setCellValue('K2', 'Jalan');
+		$this->excel->getActiveSheet()->setCellValue('L2', 'Kelurahan');
+		$this->excel->getActiveSheet()->setCellValue('M2', 'Kecamatan');
+		$this->excel->getActiveSheet()->setCellValue('N2', 'Kabupaten');
+		$this->excel->getActiveSheet()->setCellValue('O2', 'Provinsi');
+		
+		$i=2;
+		$number=0;
+		
+		$nipp = '';
+		foreach ($pegawai as $row_pegawai) :
+		{ 
+			$i++;
+			$number++;
+			if($row_pegawai['peg_jns_kelamin'] == "P"){ $jk="Perempuan"; }
+			else{$jk="Laki-Laki";}
+			
+			//masukkan data ke tabel excel
+			$this->excel->getActiveSheet()->setCellValue("A$i", "$number");
+			$this->excel->getActiveSheet()->setCellValue("B$i", "$row_pegawai[peg_nipp]");
+			$this->excel->getActiveSheet()->setCellValue("C$i", strtoupper("$row_pegawai[peg_nama]"));
+			$this->excel->getActiveSheet()->setCellValue("D$i", "$row_pegawai[peg_tmpt_lahir]");
+			$this->excel->getActiveSheet()->setCellValue("E$i",  mdate("%d-%m-%Y",strtotime($row_pegawai['peg_tgl_lahir'])));
+			$this->excel->getActiveSheet()->setCellValue("F$i", "$jk");
+			$this->excel->getActiveSheet()->setCellValue("G$i", "$row_pegawai[peg_gol_darah]");
+			$this->excel->getActiveSheet()->setCellValue("H$i", "$row_pegawai[p_ag_agama]");
+			$this->excel->getActiveSheet()->setCellValue("I$i", "'$row_pegawai[p_al_no_telp]");
+			$this->excel->getActiveSheet()->setCellValue("J$i", "$row_pegawai[p_al_email]");
+			$this->excel->getActiveSheet()->setCellValue("K$i", "$row_pegawai[p_al_jalan]");
+			$this->excel->getActiveSheet()->setCellValue("L$i", "$row_pegawai[p_al_kelurahan]");
+			$this->excel->getActiveSheet()->setCellValue("M$i", "$row_pegawai[p_al_kecamatan]");
+			$this->excel->getActiveSheet()->setCellValue("N$i", "$row_pegawai[p_al_kabupaten]");
+			$this->excel->getActiveSheet()->setCellValue("O$i", "$row_pegawai[p_al_provinsi]");
+			
+			
+			
+		}endforeach;
+		
+		//change the font size
+		$this->excel->getActiveSheet()->getStyle('A1:K1')->getFont()->setSize(14);
+		//make the font become bold
+		$this->excel->getActiveSheet()->getStyle('A1:K1')->getFont()->setBold(true);
+		$this->excel->getActiveSheet()->getStyle('G2:H2')->getFont()->setBold(true);
+		//merge cell A1 until D1
+		$this->excel->getActiveSheet()->mergeCells('A1:A2');
+		$this->excel->getActiveSheet()->mergeCells('B1:B2');
+		$this->excel->getActiveSheet()->mergeCells('C1:C2');
+		$this->excel->getActiveSheet()->mergeCells('D1:D2');
+		$this->excel->getActiveSheet()->mergeCells('E1:E2');
+		$this->excel->getActiveSheet()->mergeCells('F1:F2');
+		$this->excel->getActiveSheet()->mergeCells('G1:G2');
+		$this->excel->getActiveSheet()->mergeCells('H1:H2');
+		$this->excel->getActiveSheet()->mergeCells('I1:I2');
+		$this->excel->getActiveSheet()->mergeCells('J1:J2');
+		$this->excel->getActiveSheet()->mergeCells('K1:O1');
+		
+		//set aligment to center for that merged cell (A1 to D1)
+		$this->excel->getActiveSheet()->getStyle('A1:O1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$this->excel->getActiveSheet()->getStyle('A1:O1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		
+		 
+		$filename="Data Pegawai.xls"; //save our workbook as this file name
+		header('Content-Type: application/vnd.ms-excel'); //mime type
+		header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
+		header('Cache-Control: max-age=0'); //no cache
+					 
+		//save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
+		//if you want to save it as .XLSX Excel 2007 format
+		$objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel5');  
+		//force user to download the Excel file without writing it to server's HD
+		$objWriter->save('php://output');
+	}
+	
+	function excel_data_pensiun()
+	{
+		$datestring = "%Y" ;
+		$time = time();
+		$tanggal = mdate($datestring, $time);
+		
+		$type = '52';
+		$limit = '100';
+		
+		$pegawai = $this->kepegawaian->get_data_pensiun_unlimited($tanggal,$type,$limit);
+				
+		//load our new PHPExcel library
+		$this->load->library('excel');
+		//activate worksheet number 1
+		$this->excel->setActiveSheetIndex(0);
+		//name the worksheet
+		$this->excel->getActiveSheet()->setTitle("Data Pegawai Pensiun ");
+		//set cell A1 content with some text
+		
+		$this->excel->getActiveSheet()->setCellValue('A1', 'NO');
+		$this->excel->getActiveSheet()->setCellValue('B1', 'NIPP');
+		$this->excel->getActiveSheet()->setCellValue('C1', 'NAMA');
+		$this->excel->getActiveSheet()->setCellValue('D1', 'TEMPAT LAHIR');
+		$this->excel->getActiveSheet()->setCellValue('E1', 'TANGGAL LAHIR');
+		$this->excel->getActiveSheet()->setCellValue('F1', 'JENIS KELAMIN');
+		$this->excel->getActiveSheet()->setCellValue('G1', 'GOLONGAN DARAH');
+		$this->excel->getActiveSheet()->setCellValue('H1', 'TMT');
+		
+		
+		$i=1;
+		$number=0;
+		
+		$nipp = '';
+		foreach ($pegawai as $row_pegawai) :
+		{ 
+			$i++;
+			$number++;
+			if($row_pegawai['peg_jns_kelamin'] == "P"){ $jk="Perempuan"; }
+			else{$jk="Laki-Laki";}
+			
+						
+			//masukkan data ke tabel excel
+			$this->excel->getActiveSheet()->setCellValue("A$i", "$number");
+			$this->excel->getActiveSheet()->setCellValue("B$i", "$row_pegawai[peg_nipp]");
+			$this->excel->getActiveSheet()->setCellValue("C$i", strtoupper("$row_pegawai[peg_nama]"));
+			$this->excel->getActiveSheet()->setCellValue("D$i", "$row_pegawai[peg_tmpt_lahir]");
+			$this->excel->getActiveSheet()->setCellValue("E$i", mdate("%d-%m-%Y",strtotime($row_pegawai['peg_tgl_lahir'])));
+			$this->excel->getActiveSheet()->setCellValue("F$i", "$jk");
+			$this->excel->getActiveSheet()->setCellValue("G$i", "$row_pegawai[peg_gol_darah]");
+			$this->excel->getActiveSheet()->setCellValue("H$i", mdate("%d-%m-%Y",strtotime($row_pegawai['p_tmt_tmt'])));
+			
+		}endforeach;
+		
+		//change the font size
+		$this->excel->getActiveSheet()->getStyle('A1:H1')->getFont()->setSize(14);
+		//make the font become bold
+		$this->excel->getActiveSheet()->getStyle('A1:H1')->getFont()->setBold(true);
+		//merge cell A1 until D1
+		
+		
+		//set aligment to center for that merged cell (A1 to D1)
+		$this->excel->getActiveSheet()->getStyle('A1:H1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$this->excel->getActiveSheet()->getStyle('A1:H1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		 
+		$filename="Data Pegawai Pensiun.xls"; //save our workbook as this file name
+		header('Content-Type: application/vnd.ms-excel'); //mime type
+		header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
+		header('Cache-Control: max-age=0'); //no cache
+					 
+		//save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
+		//if you want to save it as .XLSX Excel 2007 format
+		$objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel5');  
+		//force user to download the Excel file without writing it to server's HD
+		$objWriter->save('php://output');
+		
+	}
+	
+	function excel_data_supervisor()
+	{
+		$datestring = "%Y" ;
+		$time = time();
+		$tanggal = mdate($datestring, $time);
+		
+		$supervisor = $this->kepegawaian->get_data_spv_unlimited();
+				
+		//load our new PHPExcel library
+		$this->load->library('excel');
+		//activate worksheet number 1
+		$this->excel->setActiveSheetIndex(0);
+		//name the worksheet
+		$this->excel->getActiveSheet()->setTitle("Data Supervisor ");
+		//set cell A1 content with some text
+		
+		$this->excel->getActiveSheet()->setCellValue('A1', 'NO');
+		$this->excel->getActiveSheet()->setCellValue('B1', 'NO UNIT');
+		$this->excel->getActiveSheet()->setCellValue('C1', 'NIPP');
+		$this->excel->getActiveSheet()->setCellValue('D1', 'NAMA PEGAWAI');
+		$this->excel->getActiveSheet()->setCellValue('E1', 'GRADE');
+		$this->excel->getActiveSheet()->setCellValue('F1', 'M.K.A');
+		$this->excel->getActiveSheet()->setCellValue('G1', 'T.M.T GA/GS');
+		$this->excel->getActiveSheet()->setCellValue('H1', 'JENIS KELAMIN');
+		$this->excel->getActiveSheet()->setCellValue('I1', 'TGL LAHIR');
+		$this->excel->getActiveSheet()->setCellValue('J1', 'UMUR');
+		$this->excel->getActiveSheet()->setCellValue('K1', 'T.M.T MUTASI');
+		$this->excel->getActiveSheet()->setCellValue('L1', 'JABATAN');
+		
+		
+		$i=1;
+		$number=0;
+		
+		$nipp = '';
+		foreach ($supervisor as $row_supervisor) :
+		{ 
+			$datestring = "%d-%m-%Y" ;
+			$tgl_lahir = mdate($datestring,strtotime($row_supervisor['peg_tgl_lahir']));
+			$umur=floor(($time - strtotime($row_supervisor['peg_tgl_lahir']))/(365*24*60*60));
+			
+			if ($row_supervisor['p_grd_grade'] == NULL)
+			{
+				$grade = '-';
+			}
+			else
+			{
+				$grade = $row_supervisor['p_grd_grade'];
+			}
+			if (($row_supervisor['p_tmt_tmt'] == NULL) OR ($row_supervisor['p_tmt_tmt'] == '0000-00-00'))
+			{
+				$tmt = '-';
+				$mka = '-';
+			}
+			else
+			{
+				$tmt = mdate($datestring,strtotime($row_supervisor['p_tmt_tmt']));
+				$mka = floor(($time-strtotime($row_supervisor['p_tmt_tmt']))/(365*24*60*60));
+			}			
+			
+			
+			
+			$i++;
+			$number++;
+			if($row_supervisor['peg_jns_kelamin'] == "P"){ $jk="Perempuan"; }
+			else{$jk="Laki-Laki";}
+			
+						
+			//masukkan data ke tabel excel
+			$this->excel->getActiveSheet()->setCellValue("A$i", "$number");
+			$this->excel->getActiveSheet()->setCellValue("B$i", "$row_supervisor[p_unt_kode_unit]");
+			$this->excel->getActiveSheet()->setCellValue("C$i", "$row_supervisor[peg_nipp]");
+			$this->excel->getActiveSheet()->setCellValue("D$i", strtoupper("$row_supervisor[peg_nama]"));
+			$this->excel->getActiveSheet()->setCellValue("E$i", "$grade");
+			$this->excel->getActiveSheet()->setCellValue("F$i", "$mka");
+			$this->excel->getActiveSheet()->setCellValue("G$i", "$tmt");
+			$this->excel->getActiveSheet()->setCellValue("H$i", "$jk");
+			$this->excel->getActiveSheet()->setCellValue("I$i", mdate("%d-%m-%Y",strtotime($row_supervisor['peg_tgl_lahir'])));
+			$this->excel->getActiveSheet()->setCellValue("J$i", "$umur");
+			$this->excel->getActiveSheet()->setCellValue("K$i", "-");
+			$this->excel->getActiveSheet()->setCellValue("L$i", "$row_supervisor[p_jbt_jabatan]");
+			
+			
+		}endforeach;
+		
+		//change the font size
+		$this->excel->getActiveSheet()->getStyle('A1:L1')->getFont()->setSize(14);
+		//make the font become bold
+		$this->excel->getActiveSheet()->getStyle('A1:L1')->getFont()->setBold(true);
+		//merge cell A1 until D1
+		
+		
+		//set aligment to center for that merged cell (A1 to D1)
+		$this->excel->getActiveSheet()->getStyle('A1:L1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$this->excel->getActiveSheet()->getStyle('A1:L1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		 
+		$filename="Data Supervisor.xls"; //save our workbook as this file name
+		header('Content-Type: application/vnd.ms-excel'); //mime type
+		header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
+		header('Cache-Control: max-age=0'); //no cache
+					 
+		//save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
+		//if you want to save it as .XLSX Excel 2007 format
+		$objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel5');  
+		//force user to download the Excel file without writing it to server's HD
+		$objWriter->save('php://output');
+		
+	}
+	
+	
 }
 
 /* End of file welcome.php */
