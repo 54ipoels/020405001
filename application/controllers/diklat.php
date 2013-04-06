@@ -84,6 +84,10 @@ class diklat extends Application {
 	
 	public function get_stkp()
 	{
+		$monthstring = "%m" ;
+		$yearstring = "%Y" ;
+		$time = time();
+		
 		#pagination config
 		$config['base_url'] = base_url().'index.php/diklat/get_stkp/'; //set the base url for pagination
 		$config['total_rows'] = $this->pendidikan->countSTKP(); //total rows
@@ -95,10 +99,13 @@ class diklat extends Application {
 		$data['list_stkp'] = $this->pendidikan->get_list_stkp();
 		$data['list_unit'] = $this->pendidikan->get_list_unit();
 		$data['pegawai_with_stkp_and_unit'] = $this->pendidikan->get_data_stkp_with_unit_and_name($config['per_page'],$page);
+		$data['month'] = mdate($monthstring, $time);
+		$data['year'] = mdate($yearstring, $time);
 		$data['page'] = 'Report STKP';
 		$data['page_diklat'] = 'yes';
 		$data['view_stkp'] = 'class="this"';
 		
+		//print_r($data);
 		$this->load->view('diklat/index',$data);
 	}
 	

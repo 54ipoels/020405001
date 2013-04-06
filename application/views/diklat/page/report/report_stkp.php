@@ -60,6 +60,8 @@
 				<tbody>
 				<?php 
 				$datestring = "%d-%m-%Y" ;
+				$monthstring = "%m";
+				$yearstring = "%Y";
 				$nipp = '';
 				if ($this->uri->segment(3)== NULL)
 				{
@@ -108,21 +110,26 @@
 					{
 						$stkp_selesai = mdate($datestring,strtotime($row_pegawai['p_stkp_finish']));
 					}
-					
+					$color = '';
+					if ((mdate($yearstring,strtotime($row_pegawai['p_stkp_finish'])) <= $year)){
+						if (mdate($monthstring,strtotime($row_pegawai['p_stkp_finish']))-$month <= 4) {
+							$color = 'style="background-color:#ffdfdf"';
+						}
+					}
 					$detail = anchor('pekerja/get_pegawai/'.$row_pegawai['peg_nipp'],'Detail'); ?>
 					<tr>
-                        <td><center><?php echo $number; ?></center></td>
-						<td><center><?php echo $nipp; ?></center></td>
-						<td><?php echo $nama; ?></td>
-						<td><?php echo $row_pegawai['p_stkp_jenis']; ?></td>
-						<td><center><?php echo $row_pegawai['p_stkp_no_license']; ?></center></td>
-						<td><center><?php echo $stkp_mulai; ?></center></td>
-						<td><center><?php echo $stkp_selesai; ?></center></td>
-						<td><center><?php echo $row_pegawai['p_stkp_lembaga']; ?></center></td>
-						<td><center><?php echo $pelaksanaan; ?></center></td>
-						<td><center><?php echo $pelaksanaan; ?></center></td>
-						<td><center><?php echo $row_pegawai['p_stkp_type']; ?></center></td>
-						<td><center></center></td>
+                        <td <?php echo $color ?>><center><?php echo $number; ?></center></td>
+						<td <?php echo $color ?>><center><?php echo $nipp; ?></center></td>
+						<td <?php echo $color ?>><?php echo $nama; ?></td>
+						<td <?php echo $color ?>><?php echo $row_pegawai['p_stkp_jenis']; ?></td>
+						<td <?php echo $color ?>><center><?php echo $row_pegawai['p_stkp_no_license']; ?></center></td>
+						<td <?php echo $color ?>><center><?php echo $stkp_mulai; ?></center></td>
+						<td <?php echo $color ?>><center><?php echo $stkp_selesai; ?></center></td>
+						<td <?php echo $color ?>><center><?php echo $row_pegawai['p_stkp_lembaga']; ?></center></td>
+						<td <?php echo $color ?>><center><?php echo $pelaksanaan; ?></center></td>
+						<td <?php echo $color ?>><center><?php echo $pelaksanaan; ?></center></td>
+						<td <?php echo $color ?>><center><?php echo $row_pegawai['p_stkp_type']; ?></center></td>
+						<td <?php echo $color ?>><center></center></td>
                     </tr> <?php
 					$number++;
 					$nipp = $row_pegawai['peg_nipp'];
