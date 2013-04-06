@@ -44,14 +44,20 @@
 					<div class="formRow">
                         <label>Tanggal Pelaksanaan :<span class="req">*</span></label>
                         <div class="formRight"><?php 
-						$tanggal = array(
-							'name' => 'tanggal',
-							'id'   => 'tanggal',
+						$tanggal_in = array(
+							'name' => 'tanggal_start',
+							'id'   => 'tanggal_start',
 							'style'=> 'width:30%',
 							'class'=> 'maskDate'
 						);
-						echo form_input($tanggal) ?><br/>
-						<?php echo form_error('tanggal')?></div>
+						echo form_input($tanggal_in) ?> <b>s/d</b> <?php 
+						$tanggal_out = array(
+							'name' => 'tanggal_end',
+							'id'   => 'tanggal_end',
+							'style'=> 'width:30%',
+							'class'=> 'maskDate'
+						);
+						echo form_input($tanggal_out) ?></div>
                         <div class="clear"></div>
                     </div>
 					<div class="formRow">
