@@ -63,6 +63,8 @@
 				$monthstring = "%m";
 				$yearstring = "%Y";
 				$nipp = '';
+				$stkp = '';
+				$waktu = '';
 				if ($this->uri->segment(3)== NULL)
 				{
 					$number = 1;
@@ -85,14 +87,22 @@
 					{
 						$nipp = $row_pegawai['peg_nipp'];
 						$nama = $row_pegawai['peg_nama'];
-					}
+					}	
 					if ($row_pegawai['p_stkp_pelaksanaan'] == '0000-00-00')
 					{
-						$pelaksanaan = '-';
+						$mulai= '-';
 					}
 					else
 					{
-						$pelaksanaan = $row_pegawai['p_stkp_pelaksanaan'];
+						$mulai = mdate($datestring,strtotime($row_pegawai['p_stkp_pelaksanaan']));
+					}
+					if ($row_pegawai['p_stkp_selesai'] == '0000-00-00')
+					{
+						$selesai = '-';
+					}
+					else
+					{
+						$selesai =mdate($datestring,strtotime( $row_pegawai['p_stkp_pelaksanaan']));
 					}
 					if ($row_pegawai['p_stkp_mulai'] == '0000-00-00')
 					{
@@ -126,12 +136,12 @@
 						<td <?php echo $color ?>><center><?php echo $stkp_mulai; ?></center></td>
 						<td <?php echo $color ?>><center><?php echo $stkp_selesai; ?></center></td>
 						<td <?php echo $color ?>><center><?php echo $row_pegawai['p_stkp_lembaga']; ?></center></td>
-						<td <?php echo $color ?>><center><?php echo $pelaksanaan; ?></center></td>
-						<td <?php echo $color ?>><center><?php echo $pelaksanaan; ?></center></td>
+						<td <?php echo $color ?>><center><?php echo $mulai; ?></center></td>
+						<td <?php echo $color ?>><center><?php echo $selesai; ?></center></td>
 						<td <?php echo $color ?>><center><?php echo $row_pegawai['p_stkp_type']; ?></center></td>
 						<td <?php echo $color ?>><center></center></td>
                     </tr> <?php
-					$number++;
+					$number++;;
 					$nipp = $row_pegawai['peg_nipp'];
 				}endforeach; 
 				?>

@@ -105,7 +105,6 @@ class diklat extends Application {
 		$data['page_diklat'] = 'yes';
 		$data['view_stkp'] = 'class="this"';
 		
-		//print_r($data);
 		$this->load->view('diklat/index',$data);
 	}
 	
@@ -131,6 +130,9 @@ class diklat extends Application {
 	
 	public function sort_stkp()
 	{
+		$monthstring = "%m" ;
+		$yearstring = "%Y" ;
+		$time = time();
 		if ($this->input->post('stkp')== NULL)
 		{
 			$stkp = $this->uri->segment(3);
@@ -180,6 +182,8 @@ class diklat extends Application {
 		$data['list_stkp'] = $this->pendidikan->get_list_stkp();
 		$data['list_unit'] = $this->pendidikan->get_list_unit();
 		$data['pegawai_with_stkp_and_unit'] = $this->pendidikan->search_data_stkp_with_unit_and_name($config['per_page'],$page, $stkp, $unit);
+		$data['month'] = mdate($monthstring, $time);
+		$data['year'] = mdate($yearstring, $time);
 		
 		$data['page'] = 'Report STKP';
 		$data['page_diklat'] = 'yes';
@@ -290,7 +294,8 @@ class diklat extends Application {
 			$data['page'] = 'STKP Bulanan Next';
 			$data['STKP'] = $this->input->post('stkp');
 			$data['jumlah'] = $this->input->post('jumlah');
-			$data['tanggal'] = $this->input->post('tanggal');
+			$data['tanggal_start'] = $this->input->post('tanggal_start');
+			$data['tanggal_end'] = $this->input->post('tanggal_end');
 			$data['license'] = $this->input->post('license');
 			$data['lp'] = $this->input->post('lp');
 			$data['view_input_stkp'] = 'class="this"';
@@ -304,7 +309,8 @@ class diklat extends Application {
 	{
 		$stkp = $this->input->post('stkp');
 		$jumlah = $this->input->post('jumlah');
-		$tanggal_stkp = $this->input->post('tanggal');
+		$tanggal_start = $this->input->post('tanggal_start');
+		$tanggal_end = $this->input->post('tanggal_end');
 		
 		$datestring = "%Y-%m-%d" ;
 		$time = time();
@@ -313,9 +319,9 @@ class diklat extends Application {
 		//print_r(mdate($datestring, strtotime(str_replace('/','-',$tanggal_stkp))));
 		if ($this->input->post('license') == 'yes')
 		{
-			$this->pendidikan->input_nilai_stkp($stkp, $jumlah, $tanggal_stkp, username());
+			$this->pendidikan->input_nilai_stkp($stkp, $jumlah, $tanggal_start, $tanggal_end, username());
 		} else {
-			$this->pendidikan->input_nilai_nstkp($stkp, $jumlah, $tanggal_stkp, username());
+			$this->pendidikan->input_nilai_nstkp($stkp, $jumlah, $tanggal_start, $tanggal_end, username());
 		}
 		redirect('diklat/input_stkp_bulanan/part_one');
 	}

@@ -1,5 +1,5 @@
 <div class="widget">
-		  <div class="title"><img src="<?php echo base_url()?>images/icons/dark/frames.png" alt="" class="titleIcon" /><h6>STKP : <?php echo $STKP.' - Tanggal Pelaksanaan :'.$tanggal; ?></h6></div>
+		  <div class="title"><img src="<?php echo base_url()?>images/icons/dark/frames.png" alt="" class="titleIcon" /><h6>STKP : <?php echo $STKP.' - Tanggal Pelaksanaan :'.$tanggal_start.'<b> s/d </b>'.$tanggal_end; ?></h6></div>
 		  <?php echo form_open('diklat/input_nilai_stkp');?>
             <table cellpadding="0" cellspacing="0" width="100%" class="display sTable">
                 <thead>
@@ -8,18 +8,21 @@
                         <td rowspan="2" width="50px">NIPP</td>
                         <td rowspan="2" width="19px">Mandatory</td>
 						<td rowspan="2" width="400px">License</td>
-                        <td colspan="2">Validity</td>
+						<?php if ($license == 'yes') {
+							echo '<td colspan="2">Validity</td>'; } ?>
 						<td rowspan="2" width="19px">Recurrent</td>
                     </tr>
-					<tr>
-						<td width="120px">Start Date</td>
-						<td width="120px">End Date</td>
-					</tr>
+					<?php if ($license == 'yes') {
+						echo '<tr>' ;
+						echo '<td width="120px">Start Date</td>';
+						echo '<td width="120px">End Date</td>' ;
+						echo '</tr>' ;} ?>
                 </thead>
 				<tbody>
 				<?php 
 				echo form_hidden('stkp', $STKP);
-				echo form_hidden('tanggal', $tanggal);
+				echo form_hidden('tanggal_start', $tanggal_start);
+				echo form_hidden('tanggal_end', $tanggal_end);
 				echo form_hidden('jumlah', $jumlah);
 				echo form_hidden('license', $license);
 				echo form_hidden('lp', $lp);
@@ -36,8 +39,10 @@
 								);
 					echo '<td>'.form_checkbox($check_mand).'</td>';
 					echo '<td align="center"><input type="text" name="license'.$i.'" value="" id="license'.$i.'" style="width:80%"  /></td>';
-					echo '<td align="center"><input type="text" name="start'.$i.'" value="" id="start'.$i.'" style="width:50%" class="maskDate"/></td>';
-					echo '<td align="center"><input type="text" name="end'.$i.'" value="" id="end'.$i.'" style="width:50%" class="maskDate"/></td>';
+					if ($license == 'yes') {
+						echo '<td align="center"><input type="text" name="start'.$i.'" value="" id="start'.$i.'" style="width:50%" class="maskDate"/></td>';
+						echo '<td align="center"><input type="text" name="end'.$i.'" value="" id="end'.$i.'" style="width:50%" class="maskDate"/></td>';
+					}
 					$check_recc = array(
 								  'name'        => 'recc'.$i,
 								  'id'          => 'recc'.$i,
