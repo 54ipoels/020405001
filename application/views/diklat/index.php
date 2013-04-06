@@ -111,7 +111,7 @@
 			$this->load->view('diklat/page/edit/edit_data_pribadi');
 		}else
 		if ($page == 'Edit Data Alamat')
-		{
+		{ 
 			$this->load->view('diklat/page/edit/edit_data_alamat');
 		}else
 		if ($page == 'Edit Data Pasangan')

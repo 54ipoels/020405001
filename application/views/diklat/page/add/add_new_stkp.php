@@ -84,7 +84,7 @@
 						echo form_input($validitas_akhir) ?></div>
                         <div class="clear"></div>
                     </div>
-					<div class="formRow">
+					<div class="formRow"> 
                         <label>License:</label>
                         <div class="formRight">
 						<?php 

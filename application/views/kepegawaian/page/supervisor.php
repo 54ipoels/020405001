@@ -23,6 +23,7 @@
 				</tfoot>
 				<tbody>
 				<?php 
+				$time=time();
 				if ($this->uri->segment(3)== NULL)
 				{
 					$number = 1;
@@ -52,7 +53,7 @@
 					{
 						$tmt = mdate($datestring,strtotime($row_supervisor['p_tmt_tmt']));
 						$mka = floor(($time-strtotime($row_supervisor['p_tmt_tmt']))/(365*24*60*60));
-					}
+					} 
 					  ?>
 					<tr>
                         <td><center><?php echo $number; ?></center></td>

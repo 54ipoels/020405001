@@ -41,7 +41,7 @@
 						<?php echo form_error('jumlah')?></div>
                         <div class="clear"></div>
                     </div>
-					<div class="formRow">
+					<div class="formRow"> 
                         <label>Tanggal Pelaksanaan :<span class="req">*</span></label>
                         <div class="formRight"><?php 
 						$tanggal_in = array(

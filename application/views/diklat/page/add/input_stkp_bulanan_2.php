@@ -35,7 +35,7 @@
 								  'name'        => 'mandatory'.$i,
 								  'id'          => 'mandatory'.$i,
 								  'value'       => 'yes',
-								  'checked'     => FALSE,
+								  'checked'     => FALSE, 
 								);
 					echo '<td>'.form_checkbox($check_mand).'</td>';
 					echo '<td align="center"><input type="text" name="license'.$i.'" value="" id="license'.$i.'" style="width:80%"  /></td>';

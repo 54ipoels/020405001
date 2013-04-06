@@ -24,7 +24,7 @@
 		'value'	=> 'Sort',
 		); 
 	echo form_submit($submit)?></form></div></td>
-	<td width="300px"><div class="searchWidget1"><?php echo form_open('diklat/search_pegawai');?>
+	<td width="300px"><div class="searchWidget1"><?php /* echo form_open('diklat/search_pegawai'); */ echo form_open('diklat/search_stkp');?>
                         <input type="text" name="search" width="100px" placeholder="Enter search text..." />
                         <input type="submit" name="find" value="" class="blueB m110"/></div>
                     </form></td></tr>
@@ -82,7 +82,7 @@
 					{
 						$nipp = '';
 						$nama = '';
-					}
+					} 
 					else
 					{
 						$nipp = $row_pegawai['peg_nipp'];
@@ -126,20 +126,36 @@
 							$color = 'style="background-color:#ffdfdf"';
 						}
 					}
-					$detail = anchor('pekerja/get_pegawai/'.$row_pegawai['peg_nipp'],'Detail'); ?>
+					$detail = anchor('pekerja/get_stkp_selection/'.$row_pegawai['peg_nipp'],'Detail'); 
+					
+					if ($nipp==""){$nipp_anchor = "";} else {$nipp_anchor =  anchor('diklat/get_stkp_selection/nipp/'.$nipp, $nipp);}
+					if ($nama==""){$nama_anchor = "";} else {$nama_anchor =  anchor('diklat/get_stkp_selection/nama/'.$nama, $nama);}
+					$jenis_anchor = anchor('diklat/get_stkp_selection/jenis/'.$row_pegawai['p_stkp_jenis'], $row_pegawai['p_stkp_jenis']);
+					$lembaga_anchor = anchor('diklat/get_stkp_selection/lembaga/'.$row_pegawai['p_stkp_lembaga'], $row_pegawai['p_stkp_lembaga']);
+					$type_anchor = anchor('diklat/get_stkp_selection/type/'.$row_pegawai['p_stkp_type'], $row_pegawai['p_stkp_type']);
+					
+					?>
 					<tr>
                         <td <?php echo $color ?>><center><?php echo $number; ?></center></td>
-						<td <?php echo $color ?>><center><?php echo $nipp; ?></center></td>
-						<td <?php echo $color ?>><?php echo $nama; ?></td>
-						<td <?php echo $color ?>><?php echo $row_pegawai['p_stkp_jenis']; ?></td>
+						<td <?php echo $color ?>><center><?php echo $nipp_anchor; ?></a></center></td>
+						<td <?php echo $color ?>><?php echo $nama_anchor; ?></td>
+						<td <?php echo $color ?>><?php echo $jenis_anchor; ?></td>
 						<td <?php echo $color ?>><center><?php echo $row_pegawai['p_stkp_no_license']; ?></center></td>
 						<td <?php echo $color ?>><center><?php echo $stkp_mulai; ?></center></td>
 						<td <?php echo $color ?>><center><?php echo $stkp_selesai; ?></center></td>
-						<td <?php echo $color ?>><center><?php echo $row_pegawai['p_stkp_lembaga']; ?></center></td>
+						<td <?php echo $color ?>><center><?php echo $lembaga_anchor; ?></center></td>
 						<td <?php echo $color ?>><center><?php echo $mulai; ?></center></td>
 						<td <?php echo $color ?>><center><?php echo $selesai; ?></center></td>
-						<td <?php echo $color ?>><center><?php echo $row_pegawai['p_stkp_type']; ?></center></td>
-						<td <?php echo $color ?>><center></center></td>
+						<td <?php echo $color ?>><center><?php echo $type_anchor; ?></center></td>
+						<td <?php echo $color ?>><center></center> 
+						<?php  
+							if($row_pegawai['p_stkp_type'] == "RECC")
+							{ 
+								$add_anchor = anchor('diklat/search_pegawai/'.$row_pegawai['peg_nipp'], "add"); 
+								echo $add_anchor;
+							}
+						?> 
+						</td>
                     </tr> <?php
 					$number++;;
 					$nipp = $row_pegawai['peg_nipp'];

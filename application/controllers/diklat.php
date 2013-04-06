@@ -87,7 +87,7 @@ class diklat extends Application {
 		$monthstring = "%m" ;
 		$yearstring = "%Y" ;
 		$time = time();
-		
+		 
 		#pagination config
 		$config['base_url'] = base_url().'index.php/diklat/get_stkp/'; //set the base url for pagination
 		$config['total_rows'] = $this->pendidikan->countSTKP(); //total rows
@@ -259,6 +259,7 @@ class diklat extends Application {
 		}else{
 			$search_data = $this->input->post('search');
 		}
+				
 		
 		$search = '%'.$search_data.'%';
 		#pagination config
@@ -279,6 +280,8 @@ class diklat extends Application {
 		#calling view
 		$this->load->view('diklat/index', $data);
 	}
+	
+	
 	
 	public function input_stkp_bulanan()
 	{
@@ -339,16 +342,149 @@ class diklat extends Application {
 	{
 		#update data to table pegawai
 		$this->pendidikan->update_data_non_stkp($id);
-		redirect('diklat/');
+		redirect('diklat/get_non_stkp');
 	}
 	
 	function delete_non_stkp($id)
 	{
 		#update data to table pegawai
 		$this->pendidikan->delete_data_non_stkp($id);
-		redirect('diklat/');
+		redirect('diklat/get_non_stkp');
 	}
 	
+	function get_stkp_selection()
+	{ 
+		$monthstring = "%m" ;
+		$yearstring = "%Y" ;
+		$time = time();
+		
+		$type = $this->uri->segment(3);
+		$select = str_replace("%20"," ",$this->uri->segment(4));
+		
+		#pagination config
+		$config['base_url'] = base_url().'index.php/diklat/get_stkp_selection/'.$type.'/'.$select; //set the base url for pagination
+		$config['total_rows'] = $this->pendidikan->countSTKPselection($type,$select); //total rows
+		$config['per_page'] = 10; //the number of per page for pagination
+		$config['uri_segment'] = 5; //see from base_url. 3 for this case
+		$this->pagination->initialize($config);
+		$page = ($this->uri->segment(5)) ? $this->uri->segment(5) : 0;
+		
+		$data['list_stkp'] = $this->pendidikan->get_list_stkp();
+		$data['list_unit'] = $this->pendidikan->get_list_unit();
+		$data['pegawai_with_stkp_and_unit'] = $this->pendidikan->get_data_stkp_with_unit_and_name_selection($config['per_page'],$page,$type,$select);
+		$data['month'] = mdate($monthstring, $time);
+		$data['year'] = mdate($yearstring, $time);
+		$data['page'] = 'Report STKP';
+		$data['page_diklat'] = 'yes';
+		$data['view_stkp'] = 'class="this"';
+		
+		$this->load->view('diklat/index',$data);
+		
+	}
+	
+	function get_nstkp_selection()
+	{ 
+		$monthstring = "%m" ;
+		$yearstring = "%Y" ;
+		$time = time();
+		
+		$type = $this->uri->segment(3);
+		$select = str_replace("%20"," ",$this->uri->segment(4));
+		
+		#pagination config
+		$config['base_url'] = base_url().'index.php/diklat/get_non_stkp_selection/'.$type.'/'.$select; //set the base url for pagination
+		$config['total_rows'] = $this->pendidikan->countNon_STKPselection($type,$select); //total rows
+		$config['per_page'] = 10; //the number of per page for pagination
+		$config['uri_segment'] = 5; //see from base_url. 3 for this case
+		$this->pagination->initialize($config);
+		$page = ($this->uri->segment(5)) ? $this->uri->segment(5) : 0;
+		
+		$data['list_stkp'] = $this->pendidikan->get_list_stkp();
+		$data['list_unit'] = $this->pendidikan->get_list_unit();
+		$data['pegawai_with_stkp_and_unit'] = $this->pendidikan->get_data_nstkp_with_unit_and_name_selection($config['per_page'],$page,$type,$select);
+		$data['month'] = mdate($monthstring, $time);
+		$data['year'] = mdate($yearstring, $time);
+		$data['page'] = 'Report Non STKP';
+		$data['page_diklat'] = 'yes';
+		$data['view_stkp'] = 'class="this"';
+		
+		$this->load->view('diklat/index',$data);
+	}
+	
+	function search_stkp()
+	{
+		if ($this->input->post('search') == NULL )
+		{
+			$search_data = str_replace('%20',' ',$this->uri->segment(3));
+		}else{
+			$search_data = $this->input->post('search');
+		}
+		
+		$monthstring = "%m" ;
+		$yearstring = "%Y" ;
+		$time = time();
+		
+		#pagination config
+		$config['base_url'] = base_url().'index.php/diklat/search_stkp/'.$search_data.'/'; //set the base url for pagination
+		$config['total_rows'] = $this->pendidikan->count_search_stkp($search_data); //total rows
+		$config['per_page'] = 10; //the number of per page for pagination
+		$config['uri_segment'] = 4; //see from base_url. 3 for this case
+		$this->pagination->initialize($config);
+		$page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+		
+		
+		$data['list_stkp'] = $this->pendidikan->get_list_stkp();
+		$data['list_unit'] = $this->pendidikan->get_list_unit();
+		$data['pegawai_with_stkp_and_unit'] = $this->pendidikan->search_stkp($config['per_page'],$page,$search_data);
+		$data['month'] = mdate($monthstring, $time);
+		$data['year'] = mdate($yearstring, $time);
+		$data['page'] = 'Report STKP';
+		$data['page_diklat'] = 'yes';
+		$data['view_stkp'] = 'class="this"';
+		
+		
+		//print_r($data);
+		//print_r($search);
+		#calling view
+		$this->load->view('diklat/index', $data);
+	}
+	
+	function search_nstkp()
+	{ 
+		if ($this->input->post('search') == NULL )
+		{
+			$search_data = str_replace('%20',' ',$this->uri->segment(3));
+		}else{
+			$search_data = $this->input->post('search');
+		}
+		
+		$monthstring = "%m" ;
+		$yearstring = "%Y" ;
+		$time = time();
+			
+		#pagination config
+		$config['base_url'] = base_url().'index.php/diklat/search_nstkp/'.$search_data; //set the base url for pagination
+		$config['total_rows'] = $this->pendidikan->count_search_nstkp($search_data); //total rows
+		$config['per_page'] = 10; //the number of per page for pagination
+		$config['uri_segment'] = 4; //see from base_url. 3 for this case
+		$this->pagination->initialize($config);
+		$page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+		
+		$data['list_stkp'] = $this->pendidikan->get_list_stkp();
+		$data['list_unit'] = $this->pendidikan->get_list_unit();
+		$data['pegawai_with_stkp_and_unit'] = $this->pendidikan->search_nstkp($config['per_page'],$page,$search_data);
+		$data['month'] = mdate($monthstring, $time);
+		$data['year'] = mdate($yearstring, $time);
+		$data['page'] = 'Report Non STKP';
+		$data['page_diklat'] = 'yes';
+		$data['view_stkp'] = 'class="this"';
+		
+		$this->load->view('diklat/index',$data);
+	}
+	
+	
+	
+	# EXPORT TO EXCEL
 	function excel_non_stkp()
 	{
 		$datestring = "%Y-%m-%d" ;
