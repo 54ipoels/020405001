@@ -406,6 +406,9 @@ class pendidikan extends CI_Model
 		} else if ($type == "nama")
 		{
 			$selection = " WHERE peg_nama = '$select' ";
+		} else if ($type == "jenis")
+		{
+			$selection = " WHERE p_stkp_jenis = '$select' ";
 		} else if ($type == "rating")
 		{
 			$selection = " WHERE p_stkp_rating = '$select' ";
