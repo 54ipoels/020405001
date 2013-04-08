@@ -130,9 +130,9 @@
 					
 					if ($nipp==""){$nipp_anchor = "";} else {$nipp_anchor =  anchor('diklat/get_stkp_selection/nipp/'.$nipp, $nipp);}
 					if ($nama==""){$nama_anchor = "";} else {$nama_anchor =  anchor('diklat/get_stkp_selection/nama/'.$nama, $nama);}
-					$jenis_anchor = anchor('diklat/get_stkp_selection/jenis/'.$row_pegawai['p_stkp_jenis'], $row_pegawai['p_stkp_jenis']);
-					$lembaga_anchor = anchor('diklat/get_stkp_selection/lembaga/'.$row_pegawai['p_stkp_lembaga'], $row_pegawai['p_stkp_lembaga']);
-					$type_anchor = anchor('diklat/get_stkp_selection/type/'.$row_pegawai['p_stkp_type'], $row_pegawai['p_stkp_type']);
+					if ($row_pegawai['p_stkp_jenis']=="") {$jenis_anchor ="";} else {$jenis_anchor = anchor('diklat/get_stkp_selection/jenis/'.$row_pegawai['p_stkp_jenis'], $row_pegawai['p_stkp_jenis']);}
+					if ($row_pegawai['p_stkp_lembaga']=="") {$jenis_anchor ="";} else {$lembaga_anchor = anchor('diklat/get_stkp_selection/lembaga/'.$row_pegawai['p_stkp_lembaga'], $row_pegawai['p_stkp_lembaga']);}
+					if ($row_pegawai['p_stkp_type']=="") {$jenis_anchor ="";} else {$type_anchor = anchor('diklat/get_stkp_selection/type/'.$row_pegawai['p_stkp_type'], $row_pegawai['p_stkp_type']);}
 					
 					?>
 					<tr>
