@@ -345,11 +345,35 @@ class diklat extends Application {
 		redirect('diklat/get_non_stkp');
 	}
 	
+	function edit_stkp($id)
+	{
+		$data['stkp'] = $this->pendidikan->get_nilai_stkp($id);
+		$data['list_stkp'] = $this->pendidikan->get_list_stkp();
+		
+		$data['page'] = 'Edit STKP';
+		$data['page_diklat'] = 'yes';
+		$this->load->view('diklat/index', $data);
+	}
+	
+	function update_stkp($id)
+	{
+		#update data to table pegawai
+		$this->pendidikan->update_data_stkp($id);
+		redirect('diklat/get_stkp');
+	}
+	
+	
 	function delete_non_stkp($id)
 	{
 		#update data to table pegawai
 		$this->pendidikan->delete_data_non_stkp($id);
 		redirect('diklat/get_non_stkp');
+	}
+	function delete_stkp($id)
+	{
+		#update data to table pegawai
+		$this->pendidikan->delete_data_stkp($id);
+		redirect('diklat/get_stkp');
 	}
 	
 	function get_stkp_selection()

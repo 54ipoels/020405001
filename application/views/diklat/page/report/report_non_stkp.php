@@ -107,7 +107,10 @@ echo form_input('license');?></div><td width="410px">
 						<td><center><?php echo '-'; ?></center></td>
 						<td><center><?php echo '-'; ?></center></td>
 						<td><center><?php echo $lembaga_anchor; ?></center></td>
-						<td><center><?php echo anchor('diklat/edit_non_stkp/'.$row_pegawai['id_peg_non_stkp'], 'edit');
+						<td><center><?php 
+										echo anchor('diklat/search_pegawai/'.$row_pegawai['peg_nipp'], "add"); 
+										echo " | ";
+										echo anchor('diklat/edit_non_stkp/'.$row_pegawai['id_peg_non_stkp'], 'edit');
 										echo " | ";
 										echo anchor('diklat/delete_non_stkp/'.$row_pegawai['id_peg_non_stkp'], 'delete'); ?>
 							</center></td>

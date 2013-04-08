@@ -145,11 +145,14 @@
 		if ($page == 'Add Data Bahasa')
 		{
 			$this->load->view('diklat/page/add/add_data_bahasa');
-		}
-		else
+		}else
 		if ($page == 'Edit non STKP')
 		{
 			$this->load->view('diklat/page/edit/edit_non_stkp');
+		}else
+		if ($page == 'Edit STKP')
+		{
+			$this->load->view('diklat/page/edit/edit_stkp');
 		}
 		?>
 	</div>
