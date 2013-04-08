@@ -56,7 +56,7 @@ echo form_input('license');?></div><td width="410px">
 				</tfoot>
 				<tbody>
 				<?php 
-				$datestring = "%d-%m-%Y" ;
+				$datestring = "%d-%M-%Y" ;
 				$nipp = '';
 				if ($this->uri->segment(3)== NULL)
 				{
@@ -101,7 +101,7 @@ echo form_input('license');?></div><td width="410px">
 					<tr>
                         <td><center><?php echo $number; ?></center></td>
 						<td><center><?php echo $nipp_anchor; ?></center></td>
-						<td><?php echo $nama_anchor; ?></td>
+						<td><?php echo $nama; ?></td>
 						<td><?php echo $jenis_anchor; ?></td>
 						<td><center><?php echo $row_pegawai['p_nstkp_no_license']; ?></center></td>
 						<td><center><?php echo '-'; ?></center></td>

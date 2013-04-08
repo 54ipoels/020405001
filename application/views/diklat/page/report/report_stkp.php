@@ -56,11 +56,11 @@
 					<td>From</td><td>Until</td><td>From</td><td>Until</td></tr>
                 </thead>
 				<tfoot>
-					<tr><td colspan=12><center><div class="pagination"><?php echo $this->pagination->create_links();?></div></center></td></td></tr>
+					<tr><td colspan=13><center><div class="pagination"><?php echo $this->pagination->create_links();?></div></center></td></td></tr>
 				</tfoot>
 				<tbody>
 				<?php 
-				$datestring = "%d-%m-%Y" ;
+				$datestring = "%d-%M-%Y" ;
 				$monthstring = "%m";
 				$yearstring = "%Y";
 				$nipp = '';
@@ -129,18 +129,19 @@
 					}
 					$detail = anchor('pekerja/get_stkp_selection/'.$row_pegawai['peg_nipp'],'Detail'); 
 					
-					if ($nipp==""){$nipp_anchor = "";} else {$nipp_anchor =  anchor('diklat/get_stkp_selection/nipp/'.$nipp, $nipp);}
+					if ($nipp==""){$nipp_anchor = "";} else {
+						if ($this->uri->segment(3) == 'nipp'){$nipp_anchor =  anchor('diklat/detail_kompetensi/'.$nipp, $nipp); } else {$nipp_anchor =  anchor('diklat/get_stkp_selection/nipp/'.$nipp, $nipp);}}
 					if ($nama==""){$nama_anchor = "";} else {$nama_anchor =  anchor('diklat/get_stkp_selection/nama/'.$nama, $nama);}
 					if ($row_pegawai['p_stkp_jenis']=="") {$jenis_anchor ="";} else {$jenis_anchor = anchor('diklat/get_stkp_selection/jenis/'.$row_pegawai['p_stkp_jenis'], $row_pegawai['p_stkp_jenis']);}
 					if ($row_pegawai['p_stkp_rating']=="") {$rating_anchor ="";} else {$rating_anchor = anchor('diklat/get_stkp_selection/rating/'.$row_pegawai['p_stkp_rating'], $row_pegawai['p_stkp_rating']);}
 					if ($row_pegawai['p_stkp_lembaga']=="") {$lembaga_anchor ="";} else {$lembaga_anchor = anchor('diklat/get_stkp_selection/lembaga/'.$row_pegawai['p_stkp_lembaga'], $row_pegawai['p_stkp_lembaga']);}
 					if ($row_pegawai['p_stkp_type']=="") {$type_anchor ="";} else {$type_anchor = anchor('diklat/get_stkp_selection/type/'.$row_pegawai['p_stkp_type'], $row_pegawai['p_stkp_type']);}
-					
 					?>
+					
 					<tr>
                         <td <?php echo $color ?>><center><?php echo $number; ?></center></td>
 						<td <?php echo $color ?>><center><?php echo $nipp_anchor; ?></a></center></td>
-						<td <?php echo $color ?>><?php echo $nama_anchor; ?></td>
+						<td <?php echo $color ?>><?php echo $nama; ?></td>
 						<td <?php echo $color ?>><?php echo $jenis_anchor; ?></td>
 						<td <?php echo $color ?>><?php echo $rating_anchor; ?></td>
 						<td <?php echo $color ?>><center><?php echo $row_pegawai['p_stkp_no_license']; ?></center></td>

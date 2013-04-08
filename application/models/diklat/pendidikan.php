@@ -172,7 +172,8 @@ class pendidikan extends CI_Model
 			$data_stkp = array(
 				'p_stkp_nipp' 			=> $this->input->post('nipp'.$i),
 				'p_stkp_type' 			=> $rec,
-				'p_stkp_rating'			=> $stkp,
+				'p_stkp_jenis'			=> $stkp,
+				'p_stkp_rating'			=> $this->input->post('rating'),
 				'p_stkp_lembaga'		=> $this->input->post('lp'),
 				'p_stkp_no_license'		=> $mand,
 				'p_stkp_pelaksanaan'	=> $tanggal_start,

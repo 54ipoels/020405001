@@ -85,6 +85,10 @@
 		if ($page == 'STKP Bulanan Next')
 		{
 			$this->load->view('diklat/page/add/input_stkp_bulanan_2');
+		}else 
+		if ($page == 'Detail Kompetensi')
+		{
+			$this->load->view('diklat/page/report/data_kompetensi');
 		}
 		// -------- submit data karyawan ---------------//
 		else 

@@ -16,6 +16,17 @@
 						);
 						echo form_input($stkp);?></div>
                         <div class="clear"></div>
+                    </div> 
+					<div class="formRow">
+                        <label>Rating :<span class="req">*</span></label>
+                        <div class="formRight">
+						<?php $rating = array(
+							'name' => 'rating',
+							'id'   => 'rating',
+							'style'=> 'width:80%',
+						);
+						echo form_input($rating);?></div>
+                        <div class="clear"></div>
                     </div>
 					<div class="formRow">
                         <label>Lembaga Pelaksana :<span class="req">*</span></label>

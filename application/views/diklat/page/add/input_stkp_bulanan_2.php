@@ -21,6 +21,7 @@
 				<tbody>
 				<?php 
 				echo form_hidden('stkp', $STKP);
+				echo form_hidden('rating', $rating);
 				echo form_hidden('tanggal_start', $tanggal_start);
 				echo form_hidden('tanggal_end', $tanggal_end);
 				echo form_hidden('jumlah', $jumlah);
