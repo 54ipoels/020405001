@@ -71,7 +71,7 @@ echo form_input('license');?></div><td width="410px">
 				}
 				foreach ($pegawai_with_stkp_and_unit as $row_pegawai) :
 				{ 
-					if ($row_pegawai['peg_nipp'] == $nipp)
+					if ($row_pegawai['p_nstkp_nipp'] == $nipp)
 					{
 						$nipp = '';
 						$nama = '';

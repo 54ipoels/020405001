@@ -79,14 +79,14 @@
 				}
 				foreach ($pegawai_with_stkp_and_unit as $row_pegawai) :
 				{ 
-					if ($row_pegawai['peg_nipp'] == $nipp)
+					if ($row_pegawai['p_stkp_nipp'] == $nipp)
 					{
 						$nipp = '';
 						$nama = '';
 					} 
 					else
 					{
-						$nipp = $row_pegawai['peg_nipp'];
+						$nipp = $row_pegawai['p_stkp_nipp'];
 						$nama = $row_pegawai['peg_nama'];
 					}	
 					if ($row_pegawai['p_stkp_pelaksanaan'] == '0000-00-00')
