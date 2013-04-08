@@ -562,13 +562,12 @@ class diklat extends Application {
 			$this->excel->getActiveSheet()->setCellValue("B$i", "$nipp");
 			$this->excel->getActiveSheet()->setCellValue("C$i", strtoupper("$nama"));
 			$this->excel->getActiveSheet()->setCellValue("D$i", "$row_pegawai[p_nstkp_jenis]");
-			$this->excel->getActiveSheet()->setCellValue("E$i", "$row_pegawai[p_nstkp_rating]");
-			$this->excel->getActiveSheet()->setCellValue("F$i", "$row_pegawai[p_nstkp_no_license]");
-			$this->excel->getActiveSheet()->setCellValue("G$i", "$stkp_mulai");
-			$this->excel->getActiveSheet()->setCellValue("H$i", "$stkp_selesai");
-			$this->excel->getActiveSheet()->setCellValue("I$i", "$row_pegawai[p_nstkp_lembaga]");
-			$this->excel->getActiveSheet()->setCellValue("J$i", "$pelaksanaan");
-			$this->excel->getActiveSheet()->setCellValue("K$i", "$row_pegawai[p_nstkp_type]");
+			$this->excel->getActiveSheet()->setCellValue("E$i", "$row_pegawai[p_nstkp_no_license]");
+			$this->excel->getActiveSheet()->setCellValue("F$i", "$stkp_mulai");
+			$this->excel->getActiveSheet()->setCellValue("G$i", "$stkp_selesai");
+			$this->excel->getActiveSheet()->setCellValue("H$i", "$row_pegawai[p_nstkp_lembaga]");
+			$this->excel->getActiveSheet()->setCellValue("I$i", "$pelaksanaan");
+			$this->excel->getActiveSheet()->setCellValue("J$i", "$row_pegawai[p_nstkp_type]");
 			
 			$nipp = $row_pegawai['peg_nipp'];
 			
@@ -627,15 +626,14 @@ class diklat extends Application {
 		$this->excel->getActiveSheet()->setCellValue('A1', 'No');
 		$this->excel->getActiveSheet()->setCellValue('B1', 'NIPP');
 		$this->excel->getActiveSheet()->setCellValue('C1', 'Nama');
-		$this->excel->getActiveSheet()->setCellValue('D1', 'STKP');
-		$this->excel->getActiveSheet()->setCellValue('E1', 'Rating');
-		$this->excel->getActiveSheet()->setCellValue('F1', 'No Sertifikat');
-		$this->excel->getActiveSheet()->setCellValue('G1', 'Validitas');
-		$this->excel->getActiveSheet()->setCellValue('I1', 'Lembaga');
-		$this->excel->getActiveSheet()->setCellValue('J1', 'Tanggal Pelaksanaan');
-		$this->excel->getActiveSheet()->setCellValue('K1', 'Jenis STKP');
-		$this->excel->getActiveSheet()->setCellValue('G2', 'From');
-		$this->excel->getActiveSheet()->setCellValue('H2', 'Until');
+		$this->excel->getActiveSheet()->setCellValue('D1', 'Rating');
+		$this->excel->getActiveSheet()->setCellValue('E1', 'No Sertifikat');
+		$this->excel->getActiveSheet()->setCellValue('F1', 'Validitas');
+		$this->excel->getActiveSheet()->setCellValue('H1', 'Lembaga');
+		$this->excel->getActiveSheet()->setCellValue('I1', 'Tanggal Pelaksanaan');
+		$this->excel->getActiveSheet()->setCellValue('J1', 'Jenis STKP');
+		$this->excel->getActiveSheet()->setCellValue('F2', 'From');
+		$this->excel->getActiveSheet()->setCellValue('G2', 'Until');
 		
 		$i=2;
 		$number=0;
@@ -685,38 +683,36 @@ class diklat extends Application {
 			$this->excel->getActiveSheet()->setCellValue("B$i", "$nipp");
 			$this->excel->getActiveSheet()->setCellValue("C$i", strtoupper("$nama"));
 			$this->excel->getActiveSheet()->setCellValue("D$i", "$row_pegawai[p_stkp_jenis]");
-			$this->excel->getActiveSheet()->setCellValue("E$i", "$row_pegawai[p_stkp_rating]");
-			$this->excel->getActiveSheet()->setCellValue("F$i", "$row_pegawai[p_stkp_no_license]");
-			$this->excel->getActiveSheet()->setCellValue("G$i", "$stkp_mulai");
-			$this->excel->getActiveSheet()->setCellValue("H$i", "$stkp_selesai");
-			$this->excel->getActiveSheet()->setCellValue("I$i", "$row_pegawai[p_stkp_lembaga]");
-			$this->excel->getActiveSheet()->setCellValue("J$i", "$pelaksanaan");
-			$this->excel->getActiveSheet()->setCellValue("K$i", "$row_pegawai[p_stkp_type]");
+			$this->excel->getActiveSheet()->setCellValue("E$i", "$row_pegawai[p_stkp_no_license]");
+			$this->excel->getActiveSheet()->setCellValue("F$i", "$stkp_mulai");
+			$this->excel->getActiveSheet()->setCellValue("G$i", "$stkp_selesai");
+			$this->excel->getActiveSheet()->setCellValue("H$i", "$row_pegawai[p_stkp_lembaga]");
+			$this->excel->getActiveSheet()->setCellValue("I$i", "$pelaksanaan");
+			$this->excel->getActiveSheet()->setCellValue("J$i", "$row_pegawai[p_stkp_type]");
 			
 			$nipp = $row_pegawai['peg_nipp'];
 			
 		}endforeach;
 		
 		//change the font size
-		$this->excel->getActiveSheet()->getStyle('A1:K1')->getFont()->setSize(14);
+		$this->excel->getActiveSheet()->getStyle('A1:J1')->getFont()->setSize(14);
 		//make the font become bold
-		$this->excel->getActiveSheet()->getStyle('A1:K1')->getFont()->setBold(true);
-		$this->excel->getActiveSheet()->getStyle('G2:H2')->getFont()->setBold(true);
+		$this->excel->getActiveSheet()->getStyle('A1:J1')->getFont()->setBold(true);
+		$this->excel->getActiveSheet()->getStyle('F2:G2')->getFont()->setBold(true);
 		//merge cell A1 until D1
 		$this->excel->getActiveSheet()->mergeCells('A1:A2');
 		$this->excel->getActiveSheet()->mergeCells('B1:B2');
 		$this->excel->getActiveSheet()->mergeCells('C1:C2');
 		$this->excel->getActiveSheet()->mergeCells('D1:D2');
 		$this->excel->getActiveSheet()->mergeCells('E1:E2');
-		$this->excel->getActiveSheet()->mergeCells('F1:F2');
-		$this->excel->getActiveSheet()->mergeCells('G1:H1');
+		$this->excel->getActiveSheet()->mergeCells('F1:G1');
+		$this->excel->getActiveSheet()->mergeCells('H1:H2');
 		$this->excel->getActiveSheet()->mergeCells('I1:I2');
 		$this->excel->getActiveSheet()->mergeCells('J1:J2');
-		$this->excel->getActiveSheet()->mergeCells('K1:K2');
 		
 		//set aligment to center for that merged cell (A1 to D1)
-		$this->excel->getActiveSheet()->getStyle('A1:K1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-		$this->excel->getActiveSheet()->getStyle('A1:K1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER); 
+		$this->excel->getActiveSheet()->getStyle('A1:J1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$this->excel->getActiveSheet()->getStyle('A1:J1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER); 
 		
 		$filename="Report STKP.xls"; //save our workbook as this file name
 		header('Content-Type: application/vnd.ms-excel'); //mime type
