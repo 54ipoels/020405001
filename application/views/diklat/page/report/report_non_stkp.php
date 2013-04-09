@@ -91,11 +91,26 @@ echo form_input('license');?></div><td width="410px">
 					}
 					
 					$detail = anchor('pekerja/get_pegawai/'.$row_pegawai['peg_nipp'],'Detail'); 
-					if ($nipp==""){$nipp_anchor = "";} else {$nipp_anchor =  anchor('diklat/get_nstkp_selection/nipp/'.$nipp, $nipp);}
+					if ($nipp==""){$nipp_anchor = "";} else {
+						if($this->uri->segment(3)=='nipp'){$nipp_anchor =  anchor('diklat/detail_kompetensi/'.$nipp, $nipp);} else {$nipp_anchor =  anchor('diklat/get_nstkp_selection/nipp/'.$nipp, $nipp);}}
 					if ($nama==""){$nama_anchor = "";} else {$nama_anchor =  anchor('diklat/get_nstkp_selection/nama/'.$nama, $nama);}
 					if ($row_pegawai['p_nstkp_jenis'] == ""){$jenis_anchor = "";} else {$jenis_anchor = anchor('diklat/get_nstkp_selection/jenis/'.$row_pegawai['p_nstkp_jenis'], 	$row_pegawai['p_nstkp_jenis']);}
 					if ($row_pegawai['p_nstkp_lembaga'] == ""){$lembaga_anchor = "";} else {$lembaga_anchor = anchor('diklat/get_nstkp_selection/lembaga/'.$row_pegawai['p_nstkp_lembaga'], $row_pegawai['p_nstkp_lembaga']);}
-					
+					if ($row_pegawai['p_nstkp_selesai'] == '0000-00-00')
+					{
+						$selesai = '-';
+					}
+					else
+					{
+						$selesai =mdate($datestring,strtotime( $row_pegawai['p_nstkp_selesai']));
+					}
+					if ($row_pegawai['p_nstkp_pelaksanaan'] == '0000-00-00')
+					{
+						$mulai = '-';
+					}else
+					{
+						$mulai = mdate($datestring,strtotime($row_pegawai['p_nstkp_pelaksanaan']));
+					}
 					
 					?>
 					<tr>
@@ -104,8 +119,8 @@ echo form_input('license');?></div><td width="410px">
 						<td><?php echo $nama; ?></td>
 						<td><?php echo $jenis_anchor; ?></td>
 						<td><center><?php echo $row_pegawai['p_nstkp_no_license']; ?></center></td>
-						<td><center><?php echo '-'; ?></center></td>
-						<td><center><?php echo '-'; ?></center></td>
+						<td><center><?php echo $mulai; ?></center></td>
+						<td><center><?php echo $selesai; ?></center></td>
 						<td><center><?php echo $lembaga_anchor; ?></center></td>
 						<td><center><?php 
 										echo anchor('diklat/search_pegawai/'.$row_pegawai['peg_nipp'], "add"); 

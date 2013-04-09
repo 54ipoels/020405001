@@ -51,7 +51,7 @@ class pendidikan extends CI_Model
 		ON peg_stkp.p_nstkp_nipp = peg_unt.p_unt_nipp 
 		LEFT JOIN (SELECT peg_nipp,peg_nama FROM v3_pegawai) AS peg
 		ON peg_stkp.p_nstkp_nipp = peg.peg_nipp
-		ORDER BY peg_stkp.p_nstkp_nipp
+		ORDER BY peg_stkp.p_nstkp_nipp,  peg_stkp.p_nstkp_pelaksanaan ASC
 		LIMIT '.$offset.' , '.$num.'
 		');
 		$query = $this->db->query($query); 
@@ -228,7 +228,6 @@ class pendidikan extends CI_Model
 				'p_nstkp_no_license'	=> $mand,
 				'p_nstkp_pelaksanaan'	=> $tanggal_start,
 				'p_nstkp_selesai'		=> $tanggal_end,
-				'p_nstkp_rating'		=> $this->input->post('rating'),
 				'p_nstkp_update_on'		=> $tanggal,
 				'p_nstkp_update_by'		=> $user,
 			);
@@ -264,7 +263,7 @@ class pendidikan extends CI_Model
 			LEFT JOIN (SELECT peg_nipp,peg_nama FROM v3_pegawai) AS peg
 			ON peg_stkp.p_nstkp_nipp = peg.peg_nipp
 			WHERE peg_stkp.p_nstkp_jenis LIKE \'' . $stkp . '\' AND peg_unt.p_unt_kode_unit LIKE \'' . $unit. '\'
-			ORDER BY peg_stkp.p_nstkp_nipp
+			ORDER BY peg_stkp.p_nstkp_nipp,  peg_stkp.p_nstkp_pelaksanaan ASC
 			LIMIT '.$offset.' , '.$num.'
 		');
 		$query = $this->db->query($query); 
@@ -323,10 +322,8 @@ class pendidikan extends CI_Model
 					'p_nstkp_jenis' 		=> $this->input->post('non_stkp'),
 					'p_nstkp_lembaga'		=> $this->input->post('lembaga'),
 					'p_nstkp_no_license'	=> $this->input->post('license'),
-					'p_nstkp_pelaksanaan'	=> mdate($datestring, strtotime($this->input->post('pelaksanaan'))),
-					'p_nstkp_mulai'			=> mdate($datestring, strtotime($this->input->post('validitas_awal'))),
-					'p_nstkp_finish'		=> mdate($datestring, strtotime($this->input->post('validitas_akhir'))),
-					'p_nstkp_rating'		=> $this->input->post('rating'),
+					'p_nstkp_pelaksanaan'	=> mdate($datestring, strtotime($this->input->post('validitas_awal'))),
+					'p_nstkp_selesai'		=> mdate($datestring, strtotime($this->input->post('validitas_akhir'))),
 					'p_nstkp_update_on'		=> $tanggal,
 					'p_nstkp_update_by'		=> 'admin'
 				);
@@ -440,7 +437,7 @@ class pendidikan extends CI_Model
 	{
 		$selection="";
 		if ($type == "nipp"){
-			$selection = " WHERE p_stkp_nipp = '$select' ";
+			$selection = " WHERE p_nstkp_nipp = '$select' ";
 		} else if ($type == "nama")
 		{
 			$selection = " WHERE peg_nama = '$select' ";
@@ -459,7 +456,7 @@ class pendidikan extends CI_Model
 			LEFT JOIN (SELECT peg_nipp,peg_nama FROM v3_pegawai) AS peg
 			ON peg_stkp.p_nstkp_nipp = peg.peg_nipp
 			'.$selection.'
-			ORDER BY peg_stkp.p_nstkp_nipp
+			ORDER BY peg_stkp.p_nstkp_nipp, peg_stkp.p_nstkp_pelaksanaan ASC
 			LIMIT '.$offset.' , '.$num.'
 		');
 		$query = $this->db->query($query); 
@@ -508,7 +505,7 @@ class pendidikan extends CI_Model
 		$selection = "";
 		
 		if ($type == "nipp"){
-			$selection = " WHERE p_stkp_nipp = '$select' ";
+			$selection = " WHERE p_nstkp_nipp = '$select' ";
 		} else if ($type == "nama")
 		{
 			$selection = " WHERE peg_nama = '$select' ";

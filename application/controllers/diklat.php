@@ -418,7 +418,7 @@ class diklat extends Application {
 		$select = str_replace("%20"," ",$this->uri->segment(4));
 		
 		#pagination config
-		$config['base_url'] = base_url().'index.php/diklat/get_non_stkp_selection/'.$type.'/'.$select; //set the base url for pagination
+		$config['base_url'] = base_url().'index.php/diklat/get_nstkp_selection/'.$type.'/'.$select; //set the base url for pagination
 		$config['total_rows'] = $this->pendidikan->countNon_STKPselection($type,$select); //total rows
 		$config['per_page'] = 10; //the number of per page for pagination
 		$config['uri_segment'] = 5; //see from base_url. 3 for this case

@@ -2,7 +2,7 @@
 <?php echo form_open('diklat/sort_stkp/') ?>
 <fieldset class="step" id="w2first">
 <table><tr><td width="350px">
-<div class="formBaru"><label>Jenis STKP: &nbsp </label>
+<div class="formBaru"><label>Rating STKP: &nbsp </label>
 <?php $jenis_stkp = array();
 		$jenis_stkp['ALL'] = 'ALL';
 		foreach ($list_stkp as $row_stkp_list) :
