@@ -61,6 +61,14 @@ class diklat extends Application {
 		$datestring = "%Y-%m-%d" ;
 		$time = time();
 		$tanggal = mdate($datestring, $time);
+		if ($this->input->post('pelaksanaan')=="00-00-0000"){$pelaksanaan="0000-00-00";}
+		else {$pelaksanaan = mdate($datestring, strtotime($this->input->post('pelaksanaan')));}
+		if ($this->input->post('selesai')=="00-00-0000"){$selesai="0000-00-00";}
+		else {$selesai = mdate($datestring, strtotime($this->input->post('selesai')));}
+		if ($this->input->post('validitas_awal')=="00-00-0000"){$validitas_awal="0000-00-00";}
+		else {$validitas_awal = mdate($datestring, strtotime($this->input->post('validitas_awal')));}
+		if ($this->input->post('validitas_akhir')=="00-00-0000"){$validitas_akhir="0000-00-00";}
+		else {$validitas_akhir = mdate($datestring, strtotime($this->input->post('validitas_akhir')));}
 		
 		$data_stkp = array(
 				'p_stkp_nipp' 			=> $nipp,
@@ -68,9 +76,10 @@ class diklat extends Application {
 				'p_stkp_jenis' 			=> $this->input->post('stkp'),
 				'p_stkp_lembaga'		=> $this->input->post('lembaga'),
 				'p_stkp_no_license'		=> $this->input->post('license'),
-				'p_stkp_pelaksanaan'	=> mdate($datestring, strtotime($this->input->post('pelaksanaan'))),
-				'p_stkp_mulai'			=> mdate($datestring, strtotime($this->input->post('validitas_awal'))),
-				'p_stkp_finish'			=> mdate($datestring, strtotime($this->input->post('validitas_akhir'))),
+				'p_stkp_pelaksanaan'	=> $pelaksanaan,
+				'p_stkp_selesai'		=> $selesai,
+				'p_stkp_mulai'			=> $validitas_awal,
+				'p_stkp_finish'			=> $validitas_akhir,
 				'p_stkp_rating'			=> $this->input->post('rating'),
 				'p_stkp_update_on'		=> $tanggal,
 				'p_stkp_update_by'		=> 'admin'
@@ -134,18 +143,30 @@ class diklat extends Application {
 		$monthstring = "%m" ;
 		$yearstring = "%Y" ;
 		$time = time();
+		if ($this->input->post('jenis_stkp')== NULL)
+		{
+			$jenis = $this->uri->segment(3);
+		}else{
+			$jenis = $this->input->post('jenis_stkp');
+		}
+				
 		if ($this->input->post('stkp')== NULL)
 		{
-			$stkp = $this->uri->segment(3);
+			$stkp = $this->uri->segment(4);
 		}else{
 			$stkp = $this->input->post('stkp');
 		}
 		
 		if (($this->input->post('unit')== NULL))
 		{
-			$unit = str_replace('%20',' ',$this->uri->segment(4));
+			$unit = str_replace('%20',' ',$this->uri->segment(5));
 		}else{
 			$unit = $this->input->post('unit');
+		}
+		
+		if ($jenis == 'ALL')
+		{
+			$jenis = '%';
 		}
 		
 		if ($unit == 'ALL')
@@ -156,6 +177,13 @@ class diklat extends Application {
 		if ($stkp == 'ALL')
 		{
 			$stkp = '%';
+		}
+		
+		if ($jenis == '%')
+		{
+			$jenis_search = 'ALL';
+		}else{
+			$jenis_search = $jenis;
 		}
 		
 		if ($unit == '%')
@@ -173,16 +201,16 @@ class diklat extends Application {
 		}
 		
 		#pagination config
-		$config['base_url'] = base_url().'index.php/diklat/sort_stkp/'.$stkp_search.'/'.$unit_search; //set the base url for pagination
-		$config['total_rows'] = $this->pendidikan->countSTKP_Unit($stkp, $unit); //total rows
+		$config['base_url'] = base_url().'index.php/diklat/sort_stkp/'.$jenis_search.'/'.$stkp_search.'/'.$unit_search; //set the base url for pagination
+		$config['total_rows'] = $this->pendidikan->countSTKP_Unit($jenis, $stkp, $unit); //total rows
 		$config['per_page'] = 10; //the number of per page for pagination
-		$config['uri_segment'] = 5; //see from base_url. 3 for this case
+		$config['uri_segment'] = 6; //see from base_url. 3 for this case
 		$this->pagination->initialize($config);
-		$page = ($this->uri->segment(5)) ? $this->uri->segment(5) : 0;
+		$page = ($this->uri->segment(6)) ? $this->uri->segment(6) : 0;
 		
 		$data['list_stkp'] = $this->pendidikan->get_list_stkp();
 		$data['list_unit'] = $this->pendidikan->get_list_unit();
-		$data['pegawai_with_stkp_and_unit'] = $this->pendidikan->search_data_stkp_with_unit_and_name($config['per_page'],$page, $stkp, $unit);
+		$data['pegawai_with_stkp_and_unit'] = $this->pendidikan->search_data_stkp_with_unit_and_name($config['per_page'],$page, $jenis, $stkp, $unit);
 		$data['month'] = mdate($monthstring, $time);
 		$data['year'] = mdate($yearstring, $time);
 		
@@ -230,7 +258,12 @@ class diklat extends Application {
 		{
 			$stkp_search = 'ALL';
 		}else{
-			$stkp_search = $stkp;
+			if ($this->input->post('license')== NULL)
+			{
+				$stkp_search = str_replace('%20',' ',$this->uri->segment(3));
+			}else{
+				$stkp_search = $this->input->post('license');
+			}
 		}
 		
 		#pagination config

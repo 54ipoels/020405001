@@ -66,8 +66,26 @@
 							'style'=> 'width:20%'
 						);
 						$datestring = "%d-%m-%Y" ;
-						$tgl_pelaksanaan = mdate($datestring, strtotime($row_stkp['p_stkp_pelaksanaan']));
-						echo form_input($pelaksanaan,$tgl_pelaksanaan) ?></div>
+						if ($row_stkp['p_stkp_pelaksanaan']=="0000-00-00"){
+							$tgl_pelaksanaan = "00-00-0000";
+						} else {
+							$tgl_pelaksanaan = mdate($datestring, strtotime($row_stkp['p_stkp_pelaksanaan']));
+						}
+						echo form_input($pelaksanaan,$tgl_pelaksanaan) ?> &nbsp s/d &nbsp <?php 
+						$selesai = array(
+							'name' => 'selesai',
+							'id'   => 'selesai',
+							'class'=> 'maskDate',
+							'style'=> 'width:20%'
+						);
+						if ($row_stkp['p_stkp_selesai']=="0000-00-00"){
+							$tgl_selesai = "00-00-0000";
+						} else {
+							$tgl_selesai = mdate($datestring, strtotime($row_stkp['p_stkp_selesai']));
+						}
+						echo form_input($selesai,$tgl_selesai) ?> 
+						
+						</div>
                         <div class="clear"></div>
                     </div>
 					<div class="formRow">
@@ -80,7 +98,11 @@
 							'class'=> 'maskDate',
 							'style'=> 'width:20%'
 					 	);
-						$val_awal = mdate($datestring, strtotime($row_stkp['p_stkp_mulai']));
+						if ($row_stkp['p_stkp_mulai']=="0000-00-00"){
+							$val_awal = "00-00-0000";
+						} else {
+							$val_awal = mdate($datestring, strtotime($row_stkp['p_stkp_mulai']));
+						}
 						echo form_input($validitas_awal,$val_awal) ?> &nbsp s/d &nbsp<?php 
 						$validitas_akhir = array(
 							'name' => 'validitas_akhir',
@@ -88,8 +110,12 @@
 							'class'=> 'maskDate',
 							'style'=> 'width:20%'
 						);
-						$val_akhir = mdate($datestring, strtotime($row_stkp['p_stkp_finish']));
-						echo form_input($validitas_akhir,$val_akhir) ?></div>
+						if ($row_stkp['p_stkp_finish']=="0000-00-00"){
+							$val_akhir = "00-00-0000";
+						} else {
+							$val_akhir = mdate($datestring, strtotime($row_stkp['p_stkp_finish']));
+						}
+						echo form_input($validitas_akhir,$val_akhir) ?> </div>
                         <div class="clear"></div>
                     </div>
 					<div class="formRow">

@@ -75,23 +75,43 @@
 					}endforeach;
 				}
 				?>
-				<?php 
+				<?php
+				if($data_jabatan_tmt==NULL){
+					$status="-";
+					$tmt = "-";
+					$provider ="-";
+					$jabatan = "-";
+					
+				}
+				else{
 				foreach ($data_jabatan_tmt as $row_jbt_tmt) :
 				{
 					$datestring = "%d-%m-%Y" ;
 					$tmt = mdate($datestring,strtotime($row_jbt_tmt['p_tmt_tmt']));
 					$status = $row_jbt_tmt['p_tmt_status'];
 					$provider = $row_jbt_tmt['p_tmt_provider'];
+					$jabatan = $row_jbt_tmt['p_jbt_jabatan'];
 				} endforeach;
+				}
+				if($data_unit==NULL){
+					$kode_unit="-";
+					$grade = "-";
+					
+					
+				} else {
 				foreach ($data_unit as $row_unit) :
-				{} endforeach;
+				{
+					$kode_unit = $row_unit['p_unt_kode_unit'];
+				} endforeach;
 				if ($data_grade == NULL)
 				{ $grade = '';} else {
 					foreach ($data_grade as $row_grade) :
 					{
 						$grade = $row_grade['p_grd_grade'];
 					} endforeach;
-				}?>
+				}
+				}
+				?>
 			<table cellpadding="0" cellspacing="0" width="100%" class="sTable">
                 <tfoot>
 					<tr><td colspan=8><p align="right"><?php echo anchor ('pekerja/edit_data/'.$row_pegawai['peg_nipp'],'[edit]');?></p></td></tr>
@@ -194,7 +214,9 @@
                         <tfoot>
 							<tr><td colspan=2><p align="right"><?php 
 							if ($status !== 'Outsource')
-							{echo anchor('pekerja/add_bahasa_pegawai/'.$row_pegawai['peg_nipp'],'[add]  '); echo anchor('pekerja/edit_pendidikan_pegawai/'.$row_pegawai['peg_nipp'],'[edit]');}?></p></td></tr>
+							{echo anchor('pekerja/add_bahasa_pegawai/'.$row_pegawai['peg_nipp'],'[add]  '); 
+							echo anchor('pekerja/edit_pendidikan_pegawai/'.$row_pegawai['peg_nipp'],'[edit]');
+							}?></p></td></tr>
 						</tfoot>
                         <tbody>
                             <tr><td width="30%">Pendidikan Terakhir</td><td><?php echo $row_pdd['p_pdd_tingkat'];?></td></tr>
@@ -234,9 +256,9 @@
 							<tr><td colspan=8><p align="right"><?php echo anchor('pekerja/edit_jabatan_pegawai/'.$row_pegawai['peg_nipp'],'[edit]');?></p></td></tr>
 						</tfoot>
                         <tbody>
-                            <tr><td width="30%">Jabatan Terakhir</td><td><?php echo $row_jbt_tmt['p_jbt_jabatan']?></td></tr>
+                            <tr><td width="30%">Jabatan Terakhir</td><td><?php echo $jabatan;?></td></tr>
                             <tr><td>Terhitung Mulai Tanggal</td><td><?php echo $tmt; ?></td></tr>
-							<tr><td>Unit</td><td><?php echo $row_unit['p_unt_kode_unit']?></td></tr>
+							<tr><td>Unit</td><td><?php echo $kode_unit;?></td></tr>
 							<tr><td>Grade</td><td><?php echo $grade?></td></tr>
 							<tr><td>Status Pegawai</td><td><?php echo $status?></td></tr>
 							<tr><td>Provider</td><td><?php echo $provider?></td></tr>
@@ -262,7 +284,8 @@
                     <table cellpadding="0" cellspacing="0" width="100%" class="sTable">
                         <tfoot>
 							<tr><td colspan=8><p align="right"><?php if ($status !== 'Outsource')
-							{echo anchor('pekerja/edit_pasangan_pegawai/'.$row_pegawai['peg_nipp'],'[edit]');}?></p></td></tr>
+							{echo anchor('pekerja/edit_pasangan_pegawai/'.$row_pegawai['peg_nipp'],'[edit]');
+							}?></p></td></tr>
 						</tfoot>
                         <tbody>
                             <tr><td width="30%">Nama</td><td><?php echo $row_pasangan['p_ps_nama'];?></td></tr>
@@ -305,7 +328,8 @@
                     <table cellpadding="0" cellspacing="0" width="100%" class="sTable">
                         <tfoot>
 							<tr><td colspan=8><p align="right"><?php if ($status !== 'Outsource')
-							{echo anchor('pekerja/edit_ortu_pegawai/'.$row_pegawai['peg_nipp'],'[edit]');}?></p></td></tr>
+							{echo anchor('pekerja/edit_ortu_pegawai/'.$row_pegawai['peg_nipp'],'[edit]');
+							}?></p></td></tr>
 						</tfoot>
                         <tbody>
                             <tr><td width="30%">Nama Ayah</td><td><?php echo $row_ayah['p_ay_nama']; ?></td></tr>
@@ -351,7 +375,8 @@
                     <table cellpadding="0" cellspacing="0" width="100%" class="sTable">
                         <tfoot>
 							<tr><td colspan=8><p align="right"><?php if ($status !== 'Outsource')
-							{echo anchor('pekerja/edit_mertua_pegawai/'.$row_pegawai['peg_nipp'],'[edit]');}?></p></td></tr>
+							{ echo anchor('pekerja/edit_mertua_pegawai/'.$row_pegawai['peg_nipp'],'[edit]');
+							}?></p></td></tr>
 						</tfoot>
                         <tbody>
                             <tr><td width="30%">Nama Ayah Mertua</td><td><?php echo $row_m_ayah['p_may_nama']; ?></td></tr>
@@ -372,7 +397,9 @@
                     <table cellpadding="0" cellspacing="0" width="100%" class="sTable">
 						<tfoot>
 							<tr><td colspan=8><p align="right"><?php if ($status !== 'Outsource')
-							{echo anchor('pekerja/add_anak_pegawai/'.$row_pegawai['peg_nipp'],'[add]  ');echo anchor('pekerja/edit_anak_pegawai/'.$row_pegawai['peg_nipp'],'[edit]');}?></p></td></tr>
+							{	echo anchor('pekerja/add_anak_pegawai/'.$row_pegawai['peg_nipp'],'[add]  ');
+								echo anchor('pekerja/edit_anak_pegawai/'.$row_pegawai['peg_nipp'],'[edit]');
+							}?></p></td></tr>
 						</tfoot>
                         <tbody>
 							<?php 

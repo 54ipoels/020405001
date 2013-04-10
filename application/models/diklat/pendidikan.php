@@ -238,7 +238,7 @@ class pendidikan extends CI_Model
 	}
 
 	#sort STKP
-	function search_data_stkp_with_unit_and_name($num, $offset, $stkp, $unit)
+	function search_data_stkp_with_unit_and_name($num, $offset, $jenis, $stkp, $unit)
 	{
 		$query = ('
 			SELECT * FROM v3_peg_stkp AS peg_stkp
@@ -246,7 +246,7 @@ class pendidikan extends CI_Model
 			ON peg_stkp.p_stkp_nipp = peg_unt.p_unt_nipp 
 			LEFT JOIN (SELECT peg_nipp,peg_nama FROM v3_pegawai) AS peg
 			ON peg_stkp.p_stkp_nipp = peg.peg_nipp
-			WHERE peg_stkp.p_stkp_rating LIKE \'' . $stkp . '\' AND peg_unt.p_unt_kode_unit LIKE \'' . $unit. '\'
+			WHERE peg_stkp.p_stkp_jenis LIKE \'' . $jenis . '\' AND peg_stkp.p_stkp_rating LIKE \'' . $stkp . '\' AND peg_unt.p_unt_kode_unit LIKE \'' . $unit. '\'
 			ORDER BY peg_stkp.p_stkp_nipp
 			LIMIT '.$offset.' , '.$num.'
 		');
@@ -282,7 +282,7 @@ class pendidikan extends CI_Model
 		return $this->db->count_all_results('v3_peg_non_stkp');
 	}
 
-	function countSTKP_Unit($stkp, $unit)
+	function countSTKP_Unit($jenis,$stkp,$unit)
 	{
 		$query = ('
 			SELECT * FROM v3_peg_stkp AS peg_stkp
@@ -290,7 +290,7 @@ class pendidikan extends CI_Model
 			ON peg_stkp.p_stkp_nipp = peg_unt.p_unt_nipp 
 			LEFT JOIN (SELECT peg_nipp,peg_nama FROM v3_pegawai) AS peg
 			ON peg_stkp.p_stkp_nipp = peg.peg_nipp
-			WHERE peg_stkp.p_stkp_rating LIKE \'' . $stkp . '\' AND peg_unt.p_unt_kode_unit LIKE \'' . $unit. '\'
+			WHERE peg_stkp.p_stkp_jenis LIKE \'' . $jenis . '\' AND peg_stkp.p_stkp_rating LIKE \'' . $stkp . '\' AND peg_unt.p_unt_kode_unit LIKE \'' . $unit. '\'
 		');
 		$query = $this->db->query($query); 
 		return $query->num_rows();
@@ -337,16 +337,26 @@ class pendidikan extends CI_Model
 		$datestring = "%Y-%m-%d" ;
 		$time = time();
 		$tanggal = mdate($datestring, $time);
-
+		
+		if ($this->input->post('pelaksanaan')=="00-00-0000"){$pelaksanaan="0000-00-00";}
+		else {$pelaksanaan = mdate($datestring, strtotime($this->input->post('pelaksanaan')));}
+		if ($this->input->post('selesai')=="00-00-0000"){$selesai="0000-00-00";}
+		else {$selesai = mdate($datestring, strtotime($this->input->post('selesai')));}
+		if ($this->input->post('validitas_awal')=="00-00-0000"){$validitas_awal="0000-00-00";}
+		else {$validitas_awal = mdate($datestring, strtotime($this->input->post('validitas_awal')));}
+		if ($this->input->post('validitas_akhir')=="00-00-0000"){$validitas_akhir="0000-00-00";}
+		else {$validitas_akhir = mdate($datestring, strtotime($this->input->post('validitas_akhir')));}
+		
 		$data_stkp = array(
 					//'p_nstkp_nipp' 			=> $this->input->post('nipp'),
 					'p_stkp_type' 			=> $this->input->post('type'),
 					'p_stkp_jenis' 			=> $this->input->post('jenis_stkp'),
 					'p_stkp_lembaga'		=> $this->input->post('lembaga'),
 					'p_stkp_no_license'		=> $this->input->post('license'),
-					'p_stkp_pelaksanaan'	=> mdate($datestring, strtotime($this->input->post('pelaksanaan'))),
-					'p_stkp_mulai'			=> mdate($datestring, strtotime($this->input->post('validitas_awal'))),
-					'p_stkp_finish'			=> mdate($datestring, strtotime($this->input->post('validitas_akhir'))),
+					'p_stkp_pelaksanaan'	=> $pelaksanaan,
+					'p_stkp_selesai'		=> $selesai,
+					'p_stkp_mulai'			=> $validitas_awal,
+					'p_stkp_finish'			=> $validitas_akhir,
 					'p_stkp_rating'			=> $this->input->post('rating'),
 					'p_stkp_update_on'		=> $tanggal,
 					'p_stkp_update_by'		=> 'admin'

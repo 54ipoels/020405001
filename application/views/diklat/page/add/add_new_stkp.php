@@ -61,7 +61,14 @@
 							'class'=> 'maskDate',
 							'style'=> 'width:20%'
 						);
-						echo form_input($pelaksanaan) ?></div>
+						echo form_input($pelaksanaan) ?>  &nbsp s/d &nbsp <?php 
+						$selesai = array(
+							'name' => 'selesai',
+							'id'   => 'selesai',
+							'class'=> 'maskDate',
+							'style'=> 'width:20%'
+						);
+						echo form_input($selesai) ?> </div>
                         <div class="clear"></div>
                     </div>
 					<div class="formRow">
@@ -81,7 +88,7 @@
 							'class'=> 'maskDate',
 							'style'=> 'width:20%'
 						);
-						echo form_input($validitas_akhir) ?></div>
+						echo form_input($validitas_akhir) ?> </div>
                         <div class="clear"></div>
                     </div>
 					<div class="formRow"> 

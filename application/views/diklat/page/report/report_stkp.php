@@ -1,35 +1,59 @@
 <div class="widget">
 <?php echo form_open('diklat/sort_stkp/') ?>
 <fieldset class="step" id="w2first">
-<table><tr><td width="350px">
-<div class="formBaru"><label>Rating STKP: &nbsp </label>
-<?php $jenis_stkp = array();
-		$jenis_stkp['ALL'] = 'ALL';
-		foreach ($list_stkp as $row_stkp_list) :
+<table><tr>
+<td width="330px">
+	<div class="formBaru"><label>STKP: &nbsp </label>
+	<?php $jenis_stkp = array(
+			'ALL' 	=> 	'Jenis',
+			'GSE'	=>	'GSE',
+			'FOO'	=>	'FOO',
+			'DGR'	=>	'DGR',
+			'AVSEC'	=>	'AVSEC',
+		);
+		echo form_dropdown('jenis_stkp',$jenis_stkp);?>&nbsp 
+	</div>
+</td>
+<td width="100px">
+	<div class="formBaru"><label><!-- Rating STKP :--></label>
+	<?php $rating_stkp = array();
+			$rating_stkp['ALL'] = 'Rating';
+			foreach ($list_stkp as $row_stkp_list) :
+				{
+					$rating_stkp[$row_stkp_list['stkp']] = ($row_stkp_list['stkp']);
+				} endforeach; 
+			echo form_dropdown('stkp',$rating_stkp,$this->uri->segment(3));?>&nbsp 
+	</div>
+</td>
+<td width="220px">
+	<div class="formBaru"><label><!--Unit Kerja:--></label>
+	<?php $unit = array();
+			$unit['ALL'] = 'Unit Kerja';
+		foreach ($list_unit as $row_unit) :
 			{
-				$jenis_stkp[$row_stkp_list['stkp']] = ($row_stkp_list['stkp']);
+				$unit[$row_unit['kode_unit']] = ($row_unit['nama_unit']);
 			} endforeach; 
-		echo form_dropdown('stkp',$jenis_stkp,$this->uri->segment(3));?>&nbsp </div></td><td width="410px">
-<div class="formBaru"><label>Unit Kerja: &nbsp </label>
-<?php $unit = array();
-		$unit['ALL'] = 'ALL';
-	foreach ($list_unit as $row_unit) :
-		{
-			$unit[$row_unit['kode_unit']] = ($row_unit['nama_unit']);
-		} endforeach; 
-	echo form_dropdown('unit',$unit,$this->uri->segment(4)); ?>&nbsp 
-	<?php $submit = array(
-		'class' => 'blueB m110',
-		'id'	=> 'next2',
-		'value'	=> 'Sort',
-		); 
-	echo form_submit($submit)?></form></div></td>
-	<td width="300px"><div class="searchWidget1"><?php /* echo form_open('diklat/search_pegawai'); */ echo form_open('diklat/search_stkp');?>
+		echo form_dropdown('unit',$unit,$this->uri->segment(4)); ?>&nbsp 
+		<?php $submit = array(
+			'class' => 'blueB m110',
+			'id'	=> 'next2',
+			'value'	=> 'Sort',
+			); 
+		echo form_submit($submit)?></form>
+	</div>
+	
+</td>
+<td width="100px"></td>
+<td width="260px">
+	<div class="searchWidget1"><?php /* echo form_open('diklat/search_pegawai'); */ echo form_open('diklat/search_stkp');?>
                         <input type="text" name="search" width="100px" placeholder="Enter search text..." />
                         <input type="submit" name="find" value="" class="blueB m110"/></div>
-                    </form></td></tr>
+                    </form>
+	
+</td>
+</tr>
 
-</div></div></table></fieldset>
+</table></fieldset>
 </div>
 
 <div class="oneTwo"> 
@@ -103,7 +127,7 @@
 					}
 					else
 					{
-						$selesai =mdate($datestring,strtotime( $row_pegawai['p_stkp_pelaksanaan']));
+						$selesai = mdate($datestring,strtotime( $row_pegawai['p_stkp_selesai']));
 					}
 					if ($row_pegawai['p_stkp_mulai'] == '0000-00-00')
 					{
