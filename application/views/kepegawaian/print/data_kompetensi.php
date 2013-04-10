@@ -1,26 +1,69 @@
+<html>
+<head>
+	<title>DATA KOMPETENSI PEGAWAI</title>
+</head>
 <link href="<?php echo base_url(); ?>admin/css/kompetensi.css" rel="stylesheet" type="text/css" />
-
+<body>
 <?php 
 $datestring = "%d-%m-%Y" ;
 foreach($pegawai as $row_peg){}
 foreach($data_jabatan_tmt as $row_jt){}
-
+/*
 if($data_saudara == NULL)
 	{
 		$row_grd['p_grd_grade'] = '-';
 	} else {foreach($data_grade as $row_grd){}}
-
+*/
 foreach($data_unit as $row_unit){}
 foreach($data_status_keluarga as $row_stk){}
 foreach($data_fisik as $row_fis){}
 foreach($data_alamat as $row_al){}
 foreach($data_pendidikan as $row_pdk){}
 
+/*
 if($data_saudara == NULL)
 	{
 		$row_sdr['p_sdr_ke'] = '-';
 		$row_sdr['p_sdr_jumlah_sdr'] = '-';
 	} else {foreach($data_saudara as $row_sdr){}}
+*/
+if ($data_grade==NULL){
+	$grade="";
+}else {
+	foreach($data_grade as $row_grd){}
+	$grade=$row_grd['p_grd_grade'];
+}
+if ($data_unit == NULL){
+	$unit="";
+	
+}else {
+	foreach($data_unit as $row_unit){}
+	$unit = $row_unit['p_unt_kode_unit'];
+}
+/*
+if ($data_bahasa==NULL){
+	$bhs=0;
+	$bahasa[0]="";
+} else {
+	$bhs=0;
+	foreach($data_bahasa as $row_bahasa){
+		$bhs++;
+		$bahasa[$bhs] = $row_bahasa['p_bhs_bahasa'];
+	}
+}
+*/
+/*
+if ($data_saudara==NULL){
+	$sdr_ke = 0;
+	$jumlah_sdr = 0;
+} else {
+	foreach ($data_saudara as $row_sdr){
+		$sdr_ke = $row_sdr['p_sdr_ke'];
+		$jumlah_sdr = $row_sdr['p_sdr_jumlah_sdr'];
+	}
+
+}
+*/
 
 ?>
 
@@ -45,11 +88,11 @@ if($data_saudara == NULL)
 		<td colspan="2">: <?php echo mdate($datestring,strtotime($row_jt['p_tmt_tmt']));?></tr>
 	<tr>
 		<td><strong>Grade</strong></td>
-		<td colspan="2">: <?php echo $row_grd['p_grd_grade'];?></td>
+		<td colspan="2">: <?php echo $grade;?></td>
 	</tr>
 	<tr>
 		<td><strong>Unit Kerja</strong></td>
-		<td colspan="2">: <?php echo $row_unit['unit_name'];?></td>
+		<td colspan="2">: <?php echo $unit;?></td>
 	</tr>
 	<tr>
 		<td><strong>Jabatan Terakhir</strong></td>
@@ -133,10 +176,12 @@ if($data_saudara == NULL)
 							<?php }
 							$jumlah_bhs++;
 							}endforeach; ?>
+	<!--
 	<tr>
 		<td><strong>Anak ke</strong></td>
-		<td colspan="2">: <?php echo $row_sdr['p_sdr_ke'].' dari '.$row_sdr['p_sdr_jumlah_sdr'].' bersaudara';?></td>
+		<td colspan="2">: <?php //echo $sdr_ke.' dari '.$jumlah_sdr.' bersaudara';?></td>
 	</tr>
+	-->
 </table>
 <br />
 <!-- =============================================================================== -->
@@ -280,7 +325,8 @@ if($data_saudara == NULL)
   </tr>-->
 </table>
 <br>
-
+</body>
+</html>
 
 
 

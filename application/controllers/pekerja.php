@@ -834,12 +834,17 @@ class pekerja extends Application {
 		$time = time();
 		$tanggal = mdate($datestring, $time);
 		
+		if($this->input->post('tgl_ayah')=="00-00-0000"){$tgl_ayah="0000-00-00";}
+		else{$tgl_ayah = mdate($datestring, strtotime($this->input->post('tgl_ayah')));}
+		if($this->input->post('meninggal_ayah')=="00-00-0000"){$meninggal_ayah="0000-00-00";}
+		else{$meninggal_ayah = mdate($datestring, strtotime($this->input->post('meninggal_ayah')));}
+		
 		$nipp = $this->uri->segment(3);		
 		$data_ayah = array(
 				'p_ay_nama' 			=> $this->input->post('nama_ayah'),
 				'p_ay_tmpt_lahir'		=> $this->input->post('tempat_ayah'),
-				'p_ay_tgl_lahir'		=> mdate($datestring, strtotime($this->input->post('tgl_ayah'))),
-				'p_ay_tgl_meninggal'	=> mdate($datestring, strtotime($this->input->post('meninggal_ayah'))),
+				'p_ay_tgl_lahir'		=> $tgl_ayah,
+				'p_ay_tgl_meninggal'	=> $meninggal_ayah,
 				'p_ay_alamat'			=> $this->input->post('almt_ayah'),
 				'p_ay_pekerjaan'		=> $this->input->post('kerja_ayah'),
 				'p_ay_update_on'		=> $tanggal,
@@ -847,12 +852,18 @@ class pekerja extends Application {
 			);
 			
 		$this->kepegawaian->update_data_ayah($data_ayah);
-			
+		
+		
+		if($this->input->post('tgl_ibu')=="00-00-0000"){$tgl_ibu="0000-00-00";}
+		else{$tgl_ibu = mdate($datestring, strtotime($this->input->post('tgl_ibu')));}
+		if($this->input->post('meninggal_ibu')=="00-00-0000"){$meninggal_ibu="0000-00-00";}
+		else{$meninggal_ibu = mdate($datestring, strtotime($this->input->post('meninggal_ibu')));}
+		
 		$data_ibu = array(
 				'p_ibu_nama' 			=> $this->input->post('nama_ibu'),
 				'p_ibu_tmpt_lahir'		=> $this->input->post('tempat_ibu'),
-				'p_ibu_tgl_lahir'		=> mdate($datestring, strtotime($this->input->post('tgl_ibu'))),
-				'p_ibu_tgl_meninggal'	=> mdate($datestring, strtotime($this->input->post('meninggal_ibu'))),
+				'p_ibu_tgl_lahir'		=> $tgl_ibu,
+				'p_ibu_tgl_meninggal'	=> $meninggal_ibu,
 				'p_ibu_alamat'			=> $this->input->post('almt_ibu'),
 				'p_ibu_pekerjaan'		=> $this->input->post('kerja_ibu'),
 				'p_ibu_update_on'		=> $tanggal,
@@ -1020,6 +1031,8 @@ class pekerja extends Application {
 		$data['data_grade'] = $this->kepegawaian->get_detail_pegawai_grade($nipp);
 		$data['data_stkp'] = $this->kepegawaian->get_detail_pegawai_stkp($nipp);
 		$data['jumlah_bahasa'] = $this->kepegawaian->count_result_bahasa($nipp);
+		$data['data_pendidikan_full'] = $this->kepegawaian->get_detail_pegawai_pendidikan_full($nipp);
+		
 
 		$monthstring = "%m" ;
 		$yearstring = "%Y" ;

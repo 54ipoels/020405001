@@ -191,6 +191,13 @@ class kepegawaian extends CI_Model
 		$query = $this->db->get('v3_peg_pendidikan');
 		return $query->result_array();
 	}
+	function get_detail_pegawai_pendidikan_full($nipp)
+	{
+		$this->db->select('*');
+		$this->db->where('p_pdd_nipp',$nipp);
+		$query = $this->db->get('v3_peg_pendidikan');
+		return $query->result_array();
+	}
 	
 	function get_detail_pegawai_status_keluarga($nipp)
 	{
