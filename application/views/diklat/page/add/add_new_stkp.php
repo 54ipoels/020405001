@@ -32,11 +32,20 @@
 					<div class="formRow">
                         <label>Jenis STKP:</label>
                         <div class="formRight">
-						<?php $jenis_stkp = array();
+						<?php 
+						/*
+						$jenis_stkp = array();
 						foreach ($list_stkp as $row_stkp_list) :
 						{
 							$jenis_stkp[$row_stkp_list['stkp']] = ($row_stkp_list['stkp']);
 						} endforeach; 
+						*/
+						$jenis_stkp = array(
+								"GSE"	=> "GSE",
+								"FOO"	=> "FOO",
+								"DGR"	=> "DGR",
+								"AVSEC"	=> "AVSEC",
+						);
 						echo form_dropdown('stkp',$jenis_stkp,'');?></div>
                         <div class="clear"></div>
                     </div>
