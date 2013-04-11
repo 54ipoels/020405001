@@ -209,7 +209,7 @@ if ($data_saudara==NULL){
 <br>
 
 <table border="1" width="700">
-	<tr><td colspan="6"><strong>PENDIDIKAN LATIHAN PENJENJANGAN / KECAKAPAN</strong></td></tr>
+	<tr><td colspan="7"><strong>PENDIDIKAN LATIHAN PENJENJANGAN / KECAKAPAN</strong></td></tr>
   <tr>
     <td bgcolor="#CCCCCC"><div align="center">No</div></td>
     <td bgcolor="#CCCCCC"><div align="center">Diklat</div></td>
