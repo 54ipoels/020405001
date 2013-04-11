@@ -556,6 +556,7 @@ class diklat extends Application {
 		$data['data_unit'] = $this->kepegawaian->get_detail_pegawai_unit($nipp);
 		$data['data_grade'] = $this->kepegawaian->get_detail_pegawai_grade($nipp);
 		$data['data_stkp'] = $this->kepegawaian->get_detail_pegawai_stkp($nipp);
+		$data['data_nstkp'] = $this->kepegawaian->get_detail_pegawai_nstkp($nipp);
 		$data['jumlah_bahasa'] = $this->kepegawaian->count_result_bahasa($nipp);
 
 		$monthstring = "%m" ;
@@ -592,24 +593,23 @@ class diklat extends Application {
 		$this->excel->getActiveSheet()->setCellValue('B1', 'NIPP');
 		$this->excel->getActiveSheet()->setCellValue('C1', 'Nama');
 		$this->excel->getActiveSheet()->setCellValue('D1', 'STKP');
-		$this->excel->getActiveSheet()->setCellValue('E1', 'Rating');
-		$this->excel->getActiveSheet()->setCellValue('F1', 'No Sertifikat');
-		$this->excel->getActiveSheet()->setCellValue('G1', 'Validitas');
-		$this->excel->getActiveSheet()->setCellValue('I1', 'Lembaga');
-		$this->excel->getActiveSheet()->setCellValue('J1', 'Tanggal Pelaksanaan');
-		$this->excel->getActiveSheet()->setCellValue('K1', 'Jenis STKP');
-		$this->excel->getActiveSheet()->setCellValue('G2', 'From');
-		$this->excel->getActiveSheet()->setCellValue('H2', 'Until');
+		$this->excel->getActiveSheet()->setCellValue('E1', 'No Sertifikat');
+		$this->excel->getActiveSheet()->setCellValue('F1', 'Pelaksanaan');
+		$this->excel->getActiveSheet()->setCellValue('H1', 'Lembaga');
+		$this->excel->getActiveSheet()->setCellValue('I1', 'Jenis STKP');
+		$this->excel->getActiveSheet()->setCellValue('F2', 'From');
+		$this->excel->getActiveSheet()->setCellValue('G2', 'Until');
 		
 		$i=2;
 		$number=0;
+		
 		
 		$nipp = '';
 		foreach ($pegawai_with_stkp_and_unit as $row_pegawai) :
 		{ 
 			$i++;
 			$number++;
-			if ($row_pegawai['peg_nipp'] == $nipp)
+			if ($row_pegawai['p_nstkp_nipp'] == $nipp)
 			{
 				$nipp = '';
 				$nama = '';
@@ -627,21 +627,13 @@ class diklat extends Application {
 			{
 				$pelaksanaan = $row_pegawai['p_nstkp_pelaksanaan'];
 			}
-			if ($row_pegawai['p_nstkp_mulai'] == '0000-00-00')
-			{
-				$stkp_mulai = '-';
-			}
-			else
-			{
-				$stkp_mulai = mdate($datestring,strtotime($row_pegawai['p_nstkp_mulai']));
-			}
-			if ($row_pegawai['p_nstkp_finish'] == '0000-00-00')
+			if ($row_pegawai['p_nstkp_selesai'] == '0000-00-00')
 			{
 				$stkp_selesai = '-';
 			}
 			else
 			{
-				$stkp_selesai = mdate($datestring,strtotime($row_pegawai['p_nstkp_finish']));
+				$stkp_selesai = mdate($datestring,strtotime($row_pegawai['p_nstkp_selesai']));
 			}
 			
 			//masukkan data ke tabel excel
@@ -650,11 +642,10 @@ class diklat extends Application {
 			$this->excel->getActiveSheet()->setCellValue("C$i", strtoupper("$nama"));
 			$this->excel->getActiveSheet()->setCellValue("D$i", "$row_pegawai[p_nstkp_jenis]");
 			$this->excel->getActiveSheet()->setCellValue("E$i", "$row_pegawai[p_nstkp_no_license]");
-			$this->excel->getActiveSheet()->setCellValue("F$i", "$stkp_mulai");
+			$this->excel->getActiveSheet()->setCellValue("F$i", "$pelaksanaan");
 			$this->excel->getActiveSheet()->setCellValue("G$i", "$stkp_selesai");
 			$this->excel->getActiveSheet()->setCellValue("H$i", "$row_pegawai[p_nstkp_lembaga]");
-			$this->excel->getActiveSheet()->setCellValue("I$i", "$pelaksanaan");
-			$this->excel->getActiveSheet()->setCellValue("J$i", "$row_pegawai[p_nstkp_type]");
+			$this->excel->getActiveSheet()->setCellValue("I$i", "$row_pegawai[p_nstkp_type]");
 			
 			$nipp = $row_pegawai['peg_nipp'];
 			
@@ -713,14 +704,17 @@ class diklat extends Application {
 		$this->excel->getActiveSheet()->setCellValue('A1', 'No');
 		$this->excel->getActiveSheet()->setCellValue('B1', 'NIPP');
 		$this->excel->getActiveSheet()->setCellValue('C1', 'Nama');
-		$this->excel->getActiveSheet()->setCellValue('D1', 'Rating');
-		$this->excel->getActiveSheet()->setCellValue('E1', 'No Sertifikat');
-		$this->excel->getActiveSheet()->setCellValue('F1', 'Validitas');
-		$this->excel->getActiveSheet()->setCellValue('H1', 'Lembaga');
-		$this->excel->getActiveSheet()->setCellValue('I1', 'Tanggal Pelaksanaan');
-		$this->excel->getActiveSheet()->setCellValue('J1', 'Jenis STKP');
-		$this->excel->getActiveSheet()->setCellValue('F2', 'From');
-		$this->excel->getActiveSheet()->setCellValue('G2', 'Until');
+		$this->excel->getActiveSheet()->setCellValue('D1', 'Jenis');
+		$this->excel->getActiveSheet()->setCellValue('E1', 'Rating');
+		$this->excel->getActiveSheet()->setCellValue('F1', 'No Sertifikat');
+		$this->excel->getActiveSheet()->setCellValue('G1', 'Validitas');
+		$this->excel->getActiveSheet()->setCellValue('I1', 'Lembaga');
+		$this->excel->getActiveSheet()->setCellValue('J1', 'Tanggal Pelaksanaan');
+		$this->excel->getActiveSheet()->setCellValue('L1', 'Jenis STKP');
+		$this->excel->getActiveSheet()->setCellValue('G2', 'From');
+		$this->excel->getActiveSheet()->setCellValue('H2', 'Until');
+		$this->excel->getActiveSheet()->setCellValue('J2', 'From');
+		$this->excel->getActiveSheet()->setCellValue('K2', 'Until');
 		
 		$i=2;
 		$number=0;

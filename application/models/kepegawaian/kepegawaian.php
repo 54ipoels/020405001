@@ -241,6 +241,14 @@ class kepegawaian extends CI_Model
 		return $query->result_array();
 	}
 	
+	function get_detail_pegawai_nstkp($nipp)
+	{
+		$this->db->select('*');
+		$this->db->where('p_nstkp_nipp',$nipp);
+		$query = $this->db->get('v3_peg_non_stkp');
+		return $query->result_array();
+	}
+	
 	function get_detail_pegawai_anak($nipp)
 	{
 		$this->db->select('*');
