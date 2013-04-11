@@ -213,6 +213,7 @@ if ($data_saudara==NULL){
   <tr>
     <td bgcolor="#CCCCCC"><div align="center">No</div></td>
     <td bgcolor="#CCCCCC"><div align="center">Diklat</div></td>
+    <td bgcolor="#CCCCCC"><div align="center">Rating</div></td>
     <td bgcolor="#CCCCCC"><div align="center">Penyelenggara</div></td>
     <td bgcolor="#CCCCCC"><div align="center">Dari</div></td>
     <td bgcolor="#CCCCCC"><div align="center">Sampai</div></td>
@@ -228,6 +229,7 @@ if ($data_saudara==NULL){
 	  <tr>
 		<td><div align='center'><?php echo $nomor; ?></div></td>
 		<td><div align='center'><?php echo $row_stkp['p_stkp_jenis'];?></div></td>
+		<td><div align='center'><?php echo $row_stkp['p_stkp_rating'];?></div></td>
 		<td><div align='center'><?php echo $row_stkp['p_stkp_lembaga'];?></div></td>
 		<td><div align='center'><?php echo mdate($datestring,strtotime($row_stkp['p_stkp_mulai'])) ;?></div></td>
 		<td><div align='center'><?php echo mdate($datestring,strtotime($row_stkp['p_stkp_finish'])) ;?></div></td>
@@ -252,7 +254,7 @@ if ($data_saudara==NULL){
 <br>
 
 <table border="1" width="700">
-	<tr><td colspan="6">Pendidikan Latihan Penjenjangan / Kecakapan (Non STKP)</td></tr>
+	<tr><td colspan="6"><strong>PENDIDIKAN LATIHAN PENJENJANGAN / KECAKAPAN (NON STKP)</strong></td></tr>
   <tr>
     <td bgcolor="#CCCCCC"><div align="center">No</div></td>
     <td bgcolor="#CCCCCC"><div align="center">Training</div></td>
