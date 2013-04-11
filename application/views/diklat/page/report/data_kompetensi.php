@@ -124,6 +124,7 @@
                 <li><a href="#tab2">Pendidikan</a></li>
 				<li><a href="#tab3">Jabatan</a></li>
 				<li><a href="#tab4">Data Kompetensi</a></li>
+				<li><a href="#tab5">Data Non Kompetensi</a></li>
             </ul>
             <div class="tab_container">
                 <div id="tab1" class="tab_content np">
@@ -211,7 +212,7 @@
 						</tr>
 						</thead>
                         <tfoot>
-							<tr><td colspan=8></td></tr>
+							<tr><td colspan=10></td></tr>
 						</tfoot>
                         <tbody> <?php
 						$datestring = "%d-%M-%Y" ;
@@ -288,7 +289,80 @@
                     </table>
                 </div>
 				<div class="clear"></div>
-				
+				<div id="tab5" class="tab_content np">
+                    <table cellpadding="0" cellspacing="0" width="100%" class="sTable">
+						<thead>
+						<tr>
+							<td rowspan="2">No</td>
+							<td rowspan="2">Training</td>
+							<td rowspan="2">No Sertifikat</td>
+							<td colspan="2">Pelaksanaan</td>
+							<td rowspan="2">Lembaga</td>
+						</tr>
+						<tr>
+							<td>From</td><td>Until</td>
+						</tr>
+						</thead>
+                        <tfoot>
+							<tr><td colspan=8></td></tr>
+						</tfoot>
+                        <tbody> <?php 
+				$datestring = "%d-%M-%Y" ;
+				$nipp = '';
+				if ($this->uri->segment(3)== NULL)
+				{
+					$number = 1;
+				} else {
+					if ($this->uri->segment(2) == 'get_non_stkp')
+					{
+						$number = $this->uri->segment(3)+1;
+					} else {
+						$number = $this->uri->segment(5)+1;
+					}
+				}
+				foreach ($data_nstkp as $row_pegawai) :
+				{ 
+					if ($row_pegawai['p_nstkp_pelaksanaan'] == '0000-00-00')
+					{
+						$pelaksanaan = '-';
+					}
+					else
+					{
+						$pelaksanaan = $row_pegawai['p_nstkp_pelaksanaan'];
+					}
+					
+					if ($row_pegawai['p_nstkp_jenis'] == ""){$jenis_anchor = "";} else {$jenis_anchor = anchor('diklat/get_nstkp_selection/jenis/'.$row_pegawai['p_nstkp_jenis'], 	$row_pegawai['p_nstkp_jenis']);}
+					if ($row_pegawai['p_nstkp_lembaga'] == ""){$lembaga_anchor = "";} else {$lembaga_anchor = anchor('diklat/get_nstkp_selection/lembaga/'.$row_pegawai['p_nstkp_lembaga'], $row_pegawai['p_nstkp_lembaga']);}
+					if ($row_pegawai['p_nstkp_selesai'] == '0000-00-00')
+					{
+						$selesai = '-';
+					}
+					else
+					{
+						$selesai =mdate($datestring,strtotime( $row_pegawai['p_nstkp_selesai']));
+					}
+					if ($row_pegawai['p_nstkp_pelaksanaan'] == '0000-00-00')
+					{
+						$mulai = '-';
+					}else
+					{
+						$mulai = mdate($datestring,strtotime($row_pegawai['p_nstkp_pelaksanaan']));
+					}
+					
+					?>
+						<tr>
+                        <td><center><?php echo $number; ?></center></td>
+						<td><?php echo $jenis_anchor; ?></td>
+						<td><center><?php echo $row_pegawai['p_nstkp_no_license']; ?></center></td>
+						<td><center><?php echo $mulai; ?></center></td>
+						<td><center><?php echo $selesai; ?></center></td>
+						<td><center><?php echo $lembaga_anchor; ?></center></td>
+						
+						<?php $number++;} endforeach;?>
+                        </tbody>
+                    </table>
+                </div>
+				<div class="clear"></div>
             </div>	
 			<?php 
 					foreach ($pegawai as $row_pegawai){}; 
