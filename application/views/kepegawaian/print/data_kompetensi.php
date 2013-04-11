@@ -67,9 +67,9 @@ if ($data_saudara==NULL){
 
 ?>
 
-<table>
+<table border="1" width="500">
     <tr>
-		<td colspan="3" align="right"></a></td>
+		<td colspan="3" align="center"><strong>DATA PRIBADI</strong></td>
 	</tr>
 	<tr>
 		<td><strong>Nama</strong></td>
@@ -185,8 +185,8 @@ if ($data_saudara==NULL){
 </table>
 <br />
 <!-- =============================================================================== -->
-<table>
-	<tr><td colspan="5">Pendidikan Umum</td></tr>
+<table border="1" width="500">
+	<tr><td colspan="5"><strong>PENDIDIKAN UMUM</strong></td></tr>
   <tr>
     <td bgcolor="#CCCCCC"><div align="center">No</div></td>
     <td bgcolor="#CCCCCC"><div align="center">Tingkat</div></td>
@@ -208,8 +208,8 @@ if ($data_saudara==NULL){
 </table>
 <br>
 
-<table>
-	<tr><td colspan="6">Pendidikan Latihan Penjenjangan / Kecakapan</td></tr>
+<table border="1" width="500">
+	<tr><td colspan="6"><strong>PENDIDIKAN LATIHAN PENJENJANGAN / KECAKAPAN</strong></td></tr>
   <tr>
     <td bgcolor="#CCCCCC"><div align="center">No</div></td>
     <td bgcolor="#CCCCCC"><div align="center">Diklat</div></td>
@@ -251,8 +251,8 @@ if ($data_saudara==NULL){
 </table>
 <br>
 
-<table>
-	<tr><td colspan="7">Riwayat Golongan / Kepangkatan</td></tr>
+<table border="1" width="500">
+	<tr><td colspan="7"><strong>RIWAYAT GOLONGAN / KEPANGKATAN</strong></td></tr>
   <tr>
     <td bgcolor="#CCCCCC" rowspan="2" ><div align="center">No</div></td>
     <td bgcolor="#CCCCCC" rowspan="2"><div align="center">Pangkat</div></td>
@@ -276,8 +276,8 @@ if ($data_saudara==NULL){
 </table>
 <br>
 
-<table>
-	<tr><td colspan="8">Riwayat Jabatan</td></tr>
+<table border="1" width="500">
+	<tr><td colspan="8"><strong>RIWAYAT JABATAN</strong></td></tr>
   <tr>
     <td rowspan="2" bgcolor="#CCCCCC" ><div align="center">No</div></td>
     <td rowspan="2" bgcolor="#CCCCCC"><div align="center">Jabatan</div></td>
@@ -304,8 +304,8 @@ if ($data_saudara==NULL){
 </table>
 <br>
 
-<table>
-	<tr><td colspan="5">Sanksi Disiplin Yang Pernah Dijalani</td></tr>
+<table border="1" width="500">
+	<tr><td colspan="5"><strong>SANKSI DISIPLIN YANG PERNAH DIJALANI</strong></td></tr>
   <tr>
     <td rowspan="2" bgcolor="#CCCCCC"><div align="center">No</div></td>
     <td rowspan="2" bgcolor="#CCCCCC"><div align="center">Jenis Sanksi </div></td>
