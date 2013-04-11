@@ -66,10 +66,10 @@ if ($data_saudara==NULL){
 */
 
 ?>
-
-<table border="1" width="500">
+<h1>DATA KOMPETENSI</h1>
+<table border="1" width="700">
     <tr>
-		<td colspan="3" align="center"><strong>DATA PRIBADI</strong></td>
+		<td colspan="3"><strong>DATA PRIBADI</strong></td>
 	</tr>
 	<tr>
 		<td><strong>Nama</strong></td>
@@ -120,7 +120,7 @@ if ($data_saudara==NULL){
 	</tr>
 	<tr>
 		<td><strong>Alamat</strong></td>
-		<td colspan="2"></td>
+		<td colspan="2">&nbsp;</td>
 	</tr>
 	<tr>
 		<td><div align="right"><strong>Jl dan No</strong></div></td>
@@ -185,7 +185,7 @@ if ($data_saudara==NULL){
 </table>
 <br />
 <!-- =============================================================================== -->
-<table border="1" width="500">
+<table border="1" width="700">
 	<tr><td colspan="5"><strong>PENDIDIKAN UMUM</strong></td></tr>
   <tr>
     <td bgcolor="#CCCCCC"><div align="center">No</div></td>
@@ -208,7 +208,7 @@ if ($data_saudara==NULL){
 </table>
 <br>
 
-<table border="1" width="500">
+<table border="1" width="700">
 	<tr><td colspan="6"><strong>PENDIDIKAN LATIHAN PENJENJANGAN / KECAKAPAN</strong></td></tr>
   <tr>
     <td bgcolor="#CCCCCC"><div align="center">No</div></td>
@@ -251,7 +251,7 @@ if ($data_saudara==NULL){
 </table>
 <br>
 
-<table border="1" width="500">
+<table border="1" width="700">
 	<tr><td colspan="7"><strong>RIWAYAT GOLONGAN / KEPANGKATAN</strong></td></tr>
   <tr>
     <td bgcolor="#CCCCCC" rowspan="2" ><div align="center">No</div></td>
@@ -276,7 +276,7 @@ if ($data_saudara==NULL){
 </table>
 <br>
 
-<table border="1" width="500">
+<table border="1" width="700">
 	<tr><td colspan="8"><strong>RIWAYAT JABATAN</strong></td></tr>
   <tr>
     <td rowspan="2" bgcolor="#CCCCCC" ><div align="center">No</div></td>
@@ -304,7 +304,7 @@ if ($data_saudara==NULL){
 </table>
 <br>
 
-<table border="1" width="500">
+<table border="1" width="700">
 	<tr><td colspan="5"><strong>SANKSI DISIPLIN YANG PERNAH DIJALANI</strong></td></tr>
   <tr>
     <td rowspan="2" bgcolor="#CCCCCC"><div align="center">No</div></td>
