@@ -1030,6 +1030,7 @@ class pekerja extends Application {
 		$data['data_unit'] = $this->kepegawaian->get_detail_pegawai_unit($nipp);
 		$data['data_grade'] = $this->kepegawaian->get_detail_pegawai_grade($nipp);
 		$data['data_stkp'] = $this->kepegawaian->get_detail_pegawai_stkp($nipp);
+		$data['data_nstkp'] = $this->kepegawaian->get_detail_pegawai_nstkp($nipp);
 		$data['jumlah_bahasa'] = $this->kepegawaian->count_result_bahasa($nipp);
 		$data['data_pendidikan_full'] = $this->kepegawaian->get_detail_pegawai_pendidikan_full($nipp);
 		

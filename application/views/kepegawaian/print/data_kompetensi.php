@@ -223,7 +223,7 @@ if ($data_saudara==NULL){
   $stkp = '';
   $waktu = '';
   foreach ($data_stkp as $row_stkp) {
-  if ($stkp != $row_stkp['p_stkp_jenis']){
+  if ($stkp != $row_stkp['p_stkp_rating']){
 	?>
 	  <tr>
 		<td><div align='center'><?php echo $nomor; ?></div></td>
@@ -245,9 +245,75 @@ if ($data_saudara==NULL){
 	  </tr>
 	<?php $nomor++;}
 	}
-  $stkp = $row_stkp['p_stkp_jenis'];
+  $stkp = $row_stkp['p_stkp_rating'];
   $waktu = $row_stkp['p_stkp_finish'];
   } ?>
+</table>
+<br>
+
+<table border="1" width="700">
+	<tr><td colspan="6">Pendidikan Latihan Penjenjangan / Kecakapan (Non STKP)</td></tr>
+  <tr>
+    <td bgcolor="#CCCCCC"><div align="center">No</div></td>
+    <td bgcolor="#CCCCCC"><div align="center">Training</div></td>
+    <td bgcolor="#CCCCCC"><div align="center">Penyelenggara</div></td>
+    <td bgcolor="#CCCCCC"><div align="center">Dari</div></td>
+    <td bgcolor="#CCCCCC"><div align="center">Sampai</div></td>
+    <td bgcolor="#CCCCCC"><div align="center">No License </div></td>
+  </tr>
+  <?php 
+				$datestring = "%d-%M-%Y" ;
+				$nipp = '';
+				if ($this->uri->segment(3)== NULL)
+				{
+					$number = 1;
+				} else {
+					if ($this->uri->segment(2) == 'get_non_stkp')
+					{
+						$number = $this->uri->segment(3)+1;
+					} else {
+						$number = $this->uri->segment(5)+1;
+					}
+				}
+				foreach ($data_nstkp as $row_pegawai) :
+				{ 
+					if ($row_pegawai['p_nstkp_pelaksanaan'] == '0000-00-00')
+					{
+						$pelaksanaan = '-';
+					}
+					else
+					{
+						$pelaksanaan = $row_pegawai['p_nstkp_pelaksanaan'];
+					}
+					
+					if ($row_pegawai['p_nstkp_jenis'] == ""){$jenis_anchor = "";} else {$jenis_anchor = $row_pegawai['p_nstkp_jenis'];}
+					if ($row_pegawai['p_nstkp_lembaga'] == ""){$lembaga_anchor = "";} else {$lembaga_anchor = $row_pegawai['p_nstkp_lembaga'];}
+					if ($row_pegawai['p_nstkp_selesai'] == '0000-00-00')
+					{
+						$selesai = '-';
+					}
+					else
+					{
+						$selesai =mdate($datestring,strtotime( $row_pegawai['p_nstkp_selesai']));
+					}
+					if ($row_pegawai['p_nstkp_pelaksanaan'] == '0000-00-00')
+					{
+						$mulai = '-';
+					}else
+					{
+						$mulai = mdate($datestring,strtotime($row_pegawai['p_nstkp_pelaksanaan']));
+					}
+					
+					?><tr>
+                        <td><center><?php echo $number; ?></center></td>
+						<td><?php echo $jenis_anchor; ?></td>
+						<td><center><?php echo $row_pegawai['p_nstkp_no_license']; ?></center></td>
+						<td><center><?php echo $mulai; ?></center></td>
+						<td><center><?php echo $selesai; ?></center></td>
+						<td><center><?php echo $lembaga_anchor; ?></center></td>
+						
+						<?php $number++;} endforeach;?>
+					</tr>
 </table>
 <br>
 
