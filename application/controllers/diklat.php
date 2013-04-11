@@ -103,6 +103,7 @@ class diklat extends Application {
 		$config['total_rows'] = $this->pendidikan->countSTKP(); //total rows
 		$config['per_page'] = 10; //the number of per page for pagination
 		$config['uri_segment'] = 3; //see from base_url. 3 for this case
+		$config['num_links'] = 5;
 		$this->pagination->initialize($config);
 		$page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
 		

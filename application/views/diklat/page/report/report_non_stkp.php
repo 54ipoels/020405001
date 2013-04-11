@@ -1,41 +1,56 @@
 <div class="widget">
 <?php echo form_open('diklat/sort_non_stkp/') ?>
 <fieldset class="step" id="w2first">
-<table><tr><td>
-<div class="formBaru"><label>License: &nbsp </label>
-<?php $stkp = array(
-							'name' => 'license',
-							'id'   => 'license',
-							'style'=> 'width:80%',
-						);
-echo form_input('license');?></div><td width="410px">
-<div class="formBaru"><label>Unit Kerja: &nbsp </label>
-<?php $unit = array();
-		$unit['ALL'] = 'ALL';
-	foreach ($list_unit as $row_unit) :
-		{
-			$unit[$row_unit['kode_unit']] = ($row_unit['nama_unit']);
-		} endforeach; 
-	echo form_dropdown('unit',$unit,$this->uri->segment(4)); ?>&nbsp 
-	<?php $submit = array(
-		'class' => 'blueB m110',
-		'id'	=> 'next2',
-		'value'	=> 'Sort',
-		); 
-	echo form_submit($submit)?></form></div></td>
-	<td width="300px"><div class="searchWidget1"><?php /*echo form_open('diklat/search_pegawai');*/ echo form_open('diklat/search_nstkp');?>
-                        <input type="text" name="search" width="100px" placeholder="Enter search text..." />
-                        <input type="submit" name="find" value="" class="blueB m110"/></div>
-                    </form></td></tr>
+<table>
+	<tr>
+    	<td>
+			<div class="formBaru"><label><!--License: &nbsp --></label>
+				
+                <input type="text" name="license" width="100px" placeholder="Enter license..." />
+           	</div>
+      	</td>
+        <td width="410px">
+			<div class="formBaru"><label><!--Unit Kerja: &nbsp --></label>
+				<?php $unit = array();
+					$unit['ALL'] = 'Unit Kerja';
+					foreach ($list_unit as $row_unit) :
+					{
+						$unit[$row_unit['kode_unit']] = ($row_unit['nama_unit']);
+					} 
+					endforeach; 
+					echo form_dropdown('unit',$unit,$this->uri->segment(4)); 
+				?>&nbsp 
+	
+				<?php $submit = array(
+					'class' => 'blueB m110',
+					'id'	=> 'next2',
+					'value'	=> 'Sort',
+					); 
+					echo form_submit($submit);
+				?>
+                </form>
+           	</div>
+     	</td>
+		<td width="300px">
+        	<div class="searchWidget1">
+				<?php /*echo form_open('diklat/search_pegawai');*/ echo form_open('diklat/search_nstkp');?>
+                <input type="text" name="search" width="100px" placeholder="Enter search text..." />
+                <input type="submit" name="find" value="" class="blueB m110"/>
+                </form>
+           	</div>
+       	</td>
+   	</tr>
+</table>
+</fieldset>
 
-</div></div></table></fieldset>
-</div>
+</div><!--</div>-->
+<!--</div>-->
 
 <div class="oneTwo"> 
 </div>
 
 <div class="widget">  
-		  <div class="title"><img src="<?php echo base_url()?>images/icons/dark/frames.png" alt="" class="titleIcon" /><h6>Data Pegawai</h6></div>
+		  <div class="title"><img src="<?php echo base_url()?>images/icons/dark/frames.png" alt="" class="titleIcon" /><h6>Report Data Non STKP</h6></div>
             <table cellpadding="0" cellspacing="0" width="100%" class="sTable">
                 <thead>
                     <tr>
@@ -52,7 +67,16 @@ echo form_input('license');?></div><td width="410px">
 					<td>From</td><td>Until</td></tr>
                 </thead> 
 				<tfoot>
-					<tr><td colspan=11><center><div class="pagination"><?php echo $this->pagination->create_links();?></div></center></td></td></tr>
+					<tr>
+                    	<td colspan=3 align="left">
+							<?php 
+								$attr= array('target' => '_blank');
+								echo anchor('diklat/excel_non_stkp','Export to Excel',$attr);
+						 	?>
+                       	</td>
+                        <td colspan="3"><div class="pagination"><?php echo $this->pagination->create_links();?></div></td>
+                        <td colspan="3" align="right">EMS 2.0.1 | developed by www.studiokami.com</td>
+                   	</tr>
 				</tfoot>
 				<tbody>
 				<?php 
@@ -138,5 +162,4 @@ echo form_input('license');?></div><td width="410px">
             </table>
 			
         </div>
-		<?php $attr= array('target' => '_blank');
-			echo anchor('diklat/excel_non_stkp','Export to Excel',$attr); ?>
+		
