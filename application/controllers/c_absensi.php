@@ -541,8 +541,16 @@ class C_absensi extends Application {
 			$newmonth = $this->month($month);
 						
 			//Jika Bulan Desember, maka startdate tahunnya 2012, enddatenya tahunnya 2013 and next monthnya 01
-			if($month == 12) { $newnextmonth = $this->month(1); $nextyear = $year+1; 
-			} else { $newnextmonth = $this->month($month+1);	$nextyear = $year; 	}
+			if($month == 12) 
+			{ 
+				$newnextmonth = $this->month(1); 
+				$nextyear = $year+1; 
+			} 
+			else 
+			{ 
+				$newnextmonth = $this->month($month+1);	
+				$nextyear = $year; 	
+			}
 						
 			//inisial date start dan end date
 			$startdate = "".$year."-".$newmonth."-01";
@@ -646,7 +654,6 @@ class C_absensi extends Application {
 		$data['real_in'] = mdate($datestring, strtotime($tanggal_in.' '.$this->input->post('real_in').':00'));
 		$data['real_out'] = mdate($datestring, strtotime($tanggal_out.' '.$this->input->post('real_out').':00'));
 		
-		//print_r($data);
 		$this->m_absensi->submit_edit_detail_absensi($fschpeg_id,$fschpeg_tanggal,$year, $data, username());
 				
 		redirect('c_absensi/view_detail_absensi/'.$fschpeg_id.'/'.$this->input->post('month').'/'.$year);
@@ -654,7 +661,7 @@ class C_absensi extends Application {
 	
 	function tarik_absensi()
 	{
-		#tarik data dari mesin
+		#tarik data dari mesin manual
 		$ip = $this->uri->segment(3, 0);
 		$key = "0";
 		
@@ -692,17 +699,34 @@ class C_absensi extends Application {
 			#masukkan data dari mesin ke database tampung / backup
 			$this->m_absensi->input_data_backup_mesin($pin,$datetime,$status);
 			
+			
+			#foreach ($query as $row)
+			#	{
+			#		echo $row->dbmesin_nipp . '<br />';
+					#echo $row['name'];
+					#echo $row['email'];
+			#	}
 			#ambil data dari mesin dimasukkan ke database absensi
 			#$this->m_absensi->input_data_absensi_mesin($pin,$datetime,$status);
 			
 		}
 		
+		# hapus null nipp dari table
+		$this->m_absensi->del_null_dbmesin_nipp();
+		
 		# back up to excell 
 		#hapus data dari mesin
 		
-		redirect('c_absensi/absensi');
+		#redirect('c_absensi/absensi');
 		
 	
+	}
+	
+	function check_dup()
+	{
+		$query = $this->m_absensi->del_dup_data_in();
+			
+			print_r($query);
 	}
 	
 	# Parse Data untuk tarik data absensi dari mesin sidik jari, default bawaan pabrik

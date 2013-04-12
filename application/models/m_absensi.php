@@ -426,8 +426,83 @@ class M_absensi extends CI_Model {
 		
 		$this->db->where('fschpegabs_fschpeg_id', $fschpeg_id); 
 		$this->db->where('fschpegabs_id', $fschpeg_tanggal); 
-		//print_r($year);
+		
 		$this->db->update('v3_fschpeg_absensi_'.$year, $data_absensi); 
+	}
+	
+	
+	/*
+	=====================================================================================================
+	 MODEL UNTUK  FINGER PRINT
+	=====================================================================================================
+	*/
+	
+	# delete null dbmesin_nipp
+	function del_null_dbmesin_nipp()
+	{
+		$this->db->delete('v3_databackup_mesin', array('dbmesin_nipp' => '')); 
+	}
+	
+	function del_dup_data_in()
+	{
+		/*# find dup in data
+		$query = ('
+		SELECT dbmesin_nipp, COUNT(*) nipp FROM v3_databackup_mesin GROUP BY dbmesin_nipp HAVING nipp > 1;
+		');
+		
+		$data = $this->db->query($query);
+		
+		#if ( $query->result() > 1 )
+		#{
+			foreach ($data->result() as $row) :
+				echo $row->dbmesin_nipp . '<br />';
+			endforeach;
+		#}*/
+		
+		$query = $this->db->query("SELECT dbmesin_nipp, COUNT(*) c FROM v3_databackup_mesin GROUP BY dbmesin_nipp HAVING c > 1");
+		#$query = $this->db->query("SELECT DISTINCT dbmesin_nipp FROM v3_databackup_mesin GROUP BY dbmesin_nipp");
+		
+		return $query->result();
+			
+			#echo $query->num_rows();
+			#print_r($query);
+			#if($q->num_rows() > 1)
+			#{
+				/*foreach ($query->result() as $row)
+				{
+					echo $row->dbmesin_nipp . '<br />';
+					#echo $row['name'];
+					#echo $row['email'];
+				}*/
+				/*foreach ($q as $row) :
+					echo $row->dbmesin_nipp . '<br />';
+				endforeach;*/
+			#}
+			#else 
+			#{
+			#	echo "somethings wrong";
+			#} 
+		
+		
+		/*// select double data and remove the duplicate
+				$sql="SELECT * FROM v3_databackup_mesin WHERE efvr_nipp = '$nipp' AND efvr_date = '$tanggal_bulan_tahun' AND efvr_status = '0'";
+				$result=mysql_query($sql);
+	
+				$count=mysql_num_rows($result);
+				
+					if($count>1)
+					{
+						$sql="SELECT * FROM v2_ems_finger_verified_record WHERE efvr_nipp = '$nipp' AND efvr_date = '$tanggal_bulan_tahun' AND efvr_status = '0' ORDER BY efvr_id DESC LIMIT 1";
+							$result = mysql_query($sql);
+	
+								while($row = mysql_fetch_array($result, MYSQL_ASSOC))
+							{
+								$efvr_id_del = $row['efvr_id'];
+								mysql_query("DELETE FROM v2_ems_finger_verified_record WHERE efvr_id =  '$efvr_id_del'");
+							} 
+						
+					}
+				// select double data and remove the duplicate*/
 	}
 	
 	#insert data mesin backup
