@@ -1034,7 +1034,6 @@ class pekerja extends Application {
 		$data['jumlah_bahasa'] = $this->kepegawaian->count_result_bahasa($nipp);
 		$data['data_pendidikan_full'] = $this->kepegawaian->get_detail_pegawai_pendidikan_full($nipp);
 		
-
 		$monthstring = "%m" ;
 		$yearstring = "%Y" ;
 		$time = time();
