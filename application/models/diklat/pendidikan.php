@@ -548,7 +548,7 @@ class pendidikan extends CI_Model
 			LEFT JOIN (SELECT peg_nipp,peg_nama FROM v3_pegawai) AS peg
 			ON peg_stkp.p_stkp_nipp = peg.peg_nipp
 			WHERE peg_nama LIKE   '%$search%' OR peg_nipp LIKE  '%$search%'
-			ORDER BY peg_stkp.p_stkp_nipp, peg_stkp.p_stkp_rating
+			ORDER BY peg_stkp.p_stkp_nipp ASC, peg_stkp.p_stkp_rating ASC, peg_stkp.p_stkp_pelaksanaan ASC
 			LIMIT $offset , $num
 			
 		");
@@ -580,7 +580,7 @@ class pendidikan extends CI_Model
 			LEFT JOIN (SELECT peg_nipp,peg_nama FROM v3_pegawai) AS peg
 			ON peg_stkp.p_nstkp_nipp = peg.peg_nipp
 			WHERE peg_nama LIKE   '%$search%' OR peg_nipp LIKE  '%$search%'
-			ORDER BY peg_stkp.p_nstkp_nipp
+			ORDER BY peg_stkp.p_nstkp_nipp ASC, peg_stkp.p_nstkp_pelaksanaan ASC
 			LIMIT $offset , $num
 			
 		");
