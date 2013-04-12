@@ -655,29 +655,34 @@ class C_absensi extends Application {
 	function tarik_absensi()
 	{
 		#tarik data dari mesin
-		$ip = "";
-		$key = "";
+		$ip = $this->uri->segment(3, 0);
+		$key = "0";
 		
 		$Connect = fsockopen($ip, "80", $errno, $errstr, 1);
 		
-		if($Connect){
-		$soap_request="<GetAttLog><ArgComKey xsi:type=\"xsd:integer\">".$key."</ArgComKey><Arg><PIN xsi:type=\"xsd:integer\">All</PIN></Arg></GetAttLog>";
-		$newLine="\r\n";
-		fputs($Connect, "POST /iWsService HTTP/1.0".$newLine);
-	    fputs($Connect, "Content-Type: text/xml".$newLine);
-	    fputs($Connect, "Content-Length: ".strlen($soap_request).$newLine.$newLine);
-	    fputs($Connect, $soap_request.$newLine);
-		$buffer="";
-			while($Response=fgets($Connect, 1024))
-			{
-				$buffer=$buffer.$Response;
+		if($Connect)
+		{
+			$soap_request="<GetAttLog><ArgComKey xsi:type=\"xsd:integer\">".$key."</ArgComKey><Arg><PIN xsi:type=\"xsd:integer\">All</PIN></Arg></GetAttLog>";
+			$newLine="\r\n";
+			fputs($Connect, "POST /iWsService HTTP/1.0".$newLine);
+			fputs($Connect, "Content-Type: text/xml".$newLine);
+			fputs($Connect, "Content-Length: ".strlen($soap_request).$newLine.$newLine);
+			fputs($Connect, $soap_request.$newLine);
+			$buffer="";
+				while($Response=fgets($Connect, 1024))
+				{
+					$buffer=$buffer.$Response;
+				}
 			}
+		else
+		{
+			echo 'fail';
 		}
 		
 		$buffer = $this->parse_data($buffer,"<GetAttLogResponse>","</GetAttLogResponse>");
 		$buffer = explode("\r\n",$buffer);
 		
-		for($a=0;$a<count($buffer);$a++)
+		for($a=1;$a<count($buffer);$a++)
 		{
 			$data = $this->parse_data($buffer[$a],"<Row>","</Row>");
 			$pin = $this->parse_data($data,"<PIN>","</PIN>");
@@ -688,15 +693,32 @@ class C_absensi extends Application {
 			$this->m_absensi->input_data_backup_mesin($pin,$datetime,$status);
 			
 			#ambil data dari mesin dimasukkan ke database absensi
-			$this->m_absensi->input_data_absensi_mesin($pin,$datetime,$status);
+			#$this->m_absensi->input_data_absensi_mesin($pin,$datetime,$status);
 			
 		}
 		
+		# back up to excell 
 		#hapus data dari mesin
 		
 		redirect('c_absensi/absensi');
 		
 	
+	}
+	
+	# Parse Data untuk tarik data absensi dari mesin sidik jari, default bawaan pabrik
+	function parse_data($data,$p1,$p2)
+	{
+		$data=" ".$data;
+		$hasil="";
+		$awal=strpos($data,$p1);
+		if($awal!=""){
+			$akhir=strpos(strstr($data,$p1),$p2);
+			if($akhir!=""){
+				$hasil=substr($data,$awal+strlen($p1),$akhir-strlen($p1));
+			}
+		}
+		return $hasil;
+		echo 'hasil' . $hasil;	
 	}
 	
 	#################################
@@ -1213,20 +1235,7 @@ class C_absensi extends Application {
 	}
 	
 	
-	# Parse Data untuk tarik data absensi dari mesin sidik jari, default bawaan pabrik
-	function parse_data($data,$p1,$p2)
-	{
-		$data=" ".$data;
-		$hasil="";
-		$awal=strpos($data,$p1);
-		if($awal!=""){
-			$akhir=strpos(strstr($data,$p1),$p2);
-			if($akhir!=""){
-				$hasil=substr($data,$awal+strlen($p1),$akhir-strlen($p1));
-			}
-		}
-		return $hasil;	
-	}
+	
 	
 	function terbilang($angka) {
 		$angka = (float)$angka; 
