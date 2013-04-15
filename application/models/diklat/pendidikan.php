@@ -240,6 +240,7 @@ class pendidikan extends CI_Model
 	#sort STKP
 	function search_data_stkp_with_unit_and_name($num, $offset, $jenis, $stkp, $unit)
 	{
+		/*
 		$query = ('
 			SELECT * FROM v3_peg_stkp AS peg_stkp
 			LEFT JOIN (SELECT p_unt_nipp, p_unt_kode_unit FROM v3_peg_unit) AS peg_unt 
@@ -250,6 +251,18 @@ class pendidikan extends CI_Model
 			ORDER BY peg_stkp.p_stkp_nipp
 			LIMIT '.$offset.' , '.$num.'
 		');
+		*/
+		$query = ('
+			SELECT * FROM v3_peg_stkp AS peg_stkp
+			LEFT JOIN (SELECT p_unt_nipp, p_unt_kode_unit FROM v3_peg_unit GROUP BY p_unt_nipp ORDER BY id_peg_unit DESC) AS peg_unt 
+			ON peg_stkp.p_stkp_nipp = peg_unt.p_unt_nipp 
+			LEFT JOIN (SELECT peg_nipp,peg_nama FROM v3_pegawai GROUP BY peg_nipp) AS peg
+			ON peg_stkp.p_stkp_nipp = peg.peg_nipp
+			WHERE peg_stkp.p_stkp_jenis LIKE \'' . $jenis . '\' AND peg_stkp.p_stkp_rating LIKE \'' . $stkp . '\' AND peg_unt.p_unt_kode_unit LIKE \'' . $unit. '\'
+			ORDER BY peg_stkp.p_stkp_nipp
+			LIMIT '.$offset.' , '.$num.'
+		');
+		
 		$query = $this->db->query($query); 
 		return $query->result_array();
 	}
@@ -286,9 +299,9 @@ class pendidikan extends CI_Model
 	{
 		$query = ('
 			SELECT * FROM v3_peg_stkp AS peg_stkp
-			LEFT JOIN (SELECT p_unt_nipp, p_unt_kode_unit FROM v3_peg_unit) AS peg_unt 
+			LEFT JOIN (SELECT p_unt_nipp, p_unt_kode_unit FROM v3_peg_unit GROUP BY p_unt_nipp ORDER BY id_peg_unit DESC) AS peg_unt 
 			ON peg_stkp.p_stkp_nipp = peg_unt.p_unt_nipp 
-			LEFT JOIN (SELECT peg_nipp,peg_nama FROM v3_pegawai) AS peg
+			LEFT JOIN (SELECT peg_nipp,peg_nama FROM v3_pegawai GROUP BY peg_nipp) AS peg
 			ON peg_stkp.p_stkp_nipp = peg.peg_nipp
 			WHERE peg_stkp.p_stkp_jenis LIKE \'' . $jenis . '\' AND peg_stkp.p_stkp_rating LIKE \'' . $stkp . '\' AND peg_unt.p_unt_kode_unit LIKE \'' . $unit. '\'
 		');
