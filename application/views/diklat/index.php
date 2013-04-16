@@ -65,96 +65,94 @@
 		if ($page == 'Pegawai')
 		{
 			$this->load->view('diklat/page/list_karyawan');
-		}else
-		if ($page == 'Add STKP')
+		}
+		elseif ($page == 'Add STKP')
 		{
 			$this->load->view('diklat/page/add/add_new_stkp');
-		}else
-		if ($page == 'Search Result')
+		}
+		elseif ($page == 'Search Result')
 		{
 			$this->load->view('diklat/page/list_karyawan');
-		}else
-		if ($page == 'Report Non STKP')
+		}
+		elseif ($page == 'Report Non STKP')
 		{
 			$this->load->view('diklat/page/report/report_non_stkp');
-		}else
-		if ($page == 'STKP Bulanan')
+		}
+		elseif ($page == 'STKP Bulanan')
 		{
 			$this->load->view('diklat/page/add/input_stkp_bulanan');
-		}else
-		if ($page == 'STKP Bulanan Next')
+		}
+		elseif ($page == 'STKP Bulanan Next')
 		{
 			$this->load->view('diklat/page/add/input_stkp_bulanan_2');
-		}else 
-		if ($page == 'Detail Kompetensi')
+		}
+		elseif ($page == 'Detail Kompetensi')
 		{
 			$this->load->view('diklat/page/report/data_kompetensi');
 		}
 		// -------- submit data karyawan ---------------//
-		else 
-		if ($page == 'Report STKP')
+		elseif ($page == 'Report STKP')
 		{
 			$this->load->view('diklat/page/report/report_stkp');
-		} else 
-		if ($page == 'Input Data Pasangan')
+		} 
+		elseif ($page == 'Input Data Pasangan')
 		{
 			$this->load->view('diklat/page/submit/submit_data_pasangan');
-		} else 
-		if ($page == 'Input Data Ortu')
+		} 
+		elseif ($page == 'Input Data Ortu')
 		{
 			$this->load->view('diklat/page/submit/submit_data_ortu');
-		} else 
-		if ($page == 'Input Data Mertua')
+		} 
+		elseif ($page == 'Input Data Mertua')
 		{
 			$this->load->view('diklat/page/submit/submit_data_mertua');
 		}
 		//--------- edit data karyawan ---------------//
-		else
-		if ($page == 'Edit Data Diri')
+		elseif ($page == 'Edit Data Diri')
 		{
 			$this->load->view('diklat/page/edit/edit_data_pribadi');
-		}else
-		if ($page == 'Edit Data Alamat')
+		}
+		elseif ($page == 'Edit Data Alamat')
 		{ 
 			$this->load->view('diklat/page/edit/edit_data_alamat');
-		}else
-		if ($page == 'Edit Data Pasangan')
+		}
+		elseif ($page == 'Edit Data Pasangan')
 		{
 			$this->load->view('diklat/page/edit/edit_data_pasangan');
-		}else
-		if ($page == 'Edit Data Ortu')
+		}
+		elseif ($page == 'Edit Data Ortu')
 		{
 			$this->load->view('diklat/page/edit/edit_data_ortu');
-		}else
-		if ($page == 'Edit Data Mertua')
+		}
+		elseif ($page == 'Edit Data Mertua')
 		{
 			$this->load->view('diklat/page/edit/edit_data_mertua');
-		}else
-		if ($page == 'Edit Data Anak')
+		}
+		elseif ($page == 'Edit Data Anak')
 		{
 			$this->load->view('diklat/page/edit/edit_data_anak');
-		}else
-		if ($page == 'Edit Data Jabatan')
+		}
+		elseif ($page == 'Edit Data Jabatan')
 		{
 			$this->load->view('diklat/page/edit/edit_data_jabatan');
-		}else
-		if ($page == 'Edit Data Pendidikan')
+		}
+		elseif ($page == 'Edit Data Pendidikan')
 		{
 			$this->load->view('diklat/page/edit/edit_data_pendidikan');
-		}else
-		if ($page == 'Add Data Anak')
+		}
+		elseif ($page == 'Add Data Anak')
 		{
 			$this->load->view('diklat/page/add/add_data_anak');
-		}else
-		if ($page == 'Add Data Bahasa')
+		}
+		elseif ($page == 'Add Data Bahasa')
 		{
 			$this->load->view('diklat/page/add/add_data_bahasa');
-		}else
-		if ($page == 'Edit non STKP')
+		}
+		elseif ($page == 'Edit non STKP')
 		{
 			$this->load->view('diklat/page/edit/edit_non_stkp');
-		}else
-		if ($page == 'Edit STKP')
+		}
+		elseif ($page == 'Edit STKP')
 		{
 			$this->load->view('diklat/page/edit/edit_stkp');
 		}
