@@ -1,5 +1,5 @@
 <div class="twoOne">
-<div class="widget">
+<div class="widget"> 
           <div class="title"><img src="<?php echo base_url()?>images/icons/dark/frames.png" alt="" class="titleIcon" /><h6>Detail Pegawai</h6></div>
             <?php 
 				foreach ($pegawai as $row_pegawai) :
@@ -139,8 +139,8 @@
 <div class="oneThree">
 <div class="widget">
 <div class="title"><img src="<?php echo base_url()?>images/icons/dark/frames.png" alt="" class="titleIcon" /><h6>Delete Pegawai</h6></div>
+<?php echo form_open('pekerja/submit_delete_pegawai/'.$row_pegawai['peg_nipp']);?>
 <table cellpadding="0" cellspacing="0" width="100%" class="sTable">
-<?php echo form_open(); ?>
 	<tr><td>Reason</td>
 	<td><?php 
 	$reason = array(
@@ -150,7 +150,18 @@
 		'PHK' => 'Pemutusan Hubungan Kerja',
 		'Other' => 'Other'
 		);
-	echo form_dropdown('reason',$reason) ?></td></tr>
+	echo form_dropdown('reason',$reason); ?></td></tr>
+	<tr><td></td>
+	<td><?php 
+	$cabang = array(
+		'name' => 'cabang',
+		'id'   => 'cabang',
+		'title'=> 'nama cabang tujuan',
+	);
+	echo form_input($cabang);
+	?>
+	<div style="color:red; size:1pt"> Jika Pindah Cabang Mohon Isi Nama Cabang</div>
+	</td></tr>
 	<tr><td>Terhitung Mulai</td>
 	<td><?php 
 	$tanggal = array(
@@ -174,6 +185,7 @@
 			);
 	echo form_submit($submit)?></td></tr>
 </table>
+<?php echo form_close();?>
 </div>
 </div>
 

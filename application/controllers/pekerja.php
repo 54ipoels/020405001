@@ -11,7 +11,7 @@ class pekerja extends Application {
 		$this->ag_auth->restrict('user');
     }
 
-	/**
+	/** 
 	 * Index Page for this controller.
 	 *
 	 * Maps to the following URL
@@ -214,7 +214,7 @@ class pekerja extends Application {
 		
 		$this->load->view('kepegawaian/index', $data);
 	}
-	
+		
 	public function search_pegawai()
 	{
 		if ($this->input->post('search') == NULL )
@@ -331,142 +331,150 @@ class pekerja extends Application {
 		$this->form_validation->set_rules('jns_klm', 'jns_klm', 'required');
 		$this->form_validation->set_rules('gol_drh', 'gol_drh', 'required');
 
-		if ($this->form_validation->run() == FALSE)
-		{
-			$data['page'] = 'Input Data Diri';
-			$data['page_karyawan'] = 'yes';
-			$this->load->view('kepegawaian/index',$data);
-		}
-		else
-		{
-		#preparing data for input
-		$data_pegawai = array(
-				'peg_nipp' 			=> $this->input->post('nipp'),
-				'peg_nama' 			=> $this->input->post('nama'),
-				'peg_tmpt_lahir'	=> $this->input->post('tempat'),
-				'peg_tgl_lahir'		=> mdate($datestring, strtotime($this->input->post('tanggal'))),
-				'peg_jns_kelamin'	=> $this->input->post('jns_klm'),
-				'peg_gol_darah'		=> $this->input->post('gol_drh'),
-				'peg_update_on'		=> $tanggal,
-				'peg_update_by'		=> 'admin'
-			);
+		#cek nipp ada atau tidak
+		$nipp = $this->input->post('nipp');
+		$validasi = $this->kepegawaian->get_data_pegawai_by_nipp($nipp);
+		if ( $validasi == NULL){
 		
-		#input data to table pegawai
-		$this->kepegawaian->insert_data_pegawai($data_pegawai);
-		
-		$data_agama = array(
-				'p_ag_nipp' 		=> $this->input->post('nipp'),
-				'p_ag_agama' 		=> $this->input->post('agama'),
-				'p_ag_update_on'	=> $tanggal,
-				'p_ag_update_by'	=> 'admin'
-			);
+			if ($this->form_validation->run() == FALSE)
+			{
+				$data['page'] = 'Input Data Diri';
+				$data['page_karyawan'] = 'yes';
+				$this->load->view('kepegawaian/index',$data);
+			}
+			else
+			{
+			#preparing data for input
+			$data_pegawai = array(
+					'peg_nipp' 			=> $this->input->post('nipp'),
+					'peg_nama' 			=> $this->input->post('nama'),
+					'peg_tmpt_lahir'	=> $this->input->post('tempat'),
+					'peg_tgl_lahir'		=> mdate($datestring, strtotime($this->input->post('tanggal'))),
+					'peg_jns_kelamin'	=> $this->input->post('jns_klm'),
+					'peg_gol_darah'		=> $this->input->post('gol_drh'),
+					'peg_update_on'		=> $tanggal,
+					'peg_update_by'		=> 'admin'
+				);
 			
-		$this->kepegawaian->insert_data_pegawai_agama($data_agama);
-		
-		$data_alamat = array(
-				'p_al_nipp' 		=> $this->input->post('nipp'),
-				'p_al_jalan' 		=> $this->input->post('jalan'),
-				'p_al_kelurahan'	=> $this->input->post('kelurahan'),
-				'p_al_kecamatan' 	=> $this->input->post('kecamatan'),
-				'p_al_kabupaten' 	=> $this->input->post('kabupaten'),
-				'p_al_provinsi' 	=> $this->input->post('provinsi'),
-				'p_al_no_telp' 		=> $this->input->post('notelp'),
-				'p_al_email' 		=> $this->input->post('email'),
-				'p_al_update_on'	=> $tanggal,
-				'p_al_update_by'	=> 'admin'
-			);
+			#input data to table pegawai
+			$this->kepegawaian->insert_data_pegawai($data_pegawai);
 			
-		$this->kepegawaian->insert_data_pegawai_alamat($data_alamat);
-		
-		$data_bahasa = array(
-				'p_bhs_nipp' 		=> $this->input->post('nipp'),
-				'p_bhs_bahasa' 		=> $this->input->post('bahasa'),
-				'p_bhs_update_on'	=> $tanggal,
-				'p_bhs_update_by'	=> 'admin'
-			);
+			$data_agama = array(
+					'p_ag_nipp' 		=> $this->input->post('nipp'),
+					'p_ag_agama' 		=> $this->input->post('agama'),
+					'p_ag_update_on'	=> $tanggal,
+					'p_ag_update_by'	=> 'admin'
+				);
+				
+			$this->kepegawaian->insert_data_pegawai_agama($data_agama);
 			
-		$this->kepegawaian->insert_data_pegawai_bahasa($data_bahasa);
+			$data_alamat = array(
+					'p_al_nipp' 		=> $this->input->post('nipp'),
+					'p_al_jalan' 		=> $this->input->post('jalan'),
+					'p_al_kelurahan'	=> $this->input->post('kelurahan'),
+					'p_al_kecamatan' 	=> $this->input->post('kecamatan'),
+					'p_al_kabupaten' 	=> $this->input->post('kabupaten'),
+					'p_al_provinsi' 	=> $this->input->post('provinsi'),
+					'p_al_no_telp' 		=> $this->input->post('notelp'),
+					'p_al_email' 		=> $this->input->post('email'),
+					'p_al_update_on'	=> $tanggal,
+					'p_al_update_by'	=> 'admin'
+				);
+				
+			$this->kepegawaian->insert_data_pegawai_alamat($data_alamat);
 			
-		$data_fisik = array(
-				'p_fs_nipp' 		=> $this->input->post('nipp'),
-				'p_fs_tinggi' 		=> $this->input->post('tinggi'),
-				'p_fs_berat' 		=> $this->input->post('berat'),
-				'p_fs_foto'	 		=> '',
-				'p_fs_update_on'	=> $tanggal,
-				'p_fs_update_by'	=> 'admin'
-			);
+			$data_bahasa = array(
+					'p_bhs_nipp' 		=> $this->input->post('nipp'),
+					'p_bhs_bahasa' 		=> $this->input->post('bahasa'),
+					'p_bhs_update_on'	=> $tanggal,
+					'p_bhs_update_by'	=> 'admin'
+				);
+				
+			$this->kepegawaian->insert_data_pegawai_bahasa($data_bahasa);
+				
+			$data_fisik = array(
+					'p_fs_nipp' 		=> $this->input->post('nipp'),
+					'p_fs_tinggi' 		=> $this->input->post('tinggi'),
+					'p_fs_berat' 		=> $this->input->post('berat'),
+					'p_fs_foto'	 		=> '',
+					'p_fs_update_on'	=> $tanggal,
+					'p_fs_update_by'	=> 'admin'
+				);
+				
+			$this->kepegawaian->insert_data_pegawai_fisik($data_fisik);
+				
+			$data_jabatan = array(
+					'p_jbt_nipp' 		=> $this->input->post('nipp'),
+					'p_jbt_jabatan' 	=> $this->input->post('jabatan'),
+					'p_jbt_update_on'	=> $tanggal,
+					'p_jbt_update_by'	=> 'admin'
+				);
+				
+			$this->kepegawaian->insert_data_pegawai_jabatan($data_jabatan);
 			
-		$this->kepegawaian->insert_data_pegawai_fisik($data_fisik);
+			$data_pendidikan = array(
+					'p_pdd_nipp' 		=> $this->input->post('nipp'),
+					'p_pdd_tingkat' 	=> $this->input->post('tgk_pdd'),
+					'p_pdd_lp' 			=> $this->input->post('lembaga'),
+					'p_pdd_masuk'		=> $this->input->post('masuk'),
+					'p_pdd_keluar'		=> $this->input->post('keluar'),
+					'p_pdd_update_on'	=> $tanggal,
+					'p_pdd_update_by'	=> 'admin'
+				);
+				
+			$this->kepegawaian->insert_data_pegawai_pendidikan($data_pendidikan);
 			
-		$data_jabatan = array(
-				'p_jbt_nipp' 		=> $this->input->post('nipp'),
-				'p_jbt_jabatan' 	=> $this->input->post('jabatan'),
-				'p_jbt_update_on'	=> $tanggal,
-				'p_jbt_update_by'	=> 'admin'
-			);
+			#preparing data
+			#cek apakah pegawai tetap atau outsource
+			if ($this->input->post('stp') == 'PKWT')
+			{
+				$provider = 'PT Gapura Angkasa';
+			} else
+			{
+				$provider = $this->input->post('provider');
+			}
 			
-		$this->kepegawaian->insert_data_pegawai_jabatan($data_jabatan);
-		
-		$data_pendidikan = array(
-				'p_pdd_nipp' 		=> $this->input->post('nipp'),
-				'p_pdd_tingkat' 	=> $this->input->post('tgk_pdd'),
-				'p_pdd_lp' 			=> $this->input->post('lembaga'),
-				'p_pdd_masuk'		=> $this->input->post('masuk'),
-				'p_pdd_keluar'		=> $this->input->post('keluar'),
-				'p_pdd_update_on'	=> $tanggal,
-				'p_pdd_update_by'	=> 'admin'
-			);
+			$data_tmt = array(
+					'p_tmt_nipp' 			=> $this->input->post('nipp'),
+					'p_tmt_status'			=> $this->input->post('stp'),
+					'p_tmt_provider'		=> $provider,
+					'p_tmt_tmt'				=> mdate($datestring, strtotime($this->input->post('tmt'))),
+					'p_tmt_update_on'		=> $tanggal,
+					'p_tmt_update_by'		=> 'admin'
+				);
+				
+			$this->kepegawaian->insert_data_pegawai_tmt($data_tmt);
+				
+			$data_unit = array(
+					'p_unt_nipp' 			=> $this->input->post('nipp'),
+					'p_unt_kode_unit'		=> $this->input->post('unit'),
+					'p_unt_update_on'		=> $tanggal,
+					'p_unt_update_by'		=> 'admin'
+				);
+				
+			$this->kepegawaian->insert_data_pegawai_unit($data_unit);
 			
-		$this->kepegawaian->insert_data_pegawai_pendidikan($data_pendidikan);
-		
-		#preparing data
-		#cek apakah pegawai tetap atau outsource
-		if ($this->input->post('stp') == 'PKWT')
-		{
-			$provider = 'PT Gapura Angkasa';
-		} else
-		{
-			$provider = $this->input->post('provider');
-		}
-		
-		$data_tmt = array(
-				'p_tmt_nipp' 			=> $this->input->post('nipp'),
-				'p_tmt_status'			=> $this->input->post('stp'),
-				'p_tmt_provider'		=> $provider,
-				'p_tmt_tmt'				=> mdate($datestring, strtotime($this->input->post('tmt'))),
-				'p_tmt_update_on'		=> $tanggal,
-				'p_tmt_update_by'		=> 'admin'
-			);
+			$data_stk = array(
+					'p_stk_nipp' 			  => $this->input->post('nipp'),
+					'p_stk_status_keluarga'   => $this->input->post('stk'),
+					'p_stk_update_on'		  => $tanggal,
+					'p_stk_update_by'		  => 'admin'
+				);
 			
-		$this->kepegawaian->insert_data_pegawai_tmt($data_tmt);
+			$this->kepegawaian->insert_data_pegawai_status_keluarga($data_stk);
 			
-		$data_unit = array(
-				'p_unt_nipp' 			=> $this->input->post('nipp'),
-				'p_unt_kode_unit'		=> $this->input->post('unit'),
-				'p_unt_update_on'		=> $tanggal,
-				'p_unt_update_by'		=> 'admin'
-			);
-			
-		$this->kepegawaian->insert_data_pegawai_unit($data_unit);
-		
-		$data_stk = array(
-				'p_stk_nipp' 			  => $this->input->post('nipp'),
-				'p_stk_status_keluarga'   => $this->input->post('stk'),
-				'p_stk_update_on'		  => $tanggal,
-				'p_stk_update_by'		  => 'admin'
-			);
-		
-		$this->kepegawaian->insert_data_pegawai_status_keluarga($data_stk);
-		
-		#redirecting
-		if (($this->input->post('stk') != 'TK') && ($this->input->post('stk') != 'K1'))
-		{
-			redirect('pekerja/add_pegawai_pasangan/'.$this->input->post('nipp'));
-		}
-		else
-		{
-			redirect('pekerja/add_pegawai_ortu/pribadi/'.$this->input->post('nipp'));
-		}
+			#redirecting
+			if (($this->input->post('stk') != 'TK') && ($this->input->post('stk') != 'K1'))
+			{
+				redirect('pekerja/add_pegawai_pasangan/'.$this->input->post('nipp'));
+			}
+			else
+			{
+				redirect('pekerja/add_pegawai_ortu/pribadi/'.$this->input->post('nipp'));
+			}
+			}
+		} else {
+			?><script>alert("Nipp tersebut sudah digunakan");window.history.back(-1);</script><?php	
 		}
 	}
 	
@@ -1015,7 +1023,7 @@ class pekerja extends Application {
 		$this->kepegawaian->update_data_pendidikan($data_pendidikan);
 		redirect('pekerja/get_pegawai/'.$nipp);
 	}
-	
+		
 	function print_kompetensi($nipp)
 	{
 		$data['pegawai'] = $this->kepegawaian->get_data_pegawai_by_nipp($nipp);
@@ -1044,6 +1052,84 @@ class pekerja extends Application {
 	<?php
 	}
 	
+	
+	# Function untuk delete pegawai
+	public function submit_delete_pegawai()
+	{
+		$datestring = "%Y-%m-%d" ;
+		$time = time();
+		$tanggal = mdate($datestring, $time);
+		
+		if($this->input->post('tanggal')=="00-00-0000"){$tmt="0000-00-00";}
+		else{$tmt = mdate($datestring, strtotime($this->input->post('tanggal')));}
+		
+		$nipp = $this->uri->segment(3);
+		
+		if ($this->input->post('reason') == "Pindah Cabang"){
+			if ($this->input->post('cabang') == ""){
+				redirect('pekerja/get_pegawai/'.$nipp);
+			}
+			else { 
+				$data_pegawai = array(
+						"p_cab_nipp"		=> $nipp,
+						"p_cab_kode_cabang"	=> $this->input->post('cabang'),
+						"p_cab_tmt_start"	=> $tmt,
+						"p_cab_ket"			=> $this->input->post('ket'),
+						"p_cab_update_on"	=> $tanggal,
+						"p_cab_update_by"	=> 'admin',
+					);
+				
+				$data_peg_tmt = array(
+						"p_tmt_end"			=> $tmt,
+						"p_tmt_reason"		=> $this->input->post('reason'),
+						"p_tmt_keterangan"	=> $this->input->post('ket'),
+						
+					);
+				
+				#ubah tmt end
+				$id_tmt = $this->kepegawaian->get_last_tmt_by_nipp($nipp);
+				if ($id_tmt !== NULL){
+					$this->kepegawaian->update_tmt_end($id_tmt,$data_peg_tmt);
+				}
+				
+				#add data pegawai ke pindah cabang
+				$this->kepegawaian->add_pindah_cabang($data_pegawai);
+				
+				redirect('pekerja');
+			}
+		}
+
+		else {
+			$data_peg_tmt = array(
+						"p_tmt_end"			=> $tmt,
+						"p_tmt_reason"		=> $this->input->post('reason'),
+						"p_tmt_keterangan"	=> $this->input->post('ket'),
+						
+					);
+					
+			#ubah tmt end
+			$id_tmt = $this->kepegawaian->get_last_tmt_by_nipp($nipp);
+			if ($id_tmt !== NULL){
+				$this->kepegawaian->update_tmt_end($id_tmt,$data_peg_tmt);
+			}
+						
+			redirect('pekerja');
+		}
+		/*
+		if ($this->input->post('reason') == "Pensiun Dini"){
+		}
+		if ($this->input->post('reason') == "Pensiun"){
+		}
+		if ($this->input->post('reason') == "Pemutusan Hubungan Kerja"){
+		}
+		if ($this->input->post('reason') == "Order"){
+		}
+		*/
+		//$this->load->view('kepegawaian/index', $data);
+	}
+	
+	
+	# Export Excel
 	function excel_data_pegawai()
 	{
 		$datestring = "%Y-%m-%d" ;

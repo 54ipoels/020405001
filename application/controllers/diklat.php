@@ -8,7 +8,7 @@ class diklat extends Application {
 		$this->load->model('diklat/pendidikan');
 		$this->load->model('kepegawaian/kepegawaian');
 		$this->load->library('table');
-		$this->load->library('form_validation');
+		$this->load->library('form_validation');  
 		$this->ag_auth->restrict('user');
     }
 

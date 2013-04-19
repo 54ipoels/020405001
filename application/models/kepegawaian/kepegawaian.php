@@ -442,6 +442,10 @@ class kepegawaian extends CI_Model
 		$this->db->insert('v3_peg_grade',$data_grade);
 	}
 	
+	function add_pindah_cabang($data_pegawai)
+	{
+		$this->db->insert('v3_peg_cabang',$data_pegawai);
+	}
 //-------- update data pegawai --------------//
 	
 	function update_data_pegawai($data_pegawai)
@@ -607,6 +611,29 @@ class kepegawaian extends CI_Model
 			');
 		$query = $this->db->query($query);
 		return $query->result_array();
+	}
+	
+	function get_last_tmt_by_nipp($nipp)
+	{
+		$query = "
+			SELECT * FROM v3_peg_tmt 
+			WHERE p_tmt_nipp ='$nipp' 
+			ORDER BY id_peg_tmt DESC
+			LIMIT 1
+		";
+		$query = $this->db->query($query);
+		$result = $query->result_array();
+		$id_peg_tmt = "";
+		foreach($result as $row){
+			$id_peg_tmt = $row['id_peg_tmt'];
+		}
+		return $id_peg_tmt;
+	}
+	
+	function update_tmt_end($id,$tmt)
+	{
+		$this->db->where('id_peg_tmt', $id);
+		$this->db->update('v3_peg_tmt',$tmt);
 	}
 	
 }
