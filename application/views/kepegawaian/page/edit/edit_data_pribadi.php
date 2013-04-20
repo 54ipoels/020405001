@@ -77,11 +77,10 @@
                         <label>Jenis Kelamin:<span class="req">*</span></label>
                         <div class="formRight"><?php 
 						$jns_klm = array(
-							'name' => 'jns_klm',
-							'id'   => 'jns_klm',
-							'value'=> $row_pegawai['peg_jns_kelamin']
+							'L' => 'Laki-Laki',
+							'P' => 'Perempuan',
 						);
-						echo form_input($jns_klm) ?><br/>
+						echo form_dropdown('jns_klm',$jns_klm,$row_pegawai['peg_jns_kelamin']) ?><br/>
 						<?php echo form_error('jns_klm')?></div>
                         <div class="clear"></div>
                     </div>
