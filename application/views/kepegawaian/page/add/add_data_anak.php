@@ -19,7 +19,7 @@
                     </div>
 					<div class="formRow">
                         <label>Tanggal Lahir:</label>
-                        <div class="formRight"><input type="text" name="tanggal" id="tanggal" /></div>
+                        <div class="formRight"><input type="text" name="tanggal" id="tanggal" class="maskDate" /><span class="formNote">Format Date : dd/mm/yyyy</span></div>
                         <div class="clear"></div>
                     </div>
 					<div class="formRow">

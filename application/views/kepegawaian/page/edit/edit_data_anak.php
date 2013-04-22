@@ -45,7 +45,7 @@
 							'value'=> mdate($datestring, strtotime($row_anak['peg_ank_tgl_lahir'])),
 							'class'=> 'maskDate'
 						);
-						echo form_input($tanggal) ?><br/>
+						echo form_input($tanggal) ?><span class="formNote">Format Date : dd/mm/yyyy</span>
 						<?php echo form_error('tanggal')?></div>
                         <div class="clear"></div>
                     </div>
