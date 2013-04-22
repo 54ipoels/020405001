@@ -506,9 +506,18 @@ class kepegawaian extends CI_Model
 	
 	function update_data_anak($data_anak)
 	{
-		$nipp = $this->uri->segment(3);
-		$this->db->where('peg_ank_nipp', $nipp);
+		$datestring = "%Y-%m-%d" ;
+		for ($i=1; $i<=$this->input->post('jumlah'); $i++)
+		{
+		$data_anak = array(
+				'peg_ank_nama'			=> $this->input->post('nama_'.$i),
+				'peg_ank_tempat_lahir'	=> $this->input->post('tempat_'.$i),
+				'peg_ank_tgl_lahir'		=> mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tanggal_'.$i)))),
+				'peg_ank_pendidikan'	=> $this->input->post('pendidikan_'.$i),
+			);
+		$this->db->where('id_peg_anak', $this->input->post('id_anak_'.$i));
 		$this->db->update('v3_peg_anak',$data_anak);
+		}
 	}
 	
 	function update_data_pendidikan($data_pendidikan)

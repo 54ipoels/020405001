@@ -7,14 +7,17 @@
 			<fieldset class="step" id="w2first">
                     <h1>Edit Data Anak</h1>
 			<?php
+			$number = 1;
+			$datestring = "%d/%m/%Y" ;
 			foreach ($anak as $row_anak) : 
-			{ ?>
+			{ 
+				echo form_hidden('id_anak_'.$number, $row_anak['id_peg_anak']);?>
                     <div class="formRow">
                         <label>Nama:</label>
                         <div class="formRight"><?php 
 						$nama = array(
-							'name' => 'nama',
-							'id'   => 'nama',
+							'name' => 'nama_'.$number,
+							'id'   => 'nama_'.$number,
 							'value'=> $row_anak['peg_ank_nama']
 						);
 						echo form_input($nama) ?><br/>
@@ -25,8 +28,8 @@
                         <label>Tempat Lahir:</label>
                         <div class="formRight"><?php 
 						$tempat = array(
-							'name' => 'tempat',
-							'id'   => 'tempat',
+							'name' => 'tempat_'.$number,
+							'id'   => 'tempat_'.$number,
 							'value'=> $row_anak['peg_ank_tempat_lahir']
 						);
 						echo form_input($tempat) ?><br/>
@@ -37,9 +40,10 @@
                         <label>Tanggal Lahir:</label>
                         <div class="formRight"><?php 
 						$tanggal = array(
-							'name' => 'tanggal',
-							'id'   => 'tanggal',
-							'value'=> $row_anak['peg_ank_tgl_lahir']
+							'name' => 'tanggal_'.$number,
+							'id'   => 'tanggal_'.$number,
+							'value'=> mdate($datestring, strtotime($row_anak['peg_ank_tgl_lahir'])),
+							'class'=> 'maskDate'
 						);
 						echo form_input($tanggal) ?><br/>
 						<?php echo form_error('tanggal')?></div>
@@ -49,8 +53,8 @@
                         <label>Pendidikan:</label>
                         <div class="formRight"><?php 
 						$pendidikan = array(
-							'name' => 'pendidikan',
-							'id'   => 'pendidikan',
+							'name' => 'pendidikan_'.$number,
+							'id'   => 'pendidikan_'.$number,
 							'value'=> $row_anak['peg_ank_pendidikan']
 						);
 						echo form_input($pendidikan) ?><br/>
@@ -61,8 +65,10 @@
                         
                     </div>
                 </fieldset>
-			<?php } endforeach;
-			
+			<?php 
+			$number++;
+			} endforeach;
+			echo form_hidden('jumlah', $number-1);
 			?>
                 
 				<div class="wizButtons"> 
