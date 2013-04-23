@@ -370,42 +370,48 @@ class pendidikan extends CI_Model
 		return $query->num_rows();
 	}
 
-	function update_data_non_stkp($id)
+	function update_data_non_stkp($id,$user)
 	{
 		$datestring = "%Y-%m-%d" ;
 		$time = time();
 		$tanggal = mdate($datestring, $time);
-
+				
+		if ($this->input->post('tanggal_start')=="00/00/0000"){$tanggal_start="0000-00-00";}
+		else {$tanggal_start = mdate($datestring, strtotime(str_replace('/','-',($this->input->post('tanggal_start')))));}
+		if ($this->input->post('tanggal_end')=="00/00/0000"){$tanggal_end="0000-00-00";}
+		else {$tanggal_end = mdate($datestring, strtotime(str_replace('/','-',($this->input->post('tanggal_end')))));}
+		
 		$data_non_stkp = array(
 					//'p_nstkp_nipp' 			=> $this->input->post('nipp'),
 					'p_nstkp_type' 			=> $this->input->post('type'),
 					'p_nstkp_jenis' 		=> $this->input->post('non_stkp'),
 					'p_nstkp_lembaga'		=> $this->input->post('lembaga'),
 					'p_nstkp_no_license'	=> $this->input->post('license'),
-					'p_nstkp_pelaksanaan'	=> mdate($datestring, strtotime($this->input->post('validitas_awal'))),
-					'p_nstkp_selesai'		=> mdate($datestring, strtotime($this->input->post('validitas_akhir'))),
+					'p_nstkp_pelaksanaan'	=> $tanggal_start,
+					'p_nstkp_selesai'		=> $tanggal_end,
 					'p_nstkp_update_on'		=> $tanggal,
-					'p_nstkp_update_by'		=> 'admin'
+					'p_nstkp_update_by'		=> $user,
 				);
 
 		$this->db->where('id_peg_non_stkp',$id);
 		$this->db->update('v3_peg_non_stkp',$data_non_stkp);
 	}
 	
-	function update_data_stkp($id)
+	function update_data_stkp($id,$user)
 	{
 		$datestring = "%Y-%m-%d" ;
 		$time = time();
 		$tanggal = mdate($datestring, $time);
-		
-		if ($this->input->post('pelaksanaan')=="00-00-0000"){$pelaksanaan="0000-00-00";}
-		else {$pelaksanaan = mdate($datestring, strtotime($this->input->post('pelaksanaan')));}
-		if ($this->input->post('selesai')=="00-00-0000"){$selesai="0000-00-00";}
-		else {$selesai = mdate($datestring, strtotime($this->input->post('selesai')));}
-		if ($this->input->post('validitas_awal')=="00-00-0000"){$validitas_awal="0000-00-00";}
-		else {$validitas_awal = mdate($datestring, strtotime($this->input->post('validitas_awal')));}
-		if ($this->input->post('validitas_akhir')=="00-00-0000"){$validitas_akhir="0000-00-00";}
-		else {$validitas_akhir = mdate($datestring, strtotime($this->input->post('validitas_akhir')));}
+		echo $this->input->post('pelaksanaan')."<br>"; 
+		 
+		if ($this->input->post('pelaksanaan')=="00/00/0000"){$pelaksanaan="0000-00-00";}
+		else {$pelaksanaan = mdate($datestring, strtotime(str_replace('/','-',($this->input->post('pelaksanaan')))));}
+		if ($this->input->post('selesai')=="00/00/0000"){$selesai="0000-00-00";}
+		else {$selesai = mdate($datestring, strtotime(str_replace('/','-',($this->input->post('selesai')))));}
+		if ($this->input->post('validitas_awal')=="00/00/0000"){$validitas_awal="0000-00-00";}
+		else {$validitas_awal = mdate($datestring, strtotime(str_replace('/','-',($this->input->post('validitas_awal')))));}
+		if ($this->input->post('validitas_akhir')=="00/00/0000"){$validitas_akhir="0000-00-00";}
+		else {$validitas_akhir = mdate($datestring, strtotime(str_replace('/','-',($this->input->post('validitas_akhir')))));}
 		
 		$data_stkp = array(
 					//'p_nstkp_nipp' 			=> $this->input->post('nipp'),
@@ -419,9 +425,9 @@ class pendidikan extends CI_Model
 					'p_stkp_finish'			=> $validitas_akhir,
 					'p_stkp_rating'			=> $this->input->post('rating'),
 					'p_stkp_update_on'		=> $tanggal,
-					'p_stkp_update_by'		=> 'admin'
+					'p_stkp_update_by'		=> $user,
 				);
-
+		print_r($data_stkp);
 		$this->db->where('id_peg_stkp',$id);
 		$this->db->update('v3_peg_stkp',$data_stkp);
 	}
@@ -710,13 +716,14 @@ class pendidikan extends CI_Model
 	
 	function search_nstkp($num, $offset, $search)
 	{
+		$search= str_replace('_','/',$search);
 		$query = ("
 			SELECT * FROM v3_peg_non_stkp AS peg_stkp
 			LEFT JOIN (SELECT max(id_peg_unit),p_unt_nipp, p_unt_kode_unit FROM v3_peg_unit GROUP BY p_unt_nipp ) AS peg_unt 
 			ON peg_stkp.p_nstkp_nipp = peg_unt.p_unt_nipp 
 			LEFT JOIN (SELECT peg_nipp,peg_nama FROM v3_pegawai GROUP BY peg_nipp) AS peg
 			ON peg_stkp.p_nstkp_nipp = peg.peg_nipp
-			WHERE peg_nama LIKE   '%$search%' OR peg_nipp LIKE  '%$search%'
+			WHERE peg_nama LIKE   '%$search%' OR peg_nipp LIKE  '%$search%' OR p_nstkp_jenis LIKE '%$search%' OR p_nstkp_no_license LIKE '%$search%'
 			ORDER BY peg_stkp.p_nstkp_nipp ASC, peg_stkp.p_nstkp_pelaksanaan ASC
 			LIMIT $offset , $num
 			
@@ -727,13 +734,14 @@ class pendidikan extends CI_Model
 	
 	function count_search_nstkp($search)
 	{
+		$search= str_replace('_','/',$search);
 		$query = ("
 			SELECT * FROM v3_peg_non_stkp AS peg_stkp
 			LEFT JOIN (SELECT max(id_peg_unit),p_unt_nipp, p_unt_kode_unit FROM v3_peg_unit GROUP BY p_unt_nipp ) AS peg_unt 
 			ON peg_stkp.p_nstkp_nipp = peg_unt.p_unt_nipp 
 			LEFT JOIN (SELECT peg_nipp,peg_nama FROM v3_pegawai GROUP BY peg_nipp) AS peg
 			ON peg_stkp.p_nstkp_nipp = peg.peg_nipp
-			WHERE peg_nama LIKE   '%$search%' OR peg_nipp LIKE  '%$search%'
+			WHERE peg_nama LIKE   '%$search%' OR peg_nipp LIKE  '%$search%' OR p_nstkp_jenis LIKE '%$search%' OR p_nstkp_no_license LIKE '%$search%'
 		");
 		$query = $this->db->query($query); 
 		return $query->num_rows();

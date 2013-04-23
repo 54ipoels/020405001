@@ -43,6 +43,7 @@
 						$tmt = array(
 							'name' => 'tmt',
 							'id'   => 'tmt',
+							'class'=> 'maskDate',
 							'value'=> $tmt
 						);
 						echo form_input($tmt) ?><br/>
