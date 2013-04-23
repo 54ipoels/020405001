@@ -645,6 +645,8 @@ class kepegawaian extends CI_Model
 		$this->db->update('v3_peg_tmt',$tmt);
 	}
 	
+	
+	
 }
 /* End of file myfile.php */
 /* Location: ./system/modules/mymodule/myfile.php */

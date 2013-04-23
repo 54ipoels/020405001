@@ -377,7 +377,7 @@ class diklat extends Application {
 	function update_non_stkp($id)
 	{
 		#update data to table pegawai
-		$this->pendidikan->update_data_non_stkp($id);
+		$this->pendidikan->update_data_non_stkp($id,username());
 		redirect('diklat/get_non_stkp');
 	}
 	
@@ -394,7 +394,7 @@ class diklat extends Application {
 	function update_stkp($id)
 	{
 		#update data to table pegawai
-		$this->pendidikan->update_data_stkp($id);
+		$this->pendidikan->update_data_stkp($id,username());
 		redirect('diklat/get_stkp');
 	}
 	
@@ -513,17 +513,21 @@ class diklat extends Application {
 	{ 
 		if ($this->input->post('search') == NULL )
 		{
+			$search_data_link = str_replace('%20',' ',$this->uri->segment(3));
 			$search_data = str_replace('%20',' ',$this->uri->segment(3));
 		}else{
+			$search_data_link = $this->input->post('search');
 			$search_data = $this->input->post('search');
 		}
+		$search_data_link = str_replace('/','_',$search_data_link);
+		$search_data = str_replace('/','_',$search_data);
 		
 		$monthstring = "%m" ;
 		$yearstring = "%Y" ;
 		$time = time();
 			
 		#pagination config
-		$config['base_url'] = base_url().'index.php/diklat/search_nstkp/'.$search_data; //set the base url for pagination
+		$config['base_url'] = base_url().'index.php/diklat/search_nstkp/'.$search_data_link; //set the base url for pagination
 		$config['total_rows'] = $this->pendidikan->count_search_nstkp($search_data); //total rows
 		$config['per_page'] = 10; //the number of per page for pagination
 		$config['uri_segment'] = 4; //see from base_url. 3 for this case
@@ -537,7 +541,7 @@ class diklat extends Application {
 		$data['year'] = mdate($yearstring, $time);
 		$data['page'] = 'Report Non STKP';
 		$data['page_diklat'] = 'yes';
-		$data['view_stkp'] = 'class="this"';
+		$data['view_nstkp'] = 'class="this"';
 		
 		$this->load->view('diklat/index',$data);
 	}
@@ -573,11 +577,14 @@ class diklat extends Application {
 	
 	
 	# EXPORT TO EXCEL
+	
+	
 	function excel_non_stkp()
 	{
 		$datestring = "%Y-%m-%d" ;
 		$time = time();
 		$tanggal = mdate($datestring, $time);
+		
 		
 		$pegawai_with_stkp_and_unit = $this->pendidikan->get_data_nstkp_with_unit_and_name_unlimited();
 				

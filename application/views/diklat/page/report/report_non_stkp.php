@@ -3,12 +3,13 @@
 <fieldset class="step" id="w2first">
 <table>
 	<tr>
-    	<td>
+    	<!--<td>
 			<div class="formBaru"><label><!--License: &nbsp --></label>
 				
-                <input type="text" name="license" width="100px" placeholder="Enter license..." />
+        <!--        <input type="text" name="license" width="100px" placeholder="Enter license..." />
            	</div>
       	</td>
+		-->
         <td width="410px">
 			<div class="formBaru"><label><!--Unit Kerja: &nbsp --></label>
 				<?php $unit = array();

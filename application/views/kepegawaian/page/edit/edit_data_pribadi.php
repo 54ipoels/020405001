@@ -67,8 +67,10 @@
 						$tanggal = array(
 							'name' => 'tanggal',
 							'id'   => 'tanggal',
-							'value'=> $row_pegawai['peg_tgl_lahir']
+							'class'=> 'maskDate',
+							'value'=> mdate('%d-%m-%Y',strtotime($row_pegawai['peg_tgl_lahir'])),
 						);
+						
 						echo form_input($tanggal) ?><br/>
 						<?php echo form_error('tanggal')?></div>
                         <div class="clear"></div>
