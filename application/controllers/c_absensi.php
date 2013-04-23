@@ -689,17 +689,22 @@ class C_absensi extends Application {
 		$buffer = $this->parse_data($buffer,"<GetAttLogResponse>","</GetAttLogResponse>");
 		$buffer = explode("\r\n",$buffer);
 		
+		echo "<table>";
+		echo "<tr>";
+		echo "<td>NIPP</td><td>Date</td><td>Status</td><td>Verified</td>";
+		
 		for($a=1;$a<count($buffer);$a++)
 		{
 			$data = $this->parse_data($buffer[$a],"<Row>","</Row>");
 			$pin = $this->parse_data($data,"<PIN>","</PIN>");
 			$datetime = $this->parse_data($data,"<DateTime>","</DateTime>");
 			$status = $this->parse_data($data,"<Status>","</Status>");
-			
+			$verified = $this->parse_data($data,"<Verified>","</Verified>");
+						
 			#masukkan data dari mesin ke database tampung / backup
-			$this->m_absensi->input_data_backup_mesin($pin,$datetime,$status);
+			$this->m_absensi->input_data_backup_mesin($pin,$datetime,$status, $verified);
 			
-			
+			echo "<tr><td>" . $pin . "</td><td>" . $datetime . "</td><td>" . $status . "</td><td>" . $verified . "</td></tr>";
 			#foreach ($query as $row)
 			#	{
 			#		echo $row->dbmesin_nipp . '<br />';
@@ -710,6 +715,9 @@ class C_absensi extends Application {
 			#$this->m_absensi->input_data_absensi_mesin($pin,$datetime,$status);
 			
 		}
+		
+		echo "</tr>";
+		echo "</table>";
 		
 		# hapus null nipp dari table
 		$this->m_absensi->del_null_dbmesin_nipp();

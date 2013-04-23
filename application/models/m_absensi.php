@@ -506,12 +506,13 @@ class M_absensi extends CI_Model {
 	}
 	
 	#insert data mesin backup
-	function input_data_backup_mesin($pin,$datetime,$status)
+	function input_data_backup_mesin($pin,$datetime,$status, $verified)
 	{
 		$data = array(
 		'dbmesin_nipp' => $pin,
       	'dbmesin_datetime' => $datetime, 
 		'dbmesin_status' => $status,
+		'dbmesin_verified' => $verified,
 		'dbmesin_update_by' => 'admin'
       	);
       
