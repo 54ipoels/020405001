@@ -419,9 +419,10 @@
 							$datestring = "%d-%m-%Y" ;
 							foreach ($data_anak as $row_anak) :
 							{ ?>
-                            <tr><td width="5%" rowspan=3><?php echo $number ?></td><td width="25%">Nama</td><td><?php echo $row_anak['peg_ank_nama']; ?></td></tr>
+                            <tr><td width="5%" rowspan=4><?php echo $number ?></td><td width="25%">Nama</td><td><?php echo $row_anak['peg_ank_nama']; ?></td></tr>
                             <tr><td>Tempat / Tanggal Lahir</td><td><?php echo $row_anak['peg_ank_tempat_lahir'].' / '.mdate($datestring,strtotime($row_anak['peg_ank_tgl_lahir'])); ?></td></tr>
 							<tr><td>Pendidikan</td><td><?php echo $row_anak['peg_ank_pendidikan']; ?></td></tr>
+							<tr><td colspan="2"><?php echo anchor('pekerja/delete_data_anak/'.$row_anak['id_peg_anak'],'[delete]'); ?></td></tr>
 							<?php 
 							$number++;
 							} endforeach;

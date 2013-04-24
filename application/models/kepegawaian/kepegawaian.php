@@ -645,6 +645,12 @@ class kepegawaian extends CI_Model
 		$this->db->update('v3_peg_tmt',$tmt);
 	}
 	
+	function delete_data_anak($id)
+	{
+		$this->db->where('id_peg_anak', $id);
+		$this->db->delete('v3_peg_anak');
+	}
+	
 	
 	
 }

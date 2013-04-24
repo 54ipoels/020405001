@@ -1129,6 +1129,13 @@ class pekerja extends Application {
 	}
 	
 	
+	function delete_data_anak($id)
+	{
+		$this->kepegawaian->delete_data_anak($id);
+		redirect("pekerja");
+	}
+	
+	
 	# Export Excel
 	function excel_data_pegawai()
 	{
