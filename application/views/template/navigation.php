@@ -14,6 +14,7 @@
 		<ul class="sub">
                 <li <?php if(isset($view_stkp)){ echo $view_stkp; } ?>><?php echo anchor('diklat/get_stkp','Report STKP');?></li>
 				<li <?php if(isset($view_nstkp)){ echo $view_nstkp; } ?>><?php echo anchor('diklat/get_non_stkp', 'Report Non STKP' ); ?></li>
+				<li <?php if(isset($view_report_bulanan)){ echo $view_report_bulanan; } ?>><?php echo anchor('diklat/report_bulanan', 'Report Bulanan' ); ?></li>
 				<li <?php if(isset($view_input_stkp)){ echo $view_input_stkp; } ?>><?php echo anchor('diklat/input_stkp_bulanan/part_one', 'Input Training Bulanan' ); ?></li>
             </ul></li>
 		<!-- hari libur -->
