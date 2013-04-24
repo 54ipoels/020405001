@@ -78,6 +78,10 @@
 		{
 			$this->load->view('diklat/page/report/report_non_stkp');
 		}
+		elseif ($page == 'Report STKP Bulanan')
+		{
+			$this->load->view('diklat/page/search_report');
+		}
 		elseif ($page == 'STKP Bulanan')
 		{
 			$this->load->view('diklat/page/add/input_stkp_bulanan');

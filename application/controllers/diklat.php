@@ -316,6 +316,27 @@ class diklat extends Application {
 		$this->load->view('diklat/index', $data);
 	}
 	
+	function report_bulanan()
+	{
+		if (($this->uri->segment(3) == 'part_one') || ($this->uri->segment(3) == NULL))
+		{
+			$data['page'] = 'Report STKP Bulanan';
+			$data['view_report_bulanan'] = 'class="this"';
+			$data['page_diklat'] = 'yes';
+			$this->load->view('diklat/index', $data);
+		} else
+		if ($this->uri->segment(3) == 'part_two')
+		{
+			$data['page'] = 'Report STKP Bulanan';
+			$data['view_report_bulanan'] = 'class="this"';
+			$data['page_diklat'] = 'yes';
+			if ($this->input->post('jenis') == 'STKP')
+			{
+				$data['pegawai_with_stkp_and_unit'] = $this->pendidikan->search_report_stkp_bulanan($this->input->post('bulan'), $this->input->post('tahun'), $this->input->post('rating'));
+			}
+		}
+	}
+	
 	
 	
 	public function input_stkp_bulanan()
