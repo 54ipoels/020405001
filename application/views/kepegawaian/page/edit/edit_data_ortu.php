@@ -23,7 +23,7 @@
 			if (($tgl_ayah=="")  OR  ($tgl_ayah=="0000-00-00")){$tgl_ayah = "00-00-0000";}
 			else {$tgl_ayah = mdate($datestring, strtotime($row_ayah['p_ay_tgl_lahir']));}
 			if (($meninggal_ayah=="")  OR  ($meninggal_ayah=="0000-00-00")){$meninggal_ayah = "00-00-0000";}
-			else {$meninggal_ayah = mdate($datestring, strtotime($row_ayah['p_ay_meninggal']));}
+			else {$meninggal_ayah = mdate($datestring, strtotime($row_ayah['p_ay_tgl_meninggal']));}
 			
 				
 			$nama_ibu = "";
@@ -45,7 +45,7 @@
 			if (($tgl_ibu=="")  OR  ($tgl_ibu=="0000-00-00")){$tgl_ibu = "00-00-0000";}
 			else {$tgl_ibu = mdate($datestring, strtotime($row_ibu['p_ibu_tgl_lahir']));}
 			if (($meninggal_ibu=="")  OR  ($meninggal_ibu=="0000-00-00")){$meninggal_ibu = "00-00-0000";}
-			else {$meninggal_ibu = mdate($datestring, strtotime($row_ibu['p_ibu_meninggal']));}
+			else {$meninggal_ibu = mdate($datestring, strtotime($row_ibu['p_ibu_tgl_meninggal']));}
 			
 			/*foreach ($ibu as $row_ibu) : 
 			{} endforeach;
