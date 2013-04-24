@@ -2,6 +2,7 @@
 	<div class="widget">
             <div class="title"><img src="<?php echo base_url()?>images/icons/dark/pencil.png" alt="" class="titleIcon" /><h6>Data Pribadi Pegawai</h6></div>
 			<?php 
+			$datestring = "%d-%m-%Y" ;
 			foreach ($pasangan as $row_pasangan) : 
 			{} endforeach;
 			$attributes = array('class'=>'form','id'=>'wizard3');
@@ -35,10 +36,13 @@
 					<div class="formRow">
                         <label>Tanggal Lahir:</label>
                         <div class="formRight"><?php 
+						if($row_pasangan['p_ps_tgl_lahir'] == "0000-00-00"){$tgl_lhr='00-00-0000';}
+						else{$tgl_lhr = mdate($datestring,strtotime($row_pasangan['p_ps_tgl_lahir']));}
 						$tgl_lahir = array(
 							'name' => 'tgl_lahir',
 							'id'   => 'tgl_lahir',
-							'value'=> $row_pasangan['p_ps_tgl_lahir']
+							'class' => 'maskDate',
+							'value'=> $tgl_lhr
 						);
 						echo form_input($tgl_lahir) ?><br/>
 						<?php echo form_error('tgl_lahir')?></div>
@@ -47,10 +51,13 @@
 					<div class="formRow">
                         <label>Tanggal Meninggal:</label>
                         <div class="formRight"><?php 
+						if($row_pasangan['p_ps_tgl_meninggal'] == "0000-00-00"){$tgl_mngl='00-00-0000';}
+						else{$tgl_mngl = mdate($datestring,strtotime($row_pasangan['p_ps_tgl_meninggal']));}
 						$tgl_meninggal = array(
 							'name' => 'tgl_meninggal',
 							'id'   => 'tgl_meninggal',
-							'value'=> $row_pasangan['p_ps_tgl_meninggal']
+							'class'=> 'maskDate',
+							'value'=> $tgl_mngl
 						);
 						echo form_input($tgl_meninggal) ?><br/>
 						<?php echo form_error('tgl_meninggal')?></div>

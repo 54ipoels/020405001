@@ -291,7 +291,13 @@
 					foreach ($data_pasangan as $row_pasangan) :
 					{
 						$datestring = "%d-%m-%Y" ;
-						$tgl_lahir = mdate($datestring,strtotime($row_pasangan['p_ps_tgl_lahir']));
+						//$tgl_lahir = mdate($datestring,strtotime($row_pasangan['p_ps_tgl_lahir']));
+						
+						if ($row_pasangan['p_ps_tgl_lahir'] == '0000-00-00'){$ps_tgl_lahir="-";} 
+						else {$ps_tgl_lahir = mdate($datestring,strtotime($row_pasangan['p_ps_tgl_lahir']));}
+						if ($row_pasangan['p_ps_tgl_meninggal'] == '0000-00-00'){$ps_tgl_meninggal="-";} 
+						else {$ps_tgl_meninggal = mdate($datestring,strtotime($row_pasangan['p_ps_tgl_meninggal']));}
+					
 					} endforeach;}?>
                 <div class="clear"></div>
 				<div id="tab4" class="tab_content np">
@@ -303,7 +309,8 @@
 						</tfoot>
                         <tbody>
                             <tr><td width="30%">Nama</td><td><?php echo $row_pasangan['p_ps_nama'];?></td></tr>
-                            <tr><td>Tempat / Tanggal Lahir</td><td><?php echo $row_pasangan['p_ps_tmpt_lahir'].' / '.$tgl_lahir;?></td></tr>
+                            <tr><td>Tempat / Tanggal Lahir</td><td><?php echo $row_pasangan['p_ps_tmpt_lahir'].' / '.$ps_tgl_lahir;?></td></tr>
+							<tr><td>Tanggal Meninggal</td><td><?php echo $ps_tgl_meninggal;?></td></tr>
 							<tr><td>Alamat</td><td><?php echo $row_pasangan['p_ps_alamat'];?></td></tr>
 							<tr><td>Pekerjaan</td><td><?php echo $row_pasangan['p_ps_pekerjaan'];?></td></tr>
                         </tbody>
@@ -325,8 +332,6 @@
 						else {$ay_tgl_lahir = mdate($datestring,strtotime($row_ayah['p_ay_tgl_lahir']));}
 						if ($row_ayah['p_ay_tgl_meninggal'] == '0000-00-00'){$ay_tgl_meninggal="-";} 
 						else {$ay_tgl_meninggal = mdate($datestring,strtotime($row_ayah['p_ay_tgl_meninggal']));}
-						
-						
 					} endforeach;}
 					
 				if ($data_ibu == NULL)
@@ -383,7 +388,7 @@
 				{
 					$datestring = "%d-%m-%Y" ;
 					if ($row_m_ayah['p_may_tgl_lahir'] == '0000-00-00'){$m_ay_tgl_lahir="-";} 
-					else {$m_ay_tgl_lahir = mdate($datestring,strtotime($row_ayah['p_may_tgl_lahir']));}
+					else {$m_ay_tgl_lahir = mdate($datestring,strtotime($row_m_ayah['p_may_tgl_lahir']));}
 					if ($row_m_ayah['p_may_tgl_meninggal'] == '0000-00-00'){$m_ay_tgl_meninggal="-";} 
 					else {$m_ay_tgl_meninggal = mdate($datestring,strtotime($row_m_ayah['p_may_tgl_meninggal']));}
 					
