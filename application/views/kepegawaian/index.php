@@ -114,6 +114,10 @@
 		{
 			$this->load->view('kepegawaian/page/add/add_data_bahasa');
 		}else
+		if ($page == 'Edit Data Provider')
+		{
+			$this->load->view('kepegawaian/page/edit/edit_data_provider');
+		}else
 		//--------- delete data karyawan ---------------//
 		if ($page == 'Delete Pegawai')
 		{

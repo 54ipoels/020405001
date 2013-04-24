@@ -737,10 +737,22 @@ class pekerja extends Application {
 		$data['page_karyawan'] = 'yes';
 		$this->load->view('kepegawaian/index',$data);
 	}
-	
+		
 	public function add_anak_pegawai($nipp)
 	{
 		$data['page'] = 'Add Data Anak';
+		$data['page_karyawan'] = 'yes';
+		$this->load->view('kepegawaian/index',$data);
+	}
+	
+	public function edit_provider_pegawai($nipp)
+	{		
+		$data['jabatan_tmt'] = $this->kepegawaian->get_detail_pegawai_jabatan_tmt($nipp);
+		$data['list_jabatan'] = $this->kepegawaian->get_list_jabatan();
+		$data['list_unit'] = $this->kepegawaian->get_list_unit();
+		$data['unit'] = $this->kepegawaian->get_detail_pegawai_unit($nipp);
+		$data['grade'] = $this->kepegawaian->get_detail_pegawai_grade($nipp);
+		$data['page'] = 'Edit Data Provider';
 		$data['page_karyawan'] = 'yes';
 		$this->load->view('kepegawaian/index',$data);
 	}
@@ -986,6 +998,46 @@ class pekerja extends Application {
 		$this->kepegawaian->insert_data_pegawai_grade($data_grade);
 		redirect('pekerja/get_pegawai/'.$nipp);
 	}
+	
+	/*
+	public function edit_data_provider()
+	{
+		#preparing date update
+		$datestring = "%Y-%m-%d" ;
+		$time = time();
+		$tanggal = mdate($datestring, $time);
+		
+		$nipp = $this->uri->segment(3);
+		$tanggal_tmt = mdate($datestring, strtotime($this->input->post('tmt')));
+		$nipp_baru = $this->input->post('nipp_baru');
+		
+		# data provider baru
+		$data_jabatan = array(
+				'p_jbt_nipp'		=> $nipp_baru,
+				'p_jbt_jabatan'		=> $this->input->post('jabatan'),
+				'p_jbt_update_on'	=> $tanggal,
+				'p_jbt_update_by'	=> 'admin'
+			);
+		$data_tmt = array(
+				'p_tmt_nipp'		=> $nipp_baru,
+				'p_tmt_status'		=> $this->input->post('status'),
+				'p_tmt_provider'	=> $provider,
+				'p_tmt_tmt'			=> $tanggal_tmt,
+				'p_tmt_update_on'	=> $tanggal,
+				'p_tmt_update_by'	=> 'admin'
+			);
+		$data_update_tmt_tanggal = array ('p_tmt_end' => $tanggal);
+		
+		#input data to table pegawai
+		//$this->kepegawaian->copy_data_pegawai();
+	
+		$this->kepegawaian->insert_data_pegawai_jabatan($data_jabatan);
+		$this->kepegawaian->update_data_tmt($data_update_tmt_tanggal);
+		$this->kepegawaian->insert_data_pegawai_tmt($data_tmt);
+		//$this->kepegawaian->insert_data_pegawai_grade($data_grade);
+		redirect('pekerja/get_pegawai/'.$nipp);
+	}
+	*/
 	
 	public function edit_data_pendidikan()
 	{

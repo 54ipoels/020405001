@@ -639,6 +639,9 @@ class kepegawaian extends CI_Model
 		return $id_peg_tmt;
 	}
 	
+	
+	
+	
 	function update_tmt_end($id,$tmt)
 	{
 		$this->db->where('id_peg_tmt', $id);

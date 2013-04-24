@@ -265,7 +265,9 @@
 				<div id="tab3" class="tab_content np">
                     <table cellpadding="0" cellspacing="0" width="100%" class="sTable">
                         <tfoot>
-							<tr><td colspan=8><p align="right"><?php echo anchor('pekerja/edit_jabatan_pegawai/'.$row_pegawai['peg_nipp'],'[edit]');?></p></td></tr>
+							<tr><td colspan=8><p align="right"><?php 
+								echo anchor('pekerja/edit_provider_pegawai/'.$row_pegawai['peg_nipp'],'[pindah provider]')?>
+								&nbsp;&nbsp;&nbsp; <?php echo anchor('pekerja/edit_jabatan_pegawai/'.$row_pegawai['peg_nipp'],'[edit]');?></p></td></tr>
 						</tfoot>
                         <tbody>
                             <tr><td width="30%">Jabatan Terakhir</td><td><?php echo $jabatan;?></td></tr>
@@ -319,7 +321,10 @@
 					foreach($data_ayah as $row_ayah) :
 					{
 						$datestring = "%d-%m-%Y" ;
-						$ay_tgl_lahir = mdate($datestring,strtotime($row_ayah['p_ay_tgl_lahir']));
+						if ($row_ayah['p_ay_tgl_lahir'] == '0000-00-00'){$ay_tgl_lahir="-";} 
+						else {$ay_tgl_lahir = mdate($datestring,strtotime($row_ayah['p_ay_tgl_lahir']));}
+						if ($row_ayah['p_ay_tgl_meninggal'] == '0000-00-00'){$ay_tgl_meninggal="-";} 
+						else {$ay_tgl_meninggal = mdate($datestring,strtotime($row_ayah['p_ay_tgl_meninggal']));}
 					} endforeach;}
 					
 				if ($data_ibu == NULL)
@@ -333,7 +338,10 @@
 					foreach($data_ibu as $row_ibu) :
 					{
 						$datestring = "%d-%m-%Y" ;
-						$ibu_tgl_lahir = mdate($datestring,strtotime($row_ibu['p_ibu_tgl_lahir']));
+						if ($row_ayah['p_ibu_tgl_lahir'] == '0000-00-00'){$ibu_tgl_lahir="-";} 
+						else {$ibu_tgl_lahir = mdate($datestring,strtotime($row_ayah['p_ibu_tgl_lahir']));}
+						if ($row_ayah['p_ibu_tgl_meninggal'] == '0000-00-00'){$ibu_tgl_meninggal="-";} 
+						else {$ibu_tgl_meninggal = mdate($datestring,strtotime($row_ayah['p_ibu_tgl_meninggal']));}
 					} endforeach;}?>
                 <div class="clear"></div>
 				<div id="tab5" class="tab_content np">
@@ -346,11 +354,13 @@
                         <tbody>
                             <tr><td width="30%">Nama Ayah</td><td><?php echo $row_ayah['p_ay_nama']; ?></td></tr>
                             <tr><td>Tempat / Tanggal Lahir</td><td><?php echo $row_ayah['p_ay_tmpt_lahir'].' / '.$ay_tgl_lahir; ?></td></tr>
+							<tr><td>Tanggal Meninggal</td><td><?php echo $ay_tgl_meninggal; ?></td></tr>
 							<tr><td>Alamat</td><td><?php echo $row_ayah['p_ay_alamat']; ?></td></tr>
 							<tr><td>Pekerjaan</td><td><?php echo $row_ayah['p_ay_pekerjaan']; ?></td></tr>
 							<tr><td colspan=2></td></tr>
 							<tr><td width="30%">Nama Ibu</td><td><?php echo $row_ibu['p_ibu_nama']; ?></td></tr>
                             <tr><td>Tempat / Tanggal Lahir</td><td><?php echo $row_ibu['p_ibu_tmpt_lahir'].' / '.$ibu_tgl_lahir; ?></td></tr>
+							<tr><td>Tanggal Meninggal</td><td><?php echo $ibu_tgl_meninggal; ?></td></tr>
 							<tr><td>Alamat</td><td><?php echo $row_ibu['p_ibu_alamat']; ?></td></tr>
 							<tr><td>Pekerjaan</td><td><?php echo $row_ibu['p_ibu_pekerjaan']; ?></td></tr>
                         </tbody>
