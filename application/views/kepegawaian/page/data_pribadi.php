@@ -325,6 +325,8 @@
 						else {$ay_tgl_lahir = mdate($datestring,strtotime($row_ayah['p_ay_tgl_lahir']));}
 						if ($row_ayah['p_ay_tgl_meninggal'] == '0000-00-00'){$ay_tgl_meninggal="-";} 
 						else {$ay_tgl_meninggal = mdate($datestring,strtotime($row_ayah['p_ay_tgl_meninggal']));}
+						
+						
 					} endforeach;}
 					
 				if ($data_ibu == NULL)
@@ -338,10 +340,11 @@
 					foreach($data_ibu as $row_ibu) :
 					{
 						$datestring = "%d-%m-%Y" ;
-						if ($row_ayah['p_ibu_tgl_lahir'] == '0000-00-00'){$ibu_tgl_lahir="-";} 
-						else {$ibu_tgl_lahir = mdate($datestring,strtotime($row_ayah['p_ibu_tgl_lahir']));}
-						if ($row_ayah['p_ibu_tgl_meninggal'] == '0000-00-00'){$ibu_tgl_meninggal="-";} 
-						else {$ibu_tgl_meninggal = mdate($datestring,strtotime($row_ayah['p_ibu_tgl_meninggal']));}
+						if ($row_ibu['p_ibu_tgl_lahir'] == '0000-00-00'){$ibu_tgl_lahir="-";} 
+						else {$ibu_tgl_lahir = mdate($datestring,strtotime($row_ibu['p_ibu_tgl_lahir']));}
+						if ($row_ibu['p_ibu_tgl_meninggal'] == '0000-00-00'){$ibu_tgl_meninggal="-";} 
+						else {$ibu_tgl_meninggal = mdate($datestring,strtotime($row_ibu['p_ibu_tgl_meninggal']));}
+						
 					} endforeach;}?>
                 <div class="clear"></div>
 				<div id="tab5" class="tab_content np">
@@ -368,7 +371,7 @@
                 </div>
                 <div class="clear"></div>
 				<div id="tab6" class="tab_content np">
-				<?php if ($data_ayah == NULL)
+				<?php if ($data_mert_ayah == NULL)
 				{
 					$row_m_ayah['p_may_nama'] = '-';
 					$row_m_ayah['p_may_tmpt_lahir'] = '-';
@@ -379,9 +382,13 @@
 				foreach($data_mert_ayah as $row_m_ayah) :
 				{
 					$datestring = "%d-%m-%Y" ;
-					$m_ay_tgl_lahir = mdate($datestring,strtotime($row_m_ayah['p_may_tgl_lahir']));
+					if ($row_m_ayah['p_may_tgl_lahir'] == '0000-00-00'){$m_ay_tgl_lahir="-";} 
+					else {$m_ay_tgl_lahir = mdate($datestring,strtotime($row_ayah['p_may_tgl_lahir']));}
+					if ($row_m_ayah['p_may_tgl_meninggal'] == '0000-00-00'){$m_ay_tgl_meninggal="-";} 
+					else {$m_ay_tgl_meninggal = mdate($datestring,strtotime($row_m_ayah['p_may_tgl_meninggal']));}
+					
 				} endforeach;}
-				if ($data_ibu == NULL)
+				if ($data_mert_ibu == NULL)
 				{
 					$row_m_ibu['p_mib_nama'] = '-';
 					$row_m_ibu['p_mib_tmpt_lahir'] = '-';
@@ -392,7 +399,12 @@
 				foreach($data_mert_ibu as $row_m_ibu) :
 				{
 					$datestring = "%d-%m-%Y" ;
-					$m_ibu_tgl_lahir = mdate($datestring,strtotime($row_m_ibu['p_mib_tgl_lahir']));
+					if ($row_m_ibu['p_mib_tgl_lahir'] == '0000-00-00'){$m_ibu_tgl_lahir="-";} 
+					else {$m_ibu_tgl_lahir = mdate($datestring,strtotime($row_m_ibu['p_mib_tgl_lahir']));}
+					if ($row_m_ibu['p_mib_tgl_meninggal'] == '0000-00-00'){$m_ibu_tgl_meninggal="-";} 
+					else {$m_ibu_tgl_meninggal = mdate($datestring,strtotime($row_m_ibu['p_mib_tgl_meninggal']));}
+					
+					//$m_ibu_tgl_lahir = mdate($datestring,strtotime($row_m_ibu['p_mib_tgl_lahir']));
 				} endforeach;}?>
                     <table cellpadding="0" cellspacing="0" width="100%" class="sTable">
                         <tfoot>
@@ -403,11 +415,13 @@
                         <tbody>
                             <tr><td width="30%">Nama Ayah Mertua</td><td><?php echo $row_m_ayah['p_may_nama']; ?></td></tr>
                             <tr><td>Tempat / Tanggal Lahir</td><td><?php echo $row_m_ayah['p_may_tmpt_lahir'].' / '.$m_ay_tgl_lahir; ?></td></tr>
+							<tr><td>Tanggal Meninggal</td><td><?php echo $m_ay_tgl_meninggal; ?></td></tr>
 							<tr><td>Alamat</td><td><?php echo $row_m_ayah['p_may_alamat']; ?></td></tr>
 							<tr><td>Pekerjaan</td><td><?php echo $row_m_ayah['p_may_pekerjaan']; ?></td></tr>
 							<tr><td colspan=2></td></tr>
 							<tr><td width="30%">Nama Ibu Mertua</td><td><?php echo $row_m_ibu['p_mib_nama']; ?></td></tr>
                             <tr><td>Tempat / Tanggal Lahir</td><td><?php echo $row_m_ibu['p_mib_tmpt_lahir'].' / '.$m_ibu_tgl_lahir; ?></td></tr>
+							<tr><td>Tanggal Meninggal</td><td><?php echo $m_ibu_tgl_meninggal; ?></td></tr>
 							<tr><td>Alamat</td><td><?php echo $row_m_ibu['p_mib_alamat']; ?></td></tr>
 							<tr><td>Pekerjaan</td><td><?php echo $row_m_ibu['p_mib_pekerjaan']; ?></td></tr>
                         </tbody>
