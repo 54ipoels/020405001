@@ -78,9 +78,17 @@
 		{
 			$this->load->view('diklat/page/report/report_non_stkp');
 		}
-		elseif ($page == 'Report STKP Bulanan')
+		elseif ($page == 'Report Training Bulanan')
 		{
 			$this->load->view('diklat/page/search_report');
+		}
+		elseif ($page == 'Report STKP Bulanan')
+		{
+			$this->load->view('diklat/page/report/report_stkp_bulanan');
+		}
+		elseif ($page == 'Report NSTKP Bulanan')
+		{
+			$this->load->view('diklat/page/report/report_non_stkp_bulanan');
 		}
 		elseif ($page == 'STKP Bulanan')
 		{

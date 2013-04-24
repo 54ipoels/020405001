@@ -318,21 +318,33 @@ class diklat extends Application {
 	
 	function report_bulanan()
 	{
+		$monthstring = '%M';
 		if (($this->uri->segment(3) == 'part_one') || ($this->uri->segment(3) == NULL))
 		{
-			$data['page'] = 'Report STKP Bulanan';
+			$data['page'] = 'Report Training Bulanan';
 			$data['view_report_bulanan'] = 'class="this"';
 			$data['page_diklat'] = 'yes';
 			$this->load->view('diklat/index', $data);
 		} else
 		if ($this->uri->segment(3) == 'part_two')
 		{
-			$data['page'] = 'Report STKP Bulanan';
 			$data['view_report_bulanan'] = 'class="this"';
 			$data['page_diklat'] = 'yes';
 			if ($this->input->post('jenis') == 'STKP')
 			{
+				$data['page'] = 'Report STKP Bulanan';
 				$data['pegawai_with_stkp_and_unit'] = $this->pendidikan->search_report_stkp_bulanan($this->input->post('bulan'), $this->input->post('tahun'), $this->input->post('rating'));
+				$data['bulan'] = $this->input->post('bulan');
+				$data['year'] = $this->input->post('tahun');
+				$this->load->view('diklat/index', $data);
+			} else
+			if ($this->input->post('jenis') == 'NSTKP')
+			{
+				$data['page'] = 'Report NSTKP Bulanan';
+				$data['pegawai_with_stkp_and_unit'] = $this->pendidikan->search_report_nstkp_bulanan($this->input->post('bulan'), $this->input->post('tahun'), $this->input->post('rating'));
+				$data['bulan'] = $this->input->post('bulan');
+				$data['year'] = $this->input->post('tahun');
+				$this->load->view('diklat/index', $data);
 			}
 		}
 	}

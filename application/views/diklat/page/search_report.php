@@ -48,7 +48,7 @@
                         <label>Training / Rating:</label>
                         <div class="formRight"><?php 
 						$rating = array(
-							'nama' 	=> 'rating',
+							'name' 	=> 'rating',
 							'id' 	=> 'rating',
 						);
 						echo form_input($rating) ?></div>
