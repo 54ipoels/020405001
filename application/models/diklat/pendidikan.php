@@ -82,6 +82,7 @@ class pendidikan extends CI_Model
 	
 	function search_report_stkp_bulanan($bulan, $tahun, $rating)
 	{
+		$rating = str_replace('%20',' ',$rating);
 		$query = ("
 			SELECT * FROM v3_peg_stkp AS peg_stkp
 			LEFT JOIN (SELECT max(id_peg_unit),p_unt_nipp, p_unt_kode_unit FROM v3_peg_unit GROUP BY p_unt_nipp ) AS peg_unt 
@@ -100,6 +101,7 @@ class pendidikan extends CI_Model
 	
 	function search_report_nstkp_bulanan($bulan, $tahun, $rating)
 	{
+		$rating = str_replace('%20',' ',$rating);
 		$query = ("
 			SELECT * FROM v3_peg_non_stkp AS peg_nstkp
 			LEFT JOIN (SELECT max(id_peg_unit),p_unt_nipp, p_unt_kode_unit FROM v3_peg_unit GROUP BY p_unt_nipp ) AS peg_unt 

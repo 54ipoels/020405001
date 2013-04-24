@@ -634,11 +634,11 @@ class diklat extends Application {
 		$this->excel->getActiveSheet()->setCellValue('A1', 'No');
 		$this->excel->getActiveSheet()->setCellValue('B1', 'NIPP');
 		$this->excel->getActiveSheet()->setCellValue('C1', 'Nama');
-		$this->excel->getActiveSheet()->setCellValue('D1', 'STKP');
+		$this->excel->getActiveSheet()->setCellValue('D1', 'Training');
 		$this->excel->getActiveSheet()->setCellValue('E1', 'No Sertifikat');
 		$this->excel->getActiveSheet()->setCellValue('F1', 'Pelaksanaan');
 		$this->excel->getActiveSheet()->setCellValue('H1', 'Lembaga');
-		$this->excel->getActiveSheet()->setCellValue('I1', 'Jenis STKP');
+		$this->excel->getActiveSheet()->setCellValue('H2', 'Pelaksanaan');
 		$this->excel->getActiveSheet()->setCellValue('F2', 'From');
 		$this->excel->getActiveSheet()->setCellValue('G2', 'Until');
 		
@@ -687,17 +687,17 @@ class diklat extends Application {
 			$this->excel->getActiveSheet()->setCellValue("F$i", "$pelaksanaan");
 			$this->excel->getActiveSheet()->setCellValue("G$i", "$stkp_selesai");
 			$this->excel->getActiveSheet()->setCellValue("H$i", "$row_pegawai[p_nstkp_lembaga]");
-			$this->excel->getActiveSheet()->setCellValue("I$i", "$row_pegawai[p_nstkp_type]");
 			
 			$nipp = $row_pegawai['peg_nipp'];
 			
 		}endforeach;
 		
 		//change the font size
-		$this->excel->getActiveSheet()->getStyle('A1:I1')->getFont()->setSize(14);
+		$this->excel->getActiveSheet()->getStyle('A1:H1')->getFont()->setSize(14);
+		$this->excel->getActiveSheet()->getStyle('H2')->getFont()->setSize(14);
 		//make the font become bold
-		$this->excel->getActiveSheet()->getStyle('A1:I1')->getFont()->setBold(true);
-		$this->excel->getActiveSheet()->getStyle('F2:G2')->getFont()->setBold(true);
+		$this->excel->getActiveSheet()->getStyle('A1:H1')->getFont()->setBold(true);
+		$this->excel->getActiveSheet()->getStyle('F2:H2')->getFont()->setBold(true);
 		//merge cell A1 until D1
 		$this->excel->getActiveSheet()->mergeCells('A1:A2');
 		$this->excel->getActiveSheet()->mergeCells('B1:B2');
@@ -705,13 +705,10 @@ class diklat extends Application {
 		$this->excel->getActiveSheet()->mergeCells('D1:D2');
 		$this->excel->getActiveSheet()->mergeCells('E1:E2');
 		$this->excel->getActiveSheet()->mergeCells('F1:G1');
-		$this->excel->getActiveSheet()->mergeCells('I1:I2');
-		$this->excel->getActiveSheet()->mergeCells('J1:J2');
-		$this->excel->getActiveSheet()->mergeCells('K1:K2');
 		
 		//set aligment to center for that merged cell (A1 to D1)
-		$this->excel->getActiveSheet()->getStyle('A1:K1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-		$this->excel->getActiveSheet()->getStyle('A1:K1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		$this->excel->getActiveSheet()->getStyle('A1:H1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$this->excel->getActiveSheet()->getStyle('A1:H1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 		
 		$filename="Report Non STKP.xls"; //save our workbook as this file name
 		header('Content-Type: application/vnd.ms-excel'); //mime type
@@ -746,11 +743,11 @@ class diklat extends Application {
 		$this->excel->getActiveSheet()->setCellValue('A1', 'No');
 		$this->excel->getActiveSheet()->setCellValue('B1', 'NIPP');
 		$this->excel->getActiveSheet()->setCellValue('C1', 'Nama');
-		$this->excel->getActiveSheet()->setCellValue('D1', 'STKP');
+		$this->excel->getActiveSheet()->setCellValue('D1', 'Training');
 		$this->excel->getActiveSheet()->setCellValue('E1', 'No Sertifikat');
 		$this->excel->getActiveSheet()->setCellValue('F1', 'Pelaksanaan');
 		$this->excel->getActiveSheet()->setCellValue('H1', 'Lembaga');
-		$this->excel->getActiveSheet()->setCellValue('I1', 'Jenis STKP');
+		$this->excel->getActiveSheet()->setCellValue('H2', 'Pelaksanaan');
 		$this->excel->getActiveSheet()->setCellValue('F2', 'From');
 		$this->excel->getActiveSheet()->setCellValue('G2', 'Until');
 		
@@ -799,17 +796,17 @@ class diklat extends Application {
 			$this->excel->getActiveSheet()->setCellValue("F$i", "$pelaksanaan");
 			$this->excel->getActiveSheet()->setCellValue("G$i", "$stkp_selesai");
 			$this->excel->getActiveSheet()->setCellValue("H$i", "$row_pegawai[p_nstkp_lembaga]");
-			$this->excel->getActiveSheet()->setCellValue("I$i", "$row_pegawai[p_nstkp_type]");
 			
 			$nipp = $row_pegawai['peg_nipp'];
 			
 		}endforeach;
 		
 		//change the font size
-		$this->excel->getActiveSheet()->getStyle('A1:I1')->getFont()->setSize(14);
+		$this->excel->getActiveSheet()->getStyle('A1:H1')->getFont()->setSize(14);
+		$this->excel->getActiveSheet()->getStyle('H2')->getFont()->setSize(14);
 		//make the font become bold
-		$this->excel->getActiveSheet()->getStyle('A1:I1')->getFont()->setBold(true);
-		$this->excel->getActiveSheet()->getStyle('F2:G2')->getFont()->setBold(true);
+		$this->excel->getActiveSheet()->getStyle('A1:H1')->getFont()->setBold(true);
+		$this->excel->getActiveSheet()->getStyle('F2:H2')->getFont()->setBold(true);
 		//merge cell A1 until D1
 		$this->excel->getActiveSheet()->mergeCells('A1:A2');
 		$this->excel->getActiveSheet()->mergeCells('B1:B2');
@@ -817,13 +814,10 @@ class diklat extends Application {
 		$this->excel->getActiveSheet()->mergeCells('D1:D2');
 		$this->excel->getActiveSheet()->mergeCells('E1:E2');
 		$this->excel->getActiveSheet()->mergeCells('F1:G1');
-		$this->excel->getActiveSheet()->mergeCells('I1:I2');
-		$this->excel->getActiveSheet()->mergeCells('J1:J2');
-		$this->excel->getActiveSheet()->mergeCells('K1:K2');
 		
 		//set aligment to center for that merged cell (A1 to D1)
-		$this->excel->getActiveSheet()->getStyle('A1:K1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-		$this->excel->getActiveSheet()->getStyle('A1:K1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		$this->excel->getActiveSheet()->getStyle('A1:H1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$this->excel->getActiveSheet()->getStyle('A1:H1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 		
 		$filename="Report Non STKP Bulan ".$this->uri->segment(3)."-".$this->uri->segment(4).".xls"; //save our workbook as this file name
 		header('Content-Type: application/vnd.ms-excel'); //mime type
