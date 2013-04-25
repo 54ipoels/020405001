@@ -464,7 +464,7 @@ class pekerja extends Application {
 			$this->kepegawaian->insert_data_pegawai_status_keluarga($data_stk);
 			
 			#redirecting
-			if (($this->input->post('stk') != 'TK') && ($this->input->post('stk') != 'K1'))
+			if ($this->input->post('stk') != 'TK')
 			{
 				redirect('pekerja/add_pegawai_pasangan/'.$this->input->post('nipp'));
 			}
@@ -511,10 +511,10 @@ class pekerja extends Application {
 		$tanggal = mdate($datestring, $time);
 		if ($this->uri->segment(3) != 'pribadi' )
 		{
-			$nipp = $this->input->post('nipp');
+			$nipp = $this->uri->segment(3);
 			$stk = $this->uri->segment(3);
 		} else {
-			$nipp = $this->input->post('nipp');
+			$nipp = $this->uri->segment(4);
 			$stk = $this->uri->segment(3);
 		}
 		
@@ -548,7 +548,7 @@ class pekerja extends Application {
 		
 		if ($stk != 'pribadi')
 		{
-			redirect('pekerja/add_pegawai_mertua/'.$nipp);
+			redirect('pekerja/add_pegawai_mertua/'.$this->uri->segment(3));
 		} else {
 			redirect('pekerja/index');
 		}
@@ -1139,6 +1139,23 @@ class pekerja extends Application {
 		#input data to table pegawai
 		$this->kepegawaian->update_data_pendidikan($data_pendidikan);
 		redirect('pekerja/get_pegawai/'.$nipp);
+	}
+	
+	function view_data_sdm()
+	{
+		#pagination config
+		$config['base_url'] = base_url().'index.php/pekerja/view_data_sdm/'; //set the base url for pagination
+		$config['total_rows'] = $this->kepegawaian->countPegawai(); //total rows
+		$config['per_page'] = 10; //the number of per page for pagination
+		$config['uri_segment'] = 3; //see from base_url. 3 for this case
+		$this->pagination->initialize($config);
+		$page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+		
+		$data['page'] = 'Data SDM';
+		$data['page_karyawan'] = 'yes';
+		$data['pegawai'] = $this->kepegawaian->get_data_pegawai_full($config['per_page'],$page);
+		//print_r($data['pegawai']);
+		$this->load->view('kepegawaian/index', $data);
 	}
 		
 	function print_kompetensi($nipp)

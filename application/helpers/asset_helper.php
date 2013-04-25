@@ -109,6 +109,23 @@
 		}
 	}
 	
+	function get_data_anak($nipp)
+	{
+		$ci=& get_instance();
+		$ci->load->database();
+		$ci->db->where('peg_ank_nipp', $nipp);
+		$data = $ci->db->get('v3_peg_anak');
+		return $data->result_array();
+	}
+	
+	function count_jumlah_anak($nipp)
+	{
+		$ci=& get_instance();
+		$ci->load->database();
+		$ci->db->where('peg_ank_nipp', $nipp);
+		return $ci->db->count_all_results('v3_peg_anak');
+	}
+	
 	
 	//hitung selisih jam output dalam menit
 	function selisihjam($in,$out) 
