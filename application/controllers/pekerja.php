@@ -1614,6 +1614,146 @@ class pekerja extends Application {
 		
 	}
 	
+	function excel_data_sdm()
+	{
+		$datestring = "%Y" ;
+		$time = time();
+		$tanggal = mdate($datestring, $time);
+		
+		$sdm = $this->kepegawaian->get_data_sdm_unlimited();
+						
+		//load our new PHPExcel library
+		$this->load->library('excel');
+		//activate worksheet number 1
+		$this->excel->setActiveSheetIndex(0);
+		//name the worksheet
+		$this->excel->getActiveSheet()->setTitle("Data SDM ");
+		//set cell A1 content with some text
+		
+		$this->excel->getActiveSheet()->setCellValue('A1', 'NO');
+		$this->excel->getActiveSheet()->setCellValue('B1', 'NIPP');
+		$this->excel->getActiveSheet()->setCellValue('C1', 'NAMA');
+		$this->excel->getActiveSheet()->setCellValue('D1', 'TEMPAT LAHIR');
+		$this->excel->getActiveSheet()->setCellValue('E1', 'TANGGAL LAHIR');
+		$this->excel->getActiveSheet()->setCellValue('F1', 'UMUR');
+		$this->excel->getActiveSheet()->setCellValue('G1', 'JENIS KELAMIN');
+		$this->excel->getActiveSheet()->setCellValue('H1', 'STATUS');
+		$this->excel->getActiveSheet()->setCellValue('I1', 'STATUS KAWIN');
+		$this->excel->getActiveSheet()->setCellValue('J1', 'ALAMAT');
+		$this->excel->getActiveSheet()->setCellValue('K1', 'NO TELP');
+		$this->excel->getActiveSheet()->setCellValue('L1', 'AGAMA');
+		
+		
+		$i=2;
+		$number=0;
+		
+		$nipp = '';
+		foreach ($sdm as $row_sdm) :
+		{ 
+			$datestring = "%d-%M-%Y" ;
+			$tgl_lahir = mdate($datestring,strtotime($row_sdm['peg_tgl_lahir']));
+			$umur=floor(($time - strtotime($row_sdm['peg_tgl_lahir']))/(365*24*60*60));
+			$umur_ps=floor(($time - strtotime($row_sdm['p_ps_tgl_lahir']))/(365*24*60*60));
+			//$alamat = $row_sdm['p_al_jalan'].' '.$row_sdm['p_al_kelurahan'].' '.$row_sdm['p_al_kecamatan'].' '.$row_sdm'p_al_kabupaten'].' '.$row_sdm['p_al_provinsi'];
+			$alamat = '';
+			$anak = $this->kepegawaian->get_detail_pegawai_anak($row_sdm['peg_nipp']);
+			$jumlah_anak = $this->kepegawaian->count_data_jumlah_anak($row_sdm['peg_nipp']);
+			
+			if ($row_sdm['peg_jns_kelamin'] == 'L')
+				{
+					$status_ps = 'ISTERI';
+					$sex_ps = 'P';
+				} else 
+				{
+					$status_ps = 'SUAMI';
+					$sex_ps = 'L';
+				}
+			
+			$i++;
+			$number++;
+			$merge_start = $i;
+						
+			//masukkan data ke tabel excel
+			//data pegawai
+			$this->excel->getActiveSheet()->setCellValue("A$i", "$number");
+			$this->excel->getActiveSheet()->setCellValue("B$i", "$row_sdm[peg_nipp]");
+			$this->excel->getActiveSheet()->setCellValue("C$i", strtoupper("$row_sdm[peg_nama]"));
+			$this->excel->getActiveSheet()->setCellValue("D$i", strtoupper("$row_sdm[peg_tmpt_lahir]"));
+			$this->excel->getActiveSheet()->setCellValue("E$i", "$tgl_lahir");
+			$this->excel->getActiveSheet()->setCellValue("F$i", "$umur");
+			$this->excel->getActiveSheet()->setCellValue("G$i", strtoupper("$row_sdm[peg_jns_kelamin]"));
+			$this->excel->getActiveSheet()->setCellValue("H$i", strtoupper("PEGAWAI"));
+			$this->excel->getActiveSheet()->setCellValue("I$i", strtoupper("$row_sdm[p_stk_status_keluarga]"));
+			$this->excel->getActiveSheet()->setCellValue("J$i", strtoupper(" $row_sdm[p_al_jalan] $row_sdm[p_al_kelurahan] $row_sdm[p_al_kecamatan] $row_sdm[p_al_kabupaten] $row_sdm[p_al_provinsi]"));
+			$this->excel->getActiveSheet()->setCellValue("K$i", strtoupper("$row_sdm[p_al_no_telp]"));
+			$this->excel->getActiveSheet()->setCellValue("L$i", strtoupper("$row_sdm[p_ag_agama]"));
+			//data pasangan
+			$i++;
+			$this->excel->getActiveSheet()->setCellValue("C$i", strtoupper("$row_sdm[p_ps_nama]"));
+			$this->excel->getActiveSheet()->setCellValue("D$i", strtoupper("$row_sdm[p_ps_tmpt_lahir]"));
+			$this->excel->getActiveSheet()->setCellValue("E$i", mdate($datestring,strtotime("$row_sdm[p_ps_tgl_lahir]")));
+			$this->excel->getActiveSheet()->setCellValue("F$i", "$umur_ps");
+			$this->excel->getActiveSheet()->setCellValue("G$i", "$sex_ps");
+			$this->excel->getActiveSheet()->setCellValue("H$i", "$status_ps");
+			$this->excel->getActiveSheet()->setCellValue("I$i", strtoupper("$row_sdm[p_stk_status_keluarga]"));
+			$this->excel->getActiveSheet()->setCellValue("L$i", strtoupper("$row_sdm[p_ag_agama]"));
+			//data anak
+			$num_anak = 1;
+			foreach ($anak as $row_anak)
+			{
+				$umur_ank=floor(($time - strtotime($row_anak['peg_ank_tgl_lahir']))/(365*24*60*60));
+				$i++;
+				$this->excel->getActiveSheet()->setCellValue("C$i", strtoupper("$row_anak[peg_ank_nama]"));
+				$this->excel->getActiveSheet()->setCellValue("D$i", strtoupper("$row_anak[peg_ank_tempat_lahir]"));
+				$this->excel->getActiveSheet()->setCellValue("E$i", mdate($datestring,strtotime("$row_anak[peg_ank_tgl_lahir]")));
+				$this->excel->getActiveSheet()->setCellValue("F$i", "$umur_ank");
+				$this->excel->getActiveSheet()->setCellValue("G$i", "$sex_ps");
+				$this->excel->getActiveSheet()->setCellValue("H$i", "ANAK $num_anak");
+				$this->excel->getActiveSheet()->setCellValue("I$i", strtoupper("$row_sdm[p_stk_status_keluarga]"));
+				$this->excel->getActiveSheet()->setCellValue("L$i", strtoupper("$row_sdm[p_ag_agama]"));
+				$num_anak++;
+			} 
+		$i++;
+		}endforeach;
+		
+		//change the font size
+		$this->excel->getActiveSheet()->getStyle('A1:L1')->getFont()->setSize(14);
+		//make the font become bold
+		$this->excel->getActiveSheet()->getStyle('A1:L1')->getFont()->setBold(true);
+		//merge cell A1 until D1
+		
+		
+		//set aligment to center for that merged cell (A1 to D1)
+		$this->excel->getActiveSheet()->getStyle('A1:L1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$this->excel->getActiveSheet()->getStyle('A1:L1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		
+		//merge cell A1 until D1
+		$this->excel->getActiveSheet()->mergeCells('A1:A2');
+		$this->excel->getActiveSheet()->mergeCells('B1:B2');
+		$this->excel->getActiveSheet()->mergeCells('C1:C2');
+		$this->excel->getActiveSheet()->mergeCells('D1:D2');
+		$this->excel->getActiveSheet()->mergeCells('E1:E2');
+		$this->excel->getActiveSheet()->mergeCells('F1:F2');
+		$this->excel->getActiveSheet()->mergeCells('G1:G2');
+		$this->excel->getActiveSheet()->mergeCells('H1:H2');
+		$this->excel->getActiveSheet()->mergeCells('I1:I2');
+		$this->excel->getActiveSheet()->mergeCells('J1:J2');
+		$this->excel->getActiveSheet()->mergeCells('K1:K2');
+		$this->excel->getActiveSheet()->mergeCells('L1:L2');
+		 
+		$filename="Data SDM.xls"; //save our workbook as this file name
+		header('Content-Type: application/vnd.ms-excel'); //mime type
+		header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
+		header('Cache-Control: max-age=0'); //no cache
+					 
+		//save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
+		//if you want to save it as .XLSX Excel 2007 format
+		$objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel5');  
+		//force user to download the Excel file without writing it to server's HD
+		$objWriter->save('php://output');
+		
+	}
+	
 	
 }
 

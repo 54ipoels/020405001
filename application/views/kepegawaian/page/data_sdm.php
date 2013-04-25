@@ -45,9 +45,11 @@
 					if ($row_pegawai['peg_jns_kelamin'] == 'L')
 					{
 						$status_ps = 'ISTERI';
+						$sex_ps = 'P';
 					} else 
 					{
 						$status_ps = 'SUAMI';
+						$sex_ps = 'L';
 					}
 					if ($row_pegawai['p_stk_status_keluarga'] != 'TK')
 					{
@@ -61,10 +63,10 @@
 					{
 						$rowspan = 1;
 					}
-					$detail = anchor('pekerja/get_pegawai/'.$row_pegawai['peg_nipp'],'Detail');  ?>
+					$detail = anchor('pekerja/get_pegawai/'.$row_pegawai['peg_nipp'],$row_pegawai['peg_nipp']);  ?>
 					<tr>
                         <td rowspan="<?php echo $rowspan;?>"><center><?php echo $number; ?></center></td>
-						<td rowspan="<?php echo $rowspan;?>"><center><?php echo $row_pegawai['peg_nipp']; ?></center></td>
+						<td rowspan="<?php echo $rowspan;?>"><center><?php echo $detail; ?></center></td>
 						<td><?php echo strtoupper($row_pegawai['peg_nama']); ?></td>
 						<td><?php echo strtoupper($row_pegawai['peg_tmpt_lahir']); ?></td>
 						<td><center><?php echo $tgl_lahir; ?></center></td>
@@ -83,11 +85,12 @@
 						<td><?php echo strtoupper($row_pegawai['p_ps_tmpt_lahir']); ?></td>
 						<td><center><?php echo $tgl_lahir_ps; ?></center></td>
 						<td><center><?php echo $umur_ps; ?></td>
-						<td><center><?php echo strtoupper($row_pegawai['peg_jns_kelamin']); ?></td>
+						<td><center><?php echo $sex_ps; ?></td>
 						<td><center><?php echo $status_ps; ?></td>
 						<td><center><?php echo strtoupper($row_pegawai['p_stk_status_keluarga']); ?></center></td>
-						<td><center>agama</center></td>
+						<td><center><?php echo strtoupper($row_pegawai['p_ps_agama']); ?></center></td>
                     </tr> <?php
+					$num_anak = 1;
 					foreach ($anak as $row_anak)
 					{ 
 						$umur_ank = mdate($yearstring,now()) - mdate($yearstring, strtotime($row_anak['peg_ank_tgl_lahir']));?>
@@ -96,12 +99,14 @@
 						<td><?php echo strtoupper($row_anak['peg_ank_tempat_lahir']); ?></td>
 						<td><center><?php echo mdate($datestring,strtotime($row_anak['peg_ank_tgl_lahir'])); ?></center></td>
 						<td><center><?php echo $umur_ank; ?></td>
-						<td><center><?php echo strtoupper($row_pegawai['peg_jns_kelamin']); ?></td>
-						<td><center><?php echo 'ANAK'; ?></td>
-						<td><center><?php echo strtoupper($row_pegawai['p_stk_status_keluarga']); ?></center></td>
-						<td><center>agama</center></td>
+						<td><center><?php echo strtoupper($row_anak['peg_ank_jns_kelamin']); ?></td>
+						<td><center><?php echo 'ANAK '.$num_anak; ?></td>
+						<td><center><?php echo strtoupper($row_anak['peg_ank_status']); ?></center></td>
+						<td><center><?php echo strtoupper($row_anak['peg_ank_agama']); ?></center></td>
                     </tr>
-					<?php }
+					<?php 
+					$num_anak++;
+					}
 					}
 					$number++; ?> <tr><td colspan="12" style="background-color:#ffdfdf"></td></tr><?php
 				}endforeach; 
@@ -111,4 +116,4 @@
 			
         </div>
 		<?php $attr= array('target' => '_blank');
-			echo anchor('pekerja/excel_data_pegawai','Export to Excel',$attr); ?>
+			echo anchor('pekerja/excel_data_sdm','Export to Excel',$attr); ?>

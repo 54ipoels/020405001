@@ -120,7 +120,7 @@
 				<tbody>
 				
 					<tr>
-						<td width="25%" rowspan="11"><img src="<?php echo base_url()?>pegawai/foto/<?php echo $foto; ?>" width="220px" ></td>
+						<td width="25%" rowspan="11"><img src="<?php echo base_url()?>pegawai/foto/<?php echo $row_pegawai['peg_nipp']; ?>.jpg" width="220px" ></td>
 						<td>NIPP</td><td><?php echo $row_pegawai['peg_nipp']; ?></td>
 						<tr><td>Nama</td><td><?php echo $row_pegawai['peg_nama']; ?></td></tr>
 						<tr><td>Tempat / Tanggal Lahir</td><td><?php echo $row_pegawai['peg_tmpt_lahir'].' / '.$tgl_lahir; ?></td></tr>
