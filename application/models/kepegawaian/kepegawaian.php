@@ -560,6 +560,12 @@ class kepegawaian extends CI_Model
 		$this->db->update('v3_peg_agama',$data_agama);
 	}
 	
+	function delete_data_pasangan($nipp)
+	{
+		$this->db->where('p_ps_nipp', $nipp);
+		$this->db->delete('v3_peg_pasangan');
+	}
+	
 	function delete_pegawai($nipp)
 	{
 		$this->db->where('peg_nipp', $nipp);

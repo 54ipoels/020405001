@@ -284,6 +284,8 @@
 				{
 					$row_pasangan['p_ps_nama'] = '-';
 					$row_pasangan['p_ps_tmpt_lahir'] = '-';
+					$ps_tgl_lahir = '-';
+					$ps_tgl_meninggal = '-';
 					$row_pasangan['p_ps_alamat'] = '-';
 					$row_pasangan['p_ps_pekerjaan'] = '-';
 					$tgl_lahir = '-';
@@ -305,6 +307,7 @@
                         <tfoot>
 							<tr><td colspan=8><p align="right"><?php if ($status !== 'Outsource')
 							{echo anchor('pekerja/edit_pasangan_pegawai/'.$row_pegawai['peg_nipp'],'[edit]');
+							echo anchor('pekerja/delete_pasangan_pegawai/'.$row_pegawai['peg_nipp'],'[delete]');
 							}?></p></td></tr>
 						</tfoot>
                         <tbody>

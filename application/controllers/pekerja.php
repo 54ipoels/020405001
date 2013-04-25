@@ -887,6 +887,12 @@ class pekerja extends Application {
 		redirect('pekerja/get_pegawai/'.$nipp);
 	}
 	
+	public function delete_pasangan_pegawai($nipp)
+	{
+		$this->kepegawaian->delete_data_pasangan($nipp);
+		redirect('pekerja/get_pegawai/'.$nipp);
+	}
+	
 	public function edit_data_ortu()
 	{
 		#preparing date update
