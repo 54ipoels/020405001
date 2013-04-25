@@ -464,7 +464,7 @@ class pekerja extends Application {
 			$this->kepegawaian->insert_data_pegawai_status_keluarga($data_stk);
 			
 			#redirecting
-			if (($this->input->post('stk') != 'TK') && ($this->input->post('stk') != 'K1'))
+			if ($this->input->post('stk') != 'TK')
 			{
 				redirect('pekerja/add_pegawai_pasangan/'.$this->input->post('nipp'));
 			}
@@ -511,10 +511,10 @@ class pekerja extends Application {
 		$tanggal = mdate($datestring, $time);
 		if ($this->uri->segment(3) != 'pribadi' )
 		{
-			$nipp = $this->input->post('nipp');
+			$nipp = $this->uri->segment(3);
 			$stk = $this->uri->segment(3);
 		} else {
-			$nipp = $this->input->post('nipp');
+			$nipp = $this->uri->segment(4);
 			$stk = $this->uri->segment(3);
 		}
 		
@@ -548,7 +548,7 @@ class pekerja extends Application {
 		
 		if ($stk != 'pribadi')
 		{
-			redirect('pekerja/add_pegawai_mertua/'.$nipp);
+			redirect('pekerja/add_pegawai_mertua/'.$this->uri->segment(3));
 		} else {
 			redirect('pekerja/index');
 		}
