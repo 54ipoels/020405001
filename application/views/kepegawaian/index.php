@@ -53,6 +53,10 @@
 		if ($page == 'Data Supervisor')
 		{
 			$this->load->view('kepegawaian/page/supervisor');
+		}else
+		if ($page == 'Data SDM')
+		{
+			$this->load->view('kepegawaian/page/data_sdm');
 		}
 		// -------- submit data karyawan ---------------//
 		else 

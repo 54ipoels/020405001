@@ -30,6 +30,23 @@ class kepegawaian extends CI_Model
 		return $query->result_array();
 	}
 	
+	function get_data_pegawai_full()
+	{
+		$query = ('
+			SELECT * FROM v3_pegawai AS peg
+			LEFT JOIN (SELECT p_stk_nipp, p_stk_status_keluarga FROM v3_peg_status_keluarga) AS stk
+			ON peg.peg_nipp = stk.p_stk_nipp
+			LEFT JOIN (SELECT p_ps_nipp, p_ps_nama, p_ps_tmpt_lahir, p_ps_tgl_lahir FROM v3_peg_pasangan) AS ps
+			ON peg.peg_nipp = ps.p_ps_nipp
+			ORDER BY peg.peg_nipp ASC
+		');
+		
+		/*$this->db->select('*');
+		$query = $this->db->get('v3_pegawai'); */
+		$query = $this->db->query($query);
+		return $query->result_array();
+	}
+	
 	function get_data_pegawai_pensiun($num, $offset, $tahun, $type, $limit)
 	{
 		$query = ('

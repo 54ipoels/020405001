@@ -7,6 +7,7 @@
                 <li <?php if(isset($view_add_pekerja)){ echo $view_add_pekerja; } ?>><?php echo anchor('pekerja/add_pegawai', 'Add Pegawai' ); ?></li>
 				<li <?php if(isset($view_pensiun)){ echo $view_pensiun; } ?>><?php echo anchor('pekerja/pegawai_pensiun', 'Pensiun' ); ?></li>
 				<li <?php if(isset($view_supervisor)){ echo $view_supervisor; } ?>><?php echo anchor('pekerja/get_supervisor', 'Supervisor' ); ?></li>
+				<li <?php if(isset($view_sdm)){ echo $view_sdm; } ?>><?php echo anchor('pekerja/view_data_sdm', 'Data SDM' ); ?></li>
             </ul>
 		</li>
 	<?php if (isset($page_diklat)){$page_diklat = 'current';} else {$page_diklat = '';}?>

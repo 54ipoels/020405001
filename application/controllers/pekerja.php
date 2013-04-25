@@ -1118,6 +1118,15 @@ class pekerja extends Application {
 		$this->kepegawaian->update_data_pendidikan($data_pendidikan);
 		redirect('pekerja/get_pegawai/'.$nipp);
 	}
+	
+	function view_data_sdm()
+	{
+		$data['page'] = 'Data SDM';
+		$data['page_karyawan'] = 'yes';
+		$data['pegawai'] = $this->kepegawaian->get_data_pegawai_full();
+		//print_r($data['pegawai']);
+		$this->load->view('kepegawaian/index', $data);
+	}
 		
 	function print_kompetensi($nipp)
 	{
