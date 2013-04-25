@@ -51,7 +51,7 @@
 						$status_ps = 'SUAMI';
 						$sex_ps = 'L';
 					}
-					if ($row_pegawai['p_stk_status_keluarga'] != 'TK')
+					if (($row_pegawai['p_stk_status_keluarga'] != 'TK') && ($row_pegawai['p_stk_status_keluarga'] != ''))
 					{
 						$rowspan = $jumlah_anak+2;
 					} else
@@ -60,6 +60,10 @@
 						$rowspan = 2;
 					} else
 					if ($row_pegawai['p_stk_status_keluarga'] == 'TK')
+					{
+						$rowspan = 1;
+					}else
+					if ($row_pegawai['p_stk_status_keluarga'] == '')
 					{
 						$rowspan = 1;
 					}
@@ -78,7 +82,7 @@
 						<td rowspan="<?php echo $rowspan;?>"><center><?php echo strtoupper($row_pegawai['p_al_no_telp']); ?></center></td>
 						<td><center><?php echo strtoupper($row_pegawai['p_ag_agama']); ?></center></td>
                     </tr>
-					<?php if ($row_pegawai['p_stk_status_keluarga'] != 'TK')
+					<?php if (($row_pegawai['p_stk_status_keluarga'] != 'TK') && ($row_pegawai['p_stk_status_keluarga'] != NULL))
 					{?>
 					<tr>
 						<td><?php echo strtoupper($row_pegawai['p_ps_nama']); ?></td>
