@@ -1,12 +1,16 @@
 <div class = "oneTwo">
 	<div class="widget">
             <div class="title"><img src="<?php echo base_url()?>images/icons/dark/pencil.png" alt="" class="titleIcon" /><h6>Data Jabatan Pegawai</h6></div>
-			<?php 
+			<?php
+			$datestring = "%d-%m-%Y" ;
 			foreach ($jabatan as $row_jbt_tmt) : 
 			{
-				$datestring = "%d-%m-%Y" ;
-				$tmt = mdate($datestring,strtotime($row_jbt_tmt['p_jbt_tmt_start']));
+				//$tmt = $row_jbt_tmt['p_jbt_tmt_start']);
+				//$tmt = mdate($datestring,strtotime($row_jbt_tmt['p_jbt_tmt_start']));
 			} endforeach;
+			if($row_jbt_tmt['p_jbt_tmt_start'])="0000-00-00"){$tmt='00-00-0000'}
+			else{$tmt = mdate($datestring,strtotime($row_jbt_tmt['p_jbt_tmt_start'])}
+			
 			foreach ($unit as $row_unit) : 
 			{} endforeach;
 			if ($grade == NULL)

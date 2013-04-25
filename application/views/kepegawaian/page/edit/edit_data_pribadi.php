@@ -158,6 +158,7 @@
                         <div class="formRight"><?php 
 						$stk = array(
 							'TK' => 'TK',
+							'K'  => 'K',
 							'K1' => 'K1',
 							'K2' => 'K2',
 							'K3' => 'K3',
