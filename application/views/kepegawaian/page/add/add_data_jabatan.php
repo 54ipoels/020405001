@@ -1,6 +1,6 @@
 <div class = "oneTwo">
 	<div class="widget">
-            <div class="title"><img src="<?php echo base_url()?>images/icons/dark/pencil.png" alt="" class="titleIcon" /><h6>Data Anak Pegawai</h6></div>
+            <div class="title"><img src="<?php echo base_url()?>images/icons/dark/pencil.png" alt="" class="titleIcon" /><h6>Data Jabatan</h6></div>
 			<?php 
 			$attributes = array('class'=>'form','id'=>'wizard3');
 			echo form_open('pekerja/add_data_jabatan/part_two', $attributes) ?>
@@ -10,13 +10,21 @@
 					<div class="formRow">
                         <label>Jabatan yang Ada:</label>
 						 <div class="formRight searchDrop">
-                        <select name="jabatan" data-placeholder="Pilih Jabatan..." class="chzn-select" tabindex="1"><?php 
+                        <select name="list_jabatan" data-placeholder="Pilih Jabatan..." class="chzn-select" tabindex="1"><?php 
 						foreach ($list_jabatan as $row_jabatan) :
 						{ ?>
 							<option value="<?php echo $row_jabatan['peg_tab_jab'];?>"><?php echo $row_jabatan['peg_tab_jab']; ?></option>
 							
 						<?php } endforeach; ?>
-						</select></div>
+						</select>
+						<?php 
+						$check = array(
+								  'name'        => 'edit',
+								  'id'          => 'edit',
+								  'value'       => 'yes',
+								  'checked'     => FALSE, 
+								);
+						echo form_checkbox($check);?><span class="formNote">Centang bila ingin edit</span></div>
                         <div class="clear"></div>
                     </div>
 					<div class="formRow">

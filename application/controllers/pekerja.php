@@ -675,7 +675,12 @@ class pekerja extends Application {
 			}
 		else if ($this->uri->segment(3)== 'part_two')
 			{
-				$this->kepegawaian->add_list_jabatan();
+				if ($this->input->post('edit') == 'yes')
+				{
+					$this->kepegawaian->edit_list_jabatan();
+				} else {
+					$this->kepegawaian->add_list_jabatan();
+				}
 				redirect ('pekerja/add_data_jabatan/part_one');
 			}
 	}

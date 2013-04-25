@@ -275,6 +275,13 @@ class kepegawaian extends CI_Model
 		$this->db->insert('v3_peg_tab_jabatan', $data);
 	}
 	
+	function edit_list_jabatan()
+	{
+		$data = array('peg_tab_jab' => $this->input->post('jabatan'));
+		$this->db->where('peg_tab_jab', $this->input->post('list_jabatan'));
+		$this->db->update('v3_peg_tab_jabatan', $data);
+	}
+	
 	function get_supervisor($num, $offset)
 	{
 		$supervisor = '%Supervisor%';
