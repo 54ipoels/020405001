@@ -57,7 +57,7 @@ class kepegawaian extends CI_Model
 			WHERE peg_tmt.p_tmt_status = \'' . $type . '\' AND peg_tmt.p_tmt_end = 0000-00-00
 			LIMIT '.$offset.' , '.$num.'
 		');
-		$query = $this->db->query($query); 
+		$query = $this->db->query($query);  
 		return $query->result_array();
 	}
 	

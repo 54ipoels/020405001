@@ -93,7 +93,7 @@
 						echo form_input($grade) ?><br/>
 						<?php echo form_error('grade')?></div>
                         <div class="clear"></div>
-                    </div>
+                    </div> 
                 </fieldset>
 				<div class="wizButtons"> 
                     <div class="status" id="status2"></div>

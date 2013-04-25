@@ -167,7 +167,7 @@
 						);
 						echo form_dropdown('stk',$stk,$row_stk['p_stk_status_keluarga']) ?></div>
                         <div class="clear"></div>
-                    </div>
+                    </div> 
 				</fieldset>
 				<div class="wizButtons"> 
                     <div class="status" id="status2"></div>

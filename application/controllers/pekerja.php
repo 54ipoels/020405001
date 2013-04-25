@@ -236,7 +236,7 @@ class pekerja extends Application {
 		$data['list_unit'] = $this->kepegawaian->get_list_unit();
 		$data['page'] = 'Search Result';
 		$data['page_karyawan'] = 'yes';
-		
+		 
 		#calling view
 		$this->load->view('kepegawaian/index', $data);
 	}

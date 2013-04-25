@@ -33,7 +33,7 @@
 						<?php echo form_error('tempat')?></div>
                         <div class="clear"></div>
                     </div>
-					<div class="formRow">
+					<div class="formRow"> 
                         <label>Tanggal Lahir:</label>
                         <div class="formRight"><?php 
 						if($row_pasangan['p_ps_tgl_lahir'] == "0000-00-00"){$tgl_lhr='00-00-0000';}

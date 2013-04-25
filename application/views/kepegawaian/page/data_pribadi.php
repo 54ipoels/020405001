@@ -75,7 +75,7 @@
 					{ 
 					}endforeach;
 				}
-				?>
+				?>  
 				<?php
 				if($data_jabatan_tmt==NULL){
 					$status="-";
