@@ -32,6 +32,7 @@
 						$agama = $row_agama['p_ag_agama'];
 					}endforeach;
 				}
+				
 				if ($data_fisik == NULL)
 					{ $foto = '';
 					  $tinggi = '-';
@@ -288,7 +289,8 @@
 					$ps_tgl_meninggal = '-';
 					$row_pasangan['p_ps_alamat'] = '-';
 					$row_pasangan['p_ps_pekerjaan'] = '-';
-					$tgl_lahir = '-';
+					$ps_tgl_lahir = '-';
+					$ps_tgl_meninggal = '-';
 				}else{
 					foreach ($data_pasangan as $row_pasangan) :
 					{
@@ -327,6 +329,7 @@
 					$row_ayah['p_ay_alamat'] = '-';
 					$row_ayah['p_ay_pekerjaan'] = '-';
 					$ay_tgl_lahir = '-';
+					$ay_tgl_meninggal = '-';
 				}else{
 					foreach($data_ayah as $row_ayah) :
 					{
@@ -386,6 +389,7 @@
 					$row_m_ayah['p_may_alamat'] = '-';
 					$row_m_ayah['p_may_pekerjaan'] = '-';
 					$m_ay_tgl_lahir = '-';
+					$m_ay_tgl_meninggal = '-';
 				}else{
 				foreach($data_mert_ayah as $row_m_ayah) :
 				{
@@ -403,6 +407,7 @@
 					$row_m_ibu['p_mib_alamat'] = '-';
 					$row_m_ibu['p_mib_pekerjaan'] = '-';
 					$m_ibu_tgl_lahir = '-';
+					$m_ibu_tgl_meninggal = '-';
 				} else {
 				foreach($data_mert_ibu as $row_m_ibu) :
 				{

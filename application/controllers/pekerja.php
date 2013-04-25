@@ -807,6 +807,7 @@ class pekerja extends Application {
 		else{$tanggal_lahir=mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tanggal'))));}
 		
 		$nipp = $this->uri->segment(3);
+		
 		$data_pegawai = array(
 				'peg_nama' 			=> $this->input->post('nama'),
 				'peg_tmpt_lahir'	=> $this->input->post('tempat'),
@@ -832,8 +833,15 @@ class pekerja extends Application {
 				);
 				
 		$this->kepegawaian->insert_data_pegawai_agama($data_agama);
-				
 		
+		$data_stk = array(
+					'p_stk_nipp' 			  => $nipp,
+					'p_stk_status_keluarga'   => $this->input->post('stk'),
+					'p_stk_update_on'		  => $tanggal,
+					'p_stk_update_by'		  => 'admin'
+				);
+			
+		$this->kepegawaian->insert_data_pegawai_status_keluarga($data_stk);		
 		}
 		redirect('pekerja/get_pegawai/'.$nipp);
 	}
