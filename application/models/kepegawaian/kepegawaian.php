@@ -545,10 +545,13 @@ class kepegawaian extends CI_Model
 		$datestring = "%Y-%m-%d" ;
 		for ($i=1; $i<=$this->input->post('jumlah'); $i++)
 		{
+		$tanggal='0000-00-00';
+		if($this->input->post('tanggal_'.$i) !== '00/00/0000'){$tanggal = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tanggal_'.$i))));}
+		
 		$data_anak = array(
 				'peg_ank_nama'			=> $this->input->post('nama_'.$i),
 				'peg_ank_tempat_lahir'	=> $this->input->post('tempat_'.$i),
-				'peg_ank_tgl_lahir'		=> mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tanggal_'.$i)))),
+				'peg_ank_tgl_lahir'		=> $tanggal,
 				'peg_ank_pendidikan'	=> $this->input->post('pendidikan_'.$i),
 				'peg_ank_jns_kelamin'	=> $this->input->post('jns_klm_'.$i),
 				'peg_ank_agama'			=> $this->input->post('agama_'.$i),
@@ -706,7 +709,45 @@ class kepegawaian extends CI_Model
 		$this->db->delete('v3_peg_anak');
 	}
 	
-	
+	function get_new_pegawai_status_keluarga($nipp,$kriteria)
+	{
+		$query = "
+			SELECT * FROM v3_peg_status_keluarga 
+			WHERE p_stk_nipp ='$nipp' 
+			ORDER BY id_peg_status_keluarga DESC
+			LIMIT 1
+		";
+		
+		$query = $this->db->query($query);
+		$result = $query->result_array();
+		$id_peg_tmt = "";
+		foreach($result as $row){
+			$stk = $row['p_stk_status_keluarga'];
+		}
+		
+		if($stk !== NULL){
+			$daftar	= array (
+					'1' => 'TK',
+					'2' => 'K',
+					'3'	=> 'K1',
+					'4'	=> 'K2',
+					'5' => 'K3',
+					'6' => 'K4',
+					'7' => 'K5',
+				);
+			$status="";	
+			for ($i=1;$i<=7;$i++){
+				if ($stk == $daftar[$i]){$n=$i;}
+			}
+			if($kriteria=='delete'){$n--;}
+			else if($kriteria=='add'){
+				$n++; 
+				if($n>7){$n=7;}
+			}
+			$newstk=$daftar[$n];
+		}
+		return $newstk;
+	}
 	
 }
 /* End of file myfile.php */
