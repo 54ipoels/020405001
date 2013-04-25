@@ -3,7 +3,7 @@
             <div class="title"><img src="<?php echo base_url()?>images/icons/dark/pencil.png" alt="" class="titleIcon" /><h6>Data Pribadi Pegawai</h6></div>
 			<?php 
 			$attributes = array('class'=>'form','id'=>'wizard3');
-			echo form_open('pekerja/submit_data_pasangan/', $attributes) ?>
+			echo form_open('pekerja/submit_data_pasangan_baru/', $attributes) ?>
                 <fieldset class="step" id="w2first">
 					<?php echo form_hidden('nipp',$this->uri->segment(3))?>
                     <h1>Step 2 Part 1 - Data Pasangan</h1>

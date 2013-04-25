@@ -87,6 +87,18 @@
                         <div class="clear"></div>
                     </div>
 					<div class="formRow">
+						<label>Grade</label>
+						<div class="formRight">	<?php 
+						$grade = array(
+							'name' => 'grade',
+							'id'   => 'grade',
+							'style'=> 'width:30%',
+						);	
+						echo form_input($grade);?><br/>
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="formRow">
                         <label>Provider:</label>
                         <div class="formRight"><?php 
 						$provider = array(

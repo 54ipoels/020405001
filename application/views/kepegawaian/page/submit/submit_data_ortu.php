@@ -30,12 +30,12 @@
                     </div>
 					<div class="formRow">
                         <label>Tanggal Lahir:</label>
-                        <div class="formRight"><input type="text" name="tanggal_ayah" id="tanggal_ayah" class="maskDate"/></div>
+                        <div class="formRight"><input type="text" name="tanggal_ayah" id="tanggal_ayah" class="maskDate" value="00/00/0000"/></div>
                         <div class="clear"></div>
                     </div>
 					<div class="formRow">
                         <label>Tanggal Meninggal:</label>
-                        <div class="formRight"><input type="text" name="meninggal_ayah" id="meninggal_ayah" class="maskDate"/></div>
+                        <div class="formRight"><input type="text" name="meninggal_ayah" id="meninggal_ayah" class="maskDate" value="00/00/0000"/></div>
                         <div class="clear"></div>
                     </div>
 					<div class="formRow">
@@ -64,12 +64,12 @@
                     </div>
 					<div class="formRow">
                         <label>Tanggal Lahir:</label>
-                        <div class="formRight"><input type="text" name="tanggal_ibu" id="tanggal_ibu" class="maskDate"/></div>
+                        <div class="formRight"><input type="text" name="tanggal_ibu" id="tanggal_ibu" class="maskDate" value="00/00/0000"/></div>
                         <div class="clear"></div>
                     </div>
 					<div class="formRow">
                         <label>Tanggal Meninggal:</label>
-                        <div class="formRight"><input type="text" name="meninggal_ibu" id="meninggal_ibu" class="maskDate"/></div>
+                        <div class="formRight"><input type="text" name="meninggal_ibu" id="meninggal_ibu" class="maskDate" value="00/00/0000"/></div>
                         <div class="clear"></div>
                     </div>
 					<div class="formRow">

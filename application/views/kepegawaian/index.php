@@ -68,6 +68,10 @@
 		{
 			$this->load->view('kepegawaian/page/submit/submit_data_pasangan');
 		} else 
+		if ($page == 'Input Data Pasangan Baru')
+		{
+			$this->load->view('kepegawaian/page/add/add_data_pasangan');
+		} else 
 		if ($page == 'Input Data Ortu')
 		{
 			$this->load->view('kepegawaian/page/submit/submit_data_ortu');

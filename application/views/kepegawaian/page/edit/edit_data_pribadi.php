@@ -23,8 +23,15 @@
 			{
 				$row_stk['p_stk_status_keluarga'] = '';
 			}else{
-			foreach ($status_keluarga as $row_stk) : 
-			{} endforeach;
+				foreach ($status_keluarga as $row_stk) : 
+				{} endforeach;
+			}
+			if ($alamat == NULL)
+			{
+				$row_alamat['p_al_no_telp']='';
+			}else{
+				foreach ($alamat as $row_alamat) : 
+				{} endforeach;
 			}
 			$attributes = array('class'=>'form','id'=>'wizard3');
 			echo form_open('pekerja/edit_data_diri/'.$this->uri->segment(3), $attributes) ?>
@@ -146,11 +153,12 @@
 					<div class="formRow">
                         <label>Nomor Telp:</label>
                         <div class="formRight"><?php 
-						$berat = array(
+						$telepon = array(
 							'name' => 'no_telp',
 							'id'   => 'no_telp',
+							'value'=> $row_alamat['p_al_no_telp'],
 						);
-						echo form_input($berat) ?> </div>
+						echo form_input($telepon) ?> </div>
                         <div class="clear"></div>
                     </div>
 					<div class="formRow">

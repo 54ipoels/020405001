@@ -309,8 +309,12 @@
                     <table cellpadding="0" cellspacing="0" width="100%" class="sTable">
                         <tfoot>
 							<tr><td colspan=8><p align="right"><?php if ($status !== 'Outsource')
-							{echo anchor('pekerja/edit_pasangan_pegawai/'.$row_pegawai['peg_nipp'],'[edit]');
-							echo anchor('pekerja/delete_pasangan_pegawai/'.$row_pegawai['peg_nipp'],'[delete]');
+							{
+								if($data_pasangan == NULL){ echo anchor('pekerja/add_pegawai_pasangan_baru/'.$row_pegawai['peg_nipp'],'[add]');}
+								else{
+									echo anchor('pekerja/edit_pasangan_pegawai/'.$row_pegawai['peg_nipp'],'[edit]');
+									echo anchor('pekerja/delete_pasangan_pegawai/'.$row_pegawai['peg_nipp'],'[delete]');
+								}
 							}?></p></td></tr>
 						</tfoot>
                         <tbody>
@@ -356,6 +360,7 @@
 					$row_ibu['p_ibu_alamat'] = '-';
 					$row_ibu['p_ibu_pekerjaan'] = '-';
 					$ibu_tgl_lahir = '-';
+					$ibu_tgl_meninggal = '-';
 				} else {
 					foreach($data_ibu as $row_ibu) :
 					{
@@ -371,8 +376,7 @@
                     <table cellpadding="0" cellspacing="0" width="100%" class="sTable">
                         <tfoot>
 							<tr><td colspan=8><p align="right"><?php if ($status !== 'Outsource')
-							{echo anchor('pekerja/edit_ortu_pegawai/'.$row_pegawai['peg_nipp'],'[edit]');
-							}?></p></td></tr>
+							{ echo anchor('pekerja/edit_ortu_pegawai/'.$row_pegawai['peg_nipp'],'[edit]'); }?></p></td></tr>
 						</tfoot>
                         <tbody>
                             <tr><td width="30%">Nama Ayah</td><td><?php echo $row_ayah['p_ay_nama']; ?></td></tr>
@@ -431,7 +435,9 @@
                     <table cellpadding="0" cellspacing="0" width="100%" class="sTable">
                         <tfoot>
 							<tr><td colspan=8><p align="right"><?php if ($status !== 'Outsource')
-							{ echo anchor('pekerja/edit_mertua_pegawai/'.$row_pegawai['peg_nipp'],'[edit]');
+							{
+								if($data_mert_ayah == NULL){ echo anchor('pekerja/add_pegawai_mertua/'.$row_pegawai['peg_nipp'],'[add]');}
+								else{ echo anchor('pekerja/edit_mertua_pegawai/'.$row_pegawai['peg_nipp'],'[edit]');}
 							}?></p></td></tr>
 						</tfoot>
                         <tbody>
