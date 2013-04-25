@@ -71,6 +71,10 @@
 		if ($page == 'Input Data Mertua')
 		{
 			$this->load->view('kepegawaian/page/submit/submit_data_mertua');
+		} else 
+		if ($page == 'Add data jabatan')
+		{
+			$this->load->view('kepegawaian/page/add/add_data_jabatan');
 		}
 		//--------- edit data karyawan ---------------//
 		else

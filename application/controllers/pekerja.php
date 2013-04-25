@@ -663,6 +663,23 @@ class pekerja extends Application {
 		}
 	}
 	
+	function add_data_jabatan()
+	{
+		$data['page'] = 'Add data jabatan';
+		$data['page_karyawan'] = 'yes';
+		
+		if (($this->uri->segment(3) == 'part_one') || ($this->uri->segment(3) == NULL)) 
+			{
+				$data['list_jabatan'] = $this->kepegawaian->get_list_jabatan();
+				$this->load->view('kepegawaian/index', $data);
+			}
+		else if ($this->uri->segment(3)== 'part_two')
+			{
+				$this->kepegawaian->add_list_jabatan();
+				redirect ('pekerja/add_data_jabatan/part_one');
+			}
+	}
+	
 	// FUNGSI PEMANGGILAN VIEW EDIT DATA //
 	public function edit_data($nipp)
 	{
