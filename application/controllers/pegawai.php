@@ -24,14 +24,14 @@ class pegawai extends CI_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see http://codeigniter.com/user_guide/general/urls.html
 	 */
-	public function index()
+	public function index($nipp)
 	{
-		$data_lama = $this->kepegawaian->get_data_lama();
+		//$data_lama = $this->kepegawaian->get_data_lama();
 		$datestring = "%Y-%m-%d" ;
 		$time = time();
 		$tanggal = mdate($datestring, $time);
-		foreach ($data_lama as $row_data_lama ) :
-		{
+		//foreach ($data_lama as $row_data_lama ) :
+		//{
 			/*$data_pegawai = array(
 				'nipp' 			=> $row_data_lama['nip'],
 				'nama' 			=> $row_data_lama['nama'],
@@ -180,7 +180,7 @@ class pegawai extends CI_Controller {
 				'update_by'		  => 'admin'
 			);
 			
-			$this->kepegawaian->insert_data_pegawai_status_keluarga($data_status_keluarga); */
+			$this->kepegawaian->insert_data_pegawai_status_keluarga($data_status_keluarga); 
 			
 			$data_tmt = array(
 				'p_tmt_nipp' 			=> $row_data_lama['nip'],
@@ -191,7 +191,7 @@ class pegawai extends CI_Controller {
 			); 
 			
 			$this->kepegawaian->insert_data_pegawai_tmt($data_tmt);
-			/*
+			
 			$data_unit = array(
 				'nipp' 			=> $row_data_lama['nip'],
 				'kode_unit'		=> $row_data_lama['kode_unit'],
@@ -201,8 +201,7 @@ class pegawai extends CI_Controller {
 			
 			$this->kepegawaian->insert_data_pegawai_unit($data_unit); */
 			
-		} endforeach;
-		$nipp = '1';
+		//} endforeach;
 		$this->kepegawaian->delete_pegawai($nipp);
 		echo 'sukses';
 	}

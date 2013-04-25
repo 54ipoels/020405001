@@ -741,7 +741,7 @@ class pekerja extends Application {
 	
 	public function edit_jabatan_pegawai($nipp)
 	{		
-		$data['jabatan_tmt'] = $this->kepegawaian->get_detail_pegawai_jabatan_tmt($nipp);
+		$data['jabatan'] = $this->kepegawaian->get_detail_pegawai_jabatan($nipp);
 		$data['list_jabatan'] = $this->kepegawaian->get_list_jabatan();
 		$data['list_unit'] = $this->kepegawaian->get_list_unit();
 		$data['unit'] = $this->kepegawaian->get_detail_pegawai_unit($nipp);
@@ -1015,14 +1015,11 @@ class pekerja extends Application {
 		$datestring = "%Y-%m-%d" ;
 		$time = time();
 		$tanggal = mdate($datestring, $time);
-		if ($this->input->post('status') == 'PKWT')	
-		{
-			$provider = 'PT Gapura Angkasa';
-		}else{
-			$provider = $this->input->post('provider');
-		}	
-		if($this->input->post('tmt')=='00/00/0000'){$tanggal_tmt='0000-00-00';}
-		else{ $tanggal_tmt = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tmt'))));}
+		
+		if($this->input->post('tmt_jbt')=='00/00/0000'){$tanggal_tmt='0000-00-00';}
+		else{ $tanggal_tmt = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tmt_jbt'))));}
+		if($this->input->post('tmt_unt')=='00/00/0000'){$tanggal_tmt='0000-00-00';}
+		else{ $tanggal_tmt = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tmt_unt'))));}
 		
 		$nipp = $this->uri->segment(3);
 		$data_jabatan = array(
@@ -1030,14 +1027,6 @@ class pekerja extends Application {
 				'p_jbt_jabatan'		=> $this->input->post('jabatan'),
 				'p_jbt_update_on'	=> $tanggal,
 				'p_jbt_update_by'	=> 'admin'
-			);
-		$data_tmt = array(
-				'p_tmt_nipp'		=> $nipp,
-				'p_tmt_status'		=> $this->input->post('status'),
-				'p_tmt_provider'	=> $provider,
-				'p_tmt_tmt'			=> $tanggal_tmt,
-				'p_tmt_update_on'	=> $tanggal,
-				'p_tmt_update_by'	=> 'admin'
 			);
 		$data_update_tmt_tanggal = array ('p_tmt_end' => $tanggal);
 		$data_grade = array(
@@ -1049,8 +1038,6 @@ class pekerja extends Application {
 		
 		#input data to table pegawai
 		$this->kepegawaian->insert_data_pegawai_jabatan($data_jabatan);
-		$this->kepegawaian->update_data_tmt($data_update_tmt_tanggal);
-		$this->kepegawaian->insert_data_pegawai_tmt($data_tmt);
 		$this->kepegawaian->insert_data_pegawai_grade($data_grade);
 		redirect('pekerja/get_pegawai/'.$nipp);
 	}

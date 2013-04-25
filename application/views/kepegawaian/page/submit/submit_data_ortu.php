@@ -6,14 +6,16 @@
 			{
 				$step1 = 'Step 2 Part 1 - Data Orang Tua';
 				$step2 = 'Step 2 Part 2 - Data Orang Tua';
+				echo form_hidden('nipp',$this->uri->segment(4));
 			} else {
 				$step1 = 'Step 3 Part 1 - Data Orang Tua';
 				$step2 = 'Step 3 Part 2 - Data Orang Tua';
+				echo form_hidden('nipp',$this->uri->segment(3));
 			}
 			$attributes = array('class'=>'form','id'=>'wizard3');
 			echo form_open('pekerja/submit_data_ortu', $attributes) ?>
                 <fieldset class="step" id="w2first">
-					<?php echo form_hidden('nipp',$this->uri->segment(3))?>
+					<?php echo form_hidden('nipp',$this->uri->segment(4))?>
                     <h1><?php echo $step1; ?></h1>
 					<div class="formRow">
                         <label>Nama Ayah:</label>

@@ -143,6 +143,7 @@ class kepegawaian extends CI_Model
 	{
 		$this->db->select('*');
 		$this->db->where('p_jbt_nipp',$nipp);
+		$this->db->order_by('id_peg_jabatan', 'DESC');
 		$query = $this->db->get('v3_peg_jabatan');
 		return $query->result_array();
 	}

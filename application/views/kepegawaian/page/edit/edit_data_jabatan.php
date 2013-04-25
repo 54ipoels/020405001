@@ -2,10 +2,10 @@
 	<div class="widget">
             <div class="title"><img src="<?php echo base_url()?>images/icons/dark/pencil.png" alt="" class="titleIcon" /><h6>Data Jabatan Pegawai</h6></div>
 			<?php 
-			foreach ($jabatan_tmt as $row_jbt_tmt) : 
+			foreach ($jabatan as $row_jbt_tmt) : 
 			{
 				$datestring = "%d-%m-%Y" ;
-				$tmt = mdate($datestring,strtotime($row_jbt_tmt['p_tmt_tmt']));
+				$tmt = mdate($datestring,strtotime($row_jbt_tmt['p_jbt_tmt_start']));
 			} endforeach;
 			foreach ($unit as $row_unit) : 
 			{} endforeach;
@@ -41,9 +41,10 @@
                         <label>Terhitung Mulai Tanggal:</label>
                         <div class="formRight"><?php 
 						$tmt = array(
-							'name' => 'tmt',
-							'id'   => 'tmt',
+							'name' => 'tmt_jbt',
+							'id'   => 'tmt_jbt',
 							'class'=> 'maskDate',
+							'style'=> 'width:30%',
 							'value'=> $tmt
 						);
 						echo form_input($tmt) ?><br/>
@@ -62,41 +63,31 @@
 						<?php echo form_error('unit')?></div>
                         <div class="clear"></div>
                     </div>
+					 <div class="formRow">
+                        <label>Terhitung Mulai Tanggal:</label>
+                        <div class="formRight"><?php 
+						$tmt = array(
+							'name' => 'tmt_unt',
+							'id'   => 'tmt_unt',
+							'class'=> 'maskDate',
+							'style'=> 'width:30%',
+							'value'=> mdate($datestring, strtotime($row_unit['p_unt_tmt_start']))
+						);
+						echo form_input($tmt) ?><br/>
+						<?php echo form_error('tmt')?></div>
+                        <div class="clear"></div>
+                    </div>
 					<div class="formRow">
                         <label>Grade:</label>
                         <div class="formRight"><?php 
 						$grade = array(
 							'name' => 'grade',
 							'id'   => 'grade',
+							'style'=> 'width:30%',
 							'value'=> $grade
 						);
 						echo form_input($grade) ?><br/>
 						<?php echo form_error('grade')?></div>
-                        <div class="clear"></div>
-                    </div>
-					<div class="formRow">
-                        <label>Status Pegawai:</label>
-                        <div class="formRight"><?php 
-						$status = array(
-							'Tetap'	=> 'Tetap',
-							'PKWT' => 'PKWT',
-							'Outsource' => 'Outsource',
-						);
-						$value = $row_jbt_tmt['p_tmt_status'];
-						echo form_dropdown('status',$status, $value) ?><br/>
-						<?php echo form_error('status')?></div>
-                        <div class="clear"></div>
-                    </div>
-					<div class="formRow">
-                        <label>Provider:</label>
-                        <div class="formRight"><?php 
-						$provider = array(
-							'name' => 'provider',
-							'id'   => 'provider',
-							'value'=> $row_jbt_tmt['p_tmt_provider']
-						);
-						echo form_input($provider) ?><br/>
-						<?php echo form_error('provider')?></div>
                         <div class="clear"></div>
                     </div>
                 </fieldset>
