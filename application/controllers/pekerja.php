@@ -1121,9 +1121,17 @@ class pekerja extends Application {
 	
 	function view_data_sdm()
 	{
+		#pagination config
+		$config['base_url'] = base_url().'index.php/pekerja/view_data_sdm/'; //set the base url for pagination
+		$config['total_rows'] = $this->kepegawaian->countPegawai(); //total rows
+		$config['per_page'] = 10; //the number of per page for pagination
+		$config['uri_segment'] = 3; //see from base_url. 3 for this case
+		$this->pagination->initialize($config);
+		$page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+		
 		$data['page'] = 'Data SDM';
 		$data['page_karyawan'] = 'yes';
-		$data['pegawai'] = $this->kepegawaian->get_data_pegawai_full();
+		$data['pegawai'] = $this->kepegawaian->get_data_pegawai_full($config['per_page'],$page);
 		//print_r($data['pegawai']);
 		$this->load->view('kepegawaian/index', $data);
 	}

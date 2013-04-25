@@ -1,4 +1,4 @@
-
+<?php $this->load->helper('asset');?>
 <div class="widget">  
 		  <div class="title"><img src="<?php echo base_url()?>images/icons/dark/frames.png" alt="" class="titleIcon" /><h6>Data Pegawai</h6></div>
             <table cellpadding="0" cellspacing="0" width="100%" class="sTable">
@@ -19,7 +19,7 @@
                     </tr>
                 </thead>
 				<tfoot>
-					<tr><td colspan=8><center><div class="pagination"><?php echo $this->pagination->create_links();?></div></center></td></td></tr>
+					<tr><td colspan=12><center><div class="pagination"><?php echo $this->pagination->create_links();?></div></center></td></td></tr>
 				</tfoot>
 				<tbody>
 				<?php 
@@ -32,10 +32,14 @@
 				}
 				foreach ($pegawai as $row_pegawai) :
 				{ 
+					// pengambilan data anak pegawai //
+					$anak = get_data_anak($row_pegawai['peg_nipp']);
+					$jumlah_anak = count_jumlah_anak($row_pegawai['peg_nipp']);
+					//
 					$yearstring = '%Y';
 					$umur = mdate($yearstring,now()) - mdate($yearstring, strtotime($row_pegawai['peg_tgl_lahir']));
 					$umur_ps = mdate($yearstring,now()) - mdate($yearstring, strtotime($row_pegawai['p_ps_tgl_lahir']));
-					$datestring = "%d-%m-%Y" ;
+					$datestring = "%d-%M-%Y" ;
 					$tgl_lahir = mdate($datestring,strtotime($row_pegawai['peg_tgl_lahir']));
 					$tgl_lahir_ps = mdate($datestring,strtotime($row_pegawai['p_ps_tgl_lahir']));
 					if ($row_pegawai['peg_jns_kelamin'] == 'L')
@@ -47,7 +51,15 @@
 					}
 					if ($row_pegawai['p_stk_status_keluarga'] != 'TK')
 					{
-						$rowspan = (int)substr($row_pegawai['p_stk_status_keluarga'],-1)+2;
+						$rowspan = $jumlah_anak+2;
+					} else
+					if ($row_pegawai['p_stk_status_keluarga'] == 'K')
+					{
+						$rowspan = 2;
+					} else
+					if ($row_pegawai['p_stk_status_keluarga'] == 'TK')
+					{
+						$rowspan = 1;
 					}
 					$detail = anchor('pekerja/get_pegawai/'.$row_pegawai['peg_nipp'],'Detail');  ?>
 					<tr>
@@ -60,8 +72,9 @@
 						<td><center><?php echo strtoupper($row_pegawai['peg_jns_kelamin']); ?></td>
 						<td><center><?php echo 'PEGAWAI'; ?></td>
 						<td><center><?php echo strtoupper($row_pegawai['p_stk_status_keluarga']); ?></center></td>
-						<td><center></center></td>
-						<td><center><?php echo $detail ?></center></td>
+						<td rowspan="<?php echo $rowspan;?>"><center><?php echo strtoupper($row_pegawai['p_al_jalan'].' '.$row_pegawai['p_al_kelurahan'].' '.$row_pegawai['p_al_kecamatan'].' '.$row_pegawai['p_al_kabupaten'].' '.$row_pegawai['p_al_provinsi']); ?></center></td>
+						<td rowspan="<?php echo $rowspan;?>"><center><?php echo strtoupper($row_pegawai['p_al_no_telp']); ?></center></td>
+						<td><center><?php echo strtoupper($row_pegawai['p_ag_agama']); ?></center></td>
                     </tr>
 					<?php if ($row_pegawai['p_stk_status_keluarga'] != 'TK')
 					{?>
@@ -73,25 +86,24 @@
 						<td><center><?php echo strtoupper($row_pegawai['peg_jns_kelamin']); ?></td>
 						<td><center><?php echo $status_ps; ?></td>
 						<td><center><?php echo strtoupper($row_pegawai['p_stk_status_keluarga']); ?></center></td>
-						<td><center></center></td>
-						<td><center><?php echo $detail ?></center></td>
+						<td><center>agama</center></td>
                     </tr> <?php
-					for ($anak = 1; $anak <= $rowspan-2; $anak++)
-					{ ?>
+					foreach ($anak as $row_anak)
+					{ 
+						$umur_ank = mdate($yearstring,now()) - mdate($yearstring, strtotime($row_anak['peg_ank_tgl_lahir']));?>
 						<tr>
-						<td><?php echo strtoupper($row_pegawai['p_ps_nama']); ?></td>
-						<td><?php echo strtoupper($row_pegawai['p_ps_tmpt_lahir']); ?></td>
-						<td><center><?php echo $tgl_lahir_ps; ?></center></td>
-						<td><center><?php echo $umur_ps; ?></td>
+						<td><?php echo strtoupper($row_anak['peg_ank_nama']); ?></td>
+						<td><?php echo strtoupper($row_anak['peg_ank_tempat_lahir']); ?></td>
+						<td><center><?php echo mdate($datestring,strtotime($row_anak['peg_ank_tgl_lahir'])); ?></center></td>
+						<td><center><?php echo $umur_ank; ?></td>
 						<td><center><?php echo strtoupper($row_pegawai['peg_jns_kelamin']); ?></td>
-						<td><center><?php echo $status_ps; ?></td>
+						<td><center><?php echo 'ANAK'; ?></td>
 						<td><center><?php echo strtoupper($row_pegawai['p_stk_status_keluarga']); ?></center></td>
-						<td><center></center></td>
-						<td><center><?php echo $detail ?></center></td>
+						<td><center>agama</center></td>
                     </tr>
 					<?php }
 					}
-					$number++;
+					$number++; ?> <tr><td colspan="12" style="background-color:#ffdfdf"></td></tr><?php
 				}endforeach; 
 				?>
                 </tbody>
