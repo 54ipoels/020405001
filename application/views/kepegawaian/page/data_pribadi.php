@@ -289,8 +289,9 @@
 					$ps_tgl_meninggal = '-';
 					$row_pasangan['p_ps_alamat'] = '-';
 					$row_pasangan['p_ps_pekerjaan'] = '-';
-					$ps_tgl_lahir = '-';
-					$ps_tgl_meninggal = '-';
+					$row_pasangan['p_ps_agama'] = '-';
+					$row_pasangan['p_ps_jns_kelamin'] = '-';
+					
 				}else{
 					foreach ($data_pasangan as $row_pasangan) :
 					{
@@ -318,6 +319,14 @@
 							<tr><td>Tanggal Meninggal</td><td><?php echo $ps_tgl_meninggal;?></td></tr>
 							<tr><td>Alamat</td><td><?php echo $row_pasangan['p_ps_alamat'];?></td></tr>
 							<tr><td>Pekerjaan</td><td><?php echo $row_pasangan['p_ps_pekerjaan'];?></td></tr>
+                        	<tr><td>Agama</td><td><?php echo $row_pasangan['p_ps_agama'];?></td></tr>
+							<tr><td>Jenis Kelamin</td><td>
+								<?php 	if($row_pasangan['p_ps_jns_kelamin']=='L'){$jk='Laki-Laki';}
+										else if($row_pasangan['p_ps_jns_kelamin']=='P'){$jk='Perempuan';}
+										else {$jk='-';}
+										echo $jk;
+								?>
+							</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -456,10 +465,19 @@
 							$datestring = "%d-%m-%Y" ;
 							foreach ($data_anak as $row_anak) :
 							{ ?>
-                            <tr><td width="5%" rowspan=4><?php echo $number ?></td><td width="25%">Nama</td><td><?php echo $row_anak['peg_ank_nama']; ?></td></tr>
+                            <tr><td width="5%" rowspan=7><?php echo $number ?></td><td width="25%">Nama</td><td><?php echo $row_anak['peg_ank_nama']; ?></td></tr>
                             <tr><td>Tempat / Tanggal Lahir</td><td><?php echo $row_anak['peg_ank_tempat_lahir'].' / '.mdate($datestring,strtotime($row_anak['peg_ank_tgl_lahir'])); ?></td></tr>
 							<tr><td>Pendidikan</td><td><?php echo $row_anak['peg_ank_pendidikan']; ?></td></tr>
+							<tr><td>Jenis Kelamin</td><td><?php 
+										if($row_anak['peg_ank_jns_kelamin']=='L'){$jk='Laki-Laki';}
+										else if($row_anak['peg_ank_jns_kelamin']=='P'){$jk='Perempuan';}
+										else {$jk='-';}
+										echo $jk;
+									?></td></tr>
+							<tr><td>Agama</td><td><?php echo $row_anak['peg_ank_agama']; ?></td></tr>
+							<tr><td>Status</td><td><?php echo $row_anak['peg_ank_status']; ?></td></tr>
 							<tr><td colspan="2"><?php echo anchor('pekerja/delete_data_anak/'.$row_anak['id_peg_anak'],'[delete]'); ?></td></tr>
+							<tr><td colspan="3"></td></tr>
 							<?php 
 							$number++;
 							} endforeach;

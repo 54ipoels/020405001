@@ -87,6 +87,31 @@
 						<?php echo form_error('pekerjaan')?></div>
                         <div class="clear"></div>
                     </div>
+					<div class="formRow">
+                        <label>Agama:</label>
+                        <div class="formRight"><?php 
+						$agama = array(
+							'hindu' => 'Hindu',
+							'islam' => 'Islam',
+							'protestan' => 'Kristen Protestan',
+							'katolik' => 'Kristen Katolik',
+							'budha' => 'Budha',
+							'kongfucu' => 'Kong Fu Cu'
+						);
+						echo form_dropdown('agama',$agama,$row_pasangan['p_ps_agama']) ?></div>
+                        <div class="clear"></div>
+                    </div>
+					<div class="formRow">
+                        <label>Jenis Kelamin:<span class="req">*</span></label>
+                        <div class="formRight"><?php 
+						$jns_klm = array(
+							'L' => 'Laki-Laki',
+							'P' => 'Perempuan',
+						);
+						echo form_dropdown('jns_klm',$jns_klm,$row_pasangan['p_ps_jns_kelamin']) ?><br/>
+						<?php echo form_error('jns_klm')?></div>
+                        <div class="clear"></div>
+                    </div>
                 </fieldset>
 				<div class="wizButtons"> 
                     <div class="status" id="status2"></div>

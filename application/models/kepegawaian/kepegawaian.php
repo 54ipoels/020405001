@@ -528,6 +528,9 @@ class kepegawaian extends CI_Model
 				'peg_ank_tempat_lahir'	=> $this->input->post('tempat_'.$i),
 				'peg_ank_tgl_lahir'		=> mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tanggal_'.$i)))),
 				'peg_ank_pendidikan'	=> $this->input->post('pendidikan_'.$i),
+				'peg_ank_jns_kelamin'	=> $this->input->post('jns_klm_'.$i),
+				'peg_ank_agama'			=> $this->input->post('agama_'.$i),
+				'peg_ank_status'		=> $this->input->post('status_'.$i),
 			);
 		$this->db->where('id_peg_anak', $this->input->post('id_anak_'.$i));
 		$this->db->update('v3_peg_anak',$data_anak);

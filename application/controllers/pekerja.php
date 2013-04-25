@@ -887,6 +887,8 @@ class pekerja extends Application {
 				'p_ps_tgl_meninggal'=> $tgl_meninggal,
 				'p_ps_alamat'		=> $this->input->post('alamat'),
 				'p_ps_pekerjaan'	=> $this->input->post('pekerjaan'),
+				'p_ps_agama'		=> $this->input->post('agama'),
+				'p_ps_jns_kelamin'	=> $this->input->post('jns_klm'),
 				'p_ps_update_on'	=> $tanggal,
 				'p_ps_update_by'	=> 'admin'
 			);
@@ -1015,6 +1017,7 @@ class pekerja extends Application {
 		#input data to table pegawai
 		$this->kepegawaian->update_data_anak($data_anak);
 		redirect('pekerja/get_pegawai/'.$nipp);
+		
 	}
 	
 	public function edit_data_jabatan()
@@ -1024,18 +1027,27 @@ class pekerja extends Application {
 		$time = time();
 		$tanggal = mdate($datestring, $time);
 		
-		if($this->input->post('tmt_jbt')=='00/00/0000'){$tanggal_tmt='0000-00-00';}
-		else{ $tanggal_tmt = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tmt_jbt'))));}
-		if($this->input->post('tmt_unt')=='00/00/0000'){$tanggal_tmt='0000-00-00';}
-		else{ $tanggal_tmt = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tmt_unt'))));}
+		if($this->input->post('tmt_jbt')=='00/00/0000'){$tanggal_tmt_jbt='0000-00-00';}
+		else{ $tanggal_tmt_jbt = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tmt_jbt'))));}
+		if($this->input->post('tmt_unt')=='00/00/0000'){$tanggal_tmt_unit='0000-00-00';}
+		else{ $tanggal_tmt_unit = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tmt_unt'))));}
 		
 		$nipp = $this->uri->segment(3);
 		$data_jabatan = array(
 				'p_jbt_nipp'		=> $nipp,
 				'p_jbt_jabatan'		=> $this->input->post('jabatan'),
+				'p_jbt_tmt_start'	=> $tanggal_tmt_jbt,
 				'p_jbt_update_on'	=> $tanggal,
 				'p_jbt_update_by'	=> 'admin'
 			);
+		$data_unit = array(
+				'p_unt_nipp'		=> $nipp,
+				'p_unt_kode_unit'	=> $this->input->post('unit'),
+				'p_unt_tmt_start'	=> $tanggal_tmt_unit,
+				'p_jbt_update_on'	=> $tanggal,
+				'p_jbt_update_by'	=> 'admin'
+			);
+			
 		$data_update_tmt_tanggal = array ('p_tmt_end' => $tanggal);
 		$data_grade = array(
 				'p_grd_nipp'		=> $nipp,
@@ -1044,8 +1056,10 @@ class pekerja extends Application {
 				'p_grd_update_by'	=> 'admin'
 			);
 		
+		
 		#input data to table pegawai
 		$this->kepegawaian->insert_data_pegawai_jabatan($data_jabatan);
+		$this->kepegawaian->insert_data_pegawai_unit($data_unit);
 		$this->kepegawaian->insert_data_pegawai_grade($data_grade);
 		redirect('pekerja/get_pegawai/'.$nipp);
 	}
@@ -1235,6 +1249,18 @@ class pekerja extends Application {
 	function delete_data_anak($id)
 	{
 		$this->kepegawaian->delete_data_anak($id);
+		
+		$data['status_keluarga'] = $this->kepegawaian->get_last_pegawai_status_keluarga($nipp);
+				
+		$data_stk = array(
+					'p_stk_nipp' 			  => $nipp,
+					'p_stk_status_keluarga'   => $this->input->post('stk'),
+					'p_stk_update_on'		  => $tanggal,
+					'p_stk_update_by'		  => 'admin'
+				);
+			
+		$this->kepegawaian->insert_data_pegawai_status_keluarga($data_stk);	
+		
 		redirect("pekerja");
 	}
 	
