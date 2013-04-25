@@ -518,12 +518,17 @@ class pekerja extends Application {
 			$stk = $this->uri->segment(3);
 		}
 		
+		if($this->input->post('tanggal_ayah')=='00/00/0000' ){$tgl_ayah='0000-00-00';}
+		else{$tgl_ayah = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tanggal_ayah'))));}
+		if($this->input->post('meninggal_ayah')=='00/00/0000' ){$meninggal_ayah='0000-00-00';}
+		else{$meninggal_ayah = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('meninggal_ayah'))));}
+		
 		$data_ayah = array(
 				'p_ay_nipp' 			=> $nipp,
 				'p_ay_nama' 			=> $this->input->post('nama_ayah'),
 				'p_ay_tmpt_lahir'		=> $this->input->post('tempat_ayah'),
-				'p_ay_tgl_lahir'		=> mdate($datestring, strtotime($this->input->post('tanggal_ayah'))),
-				'p_ay_tgl_meninggal'	=> mdate($datestring, strtotime($this->input->post('meninggal_ayah'))),
+				'p_ay_tgl_lahir'		=> $tgl_ayah,
+				'p_ay_tgl_meninggal'	=> $meninggal_ayah,
 				'p_ay_alamat'			=> $this->input->post('almt_ayah'),
 				'p_ay_pekerjaan'		=> $this->input->post('kerja_ayah'),
 				'p_ay_update_on'		=> $tanggal,
@@ -532,12 +537,18 @@ class pekerja extends Application {
 			
 		$this->kepegawaian->insert_data_pegawai_ayah($data_ayah);
 			
+		
+		if($this->input->post('tanggal_ibu')=='00/00/0000' ){$tgl_ibu='0000-00-00';}
+		else{$tgl_ibu = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tanggal_ibu'))));}
+		if($this->input->post('meninggal_ibu')=='00/00/0000' ){$meninggal_ibu='0000-00-00';}
+		else{$meninggal_ibu = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('meninggal_ibu'))));}
+		
 		$data_ibu = array(
 				'p_ibu_nipp' 			=> $nipp,
 				'p_ibu_nama' 			=> $this->input->post('nama_ibu'),
 				'p_ibu_tmpt_lahir'		=> $this->input->post('tempat_ibu'),
-				'p_ibu_tgl_lahir'		=> mdate($datestring, strtotime($this->input->post('tanggal_ibu'))),
-				'p_ibu_tgl_meninggal'	=> mdate($datestring, strtotime($this->input->post('meninggal_ibu'))),
+				'p_ibu_tgl_lahir'		=> $tgl_ibu,
+				'p_ibu_tgl_meninggal'	=> $meninggal_ibu,
 				'p_ibu_alamat'			=> $this->input->post('almt_ibu'),
 				'p_ibu_pekerjaan'		=> $this->input->post('kerja_ibu'),
 				'p_ibu_update_on'		=> $tanggal,
@@ -562,12 +573,17 @@ class pekerja extends Application {
 		$tanggal = mdate($datestring, $time);
 		$nipp = $this->input->post('nipp');
 		
+		if($this->input->post('tanggal_mert_ayah')=='00/00/0000' ){$tgl_ayah='0000-00-00';}
+		else{$tgl_mert_ayah = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tanggal_mert_ayah'))));}
+		if($this->input->post('meninggal_mert_ayah')=='00/00/0000' ){$meninggal_ayah='0000-00-00';}
+		else{$meninggal_mert_ayah = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('meninggal_mert_ayah'))));}
+		
 		$data_mert_ayah = array(
 				'p_may_nipp' 			=> $nipp,
 				'p_may_nama' 			=> $this->input->post('nama_mert_ayah'),
 				'p_may_tmpt_lahir'		=> $this->input->post('tempat_mert_ayah'),
-				'p_may_tgl_lahir'		=> mdate($datestring, strtotime($this->input->post('tanggal_mert_ayah'))),
-				'p_may_tgl_meninggal'	=> mdate($datestring, strtotime($this->input->post('meninggal_mert_ayah'))),
+				'p_may_tgl_lahir'		=> $tgl_mert_ayah,
+				'p_may_tgl_meninggal'	=> $meninggal_mert_ayah,
 				'p_may_alamat'			=> $this->input->post('almt_mert_ayah'),
 				'p_may_pekerjaan'		=> $this->input->post('kerja_mert_ayah'),
 				'p_may_update_on'		=> $tanggal,
@@ -576,12 +592,18 @@ class pekerja extends Application {
 			
 		$this->kepegawaian->insert_data_pegawai_mert_ayah($data_mert_ayah);
 			
+		
+		if($this->input->post('tanggal_mert_ibu')=='00/00/0000' ){$tgl_ayah='0000-00-00';}
+		else{$tgl_mert_ibu = mdate($datestring, strtotime(str_replace($this->input->post('tanggal_mert_ayah'))));}
+		if($this->input->post('meninggal_mert_ibu')=='00/00/0000' ){$meninggal_ayah='0000-00-00';}
+		else{$meninggal_mert_ibu = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('meninggal_mert_ayah'))));}
+		
 		$data_mert_ibu = array(
 				'p_mib_nipp' 			=> $nipp,
 				'p_mib_nama' 			=> $this->input->post('nama_mert_ibu'),
 				'p_mib_tmpt_lahir'		=> $this->input->post('tempat_mert_ibu'),
-				'p_mib_tgl_lahir'		=> mdate($datestring, strtotime($this->input->post('tanggal_mert_ibu'))),
-				'p_mib_tgl_meninggal'	=> mdate($datestring, strtotime($this->input->post('meninggal_mert_ibu'))),
+				'p_mib_tgl_lahir'		=> $tgl_mert_ibu,
+				'p_mib_tgl_meninggal'	=> $meninggal_mert_ibu,
 				'p_mib_alamat'			=> $this->input->post('almt_mert_ibu'),
 				'p_mib_pekerjaan'		=> $this->input->post('kerja_mert_ibu'),
 				'p_mib_update_on'		=> $tanggal,
@@ -606,7 +628,7 @@ class pekerja extends Application {
 		$this->form_validation->set_rules('nama', 'nama', 'required');
 		$this->form_validation->set_rules('tempat', 'tempat', 'required');		
 		$this->form_validation->set_rules('tanggal', 'tanggal', 'required');
-		$this->form_validation->set_rules('pendidikan', 'pendidikan', 'required');
+		#$this->form_validation->set_rules('pendidikan', 'pendidikan', 'required');
 
 		if ($this->form_validation->run() == FALSE)
 		{
@@ -615,19 +637,39 @@ class pekerja extends Application {
 		else
 		{
 			#preparing data for input
+			
+			if($this->input->post('tanggal')=='00/00/0000' ){$tgl_lahir='0000-00-00';}
+			else{ $tgl_lahir =  mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tanggal'))));}
+			
+			
 			$data_anak = array(
 					'peg_ank_nipp'			=> $nipp,
 					'peg_ank_nama'			=> $this->input->post('nama'),
 					'peg_ank_tempat_lahir'	=> $this->input->post('tempat'),
-					'peg_ank_tgl_lahir'		=> mdate($datestring, strtotime($this->input->post('tanggal'))),
+					'peg_ank_tgl_lahir'		=> $tgl_lahir,
 					'peg_ank_pendidikan'	=> $this->input->post('pendidikan'),
+					'peg_ank_jns_kelamin'	=> $this->input->post('jns_klm'),
+					'peg_ank_agama'			=> $this->input->post('agama'),
+					'peg_ank_status'		=> $this->input->post('status'),
 					'p_ank_update_on'		=> $tanggal,
 					'p_ank_update_by'		=> 'admin'
 				);
-				
+			
 			$this->kepegawaian->insert_data_pegawai_anak($data_anak);
 			
+			#stk baru 
+			$stk = $this->kepegawaian->get_new_pegawai_status_keluarga($nipp,'add');
+			$data_stk = array(
+						'p_stk_nipp' 			  => $nipp,
+						'p_stk_status_keluarga'   => $stk,
+						'p_stk_update_on'		  => $tanggal,
+						'p_stk_update_by'		  => 'admin'
+					);
+				
+			$this->kepegawaian->insert_data_pegawai_status_keluarga($data_stk);	
+			
 			redirect('pekerja/get_pegawai/'.$nipp);
+			
 		}
 	}
 	
@@ -1263,22 +1305,25 @@ class pekerja extends Application {
 	}
 	
 	
-	function delete_data_anak($id)
+	function delete_data_anak($id,$nipp)
 	{
-		$this->kepegawaian->delete_data_anak($id);
 		
-		$data['status_keluarga'] = $this->kepegawaian->get_last_pegawai_status_keluarga($nipp);
-				
+		$datestring = "%Y-%m-%d" ;
+		$time = time();
+		$tanggal = mdate($datestring, $time);
+		
+		$stk = $this->kepegawaian->get_new_pegawai_status_keluarga($nipp,'delete');
+			
 		$data_stk = array(
 					'p_stk_nipp' 			  => $nipp,
-					'p_stk_status_keluarga'   => $this->input->post('stk'),
+					'p_stk_status_keluarga'   => $stk,
 					'p_stk_update_on'		  => $tanggal,
 					'p_stk_update_by'		  => 'admin'
 				);
 			
+		$this->kepegawaian->delete_data_anak($id);
 		$this->kepegawaian->insert_data_pegawai_status_keluarga($data_stk);	
-		
-		redirect("pekerja");
+		redirect('pekerja/get_pegawai/'.$nipp);
 	}
 	
 	

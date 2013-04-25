@@ -464,9 +464,12 @@
 							$number = 1;
 							$datestring = "%d-%m-%Y" ;
 							foreach ($data_anak as $row_anak) :
-							{ ?>
+							{ 
+							if($row_anak['peg_ank_tgl_lahir']=='0000-00-00'){$tgl_lahir_anak="00-00-0000";}
+							else { $tgl_lahir_anak = mdate($datestring,strtotime($row_anak['peg_ank_tgl_lahir']));}
+							?>
                             <tr><td width="5%" rowspan=7><?php echo $number ?></td><td width="25%">Nama</td><td><?php echo $row_anak['peg_ank_nama']; ?></td></tr>
-                            <tr><td>Tempat / Tanggal Lahir</td><td><?php echo $row_anak['peg_ank_tempat_lahir'].' / '.mdate($datestring,strtotime($row_anak['peg_ank_tgl_lahir'])); ?></td></tr>
+                            <tr><td>Tempat / Tanggal Lahir</td><td><?php echo $row_anak['peg_ank_tempat_lahir'].' / '.$tgl_lahir_anak; ?></td></tr>
 							<tr><td>Pendidikan</td><td><?php echo $row_anak['peg_ank_pendidikan']; ?></td></tr>
 							<tr><td>Jenis Kelamin</td><td><?php 
 										if($row_anak['peg_ank_jns_kelamin']=='L'){$jk='Laki-Laki';}
@@ -476,7 +479,7 @@
 									?></td></tr>
 							<tr><td>Agama</td><td><?php echo $row_anak['peg_ank_agama']; ?></td></tr>
 							<tr><td>Status</td><td><?php echo $row_anak['peg_ank_status']; ?></td></tr>
-							<tr><td colspan="2"><?php echo anchor('pekerja/delete_data_anak/'.$row_anak['id_peg_anak'],'[delete]'); ?></td></tr>
+							<tr><td colspan="2"><?php echo anchor('pekerja/delete_data_anak/'.$row_anak['id_peg_anak'].'/'.$row_pegawai['peg_nipp'],'[delete]'); ?></td></tr>
 							<tr><td colspan="3"></td></tr>
 							<?php 
 							$number++;

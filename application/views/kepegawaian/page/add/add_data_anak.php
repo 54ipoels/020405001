@@ -19,13 +19,52 @@
                     </div>
 					<div class="formRow">
                         <label>Tanggal Lahir:</label>
-                        <div class="formRight"><input type="text" name="tanggal" id="tanggal" class="maskDate" /><span class="formNote">Format Date : dd/mm/yyyy</span></div>
+                        <div class="formRight"><input type="text" name="tanggal" id="tanggal" class="maskDate" value="00/00/0000"/><span class="formNote">Format Date : dd/mm/yyyy</span></div>
                         <div class="clear"></div>
                     </div>
 					<div class="formRow">
                         <label>Pendidikan:</label>
                         <div class="formRight"><input type="text" name="pendidikan" id="pendidikan" /></div>
                         <div class="clear"></div>
+                    </div>
+					<div class="formRow">
+                        <label>Agama:</label>
+                        <div class="formRight"><?php 
+						$agama = array(
+							'hindu' => 'Hindu',
+							'islam' => 'Islam',
+							'protestan' => 'Kristen Protestan',
+							'katolik' => 'Kristen Katolik',
+							'budha' => 'Budha',
+							'kongfucu' => 'Kong Fu Cu'
+						);
+						echo form_dropdown('agama',$agama) ?></div>
+                        <div class="clear"></div>
+                    </div>
+					<div class="formRow">
+                        <label>Jenis Kelamin:</label>
+                        <div class="formRight"><?php 
+						$jns_klm = array(
+							'L' => 'Laki-Laki',
+							'P' => 'Perempuan',
+						);
+						echo form_dropdown('jns_klm',$jns_klm) ?><br/></div>
+						<div class="clear"></div>
+                    </div>
+					<div class="formRow">
+                        <label>Status Anak:</label>
+                        <div class="formRight"><?php 
+						$stk = array(
+							'TK' => 'TK',
+							'K'  => 'K',
+							'K1' => 'K1',
+							'K2' => 'K2',
+							'K3' => 'K3',
+							'K4' => 'K4',
+							'K5' => 'K5'
+						);
+						echo form_dropdown('status',$stk) ?><br/></div>
+						<div class="clear"></div>
                     </div>
 				</fieldset>
 				<div class="wizButtons"> 
