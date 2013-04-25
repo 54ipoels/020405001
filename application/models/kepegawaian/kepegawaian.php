@@ -297,7 +297,7 @@ class kepegawaian extends CI_Model
 	{
 		$this->db->select('*');
 		$this->db->where('peg_ank_nipp',$nipp);
-		$this->db->order_by('peg_ank_tgl_lahir', 'DESC');
+		$this->db->order_by('peg_ank_tgl_lahir', 'ASC');
 		$query = $this->db->get('v3_peg_anak');
 		return $query->result_array();
 	}
