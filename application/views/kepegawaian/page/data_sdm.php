@@ -63,10 +63,10 @@
 					{
 						$rowspan = 1;
 					}
-					$detail = anchor('pekerja/get_pegawai/'.$row_pegawai['peg_nipp'],'Detail');  ?>
+					$detail = anchor('pekerja/get_pegawai/'.$row_pegawai['peg_nipp'],$row_pegawai['peg_nipp']);  ?>
 					<tr>
                         <td rowspan="<?php echo $rowspan;?>"><center><?php echo $number; ?></center></td>
-						<td rowspan="<?php echo $rowspan;?>"><center><?php echo $row_pegawai['peg_nipp']; ?></center></td>
+						<td rowspan="<?php echo $rowspan;?>"><center><?php echo $detail; ?></center></td>
 						<td><?php echo strtoupper($row_pegawai['peg_nama']); ?></td>
 						<td><?php echo strtoupper($row_pegawai['peg_tmpt_lahir']); ?></td>
 						<td><center><?php echo $tgl_lahir; ?></center></td>
@@ -88,7 +88,7 @@
 						<td><center><?php echo $sex_ps; ?></td>
 						<td><center><?php echo $status_ps; ?></td>
 						<td><center><?php echo strtoupper($row_pegawai['p_stk_status_keluarga']); ?></center></td>
-						<td><center>agama</center></td>
+						<td><center><?php echo strtoupper($row_pegawai['p_ps_agama']); ?></center></td>
                     </tr> <?php
 					$num_anak = 1;
 					foreach ($anak as $row_anak)
@@ -99,10 +99,10 @@
 						<td><?php echo strtoupper($row_anak['peg_ank_tempat_lahir']); ?></td>
 						<td><center><?php echo mdate($datestring,strtotime($row_anak['peg_ank_tgl_lahir'])); ?></center></td>
 						<td><center><?php echo $umur_ank; ?></td>
-						<td><center><?php echo strtoupper($row_pegawai['peg_jns_kelamin']); ?></td>
+						<td><center><?php echo strtoupper($row_anak['peg_ank_jns_kelamin']); ?></td>
 						<td><center><?php echo 'ANAK '.$num_anak; ?></td>
-						<td><center><?php echo strtoupper($row_pegawai['p_stk_status_keluarga']); ?></center></td>
-						<td><center>agama</center></td>
+						<td><center><?php echo strtoupper($row_anak['peg_ank_status']); ?></center></td>
+						<td><center><?php echo strtoupper($row_anak['peg_ank_agama']); ?></center></td>
                     </tr>
 					<?php 
 					$num_anak++;
