@@ -2,13 +2,42 @@
 	<div class="widget">
             <div class="title"><img src="<?php echo base_url()?>images/icons/dark/pencil.png" alt="" class="titleIcon" /><h6>Data Provider Pegawai</h6></div>
 			<?php 
+			/*
 			foreach ($jabatan_tmt as $row_jbt_tmt) : 
 			{
 				$datestring = "%d-%m-%Y" ;
 				$tmt = mdate($datestring,strtotime($row_jbt_tmt['p_tmt_tmt']));
 			} endforeach;
+			
 			foreach ($unit as $row_unit) : 
 			{} endforeach;
+			*/
+			$datestring = "%d-%m-%Y" ;
+			foreach ($jabatan as $row_jbt_tmt) : 
+			{} endforeach;
+			if($row_jbt_tmt['p_jbt_tmt_start']=="0000-00-00"){$jbt_tmt='00-00-0000';}
+			else{$jbt_tmt = mdate($datestring,strtotime($row_jbt_tmt['p_jbt_tmt_start']));}
+			
+			foreach ($unit as $row_unit) : 
+			{} endforeach;
+			if($row_unit['p_unt_tmt_start']=="0000-00-00"){$unit_tmt='00-00-0000';}
+			else{$unit_tmt = mdate($datestring,strtotime($row_unit['p_unt_tmt_start']));}
+		
+			if($data_tmt==NULL)
+			{
+				$status="-";
+				$tmt = "-";
+				$provider ="-";
+			} else {
+				foreach ($data_tmt as $row_tmt) :
+				{
+					$datestring = "%d-%m-%Y" ;
+					$tmt = mdate($datestring,strtotime($row_tmt['p_tmt_tmt']));
+					$status = $row_tmt['p_tmt_status'];
+					$provider = $row_tmt['p_tmt_provider'];
+				} endforeach;
+			}
+			
 			if ($grade == NULL)
 				{ $grade = '';} else {
 					foreach ($grade as $row_grade) :
@@ -34,6 +63,7 @@
 					<div class="formRow">
                         <label>Jabatan :</label>
                         <div class="formRight searchDrop">
+						<input type="text" name="id_peg_jbt" id="id_peg_jbt" value=<?php echo $row_jbt_tmt['id_peg_jabatan']; ?> /hidden>
 						<select name="jabatan" data-placeholder="Pilih Jabatan..." class="chzn-select" tabindex="1" value="<?php echo $row_jbt_tmt['p_jbt_jabatan'];?>"><?php 
 						foreach ($list_jabatan as $row_jabatan) :
 						{ 
@@ -50,7 +80,9 @@
                     </div>
 					<div class="formRow">
                         <label>Unit:</label>
-                        <div class="formRight"><?php 
+                        <div class="formRight">
+						<input type="text" name="id_peg_unit" id="id_peg_unit" value=<?php echo $row_unit['id_peg_unit']; ?> /hidden>
+						<?php 
 						$unit = array();
 						foreach ($list_unit as $row_unit_list) :
 						{
@@ -81,7 +113,7 @@
 							'PKWT' => 'PKWT',
 							'Outsource' => 'Outsource',
 						);
-						$value = $row_jbt_tmt['p_tmt_status'];
+						#$value = $row_jbt_tmt['p_tmt_status'];
 						echo form_dropdown('status',$status,'Outsource') ?><br/>
 						<?php echo form_error('status')?></div>
                         <div class="clear"></div>

@@ -193,6 +193,7 @@ class kepegawaian extends CI_Model
 	
 	function get_detail_pegawai_jabatan_tmt($nipp)
 	{
+		/*
 		$query = ('
 		SELECT * FROM v3_peg_jabatan AS peg_jbt
 		LEFT JOIN (SELECT * FROM v3_peg_tmt) AS peg_tmt
@@ -202,7 +203,9 @@ class kepegawaian extends CI_Model
 		');
 		$query = $this->db->query($query); 
 		return $query->result_array();
+		*/
 	}
+	
 	
 	function get_detail_pegawai_mert_ayah($nipp)
 	{
@@ -510,6 +513,15 @@ class kepegawaian extends CI_Model
 	{
 		$this->db->insert('v3_peg_cabang',$data_pegawai);
 	}
+	function insert_data_pegawai_stkp($data_stkp)
+	{
+		$this->db->insert('v3_peg_stkp',$data_stkp);
+	}
+	function insert_data_pegawai_nstkp($data_nstkp)
+	{
+		$this->db->insert('v3_peg_non_stkp',$data_nstkp);
+	}
+	
 //-------- update data pegawai --------------//
 	
 	function update_data_pegawai($data_pegawai)
@@ -722,6 +734,15 @@ class kepegawaian extends CI_Model
 		return $id_peg_tmt;
 	}
 	
+	function get_last_jabatan($nipp)
+	{
+		$this->db->select('*');
+		$this->db->where('p_jbt_nipp',$nipp);
+		$this->db->order_by('id_peg_jabatan', 'DESC');
+		$this->db->limit(1);
+		$query = $this->db->get('v3_peg_jabatan');
+		return $query->result_array();
+	}
 	
 	
 	
@@ -777,6 +798,54 @@ class kepegawaian extends CI_Model
 		return $newstk;
 	}
 	
+	function update_data_pegawai_jabatan($tmt,$id)
+	{
+		$this->db->where('id_peg_jabatan', $id);
+		$this->db->update('v3_peg_jabatan',$tmt);
+	}
+	
+	function update_data_pegawai_unit($tmt,$id)
+	{
+		$this->db->where('id_peg_unit', $id);
+		$this->db->update('v3_peg_unit',$tmt);
+	}
+	/*
+	function copy_data_pegawai($nipp,$nipp_baru)
+	{
+		$pegawai= get_data_pegawai_by_nipp($nipp);
+		$agama = get_detail_pegawai_agama($nipp);
+		$alamat = get_detail_pegawai_alamat($nipp);
+		$ayah = get_detail_pegawai_ayah($nipp);
+		$bahasa = get_detail_pegawai_bahasa($nipp);
+		$fisik = get_detail_pegawai_fisik($nipp);
+		$ibu = get_detail_pegawai_ibu($nipp);
+		$mert_ayah = get_detail_pegawai_mert_ayah($nipp);
+		$mert_ibu = get_detail_pegawai_mert_ibu($nipp);
+		$pasangan = get_detail_pegawai_pasangan($nipp);
+		$pendidikan = get_detail_pegawai_pendidikan($nipp);
+		$status_keluarga = get_detail_pegawai_status_keluarga($nipp);
+		$tmt = get_detail_pegawai_tmt($nipp);
+		$unit = get_detail_pegawai_unit($nipp);
+		$grade = get_detail_pegawai_grade($nipp);
+		$stkp = get_detail_pegawai_stkp($nipp);		
+		$anak = get_detail_pegawai_anak($nipp);
+		$jabatan = get_last_jabatan($nipp);
+		
+		#copy data pegawai
+		foreach($pegawai as $row_pegawai){}
+		$data_pegawai = array(
+			'peg_nipp'			=> 	$nipp_baru,
+			'peg_nama'			=>	$row_pegawai['peg_nama'],	
+			'peg_tmpt_lahir'	=>	$row_pegawai['peg_tmpt_lahir'],
+			'peg_tgl_lahir'		=>	$row_pegawai['peg_tgl_lahir'],
+			'peg_jns_kelamin'	=>	$row_pegawai['peg_jns_kelamin'],
+			'peg_gol_darah'		=>	$row_pegawai['peg_gol_darah'],
+			'peg_update_by'		=>	'admin',
+		);
+		insert_data_pegawai($data_pegawai);
+		
+	}
+	*/
 }
 /* End of file myfile.php */
 /* Location: ./system/modules/mymodule/myfile.php */

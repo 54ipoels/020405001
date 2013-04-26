@@ -264,6 +264,7 @@ class pekerja extends Application {
 		$data['data_grade'] = $this->kepegawaian->get_detail_pegawai_grade($nipp);
 		$data['data_stkp'] = $this->kepegawaian->get_detail_pegawai_stkp($nipp);		
 		$data['data_anak'] = $this->kepegawaian->get_detail_pegawai_anak($nipp);
+		$data['data_jabatan'] = $this->kepegawaian->get_last_jabatan($nipp);
 		
 		#count data
 		$data['jumlah_bahasa'] = $this->kepegawaian->count_result_bahasa($nipp);
@@ -825,7 +826,8 @@ class pekerja extends Application {
 	
 	public function edit_jabatan_pegawai($nipp)
 	{		
-		$data['jabatan'] = $this->kepegawaian->get_detail_pegawai_jabatan($nipp);
+		#$data['jabatan'] = $this->kepegawaian->get_detail_pegawai_jabatan($nipp);
+		$data['jabatan'] = $this->kepegawaian->get_last_jabatan($nipp);
 		$data['list_jabatan'] = $this->kepegawaian->get_list_jabatan();
 		$data['list_unit'] = $this->kepegawaian->get_list_unit();
 		$data['unit'] = $this->kepegawaian->get_detail_pegawai_unit($nipp);
@@ -853,11 +855,14 @@ class pekerja extends Application {
 	
 	public function edit_provider_pegawai($nipp)
 	{		
-		$data['jabatan_tmt'] = $this->kepegawaian->get_detail_pegawai_jabatan_tmt($nipp);
+		#$data['jabatan_tmt'] = $this->kepegawaian->get_detail_pegawai_jabatan_tmt($nipp);
 		$data['list_jabatan'] = $this->kepegawaian->get_list_jabatan();
 		$data['list_unit'] = $this->kepegawaian->get_list_unit();
 		$data['unit'] = $this->kepegawaian->get_detail_pegawai_unit($nipp);
 		$data['grade'] = $this->kepegawaian->get_detail_pegawai_grade($nipp);
+		$data['jabatan'] = $this->kepegawaian->get_last_jabatan($nipp);
+		$data['data_tmt'] = $this->kepegawaian->get_detail_pegawai_tmt($nipp);
+		
 		$data['page'] = 'Edit Data Provider';
 		$data['page_karyawan'] = 'yes';
 		$this->load->view('kepegawaian/index',$data);
@@ -875,11 +880,12 @@ class pekerja extends Application {
 		$this->load->library('form_validation');
 		
 		$this->form_validation->set_rules('nama', 'nama', 'required');
-		#$this->form_validation->set_rules('tempat', 'tempat', 'required');		
-		#$this->form_validation->set_rules('tanggal', 'tanggal', 'required');
-		#$this->form_validation->set_rules('jns_klm', 'jns_klm', 'required');
-		#$this->form_validation->set_rules('gol_drh', 'gol_drh', 'required');
-
+		$this->form_validation->set_rules('tempat', 'tempat', 'required');		
+		$this->form_validation->set_rules('tanggal', 'tanggal', 'required');
+		$this->form_validation->set_rules('jns_klm', 'jns_klm', 'required');
+		$this->form_validation->set_rules('gol_drh', 'gol_drh', 'required');
+		$nipp = $this->uri->segment(3);
+		
 		if ($this->form_validation->run() == FALSE)
 		{
 			$data['page'] = 'Input Data Diri';
@@ -890,7 +896,6 @@ class pekerja extends Application {
 		if($this->input->post('tanggal')=="00/00/0000"){$tanggal_lahir="00-00-0000";}
 		else{$tanggal_lahir=mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tanggal'))));}
 		
-		$nipp = $this->uri->segment(3);
 		
 		$data_pegawai = array(
 				'peg_nama' 			=> $this->input->post('nama'),
@@ -927,7 +932,6 @@ class pekerja extends Application {
 			
 		$this->kepegawaian->insert_data_pegawai_status_keluarga($data_stk);		
 		}
-		$nipp = $this->uri->segment(3);
 		redirect('pekerja/get_pegawai/'.$nipp);
 	}
 	
@@ -1122,18 +1126,18 @@ class pekerja extends Application {
 				'p_jbt_nipp'		=> $nipp,
 				'p_jbt_jabatan'		=> $this->input->post('jabatan'),
 				'p_jbt_tmt_start'	=> $tanggal_tmt_jbt,
-				'p_jbt_update_on'	=> $tanggal,
+				//'p_jbt_update_on'	=> $tanggal,
 				'p_jbt_update_by'	=> 'admin'
 			);
 		$data_unit = array(
 				'p_unt_nipp'		=> $nipp,
 				'p_unt_kode_unit'	=> $this->input->post('unit'),
+				'p_unt_kode_sub_unit'	=> $this->input->post('sub_unit'),
 				'p_unt_tmt_start'	=> $tanggal_tmt_unit,
-				'p_jbt_update_on'	=> $tanggal,
-				'p_jbt_update_by'	=> 'admin'
+				//'p_unt_update_on'	=> $tanggal,
+				'p_unt_update_by'	=> 'admin'
 			);
-			
-		$data_update_tmt_tanggal = array ('p_tmt_end' => $tanggal);
+		
 		$data_grade = array(
 				'p_grd_nipp'		=> $nipp,
 				'p_grd_grade'		=> $this->input->post('grade'),
@@ -1141,7 +1145,11 @@ class pekerja extends Application {
 				'p_grd_update_by'	=> 'admin'
 			);
 		
-		
+		$data_jabatan_tmt_end = array ('p_jbt_tmt_end' => $tanggal);
+		$data_unit_tmt_end = array ('p_unt_tmt_end' => $tanggal);
+		$this->kepegawaian->update_data_pegawai_jabatan($data_jabatan_tmt_end,$this->input->post('id_peg_jabatan'));
+		$this->kepegawaian->update_data_pegawai_unit($data_unit_tmt_end,$this->input->post('id_peg_unit'));
+				
 		#input data to table pegawai
 		$this->kepegawaian->insert_data_pegawai_jabatan($data_jabatan);
 		$this->kepegawaian->insert_data_pegawai_unit($data_unit);
@@ -1158,37 +1166,333 @@ class pekerja extends Application {
 		$tanggal = mdate($datestring, $time);
 		
 		$nipp = $this->uri->segment(3);
-		$tanggal_tmt = mdate($datestring, strtotime($this->input->post('tmt')));
+		$tanggal_tmt = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tmt'))));
 		$nipp_baru = $this->input->post('nipp_baru');
 		
 		# data provider baru
 		$data_jabatan = array(
 				'p_jbt_nipp'		=> $nipp_baru,
 				'p_jbt_jabatan'		=> $this->input->post('jabatan'),
-				'p_jbt_update_on'	=> $tanggal,
+				'p_jbt_tmt_start'	=> $tanggal_tmt,
+				//'p_jbt_update_on'	=> $tanggal,
 				'p_jbt_update_by'	=> 'admin'
 			);
+			
+		$data_unit = array(
+				'p_unt_nipp'		=> $nipp_baru,
+				'p_unt_kode_unit'	=> $this->input->post('unit'),
+				'p_unt_kode_sub_unit'	=> $this->input->post('sub_unit'),
+				'p_unt_tmt_start'	=> $tanggal_tmt,
+				//'p_unt_update_on'	=> $tanggal,
+				'p_unt_update_by'	=> 'admin'
+			);
+		
+		$data_grade = array(
+				'p_grd_nipp'		=> $nipp_baru,
+				'p_grd_grade'		=> $this->input->post('grade'),
+				'p_grd_update_on'	=> $tanggal,
+				'p_grd_update_by'	=> 'admin'
+			);
+			
 		$data_tmt = array(
 				'p_tmt_nipp'		=> $nipp_baru,
 				'p_tmt_status'		=> $this->input->post('status'),
-				'p_tmt_provider'	=> $provider,
+				'p_tmt_provider'	=> $this->input->post('provider'),
 				'p_tmt_tmt'			=> $tanggal_tmt,
 				'p_tmt_update_on'	=> $tanggal,
 				'p_tmt_update_by'	=> 'admin'
 			);
-		$data_update_tmt_tanggal = array ('p_tmt_end' => $tanggal);
+		
+		$data_jabatan_tmt_end = array ('p_jbt_tmt_end' => $tanggal);
+		$data_unit_tmt_end = array ('p_unt_tmt_end' => $tanggal);
+#		$this->kepegawaian->update_data_pegawai_jabatan($data_jabatan_tmt_end,$this->input->post('id_peg_jabatan'));
+#		$this->kepegawaian->update_data_pegawai_unit($data_unit_tmt_end,$this->input->post('id_peg_unit'));
+		
+		$data_update_tmt_tanggal = array (
+				'p_tmt_end' 	=> $tanggal,
+				'p_tmt_reason'	=> "PHK",
+				'p_tmt_ket'		=> "Pindah Provider",
+			);
 		
 		#input data to table pegawai
-		//$this->kepegawaian->copy_data_pegawai();
-		
-		
-		$this->kepegawaian->insert_data_pegawai_jabatan($data_jabatan);
-		$this->kepegawaian->update_data_tmt($data_update_tmt_tanggal);
-		$this->kepegawaian->insert_data_pegawai_tmt($data_tmt);
+				
+#		$this->kepegawaian->insert_data_pegawai_jabatan($data_jabatan);
+#		$this->kepegawaian->update_data_tmt($data_update_tmt_tanggal);
+#		$this->kepegawaian->insert_data_pegawai_tmt($data_tmt);
 		//$this->kepegawaian->insert_data_pegawai_grade($data_grade);
-		redirect('pekerja/get_pegawai/'.$nipp);
+		
+		#copy data pegawai 
+		$this->copy_data_pegawai($nipp,$nipp_baru);
+		
+		
+		#redirect('pekerja/get_pegawai/'.$nipp);
 	}
 	
+	function copy_data_pegawai($nipp,$nipp_baru)
+	{
+		#preparing date update
+		$datestring = "%Y-%m-%d" ;
+		$time = time();
+		$tanggal = mdate($datestring, $time);
+		
+		#tarik data dari database
+		$pegawai= $this->kepegawaian->get_data_pegawai_by_nipp($nipp);
+		$agama = $this->kepegawaian->get_detail_pegawai_agama($nipp);
+		$alamat = $this->kepegawaian->get_detail_pegawai_alamat($nipp);
+		$ayah = $this->kepegawaian->get_detail_pegawai_ayah($nipp);
+		$bahasa = $this->kepegawaian->get_detail_pegawai_bahasa($nipp);
+		$fisik = $this->kepegawaian->get_detail_pegawai_fisik($nipp);
+		$ibu = $this->kepegawaian->get_detail_pegawai_ibu($nipp);
+		$mert_ayah = $this->kepegawaian->get_detail_pegawai_mert_ayah($nipp);
+		$mert_ibu = $this->kepegawaian->get_detail_pegawai_mert_ibu($nipp);
+		$pasangan = $this->kepegawaian->get_detail_pegawai_pasangan($nipp);
+		$pendidikan = $this->kepegawaian->get_detail_pegawai_pendidikan($nipp);
+		$status_keluarga = $this->kepegawaian->get_detail_pegawai_status_keluarga($nipp);
+		$tmt = $this->kepegawaian->get_detail_pegawai_tmt($nipp);
+		$unit = $this->kepegawaian->get_detail_pegawai_unit($nipp);
+		$grade = $this->kepegawaian->get_detail_pegawai_grade($nipp);
+		$stkp = $this->kepegawaian->get_detail_pegawai_stkp($nipp);		
+		$nstkp = $this->kepegawaian->get_detail_pegawai_nstkp($nipp);		
+		$anak = $this->kepegawaian->get_detail_pegawai_anak($nipp);
+		$jabatan = $this->kepegawaian->get_last_jabatan($nipp);
+		
+		echo $nipp;
+		#copy data pegawai
+		foreach($pegawai as $row_pegawai){}
+		$data_pegawai = array(
+			'peg_nipp'			=> 	$nipp_baru,
+			'peg_nama'			=>	$row_pegawai['peg_nama'],	
+			'peg_tmpt_lahir'	=>	$row_pegawai['peg_tmpt_lahir'],
+			'peg_tgl_lahir'		=>	$row_pegawai['peg_tgl_lahir'],
+			'peg_jns_kelamin'	=>	$row_pegawai['peg_jns_kelamin'],
+			'peg_gol_darah'		=>	$row_pegawai['peg_gol_darah'],
+			'peg_update_by'		=>	'admin',
+		);
+		$this->kepegawaian->insert_data_pegawai($data_pegawai);
+		
+		#copy data agama
+		if($agama == NULL){}
+		else{
+			foreach($agama as $row_agama){}
+			$data_agama = array(
+				'p_ag_nipp' 	=>	$nipp_baru,
+				'p_ag_agama'	=>	$row_agama['p_ag_agama'],
+				'p_ag_update_by'=>	'admin',
+			);
+			$this->kepegawaian->insert_data_pegawai_agama($data_agama);
+		}
+		
+		#copy data alamat
+		if($alamat == NULL){}
+		else{
+			foreach($alamat as $row_alamat){}
+			$data_alamat = array(
+				'p_al_nipp' 	=>	$nipp_baru,
+				'p_al_jalan'	=>	$row_alamat['p_al_jalan'],
+				'p_al_kelurahan'=>	$row_alamat['p_al_kelurahan'],
+				'p_al_kecamatan'	=>	$row_alamat['p_al_kecamatan'],
+				'p_al_kabupaten'	=>	$row_alamat['p_al_kabupaten'],
+				'p_al_provinsi'		=>	$row_alamat['p_al_provinsi'],
+				'p_al_no_telp'	=>	$row_alamat['p_al_no_telp'],
+				'p_al_email'	=>	$row_alamat['p_al_email'],
+				'p_al_update_by'=>	'admin',
+			);
+			$this->kepegawaian->insert_data_pegawai_alamat($data_alamat);
+		}
+		
+		#copy data anak
+		if($anak == NULL){}
+		else{
+			foreach($anak as $row_anak){
+			$data_anak = array(
+				'peg_ank_nipp' 	=>	$nipp_baru,
+				'peg_ank_nama'	=>	$row_anak['peg_ank_nama'],
+				'peg_ank_tempat_lahir'	=>	$row_anak['peg_ank_tempat_lahir'],
+				'peg_ank_tgl_lahir'		=>	$row_anak['peg_ank_tgl_lahir'],
+				'peg_ank_pendidikan'	=>	$row_anak['peg_ank_pendidikan'],
+				'peg_ank_jns_kelamin'	=>	$row_anak['peg_ank_jns_kelamin'],
+				'peg_ank_agama' 	=>	$row_anak['peg_ank_agama'],
+				'peg_ank_status' 	=> $row_anak['peg_ank_status'],
+				'p_ank_update_by'=>	'admin',
+			);
+			$this->kepegawaian->insert_data_pegawai_anak($data_anak);
+			}
+		}
+		
+		#copy data ayah
+		if($ayah == NULL){}
+		else{
+			foreach($ayah as $row_ayah){}
+			$data_ayah = array(
+				'p_ay_nipp' 	=>	$nipp_baru,
+				'p_ay_nama'	=>	$row_ayah['p_ay_nama'],
+				'p_ay_tmpt_lahir' => $row_ayah['p_ay_tmpt_lahir'],
+				'p_ay_tgl_lahir' => $row_ayah['p_ay_tgl_lahir'],
+				'p_ay_tgl_meninggal' => $row_ayah['p_ay_tgl_meninggal'],
+				'p_ay_alamat' => $row_ayah['p_ay_alamat'],
+				'p_ay_pekerjaan' => $row_ayah['p_ay_pekerjaan'],
+				'p_ay_update_by'=>	'admin',
+			);
+			$this->kepegawaian->insert_data_pegawai_ayah($data_ayah);
+		}
+		
+		#copy data ibu
+		if($ibu == NULL){}
+		else{
+			foreach($ibu as $row_ibu){}
+			$data_ibu = array(
+				'p_ibu_nipp' 	=>	$nipp_baru,
+				'p_ibu_nama'	=>	$row_ibu['p_ibu_nama'],
+				'p_ibu_tmpt_lahir' => $row_ibu['p_ibu_tmpt_lahir'],
+				'p_ibu_tgl_lahir' => $row_ibu['p_ibu_tgl_lahir'],
+				'p_ibu_tgl_meninggal' => $row_ibu['p_ibu_tgl_meninggal'],
+				'p_ibu_alamat' => $row_ibu['p_ibu_alamat'],
+				'p_ibu_pekerjaan' => $row_ibu['p_ibu_pekerjaan'],
+				'p_ibu_update_by'=>	'admin',
+			);
+			$this->kepegawaian->insert_data_pegawai_ibu($data_ibu);
+		}
+		
+		#copy data mertua ayah
+		if($mert_ayah == NULL){}
+		else{
+			foreach($mert_ayah as $row_mert_ayah){}
+			$data_mert_ayah = array(
+				'p_may_nipp' 	=>	$nipp_baru,
+				'p_may_nama'	=>	$row_mert_ayah['p_may_nama'],
+				'p_may_tmpt_lahir' => $row_mert_ayah['p_may_tmpt_lahir'],
+				'p_may_tgl_lahir' => $row_mert_ayah['p_may_tgl_lahir'],
+				'p_may_tgl_meninggal' => $row_mert_ayah['p_may_tgl_meninggal'],
+				'p_may_alamat' => $row_mert_ayah['p_may_alamat'],
+				'p_may_pekerjaan' => $row_mert_ayah['p_may_pekerjaan'],
+				'p_may_update_by'=>	'admin',
+			);
+			$this->kepegawaian->insert_data_pegawai_mert_ayah($data_mert_ayah);
+		}
+		
+		#copy data ibu
+		if($mert_ibu == NULL){}
+		else{
+			foreach($mert_ibu as $row_mert_ibu){}
+			$data_mert_ibu = array(
+				'p_mib_nipp' 	=>	$nipp_baru,
+				'p_mib_nama'	=>	$row_mert_ibu['p_mib_nama'],
+				'p_mib_tmpt_lahir' => $row_mert_ibu['p_mib_tmpt_lahir'],
+				'p_mib_tgl_lahir' => $row_mert_ibu['p_mib_tgl_lahir'],
+				'p_mib_tgl_meninggal' => $row_mert_ibu['p_mib_tgl_meninggal'],
+				'p_mib_alamat' => $row_mert_ibu['p_mib_alamat'],
+				'p_mib_pekerjaan' => $row_mert_ibu['p_mib_pekerjaan'],
+				'p_mib_update_by'=>	'admin',
+			);
+			$this->kepegawaian->insert_data_pegawai_mert_ibu($data_mert_ibu);
+		}
+		
+		#copy data fisik
+		if($fisik == NULL){}
+		else{
+			foreach($fisik as $row_fisik){}
+			$data_fisik = array(
+				'p_fs_nipp' 	=>	$nipp_baru,
+				'p_fs_tinggi' 	=>	$row_fisik['p_fs_tinggi'],
+				'p_fs_berat' 	=>	$row_fisik['p_fs_berat'],
+				'p_fs_foto' 	=>	$row_fisik['p_fs_berat'],
+				'p_fs_update_by'=>	'admin',
+			);
+			$this->kepegawaian->insert_data_pegawai_fisik($data_fisik);
+		}
+		
+		#copy data non stkp
+		if($nstkp == NULL){}
+		else{
+			foreach($nstkp as $row_nstkp){
+				$data_nstkp = array(
+					'p_nstkp_nipp' 	=>	$nipp_baru,
+					'p_nstkp_type' 	=>	$row_nstkp['p_nstkp_type'],
+					'p_nstkp_jenis'	=>	$row_nstkp['p_nstkp_jenis'],
+					'p_nstkp_lembaga' 	=>	$row_nstkp['p_nstkp_lembaga'],
+					'p_nstkp_no_license' 	=>	$row_nstkp['p_nstkp_no_license'],
+					'p_nstkp_pelaksanaan' 	=>	$row_nstkp['p_nstkp_pelaksanaan'],
+					'p_nstkp_selesai' 	=>	$row_nstkp['p_nstkp_selesai'],
+					'p_nstkp_update_by'=>	'admin',
+				);
+				$this->kepegawaian->insert_data_pegawai_nstkp($data_nstkp);
+			}
+		}
+		
+		#copy data stkp
+		if($stkp == NULL){}
+		else{
+			foreach($stkp as $row_stkp){
+				$data_stkp = array(
+					'p_stkp_nipp' 	=>	$nipp_baru,
+					'p_stkp_type' 	=>	$row_stkp['p_stkp_type'],
+					'p_stkp_jenis'	=>	$row_stkp['p_stkp_jenis'],
+					'p_stkp_rating'	=>	$row_stkp['p_stkp_rating'],
+					'p_stkp_lembaga' 	=>	$row_stkp['p_stkp_lembaga'],
+					'p_stkp_no_license' 	=>	$row_stkp['p_stkp_no_license'],
+					'p_stkp_pelaksanaan' 	=>	$row_stkp['p_stkp_pelaksanaan'],
+					'p_stkp_selesai' 	=>	$row_stkp['p_stkp_selesai'],
+					'p_stkp_mulai' 	=>	$row_stkp['p_stkp_mulai'],
+					'p_stkp_finish' 	=>	$row_stkp['p_stkp_finish'],
+					'p_stkp_update_by'=>	'admin',
+				);
+				$this->kepegawaian->insert_data_pegawai_stkp($data_stkp);
+			}
+		}
+		
+		#copy data pasangan
+		if($pasangan == NULL){}
+		else{
+			foreach($pasangan as $row_pasangan){}
+			$data_pasangan = array(
+				'p_ps_nipp' 	=>	$nipp_baru,
+				'p_ps_nama'		=>	$row_pasangan['p_ps_nama'],
+				'p_ps_tmpt_lahir'	=>	$row_pasangan['p_ps_tmpt_lahir'],
+				'p_ps_tgl_lahir'	=>	$row_pasangan['p_ps_tgl_lahir'],
+				'p_ps_tgl_meninggal'=>	$row_pasangan['p_ps_tgl_meninggal'],
+				'p_ps_alamat'		=>	$row_pasangan['p_ps_alamat'],
+				'p_ps_jns_kelamin'	=>	$row_pasangan['p_ps_jns_kelamin'],
+				'p_ps_agama' 	=>	$row_pasangan['p_ps_agama'],
+				'p_ps_pekerjaan' 	=> $row_pasangan['p_ps_pekerjaan'],
+				'p_ps_update_by'=>	'admin',
+			);
+			$this->kepegawaian->insert_data_pegawai_pasangan($data_pasangan);
+		}
+		
+		#copy data pendidikan
+		if($pendidikan == NULL){}
+		else{
+			foreach($pendidikan as $row_pendidikan){
+				$data_pendidikan = array(
+					'p_pdd_nipp' 	=>	$nipp_baru,
+					'p_pdd_tingkat'	=>	$row_pendidikan['p_pdd_tingkat'],
+					'p_pdd_lp'		=>	$row_pendidikan['p_pdd_lp'],
+					'p_pdd_masuk'		=>	$row_pendidikan['p_pdd_masuk'],
+					'p_pdd_keluar'		=>	$row_pendidikan['p_pdd_keluar'],
+					'p_pdd_update_by'=>	'admin',
+				);
+				$this->kepegawaian->insert_data_pegawai_pendidikan($data_pendidikan);
+			}
+		}
+		
+		#copy data status keluarga
+		if($status_keluarga == NULL){}
+		else{
+			foreach($status_keluarga as $row_stk){}
+				$data_stk = array(
+					'p_stk_nipp' 	=>	$nipp_baru,
+					'p_stk_status_keluarga' => $row_stk['p_stk_status_keluarga'],
+					'p_stk_update_by'=>	'admin',
+				);
+				$this->kepegawaian->insert_data_pegawai_status_keluarga($data_stk);
+		}
+		
+		
+		
+		
+		//redirect setelah proses selesai
+		redirect('pekerja/get_pegawai/'.$nipp_baru);
+	}
 	
 	public function edit_data_pendidikan()
 	{
