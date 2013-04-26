@@ -258,7 +258,8 @@ class kepegawaian extends CI_Model
 	{
 		$this->db->select('*');
 		$this->db->where('p_tmt_nipp',$nipp);
-		$this->db->order_by('p_tmt_nipp','DESC');
+		//$this->db->order_by('p_tmt_nipp','DESC');
+		$this->db->order_by('id_peg_tmt','DESC');
 		$this->db->limit(1);
 		$query = $this->db->get('v3_peg_tmt');
 		return $query->result_array();

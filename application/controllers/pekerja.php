@@ -1205,8 +1205,8 @@ class pekerja extends Application {
 		
 		$data_jabatan_tmt_end = array ('p_jbt_tmt_end' => $tanggal);
 		$data_unit_tmt_end = array ('p_unt_tmt_end' => $tanggal);
-#		$this->kepegawaian->update_data_pegawai_jabatan($data_jabatan_tmt_end,$this->input->post('id_peg_jabatan'));
-#		$this->kepegawaian->update_data_pegawai_unit($data_unit_tmt_end,$this->input->post('id_peg_unit'));
+		$this->kepegawaian->update_data_pegawai_jabatan($data_jabatan_tmt_end,$this->input->post('id_peg_jabatan'));
+		$this->kepegawaian->update_data_pegawai_unit($data_unit_tmt_end,$this->input->post('id_peg_unit'));
 		
 		$data_update_tmt_tanggal = array (
 				'p_tmt_end' 	=> $tanggal,
@@ -1216,16 +1216,16 @@ class pekerja extends Application {
 		
 		#input data to table pegawai
 				
-#		$this->kepegawaian->insert_data_pegawai_jabatan($data_jabatan);
-#		$this->kepegawaian->update_data_tmt($data_update_tmt_tanggal);
-#		$this->kepegawaian->insert_data_pegawai_tmt($data_tmt);
+		$this->kepegawaian->insert_data_pegawai_jabatan($data_jabatan);
+		$this->kepegawaian->update_data_tmt($data_update_tmt_tanggal);
+		$this->kepegawaian->insert_data_pegawai_tmt($data_tmt);
 		//$this->kepegawaian->insert_data_pegawai_grade($data_grade);
 		
 		#copy data pegawai 
 		$this->copy_data_pegawai($nipp,$nipp_baru);
 		
 		
-		#redirect('pekerja/get_pegawai/'.$nipp);
+		#redirect('pekerja/get_pegawai/'.$nipp_baru);
 	}
 	
 	function copy_data_pegawai($nipp,$nipp_baru)
@@ -1487,9 +1487,6 @@ class pekerja extends Application {
 				$this->kepegawaian->insert_data_pegawai_status_keluarga($data_stk);
 		}
 		
-		
-		
-		
 		//redirect setelah proses selesai
 		redirect('pekerja/get_pegawai/'.$nipp_baru);
 	}
@@ -1646,12 +1643,31 @@ class pekerja extends Application {
 		}
 		if ($this->input->post('reason') == "Pemutusan Hubungan Kerja"){
 		}
-		if ($this->input->post('reason') == "Order"){
+		if ($this->input->post('reason') == "Other"){
 		}
 		*/
 		//$this->load->view('kepegawaian/index', $data);
 	}
 	
+	function submit_aktifkan_pegawai($nipp)
+	{
+		$datestring = "%Y-%m-%d" ;
+		$time = time();
+		$tanggal = mdate($datestring, $time);
+		
+		$tmt_start = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tanggal'))));
+		
+		$data_tmt = array(
+				'p_tmt_nipp'		=> $nipp,
+				'p_tmt_status'		=> $this->input->post('status'),
+				'p_tmt_provider'	=> $this->input->post('provider'),
+				'p_tmt_tmt'			=> $tmt_start,
+				'p_tmt_update_by'	=> 'admin'
+			);
+		
+		$this->kepegawaian->insert_data_pegawai_tmt($data_tmt);
+		redirect('pekerja/get_pegawai/'.$nipp);
+	}
 	
 	function delete_data_anak($id,$nipp)
 	{

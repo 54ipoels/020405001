@@ -172,6 +172,11 @@
 			<div id="clear"></div>
         </div>
 </div>
+
+<?php 
+# jika pegawai masih aktif 
+
+if( /*$row_tmt['p_tmt_end'] == "0000-00-00"*/ $row_tmt['p_tmt_reason']==""){?>
 <div class="oneThree">
 <div class="widget">
 <div class="title"><img src="<?php echo base_url()?>images/icons/dark/frames.png" alt="" class="titleIcon" /><h6>Delete Pegawai</h6></div>
@@ -224,6 +229,35 @@
 <?php echo form_close();?>
 </div>
 </div>
+<?php } else {?>
+<div class="oneThree">
+<div class="widget">
+<div class="title"><img src="<?php echo base_url()?>images/icons/dark/frames.png" alt="" class="titleIcon" /><h6>Aktifkan Pegawai</h6></div>
+<?php echo form_open('pekerja/submit_aktifkan_pegawai/'.$row_pegawai['peg_nipp']);?>
+<table cellpadding="0" cellspacing="0" width="100%" class="sTable">
+	<tr><td>Terhitung Mulai</td>
+	<td><?php 
+	$tanggal = array(
+		'name' => 'tanggal',
+		'id'   => 'tanggal',
+		'class'=> 'maskDate'
+	);
+	echo form_input($tanggal)?>
+	<input type="text" name="status" id="status" value="<?php echo $status; ?>" /hidden>
+	<input type="text" name="provider" id="provider" value="<?php echo $provider; ?>" /hidden>
+	</td></tr>
+	<tr><td colspan="2" align="right">
+	<?php $submit = array(
+			'class' => 'blueB m110',
+			'id'	=> 'next2',
+			'value'	=> 'Submit',
+			);
+	echo form_submit($submit)?></td></tr>
+</table>
+<?php echo form_close();?>
+</div>
+</div>
+<?php } ?>
 
 <div class="twoOne2">
 	<div class="widget rightTabs"> 
