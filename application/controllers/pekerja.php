@@ -613,9 +613,9 @@ class pekerja extends Application {
 		$tanggal = mdate($datestring, $time);
 		$nipp = $this->input->post('nipp');
 		
-		if(($this->input->post('tanggal_mert_ayah')=='00/00/0000' ) OR ($this->input->post('tanggal_mert_ayah')==NULL)){$tgl_ayah='0000-00-00';}
+		if(($this->input->post('tanggal_mert_ayah')=='00/00/0000' ) OR ($this->input->post('tanggal_mert_ayah')==NULL)){$tgl_mert_ayah='0000-00-00';}
 		else{$tgl_mert_ayah = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tanggal_mert_ayah'))));}
-		if(($this->input->post('meninggal_mert_ayah')=='00/00/0000' ) OR ($this->input->post('meninggal_mert_ayah')==NULL)){$meninggal_ayah='0000-00-00';}
+		if(($this->input->post('meninggal_mert_ayah')=='00/00/0000' ) OR ($this->input->post('meninggal_mert_ayah')==NULL)){$meninggal_mert_ayah='0000-00-00';}
 		else{$meninggal_mert_ayah = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('meninggal_mert_ayah'))));}
 		
 		$data_mert_ayah = array(
