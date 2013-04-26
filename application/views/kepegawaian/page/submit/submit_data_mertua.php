@@ -19,12 +19,12 @@
                     </div>
 					<div class="formRow">
                         <label>Tanggal Lahir:</label>
-                        <div class="formRight"><input type="text" name="tanggal_mert_ayah" id="tanggal_mert_ayah" class="maskDate"/></div>
+                        <div class="formRight"><input type="text" name="tanggal_mert_ayah" id="tanggal_mert_ayah" class="maskDate" value="00/00/0000"/></div>
                         <div class="clear"></div>
                     </div>
 					<div class="formRow">
                         <label>Tanggal Meninggal:</label>
-                        <div class="formRight"><input type="text" name="meninggal_mert_ayah" id="meninggal_mert_ayah" class="maskDate"/></div>
+                        <div class="formRight"><input type="text" name="meninggal_mert_ayah" id="meninggal_mert_ayah" class="maskDate" value="00/00/0000"/></div>
                         <div class="clear"></div>
                     </div>
 					<div class="formRow">
