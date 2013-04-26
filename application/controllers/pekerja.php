@@ -1603,7 +1603,7 @@ class pekerja extends Application {
 				$data_peg_tmt = array(
 						"p_tmt_end"			=> $tmt,
 						"p_tmt_reason"		=> $this->input->post('reason'),
-						"p_tmt_keterangan"	=> $this->input->post('ket'),
+						"p_tmt_ket"	=> $this->input->post('ket'),
 						
 					);
 				
@@ -1624,7 +1624,7 @@ class pekerja extends Application {
 			$data_peg_tmt = array(
 						"p_tmt_end"			=> $tmt,
 						"p_tmt_reason"		=> $this->input->post('reason'),
-						"p_tmt_keterangan"	=> $this->input->post('ket'),
+						"p_tmt_ket"	=> $this->input->post('ket'),
 						
 					);
 					

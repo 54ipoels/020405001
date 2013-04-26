@@ -121,6 +121,7 @@
 					$status="-";
 					$tmt = "-";
 					$provider ="-";
+					$tmt_reason = "-";
 				} else {
 					foreach ($data_tmt as $row_tmt) :
 					{
@@ -128,7 +129,10 @@
 						$tmt = mdate($datestring,strtotime($row_tmt['p_tmt_tmt']));
 						$status = $row_tmt['p_tmt_status'];
 						$provider = $row_tmt['p_tmt_provider'];
+						$tmt_reason = $row_tmt['p_tmt_reason'];
 					} endforeach;
+					
+					
 				}
 				
 				if($data_unit==NULL){
@@ -176,7 +180,7 @@
 <?php 
 # jika pegawai masih aktif 
 
-if( /*$row_tmt['p_tmt_end'] == "0000-00-00"*/ $row_tmt['p_tmt_reason']==""){?>
+if( $tmt_reason==""){?>
 <div class="oneThree">
 <div class="widget">
 <div class="title"><img src="<?php echo base_url()?>images/icons/dark/frames.png" alt="" class="titleIcon" /><h6>Delete Pegawai</h6></div>
@@ -336,16 +340,26 @@ if( /*$row_tmt['p_tmt_end'] == "0000-00-00"*/ $row_tmt['p_tmt_reason']==""){?>
                     <table cellpadding="0" cellspacing="0" width="100%" class="sTable">
                         <tfoot>
 							<tr><td colspan=8><p align="right"><?php 
+							if ($status !== 'Outsource')
+							{
 								echo anchor('pekerja/edit_provider_pegawai/'.$row_pegawai['peg_nipp'],'[pindah provider]')?>
-								&nbsp;&nbsp;&nbsp; <?php echo anchor('pekerja/edit_jabatan_pegawai/'.$row_pegawai['peg_nipp'],'[edit]');?></p></td></tr>
+								&nbsp;&nbsp;&nbsp; <?php echo anchor('pekerja/edit_jabatan_pegawai/'.$row_pegawai['peg_nipp'],'[edit]');
+							}	
+								?>
+								</p></td></tr>
 						</tfoot>
                         <tbody>
                             <tr><td width="30%">Jabatan Terakhir</td><td><?php echo $jabatan;?></td></tr>
                             <tr><td>Terhitung Mulai Tanggal</td><td><?php echo $tmt_jabatan; #echo $tmt; ?></td></tr>
 							<tr><td>Unit</td><td><?php echo $kode_unit;?></td></tr>
 							<tr><td>Grade</td><td><?php echo $grade?></td></tr>
-							<tr><td>Status Pegawai</td><td><?php echo $status?></td></tr>
+							<?php if($tmt_reason==""){?>
+							<tr><td>Status Pegawai</td><td><?php echo $status;?></td></tr>
 							<tr><td>Provider</td><td><?php echo $provider?></td></tr>
+							<?php }else{?>
+							<tr><td colspan="2"><?php echo $tmt_reason;?></td></tr>
+							<?php }?>
+							
                         </tbody>
                     </table>
                 </div>
