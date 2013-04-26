@@ -243,6 +243,7 @@ class pekerja extends Application {
 	// FUNGSI PENGAMBILAN DATA PEGAWAI //
 	public function get_pegawai($nipp)
 	{
+		
 		#retrieve data
 		$data['page'] = 'Data Perorangan';
 		$data['pegawai'] = $this->kepegawaian->get_data_pegawai_by_nipp($nipp);
@@ -874,10 +875,10 @@ class pekerja extends Application {
 		$this->load->library('form_validation');
 		
 		$this->form_validation->set_rules('nama', 'nama', 'required');
-		$this->form_validation->set_rules('tempat', 'tempat', 'required');		
-		$this->form_validation->set_rules('tanggal', 'tanggal', 'required');
-		$this->form_validation->set_rules('jns_klm', 'jns_klm', 'required');
-		$this->form_validation->set_rules('gol_drh', 'gol_drh', 'required');
+		#$this->form_validation->set_rules('tempat', 'tempat', 'required');		
+		#$this->form_validation->set_rules('tanggal', 'tanggal', 'required');
+		#$this->form_validation->set_rules('jns_klm', 'jns_klm', 'required');
+		#$this->form_validation->set_rules('gol_drh', 'gol_drh', 'required');
 
 		if ($this->form_validation->run() == FALSE)
 		{
@@ -926,6 +927,7 @@ class pekerja extends Application {
 			
 		$this->kepegawaian->insert_data_pegawai_status_keluarga($data_stk);		
 		}
+		$nipp = $this->uri->segment(3);
 		redirect('pekerja/get_pegawai/'.$nipp);
 	}
 	
