@@ -54,6 +54,10 @@
 		{
 			$this->load->view('kepegawaian/page/supervisor');
 		}else
+		if ($page == 'Data Pindah Cabang')
+		{
+			$this->load->view('kepegawaian/page/pindah_cabang');
+		}else
 		if ($page == 'Data SDM')
 		{
 			$this->load->view('kepegawaian/page/data_sdm');
@@ -134,7 +138,13 @@
 		if ($page == 'Delete Pegawai')
 		{
 			$this->load->view('kepegawaian/page/delete/delete_pegawai');
+		} else
+		//-----------------import file ------------------//
+		if ($page == 'Import Data')
+		{
+			$this->load->view('kepegawaian/page/add/import_file');
 		}
+		
 		?>
 		
 	</div>

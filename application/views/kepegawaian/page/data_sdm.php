@@ -1,4 +1,16 @@
 <?php $this->load->helper('asset');?>
+
+<div class="widget">
+<fieldset class="step" id="w2first"><br> 
+<table><tr><td width = "770px"> </td>
+	<td width="250px"><div class="searchWidget1"><?php echo form_open('pekerja/search_data_sdm');?>
+                        <input type="text" name="search"  placeholder="Enter search text..." />
+                        <input type="submit" name="find" value="" class="blueB m110"/></div>
+                    </form></td></tr>
+
+</div></div></table></fieldset>
+</div>
+
 <div class="widget">  
 		  <div class="title"><img src="<?php echo base_url()?>images/icons/dark/frames.png" alt="" class="titleIcon" /><h6>Data Pegawai</h6></div>
             <table cellpadding="0" cellspacing="0" width="100%" class="sTable">

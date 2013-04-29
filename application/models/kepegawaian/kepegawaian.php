@@ -30,6 +30,18 @@ class kepegawaian extends CI_Model
 		return $query->result_array();
 	}
 	
+	function get_data_pegawai_aktif($num,$offset)
+	{
+		$query = "	SELECT * from v3_peg_tmt  AS tmt
+					LEFT JOIN (SELECT * FROM v3_pegawai) AS peg ON tmt.p_tmt_nipp = peg.peg_nipp
+					WHERE tmt.p_tmt_end = '0000-00-00'
+					ORDER BY tmt.p_tmt_nipp DESC
+					LIMIT $offset , $num
+				";
+		$query = $this->db->query($query);
+		return $query->result_array();
+	}
+	
 	function get_data_pegawai_full($num, $offset)
 	{
 		$query = ("
@@ -51,6 +63,30 @@ class kepegawaian extends CI_Model
 		$query = $this->db->query($query);
 		return $query->result_array();
 	}
+	
+	function search_data_pegawai_full($num, $offset, $search)
+	{
+		$query = ("
+			SELECT * FROM v3_pegawai AS peg
+			LEFT JOIN (SELECT p_stk_nipp, p_stk_status_keluarga FROM v3_peg_status_keluarga) AS stk
+			ON peg.peg_nipp = stk.p_stk_nipp
+			LEFT JOIN (SELECT p_ag_nipp, p_ag_agama FROM v3_peg_agama) AS agm
+			ON peg.peg_nipp = agm.p_ag_nipp
+			LEFT JOIN (SELECT p_al_nipp, p_al_jalan, p_al_kelurahan, p_al_kecamatan, p_al_kabupaten, p_al_provinsi, p_al_no_telp FROM v3_peg_alamat) AS alm
+			ON peg.peg_nipp = alm.p_al_nipp
+			LEFT JOIN (SELECT p_ps_nipp, p_ps_nama, p_ps_tmpt_lahir, p_ps_tgl_lahir, p_ps_agama FROM v3_peg_pasangan) AS ps
+			ON peg.peg_nipp = ps.p_ps_nipp
+			WHERE peg.peg_nipp LIKE '%$search%' OR peg.peg_nama LIKE '%$search%' OR ps.p_ps_nama LIKE '%$search%'
+			ORDER BY peg.peg_nipp ASC
+			LIMIT $offset , $num
+		");
+		
+		/*$this->db->select('*');
+		$query = $this->db->get('v3_pegawai'); */
+		$query = $this->db->query($query);
+		return $query->result_array();
+	}
+	
 	
 	function get_data_sdm_unlimited()
 	{
@@ -89,6 +125,43 @@ class kepegawaian extends CI_Model
 		');
 		$query = $this->db->query($query); 
 		return $query->result_array();
+	}
+	
+	function get_data_pegawai_pindah_cabang($num,$offset)
+	{
+		$query = "
+					SELECT * FROM v3_peg_tmt AS tmt
+					LEFT JOIN (SELECT * FROM v3_pegawai) AS peg
+					ON tmt.p_tmt_nipp = peg.peg_nipp
+					LEFT JOIN (SELECT * FROM v3_peg_cabang) AS cab
+					ON tmt.p_tmt_nipp = cab.p_cab_nipp
+					WHERE tmt.p_tmt_reason = 'pindah cabang' 
+					AND	tmt.p_tmt_ket <> 'aktif'
+					ORDER BY tmt.p_tmt_nipp DESC
+					LIMIT $offset , $num
+			";
+		$query = $this->db->query($query); 
+		return $query->result_array();
+	}
+	
+	function search_pegawai_pindah_cabang($num, $offset ,$search)
+	{
+		$query = "
+					SELECT * FROM v3_peg_tmt AS tmt
+					LEFT JOIN (SELECT * FROM v3_pegawai) AS peg
+					ON tmt.p_tmt_nipp = peg.peg_nipp
+					LEFT JOIN (SELECT * FROM v3_peg_cabang) AS cab
+					ON tmt.p_tmt_nipp = cab.p_cab_nipp
+					WHERE tmt.p_tmt_reason = 'pindah cabang'  
+					AND	tmt.p_tmt_ket <> 'aktif' 
+					AND ( peg.peg_nipp LIKE '%$search%' OR cab.p_cab_tmt_start LIKE '%$search%' OR peg.peg_nama LIKE '%$search%' OR cab.p_cab_kode_cabang LIKE '%$search%' )
+					ORDER BY tmt.p_tmt_nipp DESC
+					LIMIT $offset , $num
+			";
+		$query = $this->db->query($query); 
+		return $query->result_array();
+		
+	
 	}
 	
 	function get_data_jenis_pegawai($num, $offset, $type)
@@ -424,6 +497,52 @@ class kepegawaian extends CI_Model
 		return $this->db->count_all_results('v3_peg_anak');
 	}
 	
+	function count_pegawai_aktif()
+	{
+		/*$this->db->where('p_tmt_end','0000-00-00' );
+		return $this->db->count_all_results('v3_peg_tmt');
+		*/
+	
+		$query = "	SELECT * FROM v3_peg_tmt  AS tmt
+					LEFT JOIN (SELECT * FROM v3_pegawai) AS peg ON tmt.p_tmt_nipp = peg.peg_nipp
+					WHERE tmt.p_tmt_end = '0000-00-00'
+					ORDER BY tmt.p_tmt_nipp DESC
+				";
+		$query = $this->db->query($query);
+		return $query->num_rows();
+	}
+	
+	function count_pindah_cabang()
+	{
+		$query = "
+					SELECT * FROM v3_peg_tmt AS tmt
+					LEFT JOIN (SELECT * FROM v3_pegawai) AS peg
+					ON tmt.p_tmt_nipp = peg.peg_nipp
+					WHERE tmt.p_tmt_reason = 'pindah cabang' 
+					AND	tmt.p_tmt_ket <> 'aktif'
+					ORDER BY tmt.p_tmt_nipp DESC
+			";
+		$query = $this->db->query($query);
+		return $query->num_rows();
+	}
+	
+	function count_search_pindah_cabang($search)
+	{
+		$query = "
+					SELECT * FROM v3_peg_tmt AS tmt
+					LEFT JOIN (SELECT * FROM v3_pegawai) AS peg
+					ON tmt.p_tmt_nipp = peg.peg_nipp
+					LEFT JOIN (SELECT * FROM v3_peg_cabang) AS cab
+					ON tmt.p_tmt_nipp = cab.p_cab_nipp
+					WHERE tmt.p_tmt_reason = 'pindah cabang'  
+					AND	tmt.p_tmt_ket <> 'aktif' 
+					AND ( peg.peg_nipp LIKE '%$search%' OR cab.p_cab_tmt_start LIKE '%$search%' OR peg.peg_nama LIKE '%$search%' OR cab.p_cab_kode_cabang LIKE '%$search%' )
+					ORDER BY tmt.p_tmt_nipp DESC
+				";
+		$query = $this->db->query($query);
+		return $query->num_rows();
+	}
+					
 	#----- INSERTING DATA TO DATABASE -----#
 	function insert_data_pegawai($data_pegawai)
 	{
