@@ -73,9 +73,16 @@
 		{
 			$this->load->view('gaji/page/penggajian/edit_gaji_pot_per');
 		}
-		
-		
+		else if ($page == 'hasil import')
+		{
+			$this->load->view('gaji/page/penggajian/hasil_import');
+		}
+		else if ($page == 'import data')
+		{
+			$this->load->view('gaji/page/penggajian/import_file');
+		}
 		#lembur pegawai
+		/*
 		else if ($page == 'lembur_pegawai')
 		{
 			$this->load->view('absensi/page/lembur/lembur_pegawai');
@@ -95,6 +102,27 @@
 		else if ($page == 'edit_lembur')
 		{
 			$this->load->view('absensi/page/lembur/edit_lembur');
+		}
+		*/
+		else if ($page == 'lembur_pegawai')
+		{
+			$this->load->view('gaji/page/lembur/lembur_pegawai');
+		}
+		else if ($page == 'view_lembur_pegawai')
+		{
+			$this->load->view('gaji/page/lembur/view_lembur');
+		}
+		else if ($page == 'view_detail_lembur')
+		{
+			$this->load->view('gaji/page/lembur/view_detail_lembur');
+		}
+		else if ($page == 'add_lembur')
+		{
+			$this->load->view('gaji/page/lembur/add_lembur');
+		}
+		else if ($page == 'edit_lembur')
+		{
+			$this->load->view('gaji/page/lembur/edit_lembur');
 		}
 		
 		#absensi

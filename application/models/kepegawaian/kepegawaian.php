@@ -127,6 +127,76 @@ class kepegawaian extends CI_Model
 		return $query->result_array();
 	}
 	
+	function get_data_pegawai_keluar($num, $offset, $tahun, $type, $limit)
+	{
+		$query = ('
+					SELECT * FROM v3_pegawai AS peg
+					LEFT JOIN (	SELECT * FROM v3_peg_jabatan ORDER BY id_peg_jabatan DESC) AS peg_jbt ON peg.peg_nipp = peg_jbt.p_jbt_nipp
+					LEFT JOIN (	SELECT * FROM v3_peg_tmt ORDER BY id_peg_tmt DESC) AS peg_tmt ON peg.peg_nipp = peg_tmt.p_tmt_nipp
+					LEFT JOIN (	SELECT * FROM v3_peg_cabang) AS cab ON peg_tmt.p_tmt_nipp = cab.p_cab_nipp
+					WHERE (\''.$tahun.'\' - YEAR(peg.peg_tgl_lahir) > \''.$type.'\'
+					AND \''.$tahun.'\' - YEAR(peg.peg_tgl_lahir) < \''.$limit.'\'
+					AND peg_tmt.p_tmt_end = \'0000-00-00\')  OR ((peg_tmt.p_tmt_reason = \'Pindah Cabang\') AND (peg_tmt.p_tmt_ket <> \'aktif\') )
+					GROUP BY peg.id_pegawai
+					ORDER BY peg.peg_tgl_lahir DESC
+					LIMIT '.$offset.' , '.$num
+		);
+		$query = $this->db->query($query); 
+		return $query->result_array();
+	}
+	function countPegawaiKeluar( $tahun, $type, $limit)
+	{
+		$query = ('
+					SELECT * FROM v3_pegawai AS peg
+					LEFT JOIN (	SELECT * FROM v3_peg_jabatan ORDER BY id_peg_jabatan DESC) AS peg_jbt ON peg.peg_nipp = peg_jbt.p_jbt_nipp
+					LEFT JOIN (	SELECT * FROM v3_peg_tmt ORDER BY id_peg_tmt DESC) AS peg_tmt ON peg.peg_nipp = peg_tmt.p_tmt_nipp
+					LEFT JOIN (	SELECT * FROM v3_peg_cabang) AS cab ON peg_tmt.p_tmt_nipp = cab.p_cab_nipp
+					WHERE (\''.$tahun.'\' - YEAR(peg.peg_tgl_lahir) > \''.$type.'\'
+					AND \''.$tahun.'\' - YEAR(peg.peg_tgl_lahir) < \''.$limit.'\'
+					AND peg_tmt.p_tmt_end = \'0000-00-00\')  OR ((peg_tmt.p_tmt_reason = \'Pindah Cabang\') AND (peg_tmt.p_tmt_ket <> \'aktif\') )
+					GROUP BY peg.id_pegawai
+					ORDER BY peg.peg_tgl_lahir DESC
+		');
+		$query = $this->db->query($query); 
+		return $query->num_rows();
+	}
+	
+	function search_data_pegawai_keluar($num, $offset, $tahun, $type, $limit, $search)
+	{
+		$query = ('
+					SELECT * FROM v3_pegawai AS peg
+					LEFT JOIN (	SELECT * FROM v3_peg_jabatan ORDER BY id_peg_jabatan DESC) AS peg_jbt ON peg.peg_nipp = peg_jbt.p_jbt_nipp
+					LEFT JOIN (	SELECT * FROM v3_peg_tmt ORDER BY id_peg_tmt DESC) AS peg_tmt ON peg.peg_nipp = peg_tmt.p_tmt_nipp
+					LEFT JOIN (	SELECT * FROM v3_peg_cabang) AS cab ON peg_tmt.p_tmt_nipp = cab.p_cab_nipp
+					WHERE ((\''.$tahun.'\' - YEAR(peg.peg_tgl_lahir) > \''.$type.'\'
+					AND \''.$tahun.'\' - YEAR(peg.peg_tgl_lahir) < \''.$limit.'\'
+					AND peg_tmt.p_tmt_end = \'0000-00-00\')  OR ((peg_tmt.p_tmt_reason = \'Pindah Cabang\') AND (peg_tmt.p_tmt_ket <> \'aktif\') ))
+					AND ((peg_nipp LIKE \'%'.$search.'%\')  OR  (peg_nama LIKE \'%'.$search.'%\') )
+					GROUP BY peg.id_pegawai
+					ORDER BY peg.peg_tgl_lahir DESC
+					LIMIT '.$offset.' , '.$num
+		);
+		$query = $this->db->query($query); 
+		return $query->result_array();
+	}
+	function countSearchPegawaiKeluar( $tahun, $type, $limit, $search)
+	{
+		$query = ('
+					SELECT * FROM v3_pegawai AS peg
+					LEFT JOIN (	SELECT * FROM v3_peg_jabatan ORDER BY id_peg_jabatan DESC) AS peg_jbt ON peg.peg_nipp = peg_jbt.p_jbt_nipp
+					LEFT JOIN (	SELECT * FROM v3_peg_tmt ORDER BY id_peg_tmt DESC) AS peg_tmt ON peg.peg_nipp = peg_tmt.p_tmt_nipp
+					LEFT JOIN (	SELECT * FROM v3_peg_cabang) AS cab ON peg_tmt.p_tmt_nipp = cab.p_cab_nipp
+					WHERE ((\''.$tahun.'\' - YEAR(peg.peg_tgl_lahir) > \''.$type.'\'
+					AND \''.$tahun.'\' - YEAR(peg.peg_tgl_lahir) < \''.$limit.'\'
+					AND peg_tmt.p_tmt_end = \'0000-00-00\')  OR ((peg_tmt.p_tmt_reason = \'Pindah Cabang\') AND (peg_tmt.p_tmt_ket <> \'aktif\') ))
+					AND ((peg_nipp LIKE \'%'.$search.'%\')  OR  (peg_nama LIKE \'%'.$search.'%\') )
+					GROUP BY peg.id_pegawai
+					ORDER BY peg.peg_tgl_lahir DESC
+		');
+		$query = $this->db->query($query); 
+		return $query->num_rows();
+	}
+	
 	function get_data_pegawai_pindah_cabang($num,$offset)
 	{
 		$query = "
@@ -642,6 +712,7 @@ class kepegawaian extends CI_Model
 		$this->db->insert('v3_peg_non_stkp',$data_nstkp);
 	}
 	
+	
 //-------- update data pegawai --------------//
 	
 	function update_data_pegawai($data_pegawai)
@@ -928,6 +999,19 @@ class kepegawaian extends CI_Model
 	{
 		$this->db->where('id_peg_unit', $id);
 		$this->db->update('v3_peg_unit',$tmt);
+	}
+	
+	function get_id_peg_by_nipp($nipp)
+	{
+		$data = $this->db->get_where('v3_pegawai', array('peg_nipp' => $nipp));
+		
+		if($this->db->affected_rows())
+		{
+			foreach ($data->result() as $row)
+            {
+				return $row->id_pegawai;
+			}
+		}		
 	}
 	/*
 	function copy_data_pegawai($nipp,$nipp_baru)

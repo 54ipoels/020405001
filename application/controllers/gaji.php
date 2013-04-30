@@ -77,7 +77,7 @@ class Gaji extends Application {
 		$data['form_gaji'] = 'id="current"';
 		$this->load->view('gaji/index',$data);
 	}
-	
+		
 	function add_penggajian()
 	{
 		//ambil data unit
@@ -190,7 +190,7 @@ class Gaji extends Application {
 		$data['view_gaji_peg'] = 'class="this"';
 		$data['form_gaji'] = 'id="current"';
 		
-		if ($this->input->post('unit') == 'all')
+		if ($this->input->post('unit') == 'all' OR $this->input->post('unit') == 'pilih')
 		{
 			$unit = '%';
 		} 
@@ -227,6 +227,266 @@ class Gaji extends Application {
 		
 		redirect('gaji/gaji_pegawai');
 	}
+	
+	public function import()
+	{
+		$data['page'] = 'import data';
+		$data['view_gaji_pegawai'] = 'class="this"';
+		$data['form_gaji'] = 'id="current"';
+		$this->load->view('gaji/index',$data);
+	}
+	
+	public function run_import(){
+		$bulan = $this->input->post('bulan');
+		$tahun = $this->input->post('tahun');
+		
+		$file   = explode('.',$_FILES['database']['name']);
+		$length = count($file);
+		if($file[$length -1] == 'csv' ){ 
+			$tmp    = $_FILES['database']['tmp_name'];
+		
+		$handle = fopen($tmp,"r");
+		$data = $handle;
+		$i=0;
+		$j=0;
+		do {
+			if ($data[0]) {
+			if($i>3){
+				$id_peg=$this->m_gaji->get_id_peg_by_nipp($data[4]);
+				$data_gaji =  array(
+						"pgj_id_peg"		=>	$id_peg,
+						"pgj_gaji_bruto"	=>  str_replace(",","",$data[7]),
+						"pgj_masa_bakti"	=>	$data[10],
+						"pgj_koreksi"		=>	$data[8],
+						"pgj_insentive"		=>	"",
+						"pgj_potongan"		=>	"",
+						"pgj_pembulatan"	=>	$data[15],
+						"pgj_terima"		=>	str_replace(",","",$data[16]),
+						"pgj_bulan"			=>	$bulan,
+						"pgj_tahun"			=>	$tahun,
+						"pgj_update_by"		=>	"admin",
+					
+					);
+				
+				$data_pot_peg = array(
+						"id_peg_pot_peg_gaji"	=>	$id_peg,
+						"pot_peg_siperkasa"		=>	str_replace(",","",$data[21]),
+						"pot_peg_kokarga"		=>	str_replace(",","",$data[22]),
+						"pot_peg_kosigarden"	=>	str_replace(",","",$data[24]),
+						"pot_peg_flexy"			=>	"",
+						"pot_peg_other"			=>	"",
+						"pot_peg_ggc"			=>	"",
+						"pot_peg_jht"			=>	str_replace(",","",$data[19]),
+						"pot_peg_tht"			=>	str_replace(",","",$data[20]),
+						"pot_peg_pensiun"		=>	str_replace(",","",$data[17]),
+						"pot_peg_bulan"			=>	$bulan,
+						"pot_peg_tahun"			=>	$tahun,
+						"pot_peg_update_by"		=>	"admin",
+						
+					);	
+				
+				$data_pot_perusahaan	= array (
+						"id_peg_pot_per_gaji"	=>	$id_peg,
+						"pot_per_as_jiwa"		=>	str_replace(",","",$data[36]),
+						"pot_per_jk"			=>	str_replace(",","",$data[33]),
+						"pot_per_jkk"			=>	str_replace(",","",$data[34]),
+						"pot_per_siharta"		=>	str_replace(",","",$data[35]),
+						"pot_per_other"			=>	"",
+						"pot_per_jht"			=>	str_replace(",","",$data[31]),
+						"pot_per_tht"			=>	str_replace(",","",$data[30]),
+						"pot_per_pensiun"		=>	str_replace(",","",$data[29]),
+						"pot_per_bulan"			=>	$bulan,
+						"pot_per_tahun"			=>	$tahun,
+						"pot_per_update_by"		=>	"admin",
+						);	
+				
+				if($id_peg > 0){
+					$this->m_gaji->insert_data_gaji_pegawai($data_gaji);
+					$this->m_gaji->insert_data_gaji_pot_pegawai($data_pot_peg);
+					$this->m_gaji->insert_data_gaji_pot_perusahaan($data_pot_perusahaan);
+					
+				}else{
+					$tidak_masuk[$j]=$data[4];
+					$j++;
+				}
+				
+			
+				}
+			$i++;
+			
+			}
+		} while ($data = fgetcsv($handle,1000,","));
+			$data['gagal'] = $tidak_masuk;
+			$data['n_gagal']	=	$j;
+			$data['page'] = 'hasil import';		
+			$data['view_gaji_peg'] = 'class="this"';
+			$data['form_gaji'] = 'id="current"';
+			$this->load->view('gaji/index',$data);
+		} else {
+			
+			redirect('gaji/import');
+		} 
+		/*
+		if($file[$length -1] == 'xlsx' || $file[$length -1] == 'xls'){//jagain barangkali uploadnya selain file excel <img src="http://s0.wp.com/wp-includes/images/smilies/icon_smile.gif?m=1129645325g" alt=":-)" class="wp-smiley"> 
+			$tmp    = $_FILES['database']['tmp_name'];//Baca dari tmp folder jadi file ga perlu jadi sampah di server :-p
+			$this->load->library('excel');//Load library excelnya
+			$read   = PHPExcel_IOFactory::createReaderForFile($tmp);
+			$read->setReadDataOnly(true);
+			$excel  = $read->load($tmp);
+			$sheets = $read->listWorksheetNames($tmp);//baca semua sheet yang ada
+			foreach($sheets as $sheet){
+				if($this->db->table_exists($sheet)){//check sheet-nya itu nama table ape bukan, kalo bukan buang aja... nyampah doank :-p
+					$_sheet = $excel->setActiveSheetIndexByName($sheet);//Kunci sheetnye biar kagak lepas :-p
+					$maxRow = $_sheet->getHighestRow();
+					$maxCol = $_sheet->getHighestColumn();
+					$field  = array();
+					$sql    = array();
+					$maxCol = range('A',$maxCol);
+					foreach($maxCol as $key => $coloumn){
+						$field[$key]    = $_sheet->getCell($coloumn.'1')->getCalculatedValue();//Kolom pertama sebagai field list pada table
+					}
+					for($i = 2; $i <= $maxRow; $i++){
+						foreach($maxCol as $k => $coloumn){
+							$sql[$field[$k]]  = $_sheet->getCell($coloumn.$i)->getCalculatedValue();
+							echo $sql[$field[$k]];
+						
+						}
+						
+						echo "<br>";
+						#$this->db->insert($sheet,$sql);//ribet banget tinggal insert doank...
+					}
+				}
+			}
+		}else{
+			exit('do not allowed to upload');//pesan error tipe file tidak tepat
+		}
+		redirect('home');//redirect after success
+		*/
+		
+	}
+	
+	
+	/*
+	======================================================================================================
+	 FUNCTION LEMBUR
+	======================================================================================================
+	*/
+	
+	function lembur_pegawai()
+	{	
+		//ambil data unit
+		$data['showdata'] = $this->m_asset->ambil_data_unit();
+		$data['page'] = 'lembur_pegawai';		
+		$data['view_lembur_pegawai'] = 'class="this"';
+		$data['form_gaji'] = 'id="current"';
+		$this->load->view('gaji/index',$data);
+	}
+	
+	
+	function view_lembur_pegawai()
+	{	
+		//ambil data unit
+		$data['showdata'] = $this->m_asset->ambil_data_lembur(); 
+		$data['unitshow'] = $this->input->post('unit');
+		$data['page'] = 'view_lembur_pegawai';		
+		$data['view_lembur_pegawai'] = 'class="this"';
+		$data['form_gaji'] = 'id="current"';
+		$this->load->view('gaji/index',$data);
+	}
+	
+	function view_detail_lembur()
+	{	
+		//ambil data unit
+		$id=$this->uri->segment(3);
+		$data['showdata'] = $this->m_asset->ambil_data_lembur_by_id($id); 
+		$show = $data['showdata'];
+		foreach ($show as $row){
+			$penerimaan = $row['lmb_hari_kerja'] + $row['lmb_hari_libur'] + $row['lmb_ex_voed'] + $row['lmb_shift_all'] - $row['lmb_potongan'] + $row['lmb_apresiasi'] + $row['lmb_koreksi'] + $row['lmb_natura'];
+		};
+		$data['terbilang']= $this->terbilang($penerimaan);
+		$data['month']=	$this->namabulan($this->uri->segment(4));
+		$data['year']=$this->uri->segment(5);
+		$data['penerimaan'] = $penerimaan;
+		$data['page'] = 'view_detail_lembur';		
+		$data['view_detail_lembur'] = 'class="this"';
+		$data['form_gaji'] = 'id="current"';
+		$this->load->view('gaji/index',$data);
+	}
+	
+	
+	function add_lembur()
+	{
+		//ambil data unit
+		$data['showdata'] = $this->m_asset->ambil_data_unit();
+		$data['page'] = 'add_lembur';		
+		$data['add_lembur'] = 'class="this"';
+		$data['form_gaji'] = 'id="current"';
+		$this->load->view('gaji/index',$data);	
+	}
+	
+	function edit_lembur()
+	{
+		//ambil data unit
+		$id=$this->uri->segment(3);
+		$data['showdata'] = $this->m_asset->ambil_data_lembur_by_id($id); 
+		$show = $data['showdata'];
+		foreach ($show as $row){
+			$penerimaan = $row['lmb_hari_kerja'] + $row['lmb_hari_libur'] + $row['lmb_ex_voed'] + $row['lmb_shift_all'] - $row['lmb_potongan'] + $row['lmb_apresiasi'] + $row['lmb_koreksi'] + $row['lmb_natura'];
+		};
+		$data['penerimaan'] = $penerimaan;
+		$data['page'] = 'edit_lembur';		
+		$data['edit_lembur'] = 'class="this"';
+		$data['form_gaji'] = 'id="current"';
+		$this->load->view('gaji/index',$data);	
+	}
+	
+	function submit_lembur_pegawai()
+	{
+		if($this->input->post('submit_lembur_view'))
+		{
+			$unit = $this->input->post('unit'); //unit_code
+			$month = $this->input->post('month'); //unit_code
+			$year = $this->input->post('year'); //unit_code
+			$id_pegawai = $this->input->post('nipp'); //id_pegawai
+			$data['page'] = 'view_lembur_pegawai';		
+			$data['view_lembur_pegawai'] = 'class="this"';
+			$data['form_gaji'] = 'id="current"';
+			
+			$data['showdata'] = $this->m_asset->ambil_data_lembur($unit,$id_pegawai,$month,$year); 
+			$this->load->view('gaji/index',$data);
+		}
+		
+		
+		if($this->input->post('submit_lembur_add'))
+		{
+			$check = $this->m_asset->add_lembur();
+			redirect('gaji/lembur_pegawai');
+		}
+		//submit dari Add Libur Nasional
+		else if($this->input->post('submit_lembur_edit'))
+		{
+			$result = $this->m_asset->edit_lembur();
+			redirect('gaji/lembur_pegawai');
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	function terbilang($angka) {
 		$angka = (float)$angka; 

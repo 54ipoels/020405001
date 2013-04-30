@@ -1,13 +1,13 @@
 
 <div class = "oneTwo">
-<br /><?php echo anchor('c_absensi/add_lembur', img(array('src'=>'images/icons/control/32/plus.png','border'=>'0','alt'=>'ADD')), 'title="ADD"' ); ?>
+<br /><?php echo anchor('gaji/add_lembur', img(array('src'=>'images/icons/control/32/plus.png','border'=>'0','alt'=>'ADD')), 'title="ADD"' ); ?>
 
 	<div class="widget">
             <div class="title"><img src="<?php echo base_url()?>images/icons/dark/pencil.png" alt="" class="titleIcon" /><h6>View Lembur Pegawai</h6></div>
 			<?php
 			$this->load->view('asset/v_asset');
 			$attributes = array('class'=>'form');
-			echo form_open('c_absensi/submit_lembur_pegawai', $attributes);
+			echo form_open('gaji/submit_lembur_pegawai', $attributes);
 			?>
                 <fieldset class="step" id="w2first">
                     <div class="formRow">

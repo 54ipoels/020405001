@@ -1,11 +1,11 @@
 <div class = "oneTwo">
 	<div class="widget">
-            <div class="title"><img src="<?php echo base_url()?>images/icons/dark/pencil.png" alt="" class="titleIcon" /><h6>Import Data</h6></div>
+            <div class="title"><img src="<?php echo base_url()?>images/icons/dark/pencil.png" alt="" class="titleIcon" /><h6>Gaji</h6></div>
 			<?php 
 			$attributes = array('class'=>'form','id'=>'wizard3');
-			echo form_open_multipart('pekerja/run_import', $attributes) ?>
+			echo form_open_multipart('gaji/run_import', $attributes) ?>
                 <fieldset class="step" id="w2first">
-					<h1></h1>
+					<h1>Import File</h1>
 					<div class="formRow">
 						<label>File:</label>
                         <div class="formRight"><input type="file" name="database" size="20" /></div>

@@ -284,4 +284,31 @@ class M_gaji extends CI_Model
 		$this->db->where('id_pot_gaji_perusahaan',$id);
 		$this->db->update('v3_pot_gaji_perusahaan', $data_pot_per);
 	}
+	
+	
+	function insert_data_gaji_pegawai($data_gaji)
+	{
+		$this->db->insert('v3_penggajian',$data_gaji);
+	}
+	function insert_data_gaji_pot_pegawai($data_pot_peg)
+	{
+		$this->db->insert('v3_pot_gaji_pegawai',$data_pot_peg);
+	}
+	function insert_data_gaji_pot_perusahaan($data_pot_perusahaan)
+	{
+		$this->db->insert('v3_pot_gaji_perusahaan',$data_pot_perusahaan);
+	}
+	
+	function get_id_peg_by_nipp($nipp)
+	{
+		$data = $this->db->get_where('v3_pegawai', array('peg_nipp' => $nipp));
+		
+		if($this->db->affected_rows())
+		{
+			foreach ($data->result() as $row)
+            {
+				return $row->id_pegawai;
+			}
+		}		
+	}
 }

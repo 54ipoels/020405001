@@ -58,6 +58,10 @@
 		{
 			$this->load->view('kepegawaian/page/pindah_cabang');
 		}else
+		if ($page == 'Data Pegawai Keluar')
+		{
+			$this->load->view('kepegawaian/page/pegawai_keluar');
+		}else
 		if ($page == 'Data SDM')
 		{
 			$this->load->view('kepegawaian/page/data_sdm');

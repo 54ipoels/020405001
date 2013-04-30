@@ -399,11 +399,14 @@ class pekerja extends Application {
 			else
 			{
 			#preparing data for input
+			if(($this->input->post('tanggal')==NULL) OR ($this->input->post('tanggal')=="00/00/0000")){$tgl_lahir = "0000-00-00";}
+			else{ $tgl_lahir = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tanggal'))));}
+		
 			$data_pegawai = array(
 					'peg_nipp' 			=> $this->input->post('nipp'),
 					'peg_nama' 			=> $this->input->post('nama'),
 					'peg_tmpt_lahir'	=> $this->input->post('tempat'),
-					'peg_tgl_lahir'		=> mdate($datestring, strtotime($this->input->post('tanggal'))),
+					'peg_tgl_lahir'		=> $tgl_lahir,
 					'peg_jns_kelamin'	=> $this->input->post('jns_klm'),
 					'peg_gol_darah'		=> $this->input->post('gol_drh'),
 					'peg_update_on'		=> $tanggal,
@@ -938,7 +941,7 @@ class pekerja extends Application {
 		}
 		else
 		{
-		if($this->input->post('tanggal')=="00/00/0000"){$tanggal_lahir="00-00-0000";}
+		if($this->input->post('tanggal')=="00/00/0000"){$tanggal_lahir="0000-00-00";}
 		else{$tanggal_lahir=mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tanggal'))));}
 		
 		
@@ -2198,88 +2201,69 @@ class pekerja extends Application {
 		
 	}
 	
-	public function import()
+	public function pegawai_keluar()
 	{
-		$data['page'] = 'Import Data';
-		$data['view_import'] = 'class="this"';
+		$datestring = "%Y" ;
+		$time = time();
+		$tanggal = mdate($datestring, $time);
+		
+		$type = '52';
+		$limit = '100';
+		
+		#pagination config
+		$config['base_url'] = base_url().'index.php/pekerja/pegawai_keluar/'; //set the base url for pagination
+		$config['total_rows'] = $this->kepegawaian->countPegawaiKeluar($tanggal,$type, $limit); //total rows
+		$config['per_page'] = 10; //the number of per page for pagination
+		$config['uri_segment'] = 3; //see from base_url. 3 for this case
+		$this->pagination->initialize($config);
+		$page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+		
+		#data preparing
+		$data['pegawai'] = $this->kepegawaian->get_data_pegawai_keluar($config['per_page'],$page, $tanggal, $type, $limit);
+		$data['page'] = 'Data Pegawai Keluar';
+		$data['tanggal'] = $tanggal;
+		$data['type'] = 'ALL';
+		$data['view_keluar'] = 'class="this"';
 		$data['page_karyawan'] = 'yes';
+		#calling view
 		$this->load->view('kepegawaian/index',$data);
 	}
 	
-	public function run_import(){
-		$file   = explode('.',$_FILES['database']['name']);
-		$length = count($file);
-		if($file[$length -1] == 'csv' ){//jagain barangkali uploadnya selain file excel <img src="http://s0.wp.com/wp-includes/images/smilies/icon_smile.gif?m=1129645325g" alt=":-)" class="wp-smiley"> 
-			$tmp    = $_FILES['database']['tmp_name'];//Baca dari tmp folder jadi file ga perlu jadi sampah di server :-p
-		
-		$handle = fopen($tmp,"r");
-		$data = $handle;
-		$i=0;
-		do {
-			if ($data[0]) {
-				$data_input = array(
-						"0"	=>	"0",	
-					
-					);
-			echo "test1";
-			
-				if($i>0){	
-			
-				echo "INSERT INTO contacts_tmp (contact_first, contact_last, contact_email) VALUES
-					(
-						'".addslashes($data[0])."',
-						'".addslashes($data[1])."',
-						'".addslashes($data[2])."'
-					)
-				";
-				echo"<br>";
-				}
-			$i++;
-			echo $i."<br>";
-			}
-		} while ($data = fgetcsv($handle,1000,",","'"));
-		} else {
-			
-			redirect('pekerja/import');
-		} 
-		/*
-		if($file[$length -1] == 'xlsx' || $file[$length -1] == 'xls'){//jagain barangkali uploadnya selain file excel <img src="http://s0.wp.com/wp-includes/images/smilies/icon_smile.gif?m=1129645325g" alt=":-)" class="wp-smiley"> 
-			$tmp    = $_FILES['database']['tmp_name'];//Baca dari tmp folder jadi file ga perlu jadi sampah di server :-p
-			$this->load->library('excel');//Load library excelnya
-			$read   = PHPExcel_IOFactory::createReaderForFile($tmp);
-			$read->setReadDataOnly(true);
-			$excel  = $read->load($tmp);
-			$sheets = $read->listWorksheetNames($tmp);//baca semua sheet yang ada
-			foreach($sheets as $sheet){
-				if($this->db->table_exists($sheet)){//check sheet-nya itu nama table ape bukan, kalo bukan buang aja... nyampah doank :-p
-					$_sheet = $excel->setActiveSheetIndexByName($sheet);//Kunci sheetnye biar kagak lepas :-p
-					$maxRow = $_sheet->getHighestRow();
-					$maxCol = $_sheet->getHighestColumn();
-					$field  = array();
-					$sql    = array();
-					$maxCol = range('A',$maxCol);
-					foreach($maxCol as $key => $coloumn){
-						$field[$key]    = $_sheet->getCell($coloumn.'1')->getCalculatedValue();//Kolom pertama sebagai field list pada table
-					}
-					for($i = 2; $i <= $maxRow; $i++){
-						foreach($maxCol as $k => $coloumn){
-							$sql[$field[$k]]  = $_sheet->getCell($coloumn.$i)->getCalculatedValue();
-							echo $sql[$field[$k]];
-						
-						}
-						
-						echo "<br>";
-						#$this->db->insert($sheet,$sql);//ribet banget tinggal insert doank...
-					}
-				}
-			}
+	public function search_pegawai_keluar()
+	{
+		if ($this->input->post('search') == NULL )
+		{
+			$search_data = str_replace('%20',' ',$this->uri->segment(3));
 		}else{
-			exit('do not allowed to upload');//pesan error tipe file tidak tepat
+			$search_data = $this->input->post('search');
 		}
-		redirect('home');//redirect after success
-		*/
 		
+		$datestring = "%Y" ;
+		$time = time();
+		$tanggal = mdate($datestring, $time);
+		
+		$type = '52';
+		$limit = '100';
+		
+		#pagination config
+		$config['base_url'] = base_url().'index.php/pekerja/search_pegawai_keluar/'.$search_data.'/'; //set the base url for pagination
+		$config['total_rows'] = $this->kepegawaian->countSearchPegawaiKeluar($tanggal, $type, $limit,$search_data); //total rows
+		$config['per_page'] = 10; //the number of per page for pagination
+		$config['uri_segment'] = 4; //see from base_url. 3 for this case
+		$this->pagination->initialize($config);
+		$page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+		
+		#data preparing
+		$data['pegawai'] = $this->kepegawaian->search_data_pegawai_keluar($config['per_page'],$page, $tanggal, $type, $limit, $search_data);
+		$data['page'] = 'Data Pegawai Keluar';
+		$data['tanggal'] = $tanggal;
+		$data['type'] = 'ALL';
+		$data['view_keluar'] = 'class="this"';
+		$data['page_karyawan'] = 'yes';
+		#calling view
+		$this->load->view('kepegawaian/index',$data);
 	}
+	
 	
 }
 

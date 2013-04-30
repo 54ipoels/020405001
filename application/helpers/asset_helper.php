@@ -217,6 +217,23 @@
 		return array($telathk,$lemburhk,$lemburhl,$exvo);
 	}
 
+	function romawi($angka){
+		if ($angka == 1) {$romawi = 'I';} 
+		else if ($angka == 2) {$romawi = 'II';} 
+		else if ($angka == 3) {$romawi = 'III';} 
+		else if ($angka == 4) {$romawi = 'IV';} 
+		else if ($angka == 5) {$romawi = 'V';} 
+		else if ($angka == 6) {$romawi = 'VI';} 
+		else if ($angka == 7) {$romawi = 'VII';} 
+		else if ($angka == 8) {$romawi = 'VIII';} 
+		else if ($angka == 9) {$romawi = 'IX';} 
+		else if ($angka == 10) {$romawi = 'X';} 
+		else if ($angka == 11) {$romawi = 'XI';} 
+		else if ($angka == 12) {$romawi = 'XII';}
+		else {$romawi="";}
+		return $romawi;
+	}
+	
 }
 
 ?>
