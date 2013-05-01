@@ -10,9 +10,9 @@
                         <td colspan="5"><?php echo $bulantahun; ?></td>
                     </tr>
                     <tr>
-                    	<td>Telat HK / menit</td>
-                        <td>Lembur HK / menit</td>
-                        <td>Lembur HL / menit</td>
+                    	<td>Telat HK / jam</td>
+                        <td>Lembur HK / jam</td>
+                        <td>Lembur HL / jam</td>
                         <td>Exvo</td>
                         <td>Action</td>
                     </tr>
@@ -27,7 +27,7 @@
 						{
 							$data = ambil_jam_absensi($sd['fschpeg_id'], $tgl[$i], $year);
 							//print_r($data);
-							$hitung = hit_telat_dan_lembur($data[0], $data[1], $data[2], $data[3], $data[4]);
+							$hitung = hit_telat_dan_lembur($data[0], $data[1], $data[2], $data[3], $data[4], $data[5], $data[6], $data[7], $data[8]);
 							$telathk  = $telathk  + $hitung[0];
 							$lemburhk = $lemburhk + $hitung[1];
 							$lemburhl = $lemburhl + $hitung[2];

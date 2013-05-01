@@ -5,6 +5,8 @@
                     <tr>
                         <td>No</td>
                         <td>Jam Masuk</td>
+                        <td>Break Out</td>
+                        <td>Break In</td>
                         <td>Jam Pulang</td>
                     </tr>
                 </thead>
@@ -14,15 +16,30 @@
 					<tr>
                         <td><center><?php echo $i++ ?></center></td>
 						<?php if($sd->fschtime_off_status == 1) { ?>
-                        <td colspan="2" style="background-color:#ffdfdf">OFF</td>
+                        <td colspan="4" style="background-color:#ffdfdf">OFF</td>
                         <?php } else { ?>
                         <td><?php echo $sd->fschtime_time_in ?></td>
-                        <td><?php echo $sd->fschtime_time_out?><?php if($sd->fschtime_time_in >= $sd->fschtime_time_out) { echo " / Next Day"; }?></td>
+                        <td><?php if($sd->fschtime_break_out == "00:00:00"){echo "--:--:--";}
+								else {
+									echo $sd->fschtime_break_out; 
+									if($sd->fschtime_time_in >= $sd->fschtime_break_out) { echo " / Next Day"; }
+								} 
+							?>
+						</td>
+						<td><?php if($sd->fschtime_break_in == "00:00:00"){echo "--:--:--";}
+								else {
+									echo $sd->fschtime_break_in; 
+									if($sd->fschtime_time_in >= $sd->fschtime_break_in) { echo " / Next Day"; }
+								} 
+							?>
+						</td>
+								
+						<td><?php echo $sd->fschtime_time_out?><?php if($sd->fschtime_time_in >= $sd->fschtime_time_out) { echo " / Next Day"; }?></td>
                         <?php } ?>
                     </tr>
 				<?php endforeach ?>
                 <tr>
-                <td colspan="3"><input class="basic" value="Back" type="reset" onClick="javascript:history.back(1)" /></td>
+                <td colspan="5"><input class="basic" value="Back" type="reset" onClick="javascript:history.back(1)" /></td>
                 </tr>
                 </tbody>
             </table>

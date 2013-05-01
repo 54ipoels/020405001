@@ -2,7 +2,12 @@
 
 <div class="widget">
 <fieldset class="step" id="w2first"><br> 
-<table><tr><td width = "770px"> </td>
+<table><tr><td width='30px'></td><td width = "740px">    
+				<div class="searchWidget1">
+					<a href="<?php echo 'pegawai_pensiun' ;?>"><input type="button" name="Pensiun" value="Pensiun" class="blueB m110"/></a>
+					<a href="<?php echo 'get_pindah_cabang' ;?>"><input type="button" name="Pindah" value="Pindah Cabang" class="blueB m110"/></a>
+				</div>
+            </td>
 	<td width="250px"><div class="searchWidget1"><?php echo form_open('pekerja/search_pegawai_keluar');?>
                         <input type="text" name="search"  placeholder="Enter search text..." />
                         <input type="submit" name="find" value="" class="blueB m110"/></div>
@@ -64,15 +69,24 @@
 								<?php  
 									$yearstring = '%Y';
 									$usia_end = mdate($yearstring,strtotime($row_pegawai['p_tmt_end'])) - mdate($yearstring, strtotime($row_pegawai['peg_tgl_lahir']));
+									$usia = mdate($yearstring,now()) - mdate($yearstring, strtotime($row_pegawai['peg_tgl_lahir']));
 									if($row_pegawai['p_tmt_reason'] == "Pindah Cabang" ){
 										echo "Pindah Cabang ".$row_pegawai['p_cab_kode_cabang'];
 									} else
-									if($usia_end >= 52){
-										echo "Pensiun";										
-									}else {
-										echo $row_pegawai['p_tmt_reason'];
+									if ($usia > 52){
+										if(($usia > 55)  ){
+											echo "Pensiun";										
+										} else
+										if(($usia >= 52) AND ($usia < 54) ){
+											echo "PPB";										
+										} else
+										if(($usia >= 54) AND ($usia < 56) ){
+											echo "MPP";										
+										}
 									}
-									
+									else {
+										echo $row_pegawai['p_tmt_reason'];
+									} 
 									
 								?>
 							</center>

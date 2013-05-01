@@ -75,3 +75,77 @@
 			<?php echo form_close();?>
         </div>
 </div>
+
+<div class = "oneTwo">
+<br />
+<br>
+<br>
+	<div class="widget">
+            <div class="title"><img src="<?php echo base_url()?>images/icons/dark/pencil.png" alt="" class="titleIcon" /><h6>Generate Lembur Pegawai</h6></div>
+			<?php
+			$attributes = array('class'=>'form');
+			echo form_open('gaji/generate_lembur_pegawai', $attributes);
+			?>
+                <fieldset class="step" id="w2first">
+                    <div class="formRow">
+						<label>Unit :<span class="req">*</span></label>
+                        <div class="formRight">
+							<select name="unit">
+                                <option value="pilih"> -- Pilih Unit -- </option>
+                                <?php foreach($showdata as $unit) { ?>
+                                <option value="<?php echo $unit['kode_unit']; ?>"><?php echo $unit['kode_unit']; ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+					   <div class="clear"></div>
+                    </div>
+                    <div class="formRow">
+                        <label>Periode :<span class="req">*</span></label>
+                        <div class="formRight">
+							<?php
+							$month = array(
+										  '1' => 'JANUARI',
+										  '2' => 'FEBRUARI',
+										  '3' => 'MARET',
+										  '4' => 'APRIL',
+										  '5' => 'MEI',
+										  '6' => 'JUNI',
+										  '7' => 'JULI',
+										  '8' => 'AGUSTUS',
+										  '9' => 'SEPTEMBER',
+										  '10' => 'OKTOBER',
+										  '11' => 'NOVEMBER',
+										  '12' => 'DESEMBER',
+										);
+							echo form_dropdown('month', $month, date('n'));
+							
+							$year = array(
+										  '2012' => '2012',
+										  '2013' => '2013',
+										  '2014' => '2014',
+										  '2015' => '2015',
+										  '2016' => '2016',
+										);
+						
+							echo form_dropdown('year', $year, date('Y'));
+							?>
+                            </div>
+                        <div class="clear"></div>
+                    </div>
+                </fieldset>
+				<div class="wizButtons"> 
+                    <div class="status" id="status2"></div>
+					<span class="wNavButtons">
+                       <?php 
+						$submit = array(
+							'class' => 'blueB m110',
+							'name' => 'submit_generate_lembur',
+							'value'	=> 'GENERATE',
+						);
+						echo form_submit($submit)?>
+                    </span>
+				</div>
+                <div class="clear"></div>
+			<?php echo form_close();?>
+        </div>
+</div>
