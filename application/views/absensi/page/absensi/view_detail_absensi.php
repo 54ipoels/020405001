@@ -6,8 +6,12 @@
                     <tr>
                     	<td>Tanggal</td>
                         <td>Jadwal Masuk</td>
+                        <td>Jadwal Break Out</td>
+                        <td>Jadwal Break In</td>
                         <td>Jadwal Pulang</td>
                         <td>Absensi Masuk</td>
+                        <td>Absensi Break Out</td>
+                        <td>Absensi Break In</td>
                         <td>Absensi Pulang</td>
 						<td>Action</td>
                     </tr>
@@ -20,26 +24,34 @@
 						if($sd['fschpegabs_off_status'] == 0) 
 						{ ?>
 							<td><?php echo substr($sd['fschpegabs_sch_time_in'],11,5); ?></td>
+							<td><?php echo substr($sd['fschpegabs_sch_break_out'],11,5); ?></td>
+							<td><?php echo substr($sd['fschpegabs_sch_break_in'],11,5); ?></td>
 							<td><?php echo substr($sd['fschpegabs_sch_time_out'],11,5); ?></td>
 							<td><?php echo substr($sd['fschpegabs_real_time_in'],11,5); ?></td>
+							<td><?php echo substr($sd['fschpegabs_real_break_out'],11,5); ?></td>
+							<td><?php echo substr($sd['fschpegabs_real_break_in'],11,5); ?></td>
 							<td><?php echo substr($sd['fschpegabs_real_time_out'],11,5); ?></td>
                         <?php } 
 						if($sd['fschpegabs_off_status'] == 1) 
 						{ ?>
                         	<?php if($sd['fschpegabs_real_time_in'] != "0000-00-00 00:00:00" or $sd['fschpegabs_real_time_out'] != "0000-00-00 00:00:00") { ?>
-                        	<td colspan="2" style="background-color:#ffdfdf">OFF</td>
+                        	<td colspan="4" style="background-color:#ffdfdf">OFF</td>
                         	<td style="background-color:#ffdfdf"><?php echo substr($sd['fschpegabs_real_time_in'],11,5); ?></td>
+                        	<td style="background-color:#ffdfdf"><?php echo substr($sd['fschpegabs_real_break_out'],11,5); ?></td>
+                        	<td style="background-color:#ffdfdf"><?php echo substr($sd['fschpegabs_real_break_in'],11,5); ?></td>
                         	<td style="background-color:#ffdfdf"><?php echo substr($sd['fschpegabs_real_time_out'],11,5); ?></td>
                             <?php } else { ?>
-                            <td colspan="4" style="background-color:#ffdfdf">OFF</td>
+                            <td colspan="8" style="background-color:#ffdfdf">OFF</td>
                             <?php } ?>
                         <?php } if($sd['fschpegabs_off_status'] == 2) { ?>
                         	<?php if($sd['fschpegabs_real_time_in'] != "0000-00-00 00:00:00" or $sd['fschpegabs_real_time_out'] != "0000-00-00 00:00:00") { ?>
-                        	<td colspan="2" style="background-color:#FFCCCC">LIBUR NASIONAL</td>
+                        	<td colspan="4" style="background-color:#FFCCCC">LIBUR NASIONAL</td>
                         	<td style="background-color:#ffdfdf"><?php echo substr($sd['fschpegabs_real_time_in'],11,5); ?></td>
+                        	<td style="background-color:#ffdfdf"><?php echo substr($sd['fschpegabs_real_break_out'],11,5); ?></td>
+                        	<td style="background-color:#ffdfdf"><?php echo substr($sd['fschpegabs_real_break_in'],11,5); ?></td>
                         	<td style="background-color:#ffdfdf"><?php echo substr($sd['fschpegabs_real_time_out'],11,5); ?></td>
                             <?php } else { ?>
-                            <td colspan="4" style="background-color:#FFCCCC">LIBUR NASIONAL</td>
+                            <td colspan="8" style="background-color:#FFCCCC">LIBUR NASIONAL</td>
                             <?php } ?>
                         <?php } ?>
 						<td><?php echo anchor('c_absensi/edit_detail_absensi/'.$sd['fschpegabs_fschpeg_id'].'/'.$sd['fschpegabs_id'].'/'.($numbering-1).'/'.$this->uri->segment(4).'/'.$this->uri->segment(5), 'edit'); ?></td>

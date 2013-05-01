@@ -116,7 +116,7 @@
 							'budha' => 'Budha',
 							'kongfucu' => 'Kong Fu Cu'
 						);
-						echo form_dropdown('agama',$agama,$row_agama['p_ag_agama']) ?></div>
+						echo form_dropdown('agama',$agama,strtolower($row_agama['p_ag_agama'])) ?></div>
                         <div class="clear"></div>
                     </div>
 					<div class="formRow">

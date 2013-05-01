@@ -470,7 +470,32 @@ class Gaji extends Application {
 		}
 	}
 	
-	
+	function generate_lembur_pegawai()
+	{
+		
+		if ($unit = $this->input->post('unit') == "pilih")
+		{
+			redirect('gaji/lembur_pegawai');
+		}
+		else
+		{
+			$unit = $this->input->post('unit'); //unit_code
+			$month = $this->input->post('month'); //unit_code
+			$year = $this->input->post('year'); //unit_code
+			$id_pegawai = $this->input->post('nipp'); //id_pegawai
+			
+			
+			
+			
+			
+			$data['page'] = 'view_lembur_pegawai';		
+			$data['view_lembur_pegawai'] = 'class="this"';
+			$data['form_gaji'] = 'id="current"';
+				
+			$data['showdata'] = $this->m_asset->ambil_data_lembur($unit,$id_pegawai,$month,$year); 
+			$this->load->view('gaji/index',$data);
+		}
+	}
 	
 	
 	
