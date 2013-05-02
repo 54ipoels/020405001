@@ -119,6 +119,7 @@ class M_absensi extends CI_Model {
 					SELECT *
 					FROM v3_fsch_time
 					WHERE (fschtime_fsch_id = $fsch_id)
+					ORDER BY fschtime_id ASC
 				";
 		$query = $this->db->query($query);
 		return  $query->result_array();
@@ -156,12 +157,14 @@ class M_absensi extends CI_Model {
     }  
 	
 	//tambah data detail format schedule
-	function fsch_add_next($fschtime_fsch_id, $fschtime_order, $fschtime_time_in, $fschtime_time_out, $fschtime_update_by, $fschtime_off_status)
+	function fsch_add_next($fschtime_fsch_id, $fschtime_order, $fschtime_time_in, $fschtime_break_out, $fschtime_break_in, $fschtime_time_out, $fschtime_update_by, $fschtime_off_status)
 	{
       $data = array(
       	'fschtime_fsch_id' => $fschtime_fsch_id, 
 		'fschtime_order' => $fschtime_order,
 		'fschtime_time_in' => $fschtime_time_in,
+		'fschtime_break_out' => $fschtime_break_out,
+		'fschtime_break_in' => $fschtime_break_in,
 		'fschtime_time_out' => $fschtime_time_out,
 		'fschtime_update_by' => $fschtime_update_by,
 		'fschtime_off_status' => $fschtime_off_status
@@ -255,11 +258,13 @@ class M_absensi extends CI_Model {
       	return '0';
 	}
 	
-	function insert_data_format_schedule_pegawai_absensi($fschpeg_id, $time_in, $time_out,	$offstatus, $update_by, $year)
+	function insert_data_format_schedule_pegawai_absensi($fschpeg_id, $time_in, $break_out, $break_in, $time_out, $offstatus, $update_by, $year)
 	{
 		$data = array(
 		'fschpegabs_fschpeg_id' => $fschpeg_id,
       	'fschpegabs_sch_time_in' => $time_in, 
+		'fschpegabs_sch_break_out' => $break_out, 
+		'fschpegabs_sch_break_in' => $break_in, 
 		'fschpegabs_sch_time_out' => $time_out,
 		'fschpegabs_off_status' => $offstatus,
 		'fschpegabs_update_by' => $update_by
@@ -417,10 +422,14 @@ class M_absensi extends CI_Model {
 		
 		$data_absensi = array(
 			'fschpegabs_sch_time_in' => $data['sch_in'], 
+			'fschpegabs_sch_break_in' => $data['sch_break_in'], 
+			'fschpegabs_sch_break_out' => $data['sch_break_out'], 
 			'fschpegabs_sch_time_out' => $data['sch_out'],
 			'fschpegabs_real_time_in' => $data['real_in'], 
+			'fschpegabs_real_break_in' => $data['real_break_in'], 
+			'fschpegabs_real_break_out' => $data['real_break_out'],
 			'fschpegabs_real_time_out' => $data['real_out'],
-			'fschpegabs_update_on' => $date,
+			//'fschpegabs_update_on' => $date,
 			'fschpegabs_update_by' => $user
 		);
 		

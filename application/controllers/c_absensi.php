@@ -192,17 +192,21 @@ class C_absensi extends Application {
 			
 				for($i=1;$i<=$fsch_total_day;$i++){ 
 					$in = 'fschtime_time_in_'.$i;
+					$break_out = 'fschtime_break_out_'.$i;
+					$break_in = 'fschtime_break_in_'.$i;
 					$out = 'fschtime_time_out_'.$i;
 					$status = 'fschtime_off_status_'.$i;
 					$fschtime_time_in = $this->input->post($in);
 					$fschtime_time_out = $this->input->post($out);
+					$fschtime_break_in = $this->input->post($break_in);
+					$fschtime_break_out = $this->input->post($break_out);
 					$fschtime_off_status = $this->input->post($status);
 					
 					//urutan data
 					$fschtime_order = $i;
 					
 					//insert data ke tabel v3_fsch_time
-					$result = $this->m_absensi->fsch_add_next($fschtime_fsch_id, $fschtime_order, $fschtime_time_in, $fschtime_time_out, $fschtime_update_by, $fschtime_off_status);
+					$result = $this->m_absensi->fsch_add_next($fschtime_fsch_id, $fschtime_order, $fschtime_time_in, $fschtime_break_out, $fschtime_break_in, $fschtime_time_out, $fschtime_update_by, $fschtime_off_status);
 				}
 			
 			}
@@ -375,6 +379,8 @@ class C_absensi extends Application {
 							
 						foreach($dataorder as $datanew) : {
 							$time_in = $datanew['fschtime_time_in'];
+							$break_out = $datanew['fschtime_break_out'];
+							$break_in = $datanew['fschtime_break_in'];
 							$time_out = $datanew['fschtime_time_out'];
 							$offstatus = $datanew['fschtime_off_status'];
 						} endforeach;
@@ -384,11 +390,15 @@ class C_absensi extends Application {
 						
 						//check if nextday
 						if($time_out < $time_in){ $tgl2 = $this->adddate($tgl, "+1 day"); } else { $tgl2 = $tgl; }
+						if($break_out < $time_in){ $tgl3 = $this->adddate($tgl, "+1 day"); } else { $tgl3 = $tgl; }
+						if($break_in < $time_in){ $tgl4 = $this->adddate($tgl, "+1 day"); } else { $tgl4 = $tgl; }
 																						
 						$time_in = "".$tgl." ".$time_in."";
 						$time_out = "".$tgl2." ".$time_out."";							
+						$break_out = "".$tgl3." ".$break_out."";							
+						$break_in = "".$tgl4." ".$break_in."";							
 							
-						$this->m_absensi->insert_data_format_schedule_pegawai_absensi($fschpeg_id, $time_in, $time_out,	$offstatus, $update_by, $year);
+						$this->m_absensi->insert_data_format_schedule_pegawai_absensi($fschpeg_id, $time_in, $break_out, $break_in, $time_out, $offstatus, $update_by, $year);
 							
 						if($start_order == $totalday) { $start_order = 1;} else { $start_order = $start_order + 1; }
 						
@@ -448,6 +458,8 @@ class C_absensi extends Application {
 							
 						foreach($dataorder as $datanew) : {
 							$time_in = $datanew['fschtime_time_in'];
+							$break_out = $datanew['fschtime_break_out'];
+							$break_in = $datanew['fschtime_break_in'];
 							$time_out = $datanew['fschtime_time_out'];
 							$offstatus = $datanew['fschtime_off_status'];
 						} endforeach;
@@ -457,11 +469,15 @@ class C_absensi extends Application {
 												
 						//check if nextday
 						if($time_out < $time_in){ $tgl2 = $this->adddate($tgl, "+1 day"); } else { $tgl2 = $tgl; }
+						if($break_out < $time_in){ $tgl3 = $this->adddate($tgl, "+1 day"); } else { $tgl3 = $tgl; }
+						if($break_in < $time_in){ $tgl4 = $this->adddate($tgl, "+1 day"); } else { $tgl4 = $tgl; }
 																						
 						$time_in = "".$tgl." ".$time_in."";
 						$time_out = "".$tgl2." ".$time_out."";								
+						$break_out = "".$tgl3." ".$break_out."";							
+						$break_in = "".$tgl4." ".$break_in."";							
 							
-						$this->m_absensi->insert_data_format_schedule_pegawai_absensi($fschpeg_id, $time_in, $time_out,	$offstatus, $update_by, $year);
+						$this->m_absensi->insert_data_format_schedule_pegawai_absensi($fschpeg_id, $time_in, $break_out, $break_in, $time_out,	$offstatus, $update_by, $year);
 							
 						if($start_order == $totalday) { $start_order = 1;} else { $start_order = $start_order + 1; }
 						
@@ -616,6 +632,7 @@ class C_absensi extends Application {
 		$fschpeg_id = $this->input->post('fschpeg_id');
 		$fschpeg_tanggal = $this->input->post('fschpeg_tanggal');
 		
+		// tgl out
 		if (((mdate($jam, strtotime($this->input->post('real_out')))) - (mdate($jam,strtotime($this->input->post('real_in'))))) <= 0)
 		{
 			$date_out = (int)$this->input->post('date')+ 1;
@@ -634,11 +651,45 @@ class C_absensi extends Application {
 		} else {
 			$date_out = $date_out;
 		}
+		
+		// tgl break out
+		if (((mdate($jam, strtotime($this->input->post('real_break_out')))) - (mdate($jam,strtotime($this->input->post('real_in'))))) <= 0)
+		{
+			$date_break_out = (int)$this->input->post('date')+ 1;
+		} else {
+			$date_break_out = $this->input->post('date');
+		}
+		if (strlen($date_break_out) <= 1)
+		{
+			$date_break_out = '0'.$date_break_out;
+		} else {
+			$date_break_out = $date_break_out;
+		}
+		
+		// tgl break in
+		if (((mdate($jam, strtotime($this->input->post('real_break_in')))) - (mdate($jam,strtotime($this->input->post('real_in'))))) <= 0)
+		{
+			$date_break_in = (int)$this->input->post('date')+ 1;
+		} else {
+			$date_break_in = $this->input->post('date');
+		}
+		if (strlen($date_break_in) <= 1)
+		{
+			$date_break_in = '0'.$date_break_in;
+		} else {
+			$date_break_in = $date_break_in;
+		}
+		
+		
+		
 		$month = $this->angkabulan($this->input->post('month'));
 		$year = $this->input->post('year');
 		$tanggal_in = $date.'-'.$month.'-'.$year; 
 		$tanggal_out = $date_out.'-'.$month.'-'.$year; 
+		$tanggal_break_in = $date_break_in.'-'.$month.'-'.$year; 
+		$tanggal_break_out = $date_break_out.'-'.$month.'-'.$year; 
 		
+		/* ini sebelum diedit
 		if ($this->input->post('sch_in') == NULL)
 		{
 			$data['sch_in'] = mdate($datestring, strtotime($tanggal_in.' '.$this->input->post('real_in').':00'));
@@ -649,9 +700,18 @@ class C_absensi extends Application {
 		{
 			$data['sch_out'] = mdate($datestring, strtotime($tanggal_in.' '.$this->input->post('real_out').':00'));
 		} else {
-			$data['sch_out'] = mdate($datestring, strtotime($this->input->post('sch_in_date').' '.$this->input->post('sch_out').':00'));
+			$data['sch_out'] = mdate($datestring, strtotime($this->input->post('sch_out_date').' '.$this->input->post('sch_out').':00'));
 		}
+		*/
+		
+		$data['sch_in'] = mdate($datestring, strtotime($tanggal_in.' '.$this->input->post('sch_in').':00'));
+		$data['sch_out'] = mdate($datestring, strtotime($tanggal_out.' '.$this->input->post('sch_out').':00'));
+		$data['sch_break_in'] = mdate($datestring, strtotime($tanggal_break_in.' '.$this->input->post('sch_break_in').':00'));
+		$data['sch_break_out'] = mdate($datestring, strtotime($tanggal_break_out.' '.$this->input->post('sch_break_out').':00'));
+		
 		$data['real_in'] = mdate($datestring, strtotime($tanggal_in.' '.$this->input->post('real_in').':00'));
+		$data['real_break_in'] = mdate($datestring, strtotime($tanggal_break_in.' '.$this->input->post('real_break_in').':00'));
+		$data['real_break_out'] = mdate($datestring, strtotime($tanggal_break_out.' '.$this->input->post('real_break_out').':00'));
 		$data['real_out'] = mdate($datestring, strtotime($tanggal_out.' '.$this->input->post('real_out').':00'));
 		
 		$this->m_absensi->submit_edit_detail_absensi($fschpeg_id,$fschpeg_tanggal,$year, $data, username());
