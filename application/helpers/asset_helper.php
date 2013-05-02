@@ -272,7 +272,7 @@
 				# jika >= artinya bahwa jika total jam jadwal sama dengan total jam realita, maka telat tidak dihitung dan lembur tidak dihitung
 				if($jml_jam_real > $jml_jam_jadwal) 
 				{ 
-					$lemburhk = ($jml_jam_real - $jml_jam_jadwal) - ($jml_break_real - $jml_break_jadwal);
+					$lemburhk = ($jml_jam_real - $jml_jam_jadwal) - $jml_break_jadwal - ($jml_break_real - $jml_break_jadwal);
 					$telathk = 0;
 				} 
 				else 

@@ -105,7 +105,7 @@
                             </div>
                         <div class="clear"></div>
                     </div><div class="formRow">
-                        <label>HARI KERJA<span class="req"></span></label>
+                        <label>UANG HARI KERJA <span class="req"></span></label>
                         <div class="formRight">
 							<div id="tampil_data2">
                             <?php 
@@ -135,7 +135,7 @@
                         <div class="clear"></div>
                     </div>
 					<div class="formRow">
-                        <label>HARI LIBUR<span class="req"></span></label>
+                        <label>UANG HARI LIBUR <span class="req"></span></label>
                         <div class="formRight">
 							<div id="tampil_data2">
                             <?php 
@@ -165,7 +165,22 @@
                         <div class="clear"></div>
                     </div>
 					<div class="formRow">
-                        <label>EX. VOED<span class="req"></span></label>
+                        <label>EX. VOED @ <span class="req"></span></label>
+                        <div class="formRight">
+							<div id="tampil_data2">
+                            <?php 
+								$ev = array(
+									'name'  => 'jml_ex_voed', 
+									'id'    => 'jml_ex_voed', 
+									);
+								echo form_input($ev,$sd['lmb_jml_ex_voed']) ?><br/>
+							<?php echo form_error('jml_ex_voed')?>
+                            </div>
+                            </div>
+                        <div class="clear"></div>
+                    </div>
+					<div class="formRow">
+                        <label>Jumlah EX. VOED <span class="req"></span></label>
                         <div class="formRight">
 							<div id="tampil_data2">
                             <?php 

@@ -290,6 +290,7 @@ class M_asset extends CI_Model
 			'lmb_jml_hr_kerja' => $this->input->post('jml_hr_kerja'),
 			'lmb_hari_libur' => $this->input->post('hari_libur'),
 			'lmb_jml_hr_libur' => $this->input->post('jml_hr_libur'),
+			'lmb_jml_ex_voed' => $this->input->post('jml_ex_voed'),
 			'lmb_ex_voed' => $this->input->post('ex_voed'),
 			'lmb_shift_all' => $this->input->post('shift_all'),
 			'lmb_natura' => $this->input->post('natura'),

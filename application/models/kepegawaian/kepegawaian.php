@@ -54,7 +54,8 @@ class kepegawaian extends CI_Model
 			ON peg.peg_nipp = alm.p_al_nipp
 			LEFT JOIN (SELECT p_ps_nipp, p_ps_nama, p_ps_tmpt_lahir, p_ps_tgl_lahir, p_ps_agama FROM v3_peg_pasangan) AS ps
 			ON peg.peg_nipp = ps.p_ps_nipp
-			ORDER BY peg.peg_nipp ASC
+			GROUP BY id_pegawai
+			ORDER BY peg.peg_nipp ASC 
 			LIMIT $offset , $num
 		");
 		
@@ -77,7 +78,8 @@ class kepegawaian extends CI_Model
 			LEFT JOIN (SELECT p_ps_nipp, p_ps_nama, p_ps_tmpt_lahir, p_ps_tgl_lahir, p_ps_agama FROM v3_peg_pasangan) AS ps
 			ON peg.peg_nipp = ps.p_ps_nipp
 			WHERE peg.peg_nipp LIKE '%$search%' OR peg.peg_nama LIKE '%$search%' OR ps.p_ps_nama LIKE '%$search%'
-			ORDER BY peg.peg_nipp ASC
+			GROUP BY id_pegawai
+			ORDER BY peg.peg_nipp ASC 
 			LIMIT $offset , $num
 		");
 		
@@ -100,6 +102,7 @@ class kepegawaian extends CI_Model
 			ON peg.peg_nipp = alm.p_al_nipp
 			LEFT JOIN (SELECT p_ps_nipp, p_ps_nama, p_ps_tmpt_lahir, p_ps_tgl_lahir FROM v3_peg_pasangan) AS ps
 			ON peg.peg_nipp = ps.p_ps_nipp
+			GROUP BY id_pegawai
 			ORDER BY peg.peg_nipp ASC
 		");
 		

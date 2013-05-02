@@ -311,4 +311,228 @@ class M_gaji extends CI_Model
 			}
 		}		
 	}
+	
+	function ambil_data_absen($unit,$month,$year)
+	{
+			$query = "
+				
+				SELECT * FROM v3_fschpeg_absensi_$year AS absen
+				LEFT JOIN (SELECT * FROM v3_fsch_pegawai) AS sch
+				ON absen.fschpegabs_fschpeg_id = sch.fschpeg_id
+				LEFT JOIN (SELECT * FROM v3_pegawai) AS peg
+				ON peg.id_pegawai =  sch.fschpeg_id_pegawai
+				LEFT JOIN (SELECT * FROM v3_peg_unit ORDER BY id_peg_unit DESC) AS unit
+				ON peg.peg_nipp = unit.p_unt_nipp 
+				LEFT JOIN (SELECT id_peg_jabatan,p_jbt_nipp,p_jbt_jabatan FROM v3_peg_jabatan ORDER BY id_peg_jabatan DESC) AS jbt 
+				ON jbt.p_jbt_nipp = peg.peg_nipp
+				LEFT JOIN (SELECT * FROM v3_peg_grade ORDER BY id_peg_grade DESC) AS grade
+				ON grade.p_grd_nipp = peg.peg_nipp
+				LEFT JOIN (SELECT * FROM v3_master_lembur) AS maslembur
+				ON maslembur.ml_grade = grade.p_grd_grade
+				WHERE unit.p_unt_kode_unit = '$unit'
+				AND sch.fschpeg_month = '$month'
+				AND sch.fschpeg_year = '$year'
+		";
+		
+		$query = $this->db->query($query);
+		return  $query->result_array();
+		
+	}
+	
+	function proses_hitung_lembur($absen,$month,$year)
+	{ 
+		$nipp="";
+		$telathk=0;
+		$lemburhk=0;  
+		$lemburhl=0;
+		$exvo=0;
+		$jumlahhk = 0;
+		foreach ($absen as $row_absen)
+		{ 	$in = $row_absen['fschpegabs_sch_time_in'];
+			$b_out = $row_absen['fschpegabs_sch_break_out'];
+			$b_in = $row_absen['fschpegabs_sch_break_in'];
+			$out = $row_absen['fschpegabs_sch_time_out'];
+			$realin = $row_absen['fschpegabs_real_time_in'];
+			$realb_out = $row_absen['fschpegabs_real_break_out'];
+			$realb_in = $row_absen['fschpegabs_real_break_in'];
+			$realout = $row_absen['fschpegabs_real_time_out'];
+			$statusoff = $row_absen['fschpegabs_off_status'];
+			
+			if ( substr($realin,11,8) !== "00:00:00"  ){
+			$jumlahhk++;
+			
+			$lembur=$this->hit_telat_dan_lembur($in, $b_out, $b_in, $out, $realin, $realb_out, $realb_in, $realout, $statusoff); 
+			
+			if ($nipp == $row_absen['peg_nipp'])
+			{
+				$telathk = $telathk + $lembur[0];
+				$lemburhk = $lemburhk + $lembur[1];
+				$lemburhl = $lemburhl + $lembur[2];
+				$exvo = $exvo + $lembur[3];
+			} else {
+				if(substr($row_absen['p_jbt_jabatan'],0,10)=="Supervisor"){
+					$spv = 1;
+				}
+				
+				#persiapkan data lembur
+				if ($row_absen['ml_trans'] == NULL){$ml_trans = 0;}
+				
+				$data_lembur= array(
+						'lmb_id_peg'		=>	$row_absen['id_pegawai'],
+						'lmb_uang_makan'	=>	$jumlahhk * $row_absen['ml_makan'],
+						'lmb_uang_transport'=>	$ml_trans,
+						'lmb_jumlah_hari_kerja'	=>	$jumlahhk,
+						'lmb_hari_kerja'	=>	$lemburhk * $row_absen['ml_hari_kerja'], // jumlah uang/jam
+						'lmb_jml_hr_kerja' 	=> 	$lemburhk, // jumlah jam
+						'lmb_hari_libur'	=>	$lemburhl * $row_absen['ml_hari_libur'], // jumlah uang/jam
+						'lmb_jml_hr_libur '	=>	$lemburhl, // jumlah jam
+						'lmb_jml_ex_voed'	=>	$exvo, 
+						'lmb_ex_voed'		=>	$exvo * $row_absen['ml_exvo'], 
+						'lmb_shift_all'		=>	'',
+						'lmb_natura'		=>	'',
+						'lmb_tunj_stkp'		=>	'',
+						//'lmb_potongan'		=>	'',
+						'lmb_apresiasi'		=>	'',
+						'lmb_koreksi'		=>	'',
+						'lmb_bulan'			=>	$month,
+						'lmb_tahun'			=> 	$year,
+						'lmb_update_by'		=>	'admin' ,
+					);
+				//print_r($data_lembur);echo "<br>";
+				# insert ke db 
+				$this->db->insert('v3_lembur',$data_lembur);
+				
+				
+				$nipp = $row_absen['peg_nipp'];
+				$telathk = $lembur[0];
+				$lemburhk = $lembur[1];
+				$lemburhl = $lembur[2];
+				$exvo = $lembur[3];
+				$jumlahhk=1;
+			}
+			}
+		}
+	}
+	
+	function hit_telat_dan_lembur($in, $b_out, $b_in, $out, $realin, $realb_out, $realb_in, $realout, $statusoff) 
+	{
+		$telathk = 0;
+		$lemburhk = 0;
+		$lemburhl = 0;
+		$exvo = 0;
+		/* asli
+		list($tglin,$cekin) = explode(" ", $in);
+		list($tglout,$cekout) = explode(" ", $out);
+		*/
+		list($tglin,$cekin) = explode(" ", $in);
+		list($tglout,$cekout) = explode(" ", $out);
+		list($tglbreakin,$cekbreakin) = explode(" ", $b_in);
+		list($tglbreakout,$cekbreakout) = explode(" ", $b_out);
+		
+		if (($realin != "0000-00-00 00:00:00") && ($realout != "0000-00-00 00:00:00"))
+		{
+			if($statusoff != 0)
+			{
+				if($realin < $realout) 
+				{ 	$lemburhl = $this->selisihjam($realin,$realout); 
+					#break
+					if($realb_out < $realb_in) 
+					{	$breakhl = $this->selisihjam($realb_out,$realb_in); }
+					else
+					{ 	$breakhl = $this->selisihjam($realb_in,$realb_out); }
+				} else 
+				{ 	$lemburhl = $this->selisihjam($realout,$realin); 
+					#break
+					if($realb_out < $realb_in) 
+					{	$breakhl = $this->selisihjam($realb_out,$realb_in); }
+					else
+					{ 	$breakhl = $this->selisihjam($realb_in,$realb_out); }
+				}
+				$lemburhl = $lemburhl - $breakhl;  
+			}
+			else
+			{
+			
+				if($cekin < $cekout)
+				{
+					if ($cekbreakout < $cekbreakin){
+						$jml_break_jadwal = $this->selisihjam($b_out,$b_in);
+						$jml_break_real = $this->selisihjam($realb_out,$realb_in);
+					}else {
+						$jml_break_jadwal = $this->selisihjam($b_out,"0000-00-00 24:00:00") + $this->selisihjam("0000-00-00 00:00:00",$b_in) ;
+						$jml_break_real = $this->selisihjam($realb_out,"0000-00-00 24:00:00") + $this->selisihjam("0000-00-00 00:00:00",$realb_in);
+					}
+					
+					$jml_jam_jadwal = $this->selisihjam($in,$out) - $jml_break_jadwal;
+					$jml_jam_real = $this->selisihjam($realin,$realout) - $jml_break_real;
+					
+					// cek exvo jika jam masuk kurang atau sama dengan jam 5 pagi maka exvo ditambah 1
+					list($tglin, $jamrealin) = explode(" ", $realin);
+					if($realin <= "".$tglin." 05:00:00") { $exvo = 1; } 					
+					
+				}
+				else if($cekin > $cekout)
+				{
+					if ($cekbreakout < $cekbreakin){
+						$jml_break_jadwal = $this->selisihjam($b_out,$b_in);
+						$jml_break_real = $this->selisihjam($realb_out,$realb_in);
+					}else {
+						$jml_break_jadwal = $this->selisihjam($b_out,"0000-00-00 24:00:00") + $this->selisihjam("0000-00-00 00:00:00",$b_in) ;
+						$jml_break_real = $this->selisihjam($realb_out,"0000-00-00 24:00:00") + $this->selisihjam("0000-00-00 00:00:00",$realb_in);
+					}
+					
+					$jml_jam_jadwal = $this->selisihjam($in, "0000-00-00 24:00:00") + $this->selisihjam("0000-00-00 00:00:00", $out);							
+					$jml_jam_real = $this->selisihjam($realin, "0000-00-00 24:00:00") + $this->selisihjam("0000-00-00 00:00:00", $realout);
+					
+					// cek exvo jika jam pulang lebih atau sama dengan jam 1 pagi maka exvo ditambah 1
+					list($tglout, $jamrealout) = explode(" ", $realout);
+					if($realout >= "".$tglout." 01:00:00") { $exvo = 1; } 	
+				}
+				
+				//---------------------------------------------------------
+			
+				# jika > artinya bahwa jika total jam jadwal sama dengan total jam realita, maka telat tetap dihitung dan lembur tidak dihitung
+				# jika >= artinya bahwa jika total jam jadwal sama dengan total jam realita, maka telat tidak dihitung dan lembur tidak dihitung
+				if($jml_jam_real > $jml_jam_jadwal) 
+				{ 
+					$lemburhk = ($jml_jam_real - $jml_jam_jadwal) - $jml_break_jadwal - ($jml_break_real - $jml_break_jadwal);
+					$telathk = 0;
+				} 
+				else 
+				{
+					$lemburhk = 0;
+					$telathk =  $this->selisihjam($in, $realin) + $this->selisihjam($b_in, $realb_in) ;
+				}
+			
+			} //endelse
+			
+		}
+		return array($telathk,$lemburhk,$lemburhl,$exvo);
+	}
+	
+	function selisihjam($in,$out) 
+	{
+		list($tgl,$jam_masuk) = explode(" ", $in);
+		list($tgl2,$jam_keluar) = explode(" ", $out);
+		
+		list($h,$m,$s) = explode(":",$jam_masuk);
+		$dtAwal = mktime($h,$m,$s,1,1,1);
+		
+		list($h,$m,$s) = explode(":",$jam_keluar);
+		if ($tgl2 != $tgl)
+		{ $h = (int)$h+24;}
+		$dtAkhir = mktime($h,$m,$s,1,1,1);
+		
+		$dtSelisih = $dtAkhir-$dtAwal;
+		
+		$totalmenit=$dtSelisih/60;
+		$jam =explode(".",$totalmenit/60);
+		$sisamenit=($totalmenit/60)-$jam[0];
+		$sisamenit2=$sisamenit*60;
+		$jml_jam=$jam[0];
+		$jml_jam = $jml_jam *60;
+		$totalmenit = $jml_jam+$sisamenit2;
+		return $totalmenit;
+	}
+	
 }

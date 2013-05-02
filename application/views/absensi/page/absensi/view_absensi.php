@@ -33,9 +33,9 @@
 							$lemburhl = $lemburhl + $hitung[2];
 							$exvo = $exvo + $hitung[3];
 						}
-					if ($telathk % 60 > 30){$telathk = round($telathk/60) + 0.5;} else {$telathk = round($telathk/60) ;}
-					if ($lemburhk % 60 > 30){$lemburhk = round($lemburhk/60) + 0.5;} else {$lemburhk = round($lemburhk/60) ;}
-					if ($lemburhl % 60 > 30){$lemburhl = round($lemburhl/60) + 0.5;} else {$lemburhl = round($lemburhl/60) ;}
+					if ($telathk % 60 > 30){$telathk = round($telathk/60) + 1;} else {$telathk = round($telathk/60) ;}
+					if ($lemburhk % 60 > 30){$lemburhk = round($lemburhk/60) + 1;} else {$lemburhk = round($lemburhk/60) ;}
+					if ($lemburhl % 60 > 30){$lemburhl = round($lemburhl/60) + 1;} else {$lemburhl = round($lemburhl/60) ;}
 					
 					?>
                     <td><?php echo $telathk; ?> </td>

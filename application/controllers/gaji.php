@@ -482,18 +482,15 @@ class Gaji extends Application {
 			$unit = $this->input->post('unit'); //unit_code
 			$month = $this->input->post('month'); //unit_code
 			$year = $this->input->post('year'); //unit_code
-			$id_pegawai = $this->input->post('nipp'); //id_pegawai
 			
+			$data_absen = $this->m_gaji->ambil_data_absen($unit,$month,$year);
 			
+			$this->m_gaji->proses_hitung_lembur($data_absen,$month,$year);
 			
-			
-			
-			$data['page'] = 'view_lembur_pegawai';		
-			$data['view_lembur_pegawai'] = 'class="this"';
-			$data['form_gaji'] = 'id="current"';
-				
-			$data['showdata'] = $this->m_asset->ambil_data_lembur($unit,$id_pegawai,$month,$year); 
-			$this->load->view('gaji/index',$data);
+			?>
+			<script>alert('Generate Lembur Telah Selesai')</script>
+			<?php
+			redirect('gaji/lembur_pegawai');
 		}
 	}
 	
