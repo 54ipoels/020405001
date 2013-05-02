@@ -499,7 +499,7 @@ class pendidikan extends CI_Model
 			ON peg_stkp.p_nstkp_nipp = peg_unt.p_unt_nipp 
 			LEFT JOIN (SELECT peg_nipp,peg_nama FROM v3_pegawai GROUP BY peg_nipp) AS peg
 			ON peg_stkp.p_nstkp_nipp = peg.peg_nipp
-			ORDER BY peg_stkp.p_nstkp_nipp
+			ORDER BY peg_stkp.p_nstkp_nipp, peg_stkp.p_nstkp_pelaksanaan ASC
 		');
 		$query = $this->db->query($query); 
 		return $query->result_array();
@@ -523,7 +523,7 @@ class pendidikan extends CI_Model
 			ON peg_stkp.p_stkp_nipp = peg_unt.p_unt_nipp 
 			LEFT JOIN (SELECT peg_nipp,peg_nama FROM v3_pegawai GROUP BY peg_nipp) AS peg
 			ON peg_stkp.p_stkp_nipp = peg.peg_nipp
-			ORDER BY peg_stkp.p_stkp_nipp
+			ORDER BY peg_stkp.p_stkp_nipp, peg_stkp.p_stkp_pelaksanaan ASC
 		');
 		
 		$query = $this->db->query($query); 
