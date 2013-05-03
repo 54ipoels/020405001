@@ -2265,6 +2265,70 @@ class pekerja extends Application {
 	}
 	
 	
+	public function upload()
+	{
+		$data['page'] = 'Upload';
+		$data['view_upload'] = 'class="this"';
+		$data['form_master'] = 'id="current"';
+		$this->load->view('kepegawaian/index',$data);
+	}
+	
+	function do_upload_foto()
+   {
+      $config['upload_path'] = './pegawai/foto';
+      $config['allowed_types'] = 'gif|jpg|png';
+      $config['max_size']  = '100';
+      $config['max_width']  = '1024';
+      $config['max_height']  = '768';
+ 
+      
+      $this->load->library('upload', $config);
+
+	  if ( ! $this->upload->do_upload())
+		{
+			$error = array('error' => $this->upload->display_errors());
+			$error['page'] = 'Upload';
+			$error['view_upload'] = 'class="this"';
+			$error['form_master'] = 'id="current"';
+			$this->load->view('kepegawaian/index', $error);
+			//redirect('pekerja/upload');
+		}
+		else
+		{
+			$data = array('upload_data' => $this->upload->data());
+			redirect('pekerja/upload');
+			//$this->load->view('upload_success', $data);
+		}
+	}
+	
+	function do_upload_diklat()
+   {
+      $config['upload_path'] = './pegawai/diklat/';
+      $config['allowed_types'] = 'gif|jpg|png';
+      $config['max_size']  = '100';
+      $config['max_width']  = '1024';
+      $config['max_height']  = '768';
+ 
+      
+      $this->load->library('upload', $config);
+
+	  if ( ! $this->upload->do_upload())
+		{
+			$error = array('error' => $this->upload->display_errors());
+			$error['page'] = 'Upload';
+			$error['view_upload'] = 'class="this"';
+			$error['form_master'] = 'id="current"';
+			$this->load->view('kepegawaian/index', $error);
+			
+		}
+		else
+		{
+			$data = array('upload_data' => $this->upload->data());
+			redirect('pekerja/upload');
+		}
+
+	}
+	
 }
 
 /* End of file welcome.php */

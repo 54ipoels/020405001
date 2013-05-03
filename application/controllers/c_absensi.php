@@ -1382,6 +1382,12 @@ class C_absensi extends Application {
 	}
 	
 	
+	##############################
+	#TARIK ABSENSI
+	##############################
+	function tarik_absensi_x()
+	
+	
 }
 
 

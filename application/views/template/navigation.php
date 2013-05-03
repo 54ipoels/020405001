@@ -29,6 +29,8 @@
                 <li <?php if(isset($view_cuti_pegawai)){ echo $view_cuti_pegawai; } ?>><?php echo anchor('c_absensi/cuti_pegawai', 'Cuti Pegawai' ); ?></li>
                 <li <?php if(isset($view_master_gaji)){ echo $view_master_gaji; } ?>><?php echo anchor('c_absensi/master_gaji', 'Master Gaji' ); ?></li>
 				<li <?php if(isset($view_master_gaji)){ echo $view_master_gaji; } ?>><?php echo anchor('pekerja/add_data_jabatan/part_one', 'Tambah Jabatan' ); ?></li>
+            	<li <?php if(isset($view_upload)){ echo $view_upload; } ?>><?php echo anchor('pekerja/upload/', 'Upload File' ); ?></li>
+				<li <?php if(isset($view_master_lembur)){ echo $view_master_lembur; } ?>><?php echo anchor('gaji/master_lembur', 'Master Lembur' ); ?></li>
             </ul>
         </li>
       <!-- absensi -->

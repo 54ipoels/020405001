@@ -495,7 +495,63 @@ class Gaji extends Application {
 	}
 	
 	
+	/*
+	======================================================================================================
+	 FUNCTION MASTER LEMBUR
+	======================================================================================================
+	*/
 	
+	function master_lembur()
+	{	
+		#pagination config
+		$config['base_url'] = base_url().'index.php/gaji/master_lembur/'; //set the base url for pagination
+		$config['total_rows'] = $this->m_gaji->count_master_lembur(); //total rows
+		$config['per_page'] = 10; //the number of per page for pagination
+		$config['uri_segment'] = 3; //see from base_url. 3 for this case
+		$this->pagination->initialize($config);
+		$page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+		
+		#data preparing
+		
+		$data['showdata'] = $this->m_gaji->ambil_data_master_lembur($config['per_page'],$page); 
+		$data['page'] = 'master_lembur';		
+		$data['view_master_lembur'] = 'class="this"';
+		$data['form_master'] = 'id="current"';
+		$this->load->view('gaji/index',$data);
+	}
+	
+	
+	function add_master_lembur()
+	{
+		$data['page'] = 'add_master_lembur';		
+		$data['view_master_lembur'] = 'class="this"';
+		$data['form_master'] = 'id="current"';
+		$this->load->view('gaji/index',$data);	
+	}
+	
+	function edit_master_lembur($id)
+	{
+		$data['showdata'] = $this->m_gaji->ambil_data_master_lembur_by_id($id); 
+		$data['page'] = 'edit_master_lembur';		
+		$data['view_master_lembur'] = 'class="this"';
+		$data['form_master'] = 'id="current"';
+		$this->load->view('gaji/index',$data);	
+	}
+	
+	function submit_master_lembur()
+	{
+		if($this->input->post('submit_master_lembur_add'))
+		{
+			$check = $this->m_gaji->add_master_lembur();
+			redirect('gaji/master_lembur');
+		}
+		
+		else if($this->input->post('submit_master_lembur_edit'))
+		{
+			$result = $this->m_gaji->edit_master_lembur();
+			redirect('gaji/master_lembur');
+		}
+	}
 	
 	
 	

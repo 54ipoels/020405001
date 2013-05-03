@@ -124,6 +124,20 @@
 		{
 			$this->load->view('gaji/page/lembur/edit_lembur');
 		}
+		# master lembur
+		else if ($page == 'master_lembur')
+		{
+			$this->load->view('gaji/page/lembur/master_lembur');
+		}
+		else if ($page == 'edit_master_lembur')
+		{
+			$this->load->view('gaji/page/lembur/edit_master_lembur');
+		}
+		else if ($page == 'add_master_lembur')
+		{
+			$this->load->view('gaji/page/lembur/add_master_lembur');
+		}
+		
 		
 		#absensi
 		else if ($page == 'absensi')

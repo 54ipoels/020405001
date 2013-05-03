@@ -339,6 +339,75 @@ class M_gaji extends CI_Model
 		
 	}
 	
+	function ambil_data_master_lembur($num,$offset)
+	{
+		$query = "SELECT * FROM v3_master_lembur ORDER BY ml_grade DESC, id_master_lembur DESC LIMIT $offset , $num";
+		$query = $this->db->query($query);
+		return  $query->result_array();
+	}
+	
+	function count_master_lembur()
+	{
+		$query = "SELECT * FROM v3_master_lembur ORDER BY  ml_grade DESC, id_master_lembur DESC ";
+		$query = $this->db->query($query);
+		return  $query->num_rows();
+	}
+	
+	function ambil_data_master_lembur_by_id($id)
+	{
+		$query = "SELECT * FROM v3_master_lembur WHERE id_master_lembur = $id ORDER BY id_master_lembur";
+		$query = $this->db->query($query);
+		return  $query->result_array();
+	}
+	
+	
+	function add_master_lembur()
+	{
+		$data = array(
+				'ml_grade'	=>	strtoupper($this->input->post('grade')),
+				'ml_makan'	=>	$this->input->post('makan'),
+				'ml_trans'	=>	$this->input->post('transport'),
+				'ml_exvo'	=>	$this->input->post('exvoed'),
+				'ml_hari_kerja'	=>	$this->input->post('harikerja'),
+				'ml_hari_libur'	=>	$this->input->post('harilibur'),
+				'ml_hari_kerja'	=>	$this->input->post('harikerja'),
+				'ml_shift'	=>	$this->input->post('shift'),
+				'ml_tunj_spv'	=>	$this->input->post('tunj_spv'),
+				'ml_natura'	=>	$this->input->post('natura'),
+				'ml_update_by'	=>	"admin",
+		
+		);
+		
+		$this->db->insert('v3_master_lembur', $data); 
+	}
+	
+	function edit_master_lembur()
+	{
+		$id = $this->input->post('id_master_lembur');
+		$data = array(
+				'ml_grade'	=>	strtoupper($this->input->post('grade')),
+				'ml_makan'	=>	$this->input->post('makan'),
+				'ml_trans'	=>	$this->input->post('transport'),
+				'ml_exvo'	=>	$this->input->post('exvoed'),
+				'ml_hari_kerja'	=>	$this->input->post('harikerja'),
+				'ml_hari_libur'	=>	$this->input->post('harilibur'),
+				'ml_hari_kerja'	=>	$this->input->post('harikerja'),
+				'ml_shift'	=>	$this->input->post('shift'),
+				'ml_tunj_spv'	=>	$this->input->post('tunj_spv'),
+				'ml_natura'	=>	$this->input->post('natura'),
+				'ml_update_by'	=>	"admin",
+		
+		);
+		$this->db->update('v3_master_lembur', $data, array('id_master_lembur' => $id));
+		if($this->db->affected_rows())
+      		return '1';
+      	else
+      		return '0';
+	}
+	
+	
+	
+	
 	function proses_hitung_lembur($absen,$month,$year)
 	{ 
 		$nipp="";
