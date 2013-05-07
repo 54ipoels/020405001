@@ -117,6 +117,21 @@ class M_gaji extends CI_Model
 		return $query->result_array();
 	}
 	
+	function ambil_data_master_potongan_gaji()
+	{
+		$this->db->order_by('id_master_pot','DESC');
+		$query = $this->db->get('v3_master_pot_gaji');
+		return $query->result_array();
+	}
+	
+	function count_master_potongan_gaji()
+	{
+		$query = $this->db->get('v3_master_pot_gaji');
+		return $query->num_rows();
+	}
+		
+	
+	
 	function get_gaji()
 	{
 		$query = $this->db->get('v3_penggajian_sementara');
@@ -602,6 +617,25 @@ class M_gaji extends CI_Model
 		$jml_jam = $jml_jam *60;
 		$totalmenit = $jml_jam+$sisamenit2;
 		return $totalmenit;
+	}
+	
+	function add_master_gaji_potongan()
+	{
+		$data = array(
+				'peg_siperkasa'	=>	$this->input->post('peg_siperkasa'),
+				'peg_jht'		=>	$this->input->post('peg_jht'),
+				'peg_tht'		=>	$this->input->post('peg_tht'),
+				'peg_pensiun'	=>	$this->input->post('peg_pensiun'),
+				'per_pensiun'	=>	$this->input->post('per_pensiun'),
+				'per_tht'		=>	$this->input->post('per_tht'),
+				'per_jht'		=>	$this->input->post('per_jht'),
+				'per_jk'		=>	$this->input->post('per_jk'),
+				'per_jkk'		=>	$this->input->post('per_jkk'),
+				'per_as_jiwa'	=>	$this->input->post('per_as_jiwa'),
+				'mas_update_by'	=>	'admin',
+		);
+		
+		$this->db->insert('v3_master_pot_gaji', $data); 
 	}
 	
 }

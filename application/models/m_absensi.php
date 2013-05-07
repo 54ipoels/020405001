@@ -515,13 +515,12 @@ class M_absensi extends CI_Model {
 	}
 	
 	#insert data mesin backup
-	function input_data_backup_mesin($pin,$datetime,$status, $verified)
+	function input_data_backup_mesin($pin,$datetime,$status)
 	{
 		$data = array(
 		'dbmesin_nipp' => $pin,
       	'dbmesin_datetime' => $datetime, 
 		'dbmesin_status' => $status,
-		'dbmesin_verified' => $verified,
 		'dbmesin_update_by' => 'admin'
       	);
       
@@ -535,9 +534,37 @@ class M_absensi extends CI_Model {
 		$this->db->update('v3_libur_nasional', $data, array('lnas_id' => $lnas_id));
 	}
 	
+	function get_data_backup_mesin($tanggal)
+	{
+		$query = " 	SELECT * FROM v3_databackup_mesin WHERE dbmesin_update_on > '$tanggal'";
+		$query = $this->db->query($query);
+		return $query->result_array();
+	}
 	
+	function cek_dup_tabel_absensi($nipp,$datetime,$status)
+	{
+		$tahun = substr($datetime,0,4);
+		$bulan = substr($datetime,5,2);
+		if ($status == '0'){$selection = " AND v3_fschpeg_absensi_$tahun.fschpegabs_real_time_in = '$datetime' ";}
+		else if ($status == '1'){$selection = " AND v3_fschpeg_absensi_$tahun.fschpegabs_real_time_out = '$datetime' ";}
+		$query = " SELECT * FROM v3_fschpeg_absensi_$tahun
+					LEFT JOIN (SELECT * FROM v3_fsch_pegawai) AS fschpeg
+					ON fschpeg.fschpeg_id = v3_fschpeg_absensi_$tahun.fschpegabs_fschpeg_id 
+					LEFT JOIN (SELECT * FROM v3_pegawai) AS peg
+					ON fschpeg.fschpeg_id_pegawai = peg.id_pegawai
+					WHERE peg.peg_nipp=$nipp 
+					AND  v3_fschpeg_absensi_$tahun.fschpegabs_fschpeg_id LIKE '$tahun-$bulan%'
+					$selection
+				";
+		$query = $this->db->query($query);
+		return $query->result_array();
+	}
 	
-	
+	function update_absensi_pegawai($data,$id,$year)
+	{
+		$this->db->where('fschpegabs_id', $id);
+		$this->db->update('v3_fschpeg_absensi_'.$year, $data_pegawai);
+	}
 	  
 }
 

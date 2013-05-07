@@ -49,14 +49,20 @@
                 <div class="clear"></div>
 			</form>
 			<div class="data" id="w2"></div>
-        </div>
+    </div>
 </div>
-
+<div class="widget">
+<div >
+<b>NB : </b><br>
+- Rename Foto Sesuai dengan NIPP ybs sebelum diupload <br>
+- Rename Diklat Sesuai dengan No Sertifikat sebelum diupload  <br>
+</div>
+</div>
 <?php
 if (isset($error)){
 ?>
 <br><br>
-<div class="widget">
-<h3><b><?php print_r($error);?></b></h3>
+<div class="widget" style="color:red; size:3pt;">
+<h6><b><?php print_r($error);?></b></h6>
 </div>
 <?php } ?>

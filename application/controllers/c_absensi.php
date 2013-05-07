@@ -787,7 +787,9 @@ class C_absensi extends Application {
 		
 		#redirect('c_absensi/absensi');
 		
-	
+		// tambahan
+		//$this->copy_data_tampung_to_absensi;
+		
 	}
 	
 	function check_dup()
@@ -1385,8 +1387,161 @@ class C_absensi extends Application {
 	##############################
 	#TARIK ABSENSI
 	##############################
-	function tarik_absensi_x()
 	
+	function tarik_absensi_x()
+	{	
+		#tambahan -> kriteria copy data tampung ke absensi
+		$datestring = "%Y-%m-%d" ;
+		$time = time();
+		$tanggal = mdate($datestring, $time);
+		
+		#tarik data dari mesin manual
+		//$ip = $this->uri->segment(3, 0);
+		$ip = '192.168.20.131';
+		$key = "0";
+		
+		$Connect = fsockopen($ip, "80", $errno, $errstr, 1);
+		
+		if($Connect)
+		{
+			$soap_request="<GetAttLog><ArgComKey xsi:type=\"xsd:integer\">".$key."</ArgComKey><Arg><PIN xsi:type=\"xsd:integer\">All</PIN></Arg></GetAttLog>";
+			$newLine="\r\n";
+			fputs($Connect, "POST /iWsService HTTP/1.0".$newLine);
+			fputs($Connect, "Content-Type: text/xml".$newLine);
+			fputs($Connect, "Content-Length: ".strlen($soap_request).$newLine.$newLine);
+			fputs($Connect, $soap_request.$newLine);
+			$buffer="";
+				while($Response=fgets($Connect, 1024))
+				{
+					$buffer=$buffer.$Response;
+				}
+			}
+		else
+		{
+			echo 'fail';
+		}
+		
+		$buffer = $this->parse_data($buffer,"<GetAttLogResponse>","</GetAttLogResponse>");
+		$buffer = explode("\r\n",$buffer);
+		//print_r($buffer);
+		echo "<table>";
+		echo "<tr>";
+		echo "<td>NIPP</td><td>Date</td><td>Status</td><td>Verified</td>";
+		
+		for($a=1;$a<count($buffer);$a++)
+		{
+			$data = $this->parse_data($buffer[$a],"<Row>","</Row>");
+			$pin = $this->parse_data($data,"<PIN>","</PIN>");
+			$datetime = $this->parse_data($data,"<DateTime>","</DateTime>");
+			$status = $this->parse_data($data,"<Status>","</Status>");
+			$verified = $this->parse_data($data,"<Verified>","</Verified>");
+						
+			#masukkan data dari mesin ke database tampung / backup
+			$this->m_absensi->input_data_backup_mesin($pin,$datetime,$status);
+			
+			echo "<tr><td>" . $pin . "</td><td>" . $datetime . "</td><td>" . $status . "</td><td>" . $verified . "</td></tr>";
+			#foreach ($query as $row)
+			#	{
+			#		echo $row->dbmesin_nipp . '<br />';
+					#echo $row['name'];
+					#echo $row['email'];
+			#	}
+			#ambil data dari mesin dimasukkan ke database absensi
+			#$this->m_absensi->input_data_absensi_mesin($pin,$datetime,$status);
+			
+		}
+		
+		echo "</tr>";
+		echo "</table>";
+		
+		# hapus null nipp dari table
+		$this->m_absensi->del_null_dbmesin_nipp();
+		
+		# back up to excell 
+		#hapus data dari mesin
+		
+		#redirect('c_absensi/absensi');
+		
+		// tambahan
+		$this->copy_data_tampung_to_absensi($tanggal);
+		
+	}
+	
+	public function copy_data_tampung_to_absensi()
+	{
+		//echo "test";
+		//echo $tanggal;
+		$tanggal = '2013-05-07';
+		$backup = $this->m_absensi->get_data_backup_mesin($tanggal);
+		print_r($backup);
+		foreach ($backup as $row){
+			$year 		=substr($row['dbmesin_datetime'],0,4);
+			$nipp		=$row['dbmesin_nipp'];
+			$datetime	=$row['dbmesin_datetime'];
+			$status		=$row['dbmesin_status'];
+			$dup = $this->m_absensi->cek_dup_tabel_absensi($nipp,$datetime,$status);
+			echo "$year $nipp $datetime $status ----";
+			
+			foreach ($dup as $row_dup)
+			{
+				$selisih = 0;
+				$selisihbreak = 0;
+				if($status == 1){
+					if(strtotime($row_dup['fschpegabs_real_time_out']) > strtotime($datetime)){
+						$selisih = strtotime($row_dup['fschpegabs_real_time_out']) - strtotime($datetime);
+					} else {
+						$selisih = strtotime($datetime) - strtotime($row_dup['fschpegabs_real_time_out']);
+					}
+					// menentukan apakah merupakan breakout atau tidak
+					if ($selisih > 3600){
+						if( strtotime($row_dup['fschpegabs_break_out']) > strtotime($datetime))
+						{ $selisihbreak = strtotime($row_dup['fschpegabs_break_out']) - strtotime($datetime);}						 
+						else
+						{ $selisihbreak = strtotime($datetime) - strtotime($row_dup['fschpegabs_break_out']);}						 
+					}
+					if($selisih < $selisihbreak){
+						$data =	array(
+								'fschpegabs_real_time_out' => $datetime,
+								'fschpegabs_update_by' => 'admin',
+						);
+					}else{
+						$data = array(
+								'fschpegabs_real_break_out' => $datetime,
+								'fschpegabs_update_by' => 'admin',
+						);
+					}
+					
+				
+				} else {
+					
+					if(strtotime($row_dup['fschpegabs_real_time_in']) > strtotime($datetime)){
+						$selisih = strtotime($row_dup['fschpegabs_real_time_in']) - strtotime($datetime);
+					} else {
+						$selisih = strtotime($datetime) - strtotime($row_dup['fschpegabs_real_time_in']);
+					}
+					// menentukan apakah merupakan breakin atau tidak
+					if ($selisih > 3600){
+						if( strtotime($row_dup['fschpegabs_break_in']) > strtotime($datetime))
+						{ $selisihbreak = strtotime($row_dup['fschpegabs_break_in']) - strtotime($datetime);}						 
+						else
+						{ $selisihbreak = strtotime($datetime) - strtotime($row_dup['fschpegabs_break_in']);}						 
+					}
+					if($selisih < $selisihbreak){
+						$data =	array(
+								'fschpegabs_real_time_in' => $datetime,
+								'fschpegabs_update_by' => 'admin',
+						);
+					}else{
+						$data = array(
+								'fschpegabs_real_break_in' => $datetime,
+								'fschpegabs_update_by' => 'admin',
+						);
+					}
+				}
+				$this->m_absensi->update_absensi_pegawai($data,$row_data['fschpegabs_id'],$year);
+			}
+		}
+	}
 	
 }
 

@@ -15,7 +15,7 @@ class Gaji extends Application {
 	 FUNCTION MASTER GAJI 
 	======================================================================================================
 	*/
-	
+	/*
 	function master_gaji()
 	{
 		$data['showdata'] = $this->m_asset->ambil_data_master_gaji();
@@ -61,7 +61,7 @@ class Gaji extends Application {
 			redirect ('gaji/master_gaji');
 		}
 	}
-	
+	*/
 	/*
 	======================================================================================================
 	 FUNCTION PENGGAJIAN
@@ -231,7 +231,7 @@ class Gaji extends Application {
 	public function import()
 	{
 		$data['page'] = 'import data';
-		$data['view_gaji_pegawai'] = 'class="this"';
+		$data['view_import'] = 'class="this"';
 		$data['form_gaji'] = 'id="current"';
 		$this->load->view('gaji/index',$data);
 	}
@@ -553,6 +553,45 @@ class Gaji extends Application {
 		}
 	}
 	
+	/*
+	======================================================================================================
+	 FUNCTION MASTER GAJI
+	======================================================================================================
+	*/
+	
+	function master_gaji()
+	{	
+		#pagination config
+		$config['base_url'] = base_url().'index.php/gaji/master_gaji/'; //set the base url for pagination
+		$config['total_rows'] = $this->m_gaji->count_master_potongan_gaji(); //total rows
+		$config['per_page'] = 10; //the number of per page for pagination
+		$config['uri_segment'] = 3; //see from base_url. 3 for this case
+		$this->pagination->initialize($config);
+		$page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+		
+		#data preparing
+		
+		$data['showdata'] = $this->m_gaji->ambil_data_master_potongan_gaji($config['per_page'],$page); 
+		$data['page'] = 'master_gaji_potongan';		
+		$data['view_master_gaji'] = 'class="this"';
+		$data['form_master'] = 'id="current"';
+		$this->load->view('gaji/index',$data);
+	}
+	
+	
+	function add_master_gaji_potongan()
+	{
+		$data['page'] = 'add_master_gaji_potongan';		
+		$data['view_master_gaji'] = 'class="this"';
+		$data['form_master'] = 'id="current"';
+		$this->load->view('gaji/index',$data);	
+	}
+	
+	function submit_master_gaji_potongan()
+	{
+		$check = $this->m_gaji->add_master_gaji_potongan();
+		redirect('gaji/master_gaji');
+	}
 	
 	
 	

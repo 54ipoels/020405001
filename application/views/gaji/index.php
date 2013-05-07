@@ -42,6 +42,14 @@
 		else if ($page == 'edit_gaji')
 		{
 			$this->load->view('gaji/page/gaji/edit_gaji');
+		} 
+		else if ($page == 'master_gaji_potongan')
+		{
+			$this->load->view('gaji/page/penggajian/master_gaji_pot');
+		}
+		else if ($page == 'add_master_gaji_potongan')
+		{
+			$this->load->view('gaji/page/penggajian/add_master_gaji_potongan');
 		}
 		
 		#gaji pegawai 
