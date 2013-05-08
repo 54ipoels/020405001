@@ -13,6 +13,7 @@
                         <td>Break In</td>
                         <td>Jam Pulang</td>
                         <td>Status Libur</td>
+                        <td>Status Break</td>
                     </tr>
                 </thead>
 				<tbody>
@@ -161,6 +162,9 @@
                         </td>
                         <td>
                         <?php echo form_checkbox('fschtime_off_status_'.$i, '1'); ?> Centang jika libur
+                        </td>
+						<td>
+                        <?php echo form_checkbox('fschtime_break_status_'.$i, '1'); ?> Pakai
                         </td>
                     </tr>
                 <?php } ?>

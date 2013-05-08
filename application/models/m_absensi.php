@@ -157,7 +157,7 @@ class M_absensi extends CI_Model {
     }  
 	
 	//tambah data detail format schedule
-	function fsch_add_next($fschtime_fsch_id, $fschtime_order, $fschtime_time_in, $fschtime_break_out, $fschtime_break_in, $fschtime_time_out, $fschtime_update_by, $fschtime_off_status)
+	function fsch_add_next($fschtime_fsch_id, $fschtime_order, $fschtime_time_in, $fschtime_break_out, $fschtime_break_in, $fschtime_time_out, $fschtime_update_by, $fschtime_off_status,$fschtime_break_status)
 	{
       $data = array(
       	'fschtime_fsch_id' => $fschtime_fsch_id, 
@@ -167,8 +167,9 @@ class M_absensi extends CI_Model {
 		'fschtime_break_in' => $fschtime_break_in,
 		'fschtime_time_out' => $fschtime_time_out,
 		'fschtime_update_by' => $fschtime_update_by,
-		'fschtime_off_status' => $fschtime_off_status
-      );
+		'fschtime_off_status' => $fschtime_off_status,
+		'fschtime_break_status' => $fschtime_break_status,
+	 );
       
 	  $this->db->insert('v3_fsch_time', $data); 
       
@@ -545,17 +546,18 @@ class M_absensi extends CI_Model {
 	{
 		$tahun = substr($datetime,0,4);
 		$bulan = substr($datetime,5,2);
-		if ($status == '0'){$selection = " AND v3_fschpeg_absensi_$tahun.fschpegabs_real_time_in = '$datetime' ";}
-		else if ($status == '1'){$selection = " AND v3_fschpeg_absensi_$tahun.fschpegabs_real_time_out = '$datetime' ";}
+		if ($status == '0'){$selection = " AND v3_fschpeg_absensi_$tahun.fschpegabs_sch_time_in LIKE '".substr($datetime,0,10)."%' ";}
+		else if ($status == '1'){$selection = " AND v3_fschpeg_absensi_$tahun.fschpegabs_sch_time_out LIKE '".substr($datetime,0,10)."%' ";}
 		$query = " SELECT * FROM v3_fschpeg_absensi_$tahun
 					LEFT JOIN (SELECT * FROM v3_fsch_pegawai) AS fschpeg
 					ON fschpeg.fschpeg_id = v3_fschpeg_absensi_$tahun.fschpegabs_fschpeg_id 
 					LEFT JOIN (SELECT * FROM v3_pegawai) AS peg
-					ON fschpeg.fschpeg_id_pegawai = peg.id_pegawai
+					ON fschpeg.fschpeg_id_pegawai = peg.id_pegawai 
 					WHERE peg.peg_nipp=$nipp 
-					AND  v3_fschpeg_absensi_$tahun.fschpegabs_fschpeg_id LIKE '$tahun-$bulan%'
 					$selection
 				";
+				//AND  v3_fschpeg_absensi_$tahun.fschpegabs_fschpeg_id LIKE '$tahun-$bulan%' 1
+					
 		$query = $this->db->query($query);
 		return $query->result_array();
 	}
@@ -563,7 +565,113 @@ class M_absensi extends CI_Model {
 	function update_absensi_pegawai($data,$id,$year)
 	{
 		$this->db->where('fschpegabs_id', $id);
-		$this->db->update('v3_fschpeg_absensi_'.$year, $data_pegawai);
+		$this->db->update('v3_fschpeg_absensi_'.$year, $data);
+		//return $id;
+	}
+	
+	function cek_selisih_absen_terdekat($datetime,$nipp,$status,$row_dup,$year)
+	{
+		$kemarin = date('Y-m-d',(strtotime($datetime) - (24*60*60)));
+		$cek_kemarin = $this->cek_dup_tabel_absensi($nipp,$kemarin,$status);
+		foreach ($cek_kemarin as $row_kemarin){}
+		$besok = date('Y-m-d',(strtotime($datetime) + (24*60*60)));
+		$cek_besok = $this->cek_dup_tabel_absensi($nipp,$besok,$status);
+		foreach ($cek_besok as $row_besok){$n_besok=1;}
+/*
+		echo "<br>$kemarin - $besok<br><br>";
+		echo "row_dup";print_r($row_dup);
+		echo "<br><br>";	
+		echo "row_kemarin";print_r($row_kemarin);
+		echo "<br><br>";	
+		echo "row_besok";print_r($row_besok);
+		echo "<br><br>$n_besok";	
+*/		
+		if($status == 0){
+			$sch = 'fschpegabs_sch_time_in';
+			$real = 'fschpegabs_real_time_in';
+		} 
+		else if ($status == 1){
+			$sch = 'fschpegabs_sch_time_out';
+			$real = 'fschpegabs_real_time_out';
+		}
+		else if ($status == 2){
+			$sch = 'fschpegabs_sch_break_in';
+			$real = 'fschpegabs_real_break_in';
+		}
+		else if ($status == 3){
+			$sch = 'fschpegabs_sch_break_out';
+			$real = 'fschpegabs_real_break_out';
+		}
+		
+		
+		# cek selisih tgl masuk dengan sch  tgl ini
+		if(strtotime($row_dup[$sch]) > strtotime($datetime)){
+			$selisih[0] = strtotime($row_dup[$sch]) - strtotime($datetime);
+		} else {
+			$selisih[0] = strtotime($datetime) - strtotime($row_dup[$sch]);
+		}
+						
+		# cek selisih tgl masuk dengan sch  tgl kemarin
+		if(strtotime($row_kemarin[$sch]) > strtotime($datetime)){
+			$selisih[1] = strtotime($row_kemarin[$sch]) - strtotime($datetime);
+		} else {
+			$selisih[1] = strtotime($datetime) - strtotime($row_kemarin[$sch]);
+		}
+		
+		
+		# cek selisih tgl masuk dengan sch  tgl besok
+		if (isset($n_besok)){
+			if(strtotime($row_besok[$sch]) > strtotime($datetime)){
+				$selisih[2] = strtotime($row_besok[$sch]) - strtotime($datetime);
+			} else {
+				$selisih[2] = strtotime($datetime) - strtotime($row_besok[$sch]);
+			}
+		} else {
+			$selisih[2] = 9999999999999;
+		}		
+		
+		$terdekat=0;
+		for ($i=1;$i<3;$i++){
+			if ($selisih[$i] < $selisih[$terdekat]){
+					$terdekat = $i;
+			} 
+		}
+						
+		$data =	array(
+					$real => $datetime,
+					'fschpegabs_update_by' => 'admin',
+				);
+		print_r($data);echo " terdekat=$terdekat  status=$status  <br> ";
+		
+		if (($status == 0) OR ($status == 2)) {
+			if($terdekat == 0){
+				if($row_dup[$real]=="0000-00-00 00:00:00"){
+					$this->update_absensi_pegawai($data,$row_dup['fschpegabs_id'],$year);
+				}
+			}
+			else if($terdekat == 1){
+				if($row_kemarin[$real]=="0000-00-00 00:00:00"){
+					$this->update_absensi_pegawai($data,$row_kemarin['fschpegabs_id'],$year);
+				}
+			}
+			else if($terdekat == 2){
+				if($row_besok[$real]=="0000-00-00 00:00:00"){
+					$this->update_absensi_pegawai($data,$row_besok['fschpegabs_id'],$year);
+				}
+			}
+		} else 
+		if(($status == 1) OR ($status == 3)) {
+			if($terdekat == 0){
+				$this->update_absensi_pegawai($data,$row_dup['fschpegabs_id'],$year);
+			}
+			else if($terdekat == 1){
+				$this->update_absensi_pegawai($data,$row_kemarin['fschpegabs_id'],$year);
+			}
+			else if($terdekat == 2){
+				$this->update_absensi_pegawai($data,$row_besok['fschpegabs_id'],$year);
+			}
+		}
+		
 	}
 	  
 }
