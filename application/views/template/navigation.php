@@ -6,10 +6,13 @@
 				 <li <?php if(isset($view_pekerja)){ echo $view_pekerja; } ?>><?php echo anchor('pekerja/', 'List Pegawai' ); ?></li>
                 <li <?php if(isset($view_add_pekerja)){ echo $view_add_pekerja; } ?>><?php echo anchor('pekerja/add_pegawai', 'Add Pegawai' ); ?></li>
 				<li <?php if(isset($view_supervisor)){ echo $view_supervisor; } ?>><?php echo anchor('pekerja/get_supervisor', 'Supervisor' ); ?></li>
-				<li <?php if(isset($view_pensiun)){ echo $view_pensiun; } ?>><?php echo anchor('pekerja/pegawai_pensiun', 'Pensiun' ); ?></li>
-				<li <?php if(isset($view_pindah_cabang)){ echo $view_pindah_cabang; } ?>><?php echo anchor('pekerja/get_pindah_cabang', 'Pindah Cabang' ); ?></li>
+				<!--<li <?php //if(isset($view_pensiun)){ echo $view_pensiun; } ?>><?php //echo anchor('pekerja/pegawai_pensiun', 'Pensiun' ); ?></li>
+				<li <?php //if(isset($view_pindah_cabang)){ echo $view_pindah_cabang; } ?>><?php //echo anchor('pekerja/get_pindah_cabang', 'Pindah Cabang' ); ?></li>
+				-->
 				<li <?php if(isset($view_keluar)){ echo $view_keluar; } ?>><?php echo anchor('pekerja/pegawai_keluar', 'Pegawai Keluar' ); ?></li>
 				<li <?php if(isset($view_sdm)){ echo $view_sdm; } ?>><?php echo anchor('pekerja/view_data_sdm', 'Data SDM' ); ?></li>
+				<li <?php if(isset($view_upload)){ echo $view_upload; } ?>><?php echo anchor('pekerja/upload/', 'Upload File' ); ?></li>
+				
 			 </ul>
 		</li>
 	<?php if (isset($page_diklat)){$page_diklat = 'current';} else {$page_diklat = '';}?>
@@ -19,6 +22,8 @@
 				<li <?php if(isset($view_nstkp)){ echo $view_nstkp; } ?>><?php echo anchor('diklat/get_non_stkp', 'Report Non STKP' ); ?></li>
 				<li <?php if(isset($view_report_bulanan)){ echo $view_report_bulanan; } ?>><?php echo anchor('diklat/report_bulanan', 'Report Bulanan' ); ?></li>
 				<li <?php if(isset($view_input_stkp)){ echo $view_input_stkp; } ?>><?php echo anchor('diklat/input_stkp_bulanan/part_one', 'Input Training Bulanan' ); ?></li>
+				<li <?php if(isset($view_upload)){ echo $view_upload; } ?>><?php echo anchor('pekerja/upload/', 'Upload File' ); ?></li>
+				
             </ul></li>
 		<!-- hari libur -->
         <li class="dash"><a href="#" title="" class="exp" <?php if(isset($form_master)){ echo $form_master; } ?>>
@@ -32,7 +37,6 @@
 				?></li>
 				
 				<li <?php if(isset($view_master_jabatan)){ echo $view_master_jabatan; } ?>><?php echo anchor('pekerja/add_data_jabatan/part_one', 'Tambah Jabatan' ); ?></li>
-				<li <?php if(isset($view_upload)){ echo $view_upload; } ?>><?php echo anchor('pekerja/upload/', 'Upload File' ); ?></li>
 				<li <?php if(isset($view_master_lembur)){ echo $view_master_lembur; } ?>><?php echo anchor('gaji/master_lembur', 'Master Lembur' ); ?></li>
             </ul>
         </li>

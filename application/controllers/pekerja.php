@@ -418,7 +418,7 @@ class pekerja extends Application {
 					'peg_tgl_lahir'		=> $tgl_lahir,
 					'peg_jns_kelamin'	=> $this->input->post('jns_klm'),
 					'peg_gol_darah'		=> $this->input->post('gol_drh'),
-					'peg_update_on'		=> $tanggal,
+					//'peg_update_on'		=> $tanggal,
 					'peg_update_by'		=> 'admin'
 				);
 			
@@ -428,7 +428,7 @@ class pekerja extends Application {
 			$data_agama = array(
 					'p_ag_nipp' 		=> $this->input->post('nipp'),
 					'p_ag_agama' 		=> $this->input->post('agama'),
-					'p_ag_update_on'	=> $tanggal,
+					//'p_ag_update_on'	=> $tanggal,
 					'p_ag_update_by'	=> 'admin'
 				);
 				
@@ -443,7 +443,7 @@ class pekerja extends Application {
 					'p_al_provinsi' 	=> $this->input->post('provinsi'),
 					'p_al_no_telp' 		=> $this->input->post('notelp'),
 					'p_al_email' 		=> $this->input->post('email'),
-					'p_al_update_on'	=> $tanggal,
+					//'p_al_update_on'	=> $tanggal,
 					'p_al_update_by'	=> 'admin'
 				);
 				
@@ -463,7 +463,7 @@ class pekerja extends Application {
 					'p_fs_tinggi' 		=> $this->input->post('tinggi'),
 					'p_fs_berat' 		=> $this->input->post('berat'),
 					'p_fs_foto'	 		=> '',
-					'p_fs_update_on'	=> $tanggal,
+					//'p_fs_update_on'	=> $tanggal,
 					'p_fs_update_by'	=> 'admin'
 				);
 				
@@ -472,7 +472,7 @@ class pekerja extends Application {
 			$data_jabatan = array(
 					'p_jbt_nipp' 		=> $this->input->post('nipp'),
 					'p_jbt_jabatan' 	=> $this->input->post('jabatan'),
-					'p_jbt_update_on'	=> $tanggal,
+					//'p_jbt_update_on'	=> $tanggal,
 					'p_jbt_update_by'	=> 'admin'
 				);
 				
@@ -484,7 +484,7 @@ class pekerja extends Application {
 					'p_pdd_lp' 			=> $this->input->post('lembaga'),
 					'p_pdd_masuk'		=> $this->input->post('masuk'),
 					'p_pdd_keluar'		=> $this->input->post('keluar'),
-					'p_pdd_update_on'	=> $tanggal,
+					//'p_pdd_update_on'	=> $tanggal,
 					'p_pdd_update_by'	=> 'admin'
 				);
 				
@@ -505,7 +505,7 @@ class pekerja extends Application {
 					'p_tmt_status'			=> $this->input->post('stp'),
 					'p_tmt_provider'		=> $provider,
 					'p_tmt_tmt'				=> mdate($datestring, strtotime($this->input->post('tmt'))),
-					'p_tmt_update_on'		=> $tanggal,
+					//'p_tmt_update_on'		=> $tanggal,
 					'p_tmt_update_by'		=> 'admin'
 				);
 				
@@ -514,7 +514,7 @@ class pekerja extends Application {
 			$data_unit = array(
 					'p_unt_nipp' 			=> $this->input->post('nipp'),
 					'p_unt_kode_unit'		=> $this->input->post('unit'),
-					'p_unt_update_on'		=> $tanggal,
+					//'p_unt_update_on'		=> $tanggal,
 					'p_unt_update_by'		=> 'admin'
 				);
 				
@@ -523,7 +523,7 @@ class pekerja extends Application {
 			$data_stk = array(
 					'p_stk_nipp' 			  => $this->input->post('nipp'),
 					'p_stk_status_keluarga'   => $this->input->post('stk'),
-					'p_stk_update_on'		  => $tanggal,
+					//'p_stk_update_on'		  => $tanggal,
 					'p_stk_update_by'		  => 'admin'
 				);
 			
@@ -565,7 +565,7 @@ class pekerja extends Application {
 				'p_ps_tgl_meninggal'	=> $meninggal_psgn,
 				'p_ps_alamat'			=> $this->input->post('almt_psgn'),
 				'p_ps_pekerjaan'		=> $this->input->post('kerja_psgn'),
-				'p_ps_update_on'		=> $tanggal,
+				//'p_ps_update_on'		=> $tanggal,
 				'p_ps_update_by'		=> 'admin'
 			);
 		$this->kepegawaian->insert_data_pegawai_pasangan($data_pasangan);
@@ -594,7 +594,7 @@ class pekerja extends Application {
 				'p_ps_tgl_meninggal'	=> $meninggal_psgn,
 				'p_ps_alamat'			=> $this->input->post('almt_psgn'),
 				'p_ps_pekerjaan'		=> $this->input->post('kerja_psgn'),
-				'p_ps_update_on'		=> $tanggal,
+				//'p_ps_update_on'		=> $tanggal,
 				'p_ps_update_by'		=> 'admin'
 			);
 		$this->kepegawaian->insert_data_pegawai_pasangan($data_pasangan);
@@ -630,7 +630,7 @@ class pekerja extends Application {
 				'p_ay_tgl_meninggal'	=> $meninggal_ayah,
 				'p_ay_alamat'			=> $this->input->post('almt_ayah'),
 				'p_ay_pekerjaan'		=> $this->input->post('kerja_ayah'),
-				'p_ay_update_on'		=> $tanggal,
+				//'p_ay_update_on'		=> $tanggal,
 				'p_ay_update_by'		=> 'admin'
 			);
 			
@@ -650,7 +650,7 @@ class pekerja extends Application {
 				'p_ibu_tgl_meninggal'	=> $meninggal_ibu,
 				'p_ibu_alamat'			=> $this->input->post('almt_ibu'),
 				'p_ibu_pekerjaan'		=> $this->input->post('kerja_ibu'),
-				'p_ibu_update_on'		=> $tanggal,
+				//'p_ibu_update_on'		=> $tanggal,
 				'p_ibu_update_by'		=> 'admin'
 			);
 			
@@ -685,7 +685,7 @@ class pekerja extends Application {
 				'p_may_tgl_meninggal'	=> $meninggal_mert_ayah,
 				'p_may_alamat'			=> $this->input->post('almt_mert_ayah'),
 				'p_may_pekerjaan'		=> $this->input->post('kerja_mert_ayah'),
-				'p_may_update_on'		=> $tanggal,
+				//'p_may_update_on'		=> $tanggal,
 				'p_may_update_by'		=> 'admin'
 			);
 			
@@ -705,7 +705,7 @@ class pekerja extends Application {
 				'p_mib_tgl_meninggal'	=> $meninggal_mert_ibu,
 				'p_mib_alamat'			=> $this->input->post('almt_mert_ibu'),
 				'p_mib_pekerjaan'		=> $this->input->post('kerja_mert_ibu'),
-				'p_mib_update_on'		=> $tanggal,
+				//'p_mib_update_on'		=> $tanggal,
 				'p_mib_update_by'		=> 'admin'
 			);
 			
@@ -750,7 +750,7 @@ class pekerja extends Application {
 					'peg_ank_jns_kelamin'	=> $this->input->post('jns_klm'),
 					'peg_ank_agama'			=> $this->input->post('agama'),
 					'peg_ank_status'		=> $this->input->post('status'),
-					'p_ank_update_on'		=> $tanggal,
+					//'p_ank_update_on'		=> $tanggal,
 					'p_ank_update_by'		=> 'admin'
 				);
 			
@@ -761,7 +761,7 @@ class pekerja extends Application {
 			$data_stk = array(
 						'p_stk_nipp' 			  => $nipp,
 						'p_stk_status_keluarga'   => $stk,
-						'p_stk_update_on'		  => $tanggal,
+					//	'p_stk_update_on'		  => $tanggal,
 						'p_stk_update_by'		  => 'admin'
 					);
 				
@@ -794,7 +794,7 @@ class pekerja extends Application {
 			$data_bahasa = array(
 					'p_bhs_nipp'			=> $nipp,
 					'p_bhs_bahasa'			=> $this->input->post('bahasa'),
-					'p_bhs_update_on'		=> $tanggal,
+					//'p_bhs_update_on'		=> $tanggal,
 					'p_bhs_update_by'		=> 'admin'
 				);
 				
@@ -960,7 +960,7 @@ class pekerja extends Application {
 				'peg_tgl_lahir'		=> $tanggal_lahir,
 				'peg_jns_kelamin'	=> $this->input->post('jns_klm'),
 				'peg_gol_darah'		=> $this->input->post('gol_drh'),
-				'peg_update_on'		=> $tanggal,
+				//'peg_update_on'		=> $tanggal,
 				'peg_update_by'		=> 'admin'
 			);
 		
@@ -974,7 +974,7 @@ class pekerja extends Application {
 		$data_agama = array(
 					'p_ag_nipp' 		=> $nipp,
 					'p_ag_agama' 		=> $this->input->post('agama'),
-					'p_ag_update_on'	=> $tanggal,
+					//'p_ag_update_on'	=> $tanggal,
 					'p_ag_update_by'	=> 'admin'
 				);
 				
@@ -983,7 +983,7 @@ class pekerja extends Application {
 		$data_stk = array(
 					'p_stk_nipp' 			  => $nipp,
 					'p_stk_status_keluarga'   => $this->input->post('stk'),
-					'p_stk_update_on'		  => $tanggal,
+					//'p_stk_update_on'		  => $tanggal,
 					'p_stk_update_by'		  => 'admin'
 				);
 			
@@ -1006,7 +1006,7 @@ class pekerja extends Application {
 				'p_al_kecamatan'	=> $this->input->post('kecamatan'),
 				'p_al_kabupaten'	=> $this->input->post('kabupaten'),
 				'p_al_provinsi'		=> $this->input->post('provinsi'),
-				'p_al_update_on'	=> $tanggal,
+				//'p_al_update_on'	=> $tanggal,
 				'p_al_update_by'	=> 'admin'
 			);
 		#input data to table pegawai
@@ -1035,7 +1035,7 @@ class pekerja extends Application {
 				'p_ps_pekerjaan'	=> $this->input->post('pekerjaan'),
 				'p_ps_agama'		=> $this->input->post('agama'),
 				'p_ps_jns_kelamin'	=> $this->input->post('jns_klm'),
-				'p_ps_update_on'	=> $tanggal,
+				//'p_ps_update_on'	=> $tanggal,
 				'p_ps_update_by'	=> 'admin'
 			);
 		#input data to table pegawai
@@ -1069,7 +1069,7 @@ class pekerja extends Application {
 				'p_ay_tgl_meninggal'	=> $meninggal_ayah,
 				'p_ay_alamat'			=> $this->input->post('almt_ayah'),
 				'p_ay_pekerjaan'		=> $this->input->post('kerja_ayah'),
-				'p_ay_update_on'		=> $tanggal,
+				//'p_ay_update_on'		=> $tanggal,
 				'p_ay_update_by'		=> 'admin'
 			);
 			
@@ -1088,7 +1088,7 @@ class pekerja extends Application {
 				'p_ibu_tgl_meninggal'	=> $meninggal_ibu,
 				'p_ibu_alamat'			=> $this->input->post('almt_ibu'),
 				'p_ibu_pekerjaan'		=> $this->input->post('kerja_ibu'),
-				'p_ibu_update_on'		=> $tanggal,
+				//'p_ibu_update_on'		=> $tanggal,
 				'p_ibu_update_by'		=> 'admin'
 			);
 			
@@ -1118,7 +1118,7 @@ class pekerja extends Application {
 				'p_may_tgl_meninggal'	=> $meninggal_ayah,
 				'p_may_alamat'			=> $this->input->post('almt_ayah'),
 				'p_may_pekerjaan'		=> $this->input->post('kerja_ayah'),
-				'p_may_update_on'		=> $tanggal,
+				//'p_may_update_on'		=> $tanggal,
 				'p_may_update_by'		=> 'admin'
 			);
 			
@@ -1136,7 +1136,7 @@ class pekerja extends Application {
 				'p_mib_tgl_meninggal'	=> $meninggal_ibu,
 				'p_mib_alamat'			=> $this->input->post('almt_ibu'),
 				'p_mib_pekerjaan'		=> $this->input->post('kerja_ibu'),
-				'p_mib_update_on'		=> $tanggal,
+				//'p_mib_update_on'		=> $tanggal,
 				'p_mib_update_by'		=> 'admin'
 			);
 			
@@ -1157,7 +1157,7 @@ class pekerja extends Application {
 				'peg_ank_tempat_lahir'	=> $this->input->post('tempat'),
 				'peg_ank_tgl_lahir'		=> mdate($datestring, strtotime($this->input->post('tanggal'))),
 				'peg_ank_pendidikan'	=> $this->input->post('pendidikan'),
-				'p_ank_update_on'		=> $tanggal,
+				//'p_ank_update_on'		=> $tanggal,
 				'p_ank_update_by'		=> 'admin'
 			);
 		#input data to table pegawai
@@ -1198,7 +1198,7 @@ class pekerja extends Application {
 		$data_grade = array(
 				'p_grd_nipp'		=> $nipp,
 				'p_grd_grade'		=> $this->input->post('grade'),
-				'p_grd_update_on'	=> $tanggal,
+				//'p_grd_update_on'	=> $tanggal,
 				'p_grd_update_by'	=> 'admin'
 			);
 		
@@ -1247,7 +1247,7 @@ class pekerja extends Application {
 		$data_grade = array(
 				'p_grd_nipp'		=> $nipp_baru,
 				'p_grd_grade'		=> $this->input->post('grade'),
-				'p_grd_update_on'	=> $tanggal,
+				//'p_grd_update_on'	=> $tanggal,
 				'p_grd_update_by'	=> 'admin'
 			);
 			
@@ -1256,7 +1256,7 @@ class pekerja extends Application {
 				'p_tmt_status'		=> $this->input->post('status'),
 				'p_tmt_provider'	=> $this->input->post('provider'),
 				'p_tmt_tmt'			=> $tanggal_tmt,
-				'p_tmt_update_on'	=> $tanggal,
+				//'p_tmt_update_on'	=> $tanggal,
 				'p_tmt_update_by'	=> 'admin'
 			);
 		
@@ -1561,7 +1561,7 @@ class pekerja extends Application {
 				'p_pdd_lp'			=> $this->input->post('lp'),
 				'p_pdd_masuk'		=> $this->input->post('masuk'),
 				'p_pdd_keluar'		=> $this->input->post('keluar'),
-				'p_pdd_update_on'	=> $tanggal,
+				//'p_pdd_update_on'	=> $tanggal,
 				'p_pdd_update_by'	=> 'admin'
 			);
 		
@@ -1573,7 +1573,7 @@ class pekerja extends Application {
 		{
 			$data_bahasa = array(
 					'p_bhs_bahasa'		=> $this->input->post('bahasa'.$nomer),
-					'p_bhs_update_on'	=> $tanggal,
+					//'p_bhs_update_on'	=> $tanggal,
 					'p_bhs_update_by'	=> 'admin'
 				);
 			$id_bahasa = $row_bahasa['id_peg_bahasa'];
@@ -1679,7 +1679,7 @@ class pekerja extends Application {
 						"p_cab_kode_cabang"	=> $this->input->post('cabang'),
 						"p_cab_tmt_start"	=> $tmt,
 						"p_cab_ket"			=> $this->input->post('ket'),
-						"p_cab_update_on"	=> $tanggal,
+					//	"p_cab_update_on"	=> $tanggal,
 						"p_cab_update_by"	=> 'admin',
 					);
 				
@@ -1775,7 +1775,7 @@ class pekerja extends Application {
 		$data_stk = array(
 					'p_stk_nipp' 			  => $nipp,
 					'p_stk_status_keluarga'   => $stk,
-					'p_stk_update_on'		  => $tanggal,
+					//'p_stk_update_on'		  => $tanggal,
 					'p_stk_update_by'		  => 'admin'
 				);
 			

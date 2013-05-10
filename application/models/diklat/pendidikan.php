@@ -240,7 +240,7 @@ class pendidikan extends CI_Model
 				'p_stkp_selesai'		=> $tanggal_end,
 				'p_stkp_mulai'			=> $valid_start,
 				'p_stkp_finish'			=> $valid_end,
-				'p_stkp_update_on'		=> $tanggal,
+				//'p_stkp_update_on'		=> $tanggal,
 				'p_stkp_update_by'		=> $user,
 			);
 
@@ -288,7 +288,7 @@ class pendidikan extends CI_Model
 				'p_nstkp_no_license'	=> $mand,
 				'p_nstkp_pelaksanaan'	=> $tanggal_start,
 				'p_nstkp_selesai'		=> $tanggal_end,
-				'p_nstkp_update_on'		=> $tanggal,
+				//'p_nstkp_update_on'		=> $tanggal,
 				'p_nstkp_update_by'		=> $user,
 			);
 
@@ -427,7 +427,7 @@ class pendidikan extends CI_Model
 					'p_nstkp_no_license'	=> $this->input->post('license'),
 					'p_nstkp_pelaksanaan'	=> $tanggal_start,
 					'p_nstkp_selesai'		=> $tanggal_end,
-					'p_nstkp_update_on'		=> $tanggal,
+					//'p_nstkp_update_on'		=> $tanggal,
 					'p_nstkp_update_by'		=> $user,
 				);
 
@@ -462,7 +462,7 @@ class pendidikan extends CI_Model
 					'p_stkp_mulai'			=> $validitas_awal,
 					'p_stkp_finish'			=> $validitas_akhir,
 					'p_stkp_rating'			=> $this->input->post('rating'),
-					'p_stkp_update_on'		=> $tanggal,
+					//'p_stkp_update_on'		=> $tanggal,
 					'p_stkp_update_by'		=> $user,
 				);
 		print_r($data_stkp);
