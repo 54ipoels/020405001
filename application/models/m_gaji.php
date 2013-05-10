@@ -9,7 +9,7 @@ class M_gaji extends CI_Model
 		$this->load->database();
 	}
 	
-	function input_data_gaji_per_unit($nipp_unit, $mp)
+	function input_data_gaji_per_unit($nipp_unit, $mp, $year)
 	{
 		foreach ($nipp_unit as $nipp) :
 		{
@@ -18,10 +18,10 @@ class M_gaji extends CI_Model
 				'pgj_gaji_bruto' => $this->input->post('gaji_bruto'),
 				'pgj_insentive' => $this->input->post('insentive'),
 				'pgj_bulan' => $this->input->post('month'),
-				'pgj_tahun' => $this->input->post('year'),
+				//'pgj_tahun' => $this->input->post('year'),
 				'pgj_update_by' =>"adminems",
 				);
-			$this->db->insert('v3_penggajian', $data); 
+			$this->db->insert('v3_penggajian_'.$year, $data); 
 			
 			$data_pot_peg = array(
 				'id_peg_pot_peg_gaji' => $nipp['id_pegawai'],
@@ -30,10 +30,10 @@ class M_gaji extends CI_Model
 				'pot_peg_tht' => $mp['peg_tht']*$this->input->post('gaji_bruto'),
 				'pot_peg_pensiun' => $mp['peg_pensiun']*$this->input->post('gaji_bruto'),
 				'pot_peg_bulan' => $this->input->post('month'),
-				'pot_peg_tahun' => $this->input->post('year'),
+				//'pot_peg_tahun' => $this->input->post('year'),
 				'pot_peg_update_by' => 'adminems',
 			);
-			$this->db->insert('v3_pot_gaji_pegawai', $data_pot_peg);
+			$this->db->insert('v3_pot_gaji_pegawai_'.$year, $data_pot_peg);
 						
 			$data_pot_per = array(
 				'id_peg_pot_per_gaji' => $nipp['id_pegawai'],
@@ -44,15 +44,15 @@ class M_gaji extends CI_Model
 				'pot_per_as_jiwa' => $mp['per_as_jiwa']*$this->input->post('gaji_bruto'),
 				'pot_per_pensiun' => $mp['per_pensiun']*$this->input->post('gaji_bruto'),
 				'pot_per_bulan' => $this->input->post('month'),
-				'pot_per_tahun' => $this->input->post('year'),
+				//'pot_per_tahun' => $this->input->post('year'),
 				'pot_per_update_by' => 'adminems',
 			);
-			$this->db->insert('v3_pot_gaji_perusahaan', $data_pot_per);
+			$this->db->insert('v3_pot_gaji_perusahaan_'.$year, $data_pot_per);
 			
 		} endforeach;
 	}
 	
-	function input_data_gaji($nipp, $mp)
+	function input_data_gaji($nipp, $mp, $year)
 	{
 		$data = array(
 				'pgj_id_peg'	=> $nipp,
@@ -62,7 +62,7 @@ class M_gaji extends CI_Model
 				'pgj_tahun' => $this->input->post('year'),
 				'pgj_update_by' =>"admin",
 				);
-		$this->db->insert('v3_penggajian', $data); 
+		$this->db->insert('v3_penggajian_'.$year, $data); 
 		
 		$data_pot_peg = array(
 				'id_peg_pot_peg_gaji' => $nipp['id_pegawai'],
@@ -74,7 +74,7 @@ class M_gaji extends CI_Model
 				'pot_peg_tahun' => $this->input->post('year'),
 				'pot_peg_update_by' => 'adminems',
 			);
-			$this->db->insert('v3_pot_gaji_pegawai', $data_pot_peg);
+			$this->db->insert('v3_pot_gaji_pegawai_'.$year, $data_pot_peg);
 						
 			$data_pot_per = array(
 				'id_peg_pot_per_gaji' => $nipp['id_pegawai'],
@@ -88,21 +88,21 @@ class M_gaji extends CI_Model
 				'pot_per_tahun' => $this->input->post('year'),
 				'pot_per_update_by' => 'adminems',
 			);
-			$this->db->insert('v3_pot_gaji_perusahaan', $data_pot_per);
+			$this->db->insert('v3_pot_gaji_perusahaan_'.$year, $data_pot_per);
 	}
 	
 	function ambil_data_penggajian($unit,$month,$year)
 	{		
 		$query="
-				SELECT * FROM v3_penggajian 
+				SELECT * FROM v3_penggajian_$year  AS v3_penggajian
 				LEFT JOIN (SELECT * FROM v3_pegawai ORDER BY id_pegawai DESC) AS pegawai ON pegawai.id_pegawai  = v3_penggajian.pgj_id_peg
 				LEFT JOIN (SELECT * FROM v3_peg_unit ORDER BY id_peg_unit DESC) AS unit ON unit.p_unt_nipp = pegawai.peg_nipp
 				LEFT JOIN (SELECT * FROM v3_peg_grade ORDER BY id_peg_grade DESC)AS grade ON grade.p_grd_nipp = pegawai.peg_nipp
 				LEFT JOIN (SELECT id_peg_jabatan ,p_jbt_nipp, p_jbt_jabatan FROM v3_peg_jabatan ORDER BY id_peg_jabatan DESC) AS jabatan ON jabatan.p_jbt_nipp = pegawai.peg_nipp
-				LEFT JOIN (SELECT * FROM v3_pot_gaji_pegawai) AS pot_peg ON pegawai.id_pegawai = pot_peg.id_peg_pot_peg_gaji
-				LEFT JOIN (SELECT * FROM v3_pot_gaji_perusahaan) AS pot_per ON pegawai.id_pegawai = pot_per.id_peg_pot_per_gaji
+				LEFT JOIN (SELECT * FROM v3_pot_gaji_pegawai_$year) AS pot_peg ON pegawai.id_pegawai = pot_peg.id_peg_pot_peg_gaji
+				LEFT JOIN (SELECT * FROM v3_pot_gaji_perusahaan_$year) AS pot_per ON pegawai.id_pegawai = pot_per.id_peg_pot_per_gaji
 				WHERE unit.p_unt_kode_unit LIKE '$unit'
-				AND pgj_bulan='$month' AND pgj_tahun='$year'
+				AND pgj_bulan='$month' 
 		";
 		$query = $this->db->query($query);
 		
@@ -138,10 +138,10 @@ class M_gaji extends CI_Model
 		return  $query->result_array();
 	}
 	
-	function ambil_data_penggajian_id($id)
+	function ambil_data_penggajian_id($id,$year)
 	{
 		$query="
-				SELECT * FROM `v3_penggajian` 
+				SELECT * FROM `v3_penggajian_$year` AS v3_penggajian
 				LEFT JOIN v3_pegawai ON v3_pegawai.id_pegawai  = v3_penggajian.pgj_id_peg
 				LEFT JOIN v3_peg_unit ON v3_peg_unit.p_unt_nipp = v3_pegawai.peg_nipp
 				LEFT JOIN v3_peg_grade ON v3_peg_grade.p_grd_nipp = v3_pegawai.peg_nipp
@@ -156,10 +156,10 @@ class M_gaji extends CI_Model
 	{
 		$this->db->where('id_peg_pot_peg_gaji', $id);
 		$this->db->where('pot_peg_bulan', $this->uri->segment(4));
-		$this->db->where('pot_peg_tahun', $this->uri->segment(5));
+		//$this->db->where('pot_peg_tahun', $this->uri->segment(5));
 		$this->db->order_by('id_pot_gaji_pegawai','DESC');
 		$this->db->limit(1);
-		$query = $this->db->get('v3_pot_gaji_pegawai');
+		$query = $this->db->get('v3_pot_gaji_pegawai_'.$this->uri->segment(5));
 		return $query->result_array();
 	}
 	
@@ -167,10 +167,10 @@ class M_gaji extends CI_Model
 	{
 		$this->db->where('id_peg_pot_per_gaji', $id);
 		$this->db->where('pot_per_bulan', $this->uri->segment(4));
-		$this->db->where('pot_per_tahun', $this->uri->segment(5));
+		//$this->db->where('pot_per_tahun', $this->uri->segment(5));
 		$this->db->order_by('id_pot_gaji_perusahaan','DESC');
 		$this->db->limit(1);
-		$query = $this->db->get('v3_pot_gaji_perusahaan');
+		$query = $this->db->get('v3_pot_gaji_perusahaan_'.$this->uri->segment(5));
 		return $query->result_array();
 	}
 	
@@ -219,7 +219,7 @@ class M_gaji extends CI_Model
 					'temp_pot_peg' => $pot_peg,
 					'temp_pot_per' => $pot_per,
 					'temp_bulan' => $row_penggajian['pgj_bulan'],
-					'temp_tahun' => $row_penggajian['pgj_tahun'],
+					'temp_tahun' => $this->input->post('year'),
 				);
 			if ($row_penggajian['peg_nipp'] != $nipp)
 			{
@@ -248,7 +248,7 @@ class M_gaji extends CI_Model
 				'pot_peg_update_by' => 'adminems',
 			);
 		$this->db->where('id_pot_gaji_pegawai',$id);
-		$this->db->update('v3_pot_gaji_pegawai', $data_pot_peg);
+		$this->db->update('v3_pot_gaji_pegawai_'.$this->input->post('year'), $data_pot_peg);
 	}
 	
 	function submit_edit_pot_perusahaan($id)
@@ -265,10 +265,10 @@ class M_gaji extends CI_Model
 				'pot_per_update_by' => 'adminems',
 			);
 		$this->db->where('id_pot_gaji_perusahaan',$id);
-		$this->db->update('v3_pot_gaji_perusahaan', $data_pot_per);
+		$this->db->update('v3_pot_gaji_perusahaan_'.$this->input->post('year'), $data_pot_per);
 	}
 	
-	function submit_edit_penggajian($id, $mp)
+	function submit_edit_penggajian($id, $mp, $year)
 	{
 		$data = array(
 				'pgj_gaji_bruto' => $this->input->post('gaji_bruto'),
@@ -276,7 +276,7 @@ class M_gaji extends CI_Model
 				'pgj_update_by' =>"admin",
 				);
 		$this->db->where('id_pgj',$id);
-		$this->db->update('v3_penggajian', $data); 
+		$this->db->update('v3_penggajian_'.$year, $data); 
 		
 		$data_pot_peg = array(
 				'pot_peg_jht' => $mp['peg_jht']*$this->input->post('gaji_bruto'),
@@ -285,7 +285,7 @@ class M_gaji extends CI_Model
 				'pot_peg_update_by' => 'adminems',
 			);
 		$this->db->where('id_pot_gaji_pegawai',$id);
-		$this->db->update('v3_pot_gaji_pegawai', $data_pot_peg);
+		$this->db->update('v3_pot_gaji_pegawai_'.$year, $data_pot_peg);
 						
 		$data_pot_per = array(
 				'pot_per_jht' => $mp['per_jht']*$this->input->post('gaji_bruto'),
@@ -297,21 +297,21 @@ class M_gaji extends CI_Model
 				'pot_per_update_by' => 'adminems',
 			);
 		$this->db->where('id_pot_gaji_perusahaan',$id);
-		$this->db->update('v3_pot_gaji_perusahaan', $data_pot_per);
+		$this->db->update('v3_pot_gaji_perusahaan_'.$year, $data_pot_per);
 	}
 	
 	
-	function insert_data_gaji_pegawai($data_gaji)
+	function insert_data_gaji_pegawai($data_gaji,$year)
 	{
-		$this->db->insert('v3_penggajian',$data_gaji);
+		$this->db->insert('v3_penggajian_'.$year,$data_gaji);
 	}
-	function insert_data_gaji_pot_pegawai($data_pot_peg)
+	function insert_data_gaji_pot_pegawai($data_pot_peg,$year)
 	{
-		$this->db->insert('v3_pot_gaji_pegawai',$data_pot_peg);
+		$this->db->insert('v3_pot_gaji_pegawai_'.$year,$data_pot_peg);
 	}
-	function insert_data_gaji_pot_perusahaan($data_pot_perusahaan)
+	function insert_data_gaji_pot_perusahaan($data_pot_perusahaan,$year)
 	{
-		$this->db->insert('v3_pot_gaji_perusahaan',$data_pot_perusahaan);
+		$this->db->insert('v3_pot_gaji_perusahaan_'.$year,$data_pot_perusahaan);
 	}
 	
 	function get_id_peg_by_nipp($nipp)
@@ -479,12 +479,12 @@ class M_gaji extends CI_Model
 						'lmb_apresiasi'		=>	'',
 						'lmb_koreksi'		=>	'',
 						'lmb_bulan'			=>	$month,
-						'lmb_tahun'			=> 	$year,
+						//'lmb_tahun'			=> 	$year,
 						'lmb_update_by'		=>	'admin' ,
 					);
 				//print_r($data_lembur);echo "<br>";
 				# insert ke db 
-				$this->db->insert('v3_lembur',$data_lembur);
+				$this->db->insert('v3_lembur_'.$year,$data_lembur);
 				
 				
 				$nipp = $row_absen['peg_nipp'];

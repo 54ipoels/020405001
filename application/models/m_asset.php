@@ -231,9 +231,9 @@ class M_asset extends CI_Model
 		} else {
 			$sel="  `v3_lembur`.`lmb_id_peg`= '$id' AND";
 		}
-		$sel = " WHERE ".$sel." lmb_bulan='$month' AND lmb_tahun='$year' ";
+		$sel = " WHERE ".$sel." lmb_bulan='$month' ";
 		$query="
-				SELECT * FROM `v3_lembur` 
+				SELECT * FROM `v3_lembur_$year` AS v3_lembur
 				LEFT JOIN v3_pegawai ON v3_pegawai.id_pegawai  = v3_lembur.lmb_id_peg
 				LEFT JOIN v3_peg_unit ON v3_peg_unit.p_unt_nipp = v3_pegawai.peg_nipp
 				$sel
@@ -242,13 +242,13 @@ class M_asset extends CI_Model
 		return  $query->result_array();
 	}
 	
-	function ambil_data_lembur_by_id($id)
+	function ambil_data_lembur_by_id($id,$year)
 	{
-		$this->db->join('v3_pegawai', 'v3_pegawai.id_pegawai = v3_lembur.lmb_id_peg', 'left');
+		$this->db->join('v3_pegawai', 'v3_pegawai.id_pegawai = v3_lembur_'.$year.'.lmb_id_peg', 'left');
 		$this->db->join('v3_peg_unit', 'v3_peg_unit.p_unt_nipp = v3_pegawai.peg_nipp', 'left');
 		$this->db->join('v3_peg_jabatan', 'v3_peg_jabatan.p_jbt_nipp = v3_pegawai.peg_nipp', 'left');
 		$this->db->where('id_lembur', $id);
-		$query = $this->db->get('v3_lembur');
+		$query = $this->db->get('v3_lembur_'.$year);
 		return $query->result_array();
 	}
 	
@@ -271,18 +271,18 @@ class M_asset extends CI_Model
 			'lmb_apresiasi' => $this->input->post('apresiasi'),
 			'lmb_koreksi' => $this->input->post('koreksi'),
 			'lmb_bulan' => $this->input->post('month'),
-			'lmb_tahun' => $this->input->post('year'),
+			//'lmb_tahun' => $this->input->post('year'),
 			'lmb_update_by' => "admin",
 		);
 		
-		$this->db->insert('v3_lembur', $data); 
+		$this->db->insert('v3_lembur_'.$this->input->post('year'), $data); 
 	}
 	
 	function edit_lembur()
 	{
 		$id = $this->input->post('id_lembur');
 		$data = array(
-			'lmb_nipp' => $this->input->post('id_peg'),
+			'lmb_id_peg' => $this->input->post('id_peg'),
 			'lmb_uang_makan' => $this->input->post('uang_makan'),
 			'lmb_uang_transport' => $this->input->post('uang_transport'),
 			'lmb_jumlah_hari_kerja' => $this->input->post('jumlah_hari_kerja'),
@@ -299,10 +299,10 @@ class M_asset extends CI_Model
 			'lmb_apresiasi' => $this->input->post('apresiasi'),
 			'lmb_koreksi' => $this->input->post('koreksi'),
 			'lmb_bulan' => $this->input->post('month'),
-			'lmb_tahun' => $this->input->post('year'),
+			//'lmb_tahun' => $this->input->post('year'),
 			'lmb_update_by' => "admin",
 		);
-		$this->db->update('v3_lembur', $data, array('id_lembur' => $id));
+		$this->db->update('v3_lembur_'.$this->input->post('year'), $data, array('id_lembur' => $id));
 		if($this->db->affected_rows())
       		return '1';
       	else
@@ -372,9 +372,10 @@ class M_asset extends CI_Model
 		} else {
 			$sel="  `v3_penggajian`.`pgj_id_peg`= '$id' AND";
 		}
-		$sel = " WHERE ".$sel." pgj_bulan='$month' AND pgj_tahun='$year' ";
+		//$sel = " WHERE ".$sel." pgj_bulan='$month' AND pgj_tahun='$year' ";
+		$sel = " WHERE ".$sel." pgj_bulan='$month' ";
 		$query="
-				SELECT * FROM `v3_penggajian` 
+				SELECT * FROM `v3_penggajian_$year` AS v3_penggajian 
 				LEFT JOIN v3_pegawai ON v3_pegawai.id_pegawai  = v3_penggajian.pgj_id_peg
 				LEFT JOIN v3_peg_unit ON v3_peg_unit.p_unt_nipp = v3_pegawai.peg_nipp
 				$sel
@@ -383,13 +384,13 @@ class M_asset extends CI_Model
 		return  $query->result_array();
 	}
 	
-	function ambil_data_penggajian_by_id($id)
+	function ambil_data_penggajian_by_id($id,$year)
 	{
-		$this->db->join('v3_pegawai', 'v3_pegawai.id_pegawai = v3_penggajian.pgj_id_peg', 'left');
+		$this->db->join('v3_pegawai', 'v3_pegawai.id_pegawai = v3_penggajian_'.$year.'.pgj_id_peg', 'left');
 		$this->db->join('v3_peg_unit', 'v3_peg_unit.p_unt_nipp = v3_pegawai.peg_nipp', 'left');
 		$this->db->join('v3_peg_jabatan', 'v3_peg_jabatan.p_jbt_nipp = v3_pegawai.peg_nipp', 'left');
 		$this->db->where('id_pgj', $id);
-		$query = $this->db->get('v3_penggajian');
+		$query = $this->db->get('v3_penggajian_'.$year);
 		return $query->result_array();
 	}
 	

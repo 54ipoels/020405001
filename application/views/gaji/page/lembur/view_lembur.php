@@ -44,9 +44,9 @@
 							?>
 							</td>
 							<td><?php 
-								echo anchor('gaji/view_detail_lembur/'.$row['id_lembur'].'/'.$row['lmb_bulan'].'/'.$row['lmb_tahun'].'', 
+								echo anchor('gaji/view_detail_lembur/'.$row['id_lembur'].'/'.$row['lmb_bulan'].'/'.$year.'', 
 								img(array('src'=>'images/icons/control/16/project.png','border'=>'0','alt'=>'Detail')) , 'title="Detail"' );
-								echo anchor('gaji/edit_lembur/'.$row['id_lembur'].'/'.$row['lmb_bulan'].'/'.$row['lmb_tahun'].'', 
+								echo anchor('gaji/edit_lembur/'.$row['id_lembur'].'/'.$row['lmb_bulan'].'/'.$year.'', 
 								img(array('src'=>'images/icons/control/16/pencil.png','border'=>'0','alt'=>'Edit')) , 'title="Edit"' );
 								?>
         					</td>

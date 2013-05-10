@@ -92,7 +92,8 @@ class Gaji extends Application {
 	{	
 		//ambil data unit
 		$id=$this->uri->segment(3);
-		$data['showdata'] = $this->m_asset->ambil_data_penggajian_by_id($id); 
+		$year=$this->uri->segment(5);;
+		$data['showdata'] = $this->m_asset->ambil_data_penggajian_by_id($id,$year); 
 		$show = $data['showdata'];
 		foreach ($show as $row){}
 		$data['pot_pegawai'] = $this->m_gaji->ambil_data_pot_pegawai_id($row['pgj_id_peg']); 
@@ -122,7 +123,8 @@ class Gaji extends Application {
 	{
 		//ambil data unit
 		$id=$this->uri->segment(3);
-		$data['showdata'] = $this->m_gaji->ambil_data_penggajian_id($id); 
+		$year=$this->uri->segment(5);
+		$data['showdata'] = $this->m_gaji->ambil_data_penggajian_id($id,$year); 
 		foreach ($data['showdata'] as $row){}
 		$data['pot_pegawai'] = $this->m_gaji->ambil_data_pot_pegawai_id($row['pgj_id_peg']); 
 		$data['pot_perusahaan'] = $this->m_gaji->ambil_data_pot_perusahaan_id($row['pgj_id_peg']); 
@@ -138,14 +140,15 @@ class Gaji extends Application {
 	{
 		$master_potongan = $this->m_gaji->ambil_master_potongan();
 		foreach ($master_potongan as $mp){}
-		$this->m_gaji->submit_edit_penggajian($id, $mp);
+		$year = $this->input->post('year');
+		$this->m_gaji->submit_edit_penggajian($id, $mp, $year);
 		
 		redirect('gaji/edit_penggajian/'.$this->input->post('id_peg').'/'.$this->input->post('month').'/'.$this->input->post('year'));
 	}
 	
 	function edit_pot_pegawai($id_peg)
 	{
-		$data['showdata'] = $this->m_gaji->ambil_data_penggajian_id($this->uri->segment(6)); 
+		$data['showdata'] = $this->m_gaji->ambil_data_penggajian_id($this->uri->segment(6),$this->uri->segment(5)); 
 		$data['pot_pegawai'] = $this->m_gaji->ambil_data_pot_pegawai_id($id_peg); 
 		
 		$data['page'] = 'edit potongan pegawai';		
@@ -164,7 +167,7 @@ class Gaji extends Application {
 	
 	function edit_pot_perusahaan($id_peg)
 	{
-		$data['showdata'] = $this->m_gaji->ambil_data_penggajian_id($this->uri->segment(6)); 
+		$data['showdata'] = $this->m_gaji->ambil_data_penggajian_id($this->uri->segment(6),$this->uri->segment(5)); 
 		$data['pot_perusahaan'] = $this->m_gaji->ambil_data_pot_perusahaan_id($id_peg); 
 		
 		$data['page'] = 'edit potongan perusahaan';		
@@ -240,6 +243,7 @@ class Gaji extends Application {
 		$bulan = $this->input->post('bulan');
 		$tahun = $this->input->post('tahun');
 		
+		
 		$file   = explode('.',$_FILES['database']['name']);
 		$length = count($file);
 		if($file[$length -1] == 'csv' ){ 
@@ -263,7 +267,7 @@ class Gaji extends Application {
 						"pgj_pembulatan"	=>	$data[15],
 						"pgj_terima"		=>	str_replace(",","",$data[16]),
 						"pgj_bulan"			=>	$bulan,
-						"pgj_tahun"			=>	$tahun,
+						//"pgj_tahun"			=>	$tahun,
 						"pgj_update_by"		=>	"admin",
 					
 					);
@@ -280,7 +284,7 @@ class Gaji extends Application {
 						"pot_peg_tht"			=>	str_replace(",","",$data[20]),
 						"pot_peg_pensiun"		=>	str_replace(",","",$data[17]),
 						"pot_peg_bulan"			=>	$bulan,
-						"pot_peg_tahun"			=>	$tahun,
+						//"pot_peg_tahun"			=>	$tahun,
 						"pot_peg_update_by"		=>	"admin",
 						
 					);	
@@ -296,14 +300,14 @@ class Gaji extends Application {
 						"pot_per_tht"			=>	str_replace(",","",$data[30]),
 						"pot_per_pensiun"		=>	str_replace(",","",$data[29]),
 						"pot_per_bulan"			=>	$bulan,
-						"pot_per_tahun"			=>	$tahun,
+						//"pot_per_tahun"			=>	$tahun,
 						"pot_per_update_by"		=>	"admin",
 						);	
 				
 				if($id_peg > 0){
-					$this->m_gaji->insert_data_gaji_pegawai($data_gaji);
-					$this->m_gaji->insert_data_gaji_pot_pegawai($data_pot_peg);
-					$this->m_gaji->insert_data_gaji_pot_perusahaan($data_pot_perusahaan);
+					$this->m_gaji->insert_data_gaji_pegawai($data_gaji,$tahun);
+					$this->m_gaji->insert_data_gaji_pot_pegawai($data_pot_peg,$tahun);
+					$this->m_gaji->insert_data_gaji_pot_perusahaan($data_pot_perusahaan,$tahun);
 					
 				}else{
 					$tidak_masuk[$j]=$data[4];
@@ -316,12 +320,16 @@ class Gaji extends Application {
 			
 			}
 		} while ($data = fgetcsv($handle,1000,","));
-			$data['gagal'] = $tidak_masuk;
+			if (isset($tidak_masuk)){
+				$data['gagal'] = $tidak_masuk;
+			};
 			$data['n_gagal']	=	$j;
+			if (!$handle){$data['n_gagal']="gagal";}
 			$data['page'] = 'hasil import';		
 			$data['view_gaji_peg'] = 'class="this"';
 			$data['form_gaji'] = 'id="current"';
 			$this->load->view('gaji/index',$data);
+			
 		} else {
 			
 			redirect('gaji/import');
@@ -398,7 +406,7 @@ class Gaji extends Application {
 	{	
 		//ambil data unit
 		$id=$this->uri->segment(3);
-		$data['showdata'] = $this->m_asset->ambil_data_lembur_by_id($id); 
+		$data['showdata'] = $this->m_asset->ambil_data_lembur_by_id($id,$this->uri->segment(5)); 
 		$show = $data['showdata'];
 		foreach ($show as $row){
 			$penerimaan = $row['lmb_hari_kerja'] + $row['lmb_hari_libur'] + $row['lmb_ex_voed'] + $row['lmb_shift_all'] - $row['lmb_potongan'] + $row['lmb_apresiasi'] + $row['lmb_koreksi'] + $row['lmb_natura'];
@@ -428,7 +436,7 @@ class Gaji extends Application {
 	{
 		//ambil data unit
 		$id=$this->uri->segment(3);
-		$data['showdata'] = $this->m_asset->ambil_data_lembur_by_id($id); 
+		$data['showdata'] = $this->m_asset->ambil_data_lembur_by_id($id,$this->uri->segment(5)); 
 		$show = $data['showdata'];
 		foreach ($show as $row){
 			$penerimaan = $row['lmb_hari_kerja'] + $row['lmb_hari_libur'] + $row['lmb_ex_voed'] + $row['lmb_shift_all'] - $row['lmb_potongan'] + $row['lmb_apresiasi'] + $row['lmb_koreksi'] + $row['lmb_natura'];
@@ -448,6 +456,7 @@ class Gaji extends Application {
 			$month = $this->input->post('month'); //unit_code
 			$year = $this->input->post('year'); //unit_code
 			$id_pegawai = $this->input->post('nipp'); //id_pegawai
+			$data['year'] = $this->input->post('year');
 			$data['page'] = 'view_lembur_pegawai';		
 			$data['view_lembur_pegawai'] = 'class="this"';
 			$data['form_gaji'] = 'id="current"';

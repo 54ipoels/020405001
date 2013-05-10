@@ -27,7 +27,7 @@
 							<?php
 							echo form_hidden('month', $this->uri->segment(4));
 							echo form_hidden('year',$this->uri->segment(5));
-							echo $bulan.' '. $sd['pgj_tahun'];
+							echo $bulan.' '.$this->uri->segment(5);
 							?>
                         </div>
                         <div class="clear"></div>
@@ -146,7 +146,7 @@
 									'name'  => 'other', 
 									'id'    => 'other', 
 									);
-								echo form_input($pensiun,$pr['pot_per_other']) ?>
+								echo form_input($other,$pr['pot_per_other']) ?>
                             </div>
                         <div class="clear"></div>
                     </div>

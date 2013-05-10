@@ -18,7 +18,10 @@
 					?>
 					</table>
 					<?php
-				} else {
+				} else if($n_gagal == "gagal"){
+					echo "<strong>Proses Import Gagal</strong>";
+				}
+				else{
 					echo "<strong>semua data berhasil diimport</strong>";
 				}
 			?>

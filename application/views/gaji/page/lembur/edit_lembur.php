@@ -5,7 +5,7 @@
 			foreach($showdata as $sd){}
 			$this->load->view('asset/v_asset');
 			$attributes = array('class'=>'form');
-			echo form_open('c_absensi/submit_lembur_pegawai', $attributes);
+			echo form_open('gaji/submit_lembur_pegawai', $attributes);
 			echo form_hidden('id_lembur', $sd['id_lembur']);
 			?>
                 <fieldset class="step" id="w2first">

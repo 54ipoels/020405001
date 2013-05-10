@@ -15,6 +15,7 @@
 							<div id="tampil_data2">
                             <?php 
 								echo form_hidden('id_peg', $sd['id_pgj']); 
+								echo form_hidden('year', $this->uri->segment(5)); 
 								echo $sd['peg_nipp']; ?><br/>
                             </div>
                             </div>
@@ -25,8 +26,9 @@
                         <div class="formRight">
 							<?php
 							echo form_hidden('month',$sd['pgj_bulan']);
-							echo form_hidden('year',$sd['pgj_tahun']);
-							echo $bulan.' '. $sd['pgj_tahun'];
+							//echo form_hidden('year',$sd['pgj_tahun']);
+							//echo $bulan.' '. $sd['pgj_tahun'];
+							echo $bulan.' '.$this->uri->segment(5);
 							?>
                         </div>
                         <div class="clear"></div>

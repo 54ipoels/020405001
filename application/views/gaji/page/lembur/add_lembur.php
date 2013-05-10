@@ -4,7 +4,7 @@
 			<?php
 			$this->load->view('asset/v_asset');
 			$attributes = array('class'=>'form');
-			echo form_open('c_absensi/submit_lembur_pegawai', $attributes);
+			echo form_open('gaji/submit_lembur_pegawai', $attributes);
 			?>
                 <fieldset class="step" id="w2first">
                     <div class="formRow">
