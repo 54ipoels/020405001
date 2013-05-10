@@ -42,7 +42,7 @@
                 </div><br/>
 </div>
 <div class="widget">  
-		  <div class="title"><img src="<?php echo base_url()?>images/icons/dark/frames.png" alt="" class="titleIcon" /><h6>Data Pegawai</h6></div>
+		  <div class="title"><img src="<?php echo base_url()?>images/icons/dark/frames.png" alt="" class="titleIcon" /><h6>Data Pegawai  </h6><div style="color:red;";><h6><?php echo "$count row(s)";?></h6> </div></div>
             <table cellpadding="0" cellspacing="0" width="100%" class="sTable">
                 <thead>
                     <tr>

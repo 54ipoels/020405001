@@ -41,6 +41,7 @@ class pekerja extends Application {
 		//$data['pegawai'] = $this->kepegawaian->get_data_pegawai($config['per_page'],$page);
 		$data['pegawai'] = $this->kepegawaian->get_data_pegawai_aktif($config['per_page'],$page);
 		$data['list_unit'] = $this->kepegawaian->get_list_unit();
+		$data['count']	= $config['total_rows'];
 		$data['page'] = 'Pegawai';
 		$data['view_pekerja'] = 'class="this"';
 		$data['page_karyawan'] = 'yes';
@@ -67,6 +68,7 @@ class pekerja extends Application {
 		
 		#data preparing
 		$data['pegawai'] = $this->kepegawaian->get_data_pegawai_pensiun($config['per_page'],$page, $tanggal, $type, $limit);
+		$data['count']	= $config['total_rows'];
 		$data['page'] = 'Data Pensiun';
 		$data['tanggal'] = $tanggal;
 		$data['type'] = 'ALL';
@@ -95,6 +97,7 @@ class pekerja extends Application {
 		#data preparing
 		$data['pegawai'] = $this->kepegawaian->get_data_jenis_pegawai($config['per_page'],$page,$type);
 		$data['list_unit'] = $this->kepegawaian->get_list_unit();
+		$data['count']	= $config['total_rows'];
 		$data['page'] = 'Pegawai';
 		$data['page_karyawan'] = 'yes';
 		
@@ -119,6 +122,7 @@ class pekerja extends Application {
 		
 		$data['supervisor'] = $this->kepegawaian->get_supervisor($config['per_page'],$page);
 		//print_r($data['supervisor']);
+		$data['count']	= $config['total_rows'];
 		$data['page'] = 'Data Supervisor';
 		$data['view_supervisor'] = 'class="this"';
 		$data['page_karyawan'] = 'yes';
@@ -137,6 +141,7 @@ class pekerja extends Application {
 		
 		$data['pindah_cabang'] = $this->kepegawaian->get_data_pegawai_pindah_cabang($config['per_page'],$page);
 		//print_r($data['supervisor']);
+		$data['count']	= $config['total_rows'];
 		$data['page'] = 'Data Pindah Cabang';
 		$data['view_pindah_cabang'] = 'class="this"';
 		$data['page_karyawan'] = 'yes';
@@ -162,6 +167,7 @@ class pekerja extends Application {
 		
 		$data['pindah_cabang'] = $this->kepegawaian->search_pegawai_pindah_cabang($config['per_page'],$page,$search_data);
 		//print_r($data['supervisor']);
+		$data['count']	= $config['total_rows'];
 		$data['page'] = 'Data Pindah Cabang';
 		$data['view_pindah_cabang'] = 'class="this"';
 		$data['page_karyawan'] = 'yes';
@@ -217,6 +223,7 @@ class pekerja extends Application {
 		$data['pegawai'] = $this->kepegawaian->get_data_pegawai_pensiun($config['per_page'],$page, $tanggal, $jenis, $limit);
 		$data['tanggal'] = $tanggal;
 		$data['type']	 = $type;
+		$data['count']	= $config['total_rows'];
 		$data['page'] = 'Data Pensiun';
 		$data['page_karyawan'] = 'yes';
 		$data['view_pensiun'] = 'class="this"';
@@ -244,6 +251,7 @@ class pekerja extends Application {
 		#data preparing
 		$data['pegawai'] = $this->kepegawaian->get_data_unit_pegawai($config['per_page'], $page, $unit);
 		$data['list_unit'] = $this->kepegawaian->get_list_unit();
+		$data['count']	= $config['total_rows'];
 		$data['page'] = 'Pegawai';
 		$data['page_karyawan'] = 'yes';
 		
@@ -279,6 +287,7 @@ class pekerja extends Application {
 		
 		$data['pegawai'] = $this->kepegawaian->search_data_pegawai($config['per_page'], $page, $search_data);
 		$data['list_unit'] = $this->kepegawaian->get_list_unit();
+		$data['count']	= $config['total_rows'];
 		$data['page'] = 'Search Result';
 		$data['page_karyawan'] = 'yes';
 		 
@@ -1586,6 +1595,7 @@ class pekerja extends Application {
 		$this->pagination->initialize($config);
 		$page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
 		
+		$data['count'] = $config['total_rows'];
 		$data['page'] = 'Data SDM';
 		$data['page_karyawan'] = 'yes';
 		$data['pegawai'] = $this->kepegawaian->get_data_pegawai_full($config['per_page'],$page);
@@ -1610,6 +1620,7 @@ class pekerja extends Application {
 		$this->pagination->initialize($config);
 		$page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
 		
+		$data['count'] = $config['total_rows'];
 		$data['page'] = 'Data SDM';
 		$data['page_karyawan'] = 'yes';
 		$data['pegawai'] = $this->kepegawaian->search_data_pegawai_full($config['per_page'],$page,$search_data);
@@ -2220,6 +2231,7 @@ class pekerja extends Application {
 		
 		#data preparing
 		$data['pegawai'] = $this->kepegawaian->get_data_pegawai_keluar($config['per_page'],$page, $tanggal, $type, $limit);
+		$data['count'] = $config['total_rows'];
 		$data['page'] = 'Data Pegawai Keluar';
 		$data['tanggal'] = $tanggal;
 		$data['type'] = 'ALL';
