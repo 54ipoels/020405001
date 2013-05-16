@@ -910,13 +910,26 @@ class C_absensi extends Application {
 			
 			if($result == '1')
 			{				
-				
 				$result = $this->m_asset->add_cuti_daily($id_pegawai, $iter, $mulai_cuti, $tahun, $ket, $update_by);
+				$absen = $this->m_asset->update_absen_pegawai_cuti($id_pegawai, $tahun, $mulai_cuti, $iter);
 			}
 				
-			redirect('c_absensi/format_schedule');
+			redirect('c_absensi/cuti_pegawai');
 		}
 	}
+	
+	function detail_cuti_pegawai(){
+		$cm_id = $this->uri->segment(3);
+		$year = $this->uri->segment(4);
+		$data['showdata'] = $this->m_absensi->get_detail_cuti_pegawai($cm_id,$year);
+		
+		$data['page'] = 'detail_cuti_pegawai';
+		$data['view_cuti_pegawai'] = 'class="this"';
+		$data['form_master'] = 'id="current"';
+		#calling view
+		$this->load->view('absensi/index',$data);
+	}
+	
 	
 	/*
 	======================================================================================================
@@ -1173,7 +1186,6 @@ class C_absensi extends Application {
 		$update_by = "admin";
 		$result = $this->m_absensi->cuti_pegawai_edit($cm_id, $id_pegawai, $totalcuti, $year, $update_by);
 		redirect('c_absensi/cuti_pegawai');
-		
 	}
 	
 	/*

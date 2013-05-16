@@ -123,6 +123,7 @@ class kepegawaian extends CI_Model
 			WHERE \''.$tahun.'\' - YEAR(peg.peg_tgl_lahir) > \''.$type.'\'
 			AND \''.$tahun.'\' - YEAR(peg.peg_tgl_lahir) < \''.$limit.'\'
 			AND peg_tmt.p_tmt_end = \'0000-00-00\'
+			GROUP BY peg.peg_nipp DESC
 			ORDER BY peg.peg_tgl_lahir DESC
 			LIMIT '.$offset.' , '.$num.'
 		');

@@ -98,6 +98,10 @@
 		{
 			$this->load->view('absensi/page/cuti/edit_cuti_pegawai');
 		}
+		else if ($page == 'detail_cuti_pegawai')
+		{
+			$this->load->view('absensi/page/cuti/detail_cuti_pegawai');
+		}
 		
 		#pakai cuti pegawai
 		else if ($page == 'add_pakai_cuti_pegawai')

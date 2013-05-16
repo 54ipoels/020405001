@@ -25,9 +25,9 @@
 								$nipp = array('name' => 'nipp', 'id'   => 'nipp', 'readonly'   => 'readonly', );
 								echo form_input($nipp, $rc['peg_nipp']); 
 								$id_peg = array('name' => 'id_peg', 'id' => 'id_peg');
-								echo form_hidden($id_peg, $rc['cm_id_peg']); 
+								echo form_input($id_peg, $rc['cm_id_peg'],'hidden'); 
 								$cm_id = array('name' => 'cm_id', 'id' => 'cm_id');
-								echo form_input($cm_id, $rc['cm_id']); 
+								echo form_input($cm_id, $rc['cm_id'],'hidden'); 
 							?>
 						</div>
                         <div class="clear"></div>

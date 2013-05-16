@@ -403,6 +403,33 @@ class M_asset extends CI_Model
       		return '0';
 	}
 	
+	function update_absen_pegawai_cuti($id_pegawai, $tahun, $mulai_cuti, $iter)
+	{
+		$mulai_cuti = strtotime($mulai_cuti);
+		for ($i=0;$i<$iter;$i++)
+		{
+			$tanggal_cuti = date('Y-m-d',($mulai_cuti + $i*24*60*60));
+			
+			$querysch=$this->db->query("SELECT * FROM v3_fsch_pegawai AS  fschpeg 
+					WHERE (fschpeg.fschpeg_id_pegawai = $id_pegawai) 
+					AND (fschpeg.fschpeg_year = ".substr($tanggal_cuti,0,4).") 
+					AND (fschpeg.fschpeg_month = ".substr($tanggal_cuti,5,2).") 
+					LIMIT 1"
+					);
+			$sch = $querysch->result_array();
+			foreach($sch as $row){
+				$fschpeg_id = $row['fschpeg_id'];
+			}
+
+			$query = "
+					UPDATE v3_fschpeg_absensi_$tahun 
+					SET	fschpegabs_off_status ='1'
+					WHERE (fschpegabs_fschpeg_id = $fschpeg_id)
+					AND ((fschpegabs_sch_time_in LIKE '$tanggal_cuti%') OR (fschpegabs_sch_break_in LIKE '$tanggal_cuti%'))
+				";
+			$this->db->query($query);
+		}
+	}
 	
 	/*
 	=====================================================================================================

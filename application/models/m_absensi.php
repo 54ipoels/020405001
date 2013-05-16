@@ -299,7 +299,6 @@ class M_absensi extends CI_Model {
 	=====================================================================================================
 	*/
 	
-	//tambah data cuti master
 	function cuti_add($id_pegawai, $totalcuti, $year, $update_by)
 	{
       $data = array(
@@ -318,7 +317,6 @@ class M_absensi extends CI_Model {
       	return '0';             
     }  
 	
-	//lihat data libur nasional keseluruhan
 	function cuti_pegawai($unit, $year)
 	{
 		$this->db->order_by('cm_id', 'asc');
@@ -331,19 +329,16 @@ class M_absensi extends CI_Model {
 		return $data->result_array();
 	}
 		
-	//untuk menghapus data libur nasional
 	function cuti_del($cm_id)
 	{
 		return $this->db->delete('v3_cuti_master', array('cm_id' => $cm_id)); 
 	}
 	
-	//untuk mengambil data libur nasional yang mau diedit
 	function cuti_viewedit($lnas_id)
 	{
 		return $this->db->order_by('lnas_date', 'asc')->get_where('v3_libur_nasional', array('lnas_id' => $lnas_id))->result(); 
 	}
 	
-	//untuk menyimpan hasil data libur nasional yang sudah diedit
 	function cuti_edit($lnas_id, $lnas_date, $lnas_desc, $lnas_user)
 	{
 		$data = array(
@@ -374,6 +369,26 @@ class M_absensi extends CI_Model {
       		return '1';
       	else
       		return '0';
+	}
+	
+	function get_detail_cuti_pegawai($cm_id,$year)
+	{
+		$query = "	
+				SELECT * FROM v3_cuti_daily AS cd 
+				LEFT JOIN (SELECT * FROM v3_cuti_master) AS cm
+				ON cd.cd_cm_id = cm.cm_id
+				LEFT JOIN (SELECT * FROM v3_pegawai) AS peg
+				ON cm.cm_id_peg = peg.id_pegawai
+				WHERE cd.cd_cm_id='$cm_id' 
+				AND cd.cd_tanggal LIKE '$year%' 
+				ORDER BY cd.cd_tanggal DESC
+			";
+		$query = $this->db->query($query);
+		if ($query->num_rows > 0 ){
+			return  $query->result_array();
+		} else {
+			return 0;
+		}
 	}
 	
 	/*

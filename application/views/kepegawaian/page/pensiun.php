@@ -1,3 +1,4 @@
+<?php $this->load->helper('asset'); ?>
 <div class="widget">
 <?php echo form_open('pekerja/sort_tahun_pensiun/') ?>
 <fieldset class="step" id="w2first">
@@ -45,7 +46,7 @@
                 </div><br/>
 </div>
 <div class="widget">  
-		  <div class="title"><img src="<?php echo base_url()?>images/icons/dark/frames.png" alt="" class="titleIcon" /><h6>Data Pegawai</h6><div style="color:red;";><h6><?php echo "$count row(s)";?></h6> </div></div>
+		  <div class="title"><img src="<?php echo base_url()?>images/icons/dark/frames.png" alt="" class="titleIcon" /><h6>Data Pegawai</h6><div style="color:red;";><h6><?php echo "$count pegawai";?></h6> </div></div>
             <table cellpadding="0" cellspacing="0" width="100%" class="sTable">
                 <thead>
                     <tr>
@@ -54,6 +55,7 @@
                         <td>Nama</td>
                         <td>Tempat Lahir</td>
                         <td>Tanggal Lahir</td>
+                        <td>Tanggal Pensiun</td>
                         <td>Jenis Kelamin</td>
                         <td>Jabatan</td>
                         <td>T.M.T Pensiun</td>
@@ -82,13 +84,16 @@
 					}
 					$datestring = "%d-%m-%Y" ;
 					$tgl_lahir = mdate($datestring,strtotime($row_pegawai['peg_tgl_lahir']));
-					$detail = anchor('pekerja/get_pegawai/'.$row_pegawai['peg_nipp'],'Detail'); ?>
+					$detail = anchor('pekerja/get_pegawai/'.$row_pegawai['peg_nipp'],'Detail'); 
+					$tanggal_pensiun = tanggal_pensiun($tgl_lahir);
+					?>
 					<tr>
                         <td><center><?php echo $number; ?></center></td>
 						<td><center><?php echo $row_pegawai['peg_nipp']; ?></center></td>
 						<td><?php echo strtoupper($row_pegawai['peg_nama']); ?></td>
 						<td><?php echo strtoupper($row_pegawai['peg_tmpt_lahir']); ?></td>
 						<td><center><?php echo $tgl_lahir; ?></center></td>
+						<td><center><?php echo $tanggal_pensiun; ?></center></td>
 						<td><center><?php echo strtoupper($kelamin); ?></center></td>
 						<td><center><?php echo strtoupper($row_pegawai['p_jbt_jabatan']); ?></center></td>
 						<td><center><?php echo $detail ?></center></td>

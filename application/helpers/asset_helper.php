@@ -355,6 +355,25 @@
 		return $romawi;
 	}
 	
+	function tanggal_pensiun($tgl_lahir){
+		$thn_pensiun = substr($tgl_lahir,6,4) + 56;
+		$bln_pensiun = substr($tgl_lahir,3,2);
+		$tgl_pensiun = substr($tgl_lahir,0,2);
+		if ($tgl_pensiun !== '01'){
+			$bln_pensiun=$bln_pensiun+1;
+			if($bln_pensiun <=9){
+				$bln_pensiun = '0'.$bln_pensiun;
+			}else if ($bln_pensiun == 13){ 
+				$bln_pensiun='01'; 
+				$thn_pensiun = $thn_pensiun + 1;
+			} 
+						
+			$tgl_pensiun='01';
+		} 
+		$tanggal_pensiun =  $tgl_pensiun."-".$bln_pensiun."-".$thn_pensiun;
+		return $tanggal_pensiun;
+	}
+	
 }
 
 ?>
