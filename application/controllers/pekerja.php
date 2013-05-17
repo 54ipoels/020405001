@@ -320,11 +320,14 @@ class pekerja extends Application {
 		$data['data_anak'] = $this->kepegawaian->get_detail_pegawai_anak($nipp);
 		$data['data_jabatan'] = $this->kepegawaian->get_last_jabatan($nipp);
 		
-		#count data
-		$data['jumlah_bahasa'] = $this->kepegawaian->count_result_bahasa($nipp);
-		$data['page_karyawan'] = 'yes';
+		if($data['pegawai'] == 0){ redirect('pekerja'); }
+		else{
+			#count data
+			$data['jumlah_bahasa'] = $this->kepegawaian->count_result_bahasa($nipp);
+			$data['page_karyawan'] = 'yes';
 		
-		$this->load->view('kepegawaian/index',$data);
+			$this->load->view('kepegawaian/index',$data);
+		}
 		
 	}
 	

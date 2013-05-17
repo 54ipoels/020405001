@@ -921,7 +921,7 @@ class C_absensi extends Application {
 	function detail_cuti_pegawai(){
 		$cm_id = $this->uri->segment(3);
 		$year = $this->uri->segment(4);
-		$data['showdata'] = $this->m_absensi->get_detail_cuti_pegawai($cm_id,$year);
+		$data['showdata'] = $this->m_asset->get_detail_cuti_pegawai($cm_id,$year);
 		
 		$data['page'] = 'detail_cuti_pegawai';
 		$data['view_cuti_pegawai'] = 'class="this"';

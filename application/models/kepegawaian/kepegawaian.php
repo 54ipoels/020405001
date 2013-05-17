@@ -277,8 +277,12 @@ class kepegawaian extends CI_Model
 	{
 		$this->db->select('*');
 		$this->db->where('peg_nipp',$nipp);
-		$query = $this->db->get('v3_pegawai');
-		return $query->result_array();
+		if ($this->db->count_all_results('v3_pegawai') > 0 ) {
+			$query = $this->db->get('v3_pegawai');
+			return $query->result_array();
+		} else {
+			return 0;
+		}
 	}
 	
 	function get_detail_pegawai_agama($nipp)

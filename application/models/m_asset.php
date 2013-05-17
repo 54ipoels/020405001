@@ -142,6 +142,7 @@ class M_asset extends CI_Model
 				'cd_cm_id' => $cm_id, 
 				'cd_tanggal' => $tanggal_cuti,
 				'cd_ket' => $ket,
+				'update_by'	=>	'admin',
 			  );
 		
 			$this->db->insert('v3_cuti_daily', $data); 
@@ -152,7 +153,27 @@ class M_asset extends CI_Model
 		else
 			return '0';    
 	}
-
+	
+	//mengambil detail cuti pegawai per hari
+	function get_detail_cuti_pegawai($cm_id,$year)
+	{
+		$query = "	
+				SELECT * FROM v3_cuti_daily AS cd 
+				LEFT JOIN (SELECT * FROM v3_cuti_master) AS cm
+				ON cd.cd_cm_id = cm.cm_id
+				LEFT JOIN (SELECT * FROM v3_pegawai) AS peg
+				ON cm.cm_id_peg = peg.id_pegawai
+				WHERE cd.cd_cm_id='$cm_id' 
+				AND cd.cd_tanggal LIKE '$year%' 
+				ORDER BY cd.cd_tanggal DESC
+			";
+		$query = $this->db->query($query);
+		if ($query->num_rows > 0 ){
+			return  $query->result_array();
+		} else {
+			return 0;
+		}
+	}
 	
 	
 	// ambil data time schedule berdasarkan fsch_id
@@ -403,6 +424,12 @@ class M_asset extends CI_Model
       		return '0';
 	}
 	
+	
+	/*
+	=====================================================================================================
+	 ABSENSI PEGAWAI
+	=====================================================================================================
+	*/
 	function update_absen_pegawai_cuti($id_pegawai, $tahun, $mulai_cuti, $iter)
 	{
 		$mulai_cuti = strtotime($mulai_cuti);

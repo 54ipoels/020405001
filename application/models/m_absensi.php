@@ -363,7 +363,7 @@ class M_absensi extends CI_Model {
 			   'cm_update_by' => $update_by
         );
 		
-		$this->db->update('v3_cuti_master', $data, array('cm_id' => $cm_id));
+		$this->db->update('v3_cuti_master', $data, array('cm_id' => $cm_id,'cm_year' => $year,'cm_id_peg'=>$id_pegawai));
 		
 		if($this->db->affected_rows())
       		return '1';
