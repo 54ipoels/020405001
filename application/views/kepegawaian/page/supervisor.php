@@ -34,7 +34,14 @@
 				{ 
 					$datestring = "%d-%m-%Y" ;
 					$tgl_lahir = mdate($datestring,strtotime($row_supervisor['peg_tgl_lahir']));
-					$umur=floor(($time - strtotime($row_supervisor['peg_tgl_lahir']))/(365*24*60*60));
+					
+					$tgl_sekarang = date('Y-m-d'); 
+					if(substr($row_supervisor['peg_tgl_lahir'],5) < substr($tgl_sekarang,5)){
+						$umur = substr($tgl_sekarang,0,4) - substr($row_supervisor['peg_tgl_lahir'],0,4);  
+					} else {
+						$umur = substr($tgl_sekarang,0,4) - substr($row_supervisor['peg_tgl_lahir'],0,4) - 1;  
+					}
+					//$umur=floor(($time - strtotime($row_supervisor['peg_tgl_lahir']))/(365*24*60*60));
 			
 					if ($row_supervisor['p_grd_grade'] == NULL)
 					{
@@ -61,11 +68,11 @@
 						<td><?php echo strtoupper($row_supervisor['peg_nama']); ?></td>
 						<td><?php echo $row_supervisor['peg_nipp']; ?></td>
 						<td><center><?php echo $grade; ?></center></td>
-						<td><?php echo 'MKA'; ?></td>
+						<td><?php echo $mka; ?></td>
 						<td><?php echo $tmt; ?></td>
 						<td><center><?php echo $row_supervisor['peg_jns_kelamin']; ?></center></td>
 						<td><?php echo $tgl_lahir; ?></center></td>
-						<td><center><?php echo '20'; ?></center></td>
+						<td><center><?php echo $umur; ?></center></td>
 						<td><center><?php echo '12-12-2012'; ?></center></td>
 						<td><?php echo strtoupper($row_supervisor['p_jbt_jabatan']); ?></td>
 						<td><?php echo ' '; ?></td>

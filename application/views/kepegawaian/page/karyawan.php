@@ -1,7 +1,7 @@
 <div class="widget">
 <?php echo form_open('pekerja/sort_jenis_pegawai/') ?>
 <fieldset class="step" id="w2first">
-<table><tr><td width="440px">
+<table><tr><td width="1040px" colspan="2">
 <div class="formBaru"><label>Jenis Pegawai: &nbsp </label>
 <?php $jenis = array(
 		'all' => 'ALL',
@@ -9,13 +9,36 @@
 		'PKWT' => 'PKWT',
 		'Outsource' => 'Outsource',
 		);
-	echo form_dropdown('jenis',$jenis, 'ALL') ?></form>&nbsp
+	echo form_dropdown('jenis',$jenis, 'ALL') ;
+	
+	$kelamin = array(
+		'all' => 'ALL',
+		'L' => 'LAKI-LAKI',
+		'P' => 'PEREMPUAN',
+		);
+	echo form_dropdown('kelamin',$kelamin, 'ALL') ;
+	
+	$stk = array(
+		'all' => 'ALL',
+		'TK' => 'TK',
+		'K'  => 'K',
+		'K1' => 'K1',
+		'K2' => 'K2',
+		'K3' => 'K3',
+		'K4' => 'K4',
+		'K5' => 'K5',
+		);
+	echo form_dropdown('stk',$stk, 'ALL') ;
+	?>
+	</form>&nbsp
 	<?php $submit = array(
 		'class' => 'blueB m110',
 		'id'	=> 'next2',
 		'value'	=> 'Sort',
 		);
-	echo form_submit($submit)?></form></div></td><td width="410px"><?php echo form_open('pekerja/sort_unit_pegawai/'); ?>
+	echo form_submit($submit)?></form></div></td></tr>
+<tr>
+<td width="410px"><?php echo form_open('pekerja/sort_unit_pegawai/'); ?>
 <div class="formBaru"><label>Unit Kerja: &nbsp </label>
 <?php $unit = array();
 	foreach ($list_unit as $row_unit) :

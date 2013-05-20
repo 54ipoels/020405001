@@ -238,13 +238,27 @@ class kepegawaian extends CI_Model
 	
 	}
 	
-	function get_data_jenis_pegawai($num, $offset, $type)
+	function get_data_jenis_pegawai($num, $offset, $type, $kelamin, $stk)
 	{
+		$selection = "";
+		if ($type !== 'all'){
+			$selection .= " AND peg_tmt.p_tmt_status = '$type' "  ;
+		}
+		if ($kelamin !== 'all'){
+			$selection .= " AND peg.peg_jns_kelamin = '$kelamin' "  ;
+		}
+		if ($stk !== 'all'){
+			$selection .= " AND peg_stk.p_stk_status_keluarga = '$stk' "  ;
+		}
+		
+		
 		$query = ('
 			SELECT * FROM v3_pegawai AS peg
 			LEFT JOIN (SELECT * FROM v3_peg_tmt) AS peg_tmt
 			ON peg.peg_nipp = peg_tmt.p_tmt_nipp
-			WHERE peg_tmt.p_tmt_status = \'' . $type . '\' AND peg_tmt.p_tmt_end = 0000-00-00
+			LEFT JOIN (SELECT * FROM v3_peg_status_keluarga ORDER BY id_peg_status_keluarga DESC LIMIT 1) AS peg_stk 
+			ON peg.peg_nipp = peg_stk.p_stk_nipp
+			WHERE peg_tmt.p_tmt_end = 0000-00-00 '.$selection.'
 			LIMIT '.$offset.' , '.$num.'
 		');
 		$query = $this->db->query($query);  
@@ -275,6 +289,7 @@ class kepegawaian extends CI_Model
 	
 	function get_data_pegawai_by_nipp($nipp)
 	{
+		/*
 		$this->db->select('*');
 		$this->db->where('peg_nipp',$nipp);
 		if ($this->db->count_all_results('v3_pegawai') > 0 ) {
@@ -283,6 +298,15 @@ class kepegawaian extends CI_Model
 		} else {
 			return 0;
 		}
+		*/
+		$query = (" SELECT * FROM v3_pegawai WHERE peg_nipp = '$nipp' ");
+		$query = $this->db->query($query); 
+		if ($query->num_rows()>0){
+			return $query->result_array();
+		} else {
+			return 0;
+		}
+		
 	}
 	
 	function get_detail_pegawai_agama($nipp)
@@ -519,11 +543,36 @@ class kepegawaian extends CI_Model
 		return $query->num_rows();
 	}
 	
-	function count_jenis_Pegawai($type)
+	function count_jenis_Pegawai($type,$kelamin,$stk)
 	{
+		$selection = "";
+		if ($type !== 'all'){
+			$selection .= " AND peg_tmt.p_tmt_status = '$type' "  ;
+		}
+		if ($kelamin !== 'all'){
+			$selection .= " AND peg.peg_jns_kelamin = '$kelamin' "  ;
+		}
+		if ($stk !== 'all'){
+			$selection .= " AND peg_stk.p_stk_status_keluarga = '$stk' "  ;
+		}
+		
+		
+		$query = ('
+			SELECT * FROM v3_pegawai AS peg
+			LEFT JOIN (SELECT * FROM v3_peg_tmt) AS peg_tmt
+			ON peg.peg_nipp = peg_tmt.p_tmt_nipp
+			LEFT JOIN (SELECT * FROM v3_peg_status_keluarga ORDER BY id_peg_status_keluarga DESC LIMIT 1) AS peg_stk 
+			ON peg.peg_nipp = peg_stk.p_stk_nipp
+			WHERE peg_tmt.p_tmt_end = 0000-00-00 '.$selection.'
+		');
+		$query = $this->db->query($query);  
+		return $query->num_rows();
+		
+		/*
 		$search = array('p_tmt_status'=>$type, 'p_tmt_end'=>'0000-00-00');
 		$this->db->where($search);
 		return $this->db->count_all_results('v3_peg_tmt');
+		*/
 	}
 	
 	function count_unit_Pegawai($unit)
