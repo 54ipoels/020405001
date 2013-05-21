@@ -199,10 +199,14 @@
 						<td <?php echo $color ?>><?php echo $rating_anchor; ?></td>
 						<td <?php echo $color ?>>
 							<center>
+							<?php if ($row_pegawai['p_stkp_image'] !== ""){?>
 								<a href="<?php echo base_url(); ?>index.php/diklat/view_pdf/<?php echo $row_pegawai['p_stkp_image'];?>" target="_blank" >
 									<?php echo $row_pegawai['p_stkp_no_license']; ?>
 								</a>
-								
+							<?php } else {
+									echo $row_pegawai['p_stkp_no_license'];
+								}
+							?>
 							</center>
 						</td>
 						<td <?php echo $color ?>><center><?php echo $stkp_mulai; ?></center></td>
