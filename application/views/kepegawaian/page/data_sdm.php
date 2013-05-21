@@ -2,9 +2,21 @@
 
 <div class="widget">
 <fieldset class="step" id="w2first"><br> 
-<table><tr><td width = "770px"> </td>
-	<td width="250px"><div class="searchWidget1"><?php echo form_open('pekerja/search_data_sdm');?>
-                        <input type="text" name="search"  placeholder="Enter search text..." />
+<table><tr><td width = "470px">
+<?php echo form_open('pekerja/search_data_sdm');?>
+	<div class="formBaru"><label>Unit Kerja: &nbsp </label>	
+	<?php
+		$unit = array();
+		$unit['ALL']	= "ALL" ;
+		foreach ($list_unit as $row_unit) :
+			{ $unit[$row_unit['kode_unit']] = ($row_unit['nama_unit']); } 
+		endforeach; 
+		echo form_dropdown('unit',$unit); 
+	?>
+	</div>
+	</td>
+	<td width="550px"><div class="searchWidget1">
+	                    <input type="text" name="search"  placeholder="Enter search text..." />
                         <input type="submit" name="find" value="" class="blueB m110"/></div>
                     </form></td></tr>
 
@@ -18,6 +30,8 @@
                     <tr>
                         <td>No</td>
                         <td>NIPP</td>
+                        <td>Unit</td>
+                        <td>T.M.T</td>
                         <td>Nama</td>
                         <td>Tempat Lahir</td>
                         <td>Tanggal Lahir</td>
@@ -54,6 +68,9 @@
 					$datestring = "%d-%M-%Y" ;
 					$tgl_lahir = mdate($datestring,strtotime($row_pegawai['peg_tgl_lahir']));
 					$tgl_lahir_ps = mdate($datestring,strtotime($row_pegawai['p_ps_tgl_lahir']));
+					
+					$unit_tmt= mdate($datestring,strtotime($row_pegawai['p_unt_tmt_start']));
+					
 					if ($row_pegawai['peg_jns_kelamin'] == 'L')
 					{
 						$status_ps = 'ISTERI';
@@ -83,6 +100,8 @@
 					<tr>
                         <td rowspan="<?php echo $rowspan;?>"><center><?php echo $number; ?></center></td>
 						<td rowspan="<?php echo $rowspan;?>"><center><?php echo $detail; ?></center></td>
+						<td rowspan="<?php echo $rowspan;?>"><center><?php echo $row_pegawai['p_unt_kode_unit']; ?></center></td>
+						<td rowspan="<?php echo $rowspan;?>"><center><?php echo $unit_tmt; ?></center></td>
 						<td><?php echo strtoupper($row_pegawai['peg_nama']); ?></td>
 						<td><?php echo strtoupper($row_pegawai['peg_tmpt_lahir']); ?></td>
 						<td><center><?php echo $tgl_lahir; ?></center></td>

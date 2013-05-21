@@ -579,5 +579,12 @@ if( $tmt_reason==""){?>
                 </div>
                 <div class="clear"></div>
             </div>	
+			<?php 
+					foreach ($pegawai as $row_pegawai){}; 
+					$nipp=$row_pegawai['peg_nipp'];
+					$attr=" target='_blank'";
+					$print = anchor('pekerja/print_detail_pegawai/'.$nipp,'Print',$attr);
+					echo $print;	
+				?> 
         </div>
 </div>

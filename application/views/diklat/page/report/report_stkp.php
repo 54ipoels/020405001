@@ -131,6 +131,7 @@
 				}
 				foreach ($pegawai_with_stkp_and_unit as $row_pegawai) :
 				{ 
+					//$nipp_bantu=$row_pegawai['p_stkp_nipp'];
 					if ($row_pegawai['p_stkp_nipp'] == $nipp)
 					{
 						$nipp = '';
@@ -196,7 +197,26 @@
 						<td <?php echo $color ?>><?php echo $nama; ?></td>
 						<td <?php echo $color ?>><?php echo $jenis_anchor; ?></td>
 						<td <?php echo $color ?>><?php echo $rating_anchor; ?></td>
-						<td <?php echo $color ?>><center><?php echo $row_pegawai['p_stkp_no_license']; ?></center></td>
+						<td <?php echo $color ?>>
+							<center>
+								<?php /* 
+								if($row_pegawai['p_stkp_rating'] == 'FWM'){ ?>
+								<a href="<?php echo base_url(); ?>pegawai/diklat/<?php echo str_replace("/","",$row_pegawai['p_stkp_no_license'])."-FWM";?>" title="<?php echo $row_pegawai['p_stkp_no_license']; ?>" rel="lightbox">
+									<?php echo $row_pegawai['p_stkp_no_license']; ?>
+								</a>
+								<?php }else{ ?>
+								<a href="<?php echo base_url(); ?>pegawai/diklat/<?php echo str_replace("/","",$row_pegawai['p_stkp_no_license']);?>" title="<?php echo $row_pegawai['p_stkp_no_license']; ?>" rel="lightbox">
+									<?php echo $row_pegawai['p_stkp_no_license']; ?>
+								</a>
+								<?php } 
+								*/
+								?>
+								<a href="<?php echo base_url(); ?>index.php/diklat/view_pdf/<?php echo str_replace("/","",$row_pegawai['p_stkp_no_license'])?>" target="_blank" >
+									<?php echo $row_pegawai['p_stkp_no_license']; ?>
+								</a>
+								
+							</center>
+						</td>
 						<td <?php echo $color ?>><center><?php echo $stkp_mulai; ?></center></td>
 						<td <?php echo $color ?>><center><?php echo $stkp_selesai; ?></center></td>
 						<td <?php echo $color ?>><center><?php echo $lembaga_anchor; ?></center></td>

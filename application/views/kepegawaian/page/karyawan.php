@@ -3,20 +3,37 @@
 <fieldset class="step" id="w2first">
 <table><tr><td width="1040px" colspan="2">
 <div class="formBaru"><label>Jenis Pegawai: &nbsp </label>
-<?php $jenis = array(
+<?php
+	$var_jenis=$this->input->post('jenis');
+	if($var_jenis==NULL){$var_jenis = $this->uri->segment(3);}
+	$var_unit=$this->input->post('unit');
+	if($var_unit==NULL){$var_unit = $this->uri->segment(4);}
+	$var_kelamin=$this->input->post('kelamin');
+	if($var_kelamin==NULL){$var_kelamin = $this->uri->segment(5);}
+	$var_stk=$this->input->post('stk');
+	if($var_stk==NULL){$var_stk = $this->uri->segment(6);}
+	
+	$jenis = array(
 		'all' => 'ALL',
 		'Tetap' => 'TETAP',
 		'PKWT' => 'PKWT',
 		'Outsource' => 'Outsource',
 		);
-	echo form_dropdown('jenis',$jenis, 'ALL') ;
+	echo form_dropdown('jenis',$jenis,$var_jenis) ;
+	
+	$unit['all'] = "ALL";
+	foreach ($list_unit as $row_unit) :
+		{
+			$unit[$row_unit['kode_unit']] = ($row_unit['nama_unit']);
+		} endforeach; 
+	echo form_dropdown('unit',$unit,$var_unit); 
 	
 	$kelamin = array(
 		'all' => 'ALL',
 		'L' => 'LAKI-LAKI',
 		'P' => 'PEREMPUAN',
 		);
-	echo form_dropdown('kelamin',$kelamin, 'ALL') ;
+	echo form_dropdown('kelamin',$kelamin,$var_kelamin) ;
 	
 	$stk = array(
 		'all' => 'ALL',
@@ -28,7 +45,7 @@
 		'K4' => 'K4',
 		'K5' => 'K5',
 		);
-	echo form_dropdown('stk',$stk, 'ALL') ;
+	echo form_dropdown('stk',$stk, $var_stk) ;
 	?>
 	</form>&nbsp
 	<?php $submit = array(
@@ -37,8 +54,11 @@
 		'value'	=> 'Sort',
 		);
 	echo form_submit($submit)?></form></div></td></tr>
+
 <tr>
-<td width="410px"><?php echo form_open('pekerja/sort_unit_pegawai/'); ?>
+<td width="410px">
+<?php /* ?>
+<?php echo form_open('pekerja/sort_unit_pegawai/'); ?>
 <div class="formBaru"><label>Unit Kerja: &nbsp </label>
 <?php $unit = array();
 	foreach ($list_unit as $row_unit) :
@@ -51,12 +71,13 @@
 		'id'	=> 'next2',
 		'value'	=> 'Sort',
 		); 
-	echo form_submit($submit)?></form></div></td>
+	echo form_submit($submit)?></form></div>
+<?php */ ?>
+</td>
 	<td width="250px"><div class="searchWidget1"><?php echo form_open('pekerja/search_pegawai');?>
                         <input type="text" name="search"  placeholder="Enter search text..." />
                         <input type="submit" name="find" value="" class="blueB m110"/></div>
                     </form></td></tr>
-
 </div></div></table></fieldset>
 </div>
 <div class="oneTwo"> 

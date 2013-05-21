@@ -79,7 +79,7 @@ class pendidikan extends CI_Model
 		$query = $this->db->query($query); 
 		return $query->result_array();
 	}
-	
+	/*
 	function search_report_stkp_bulanan($bulan, $tahun, $rating)
 	{
 		$rating = str_replace('%20',' ',$rating);
@@ -98,10 +98,30 @@ class pendidikan extends CI_Model
 		$query = $this->db->query($query);
 		return $query->result_array();
 	}
-	
-	function search_report_nstkp_bulanan($bulan, $tahun, $rating)
+	*/
+	function search_report_stkp_bulanan($bulan, $tahun, $jenis_stkp)
 	{
-		$rating = str_replace('%20',' ',$rating);
+		$jenis_stkp = str_replace('%20',' ',$jenis_stkp);
+		$query = ("
+			SELECT * FROM v3_peg_stkp AS peg_stkp
+			LEFT JOIN (SELECT max(id_peg_unit),p_unt_nipp, p_unt_kode_unit FROM v3_peg_unit GROUP BY p_unt_nipp ) AS peg_unt 
+			ON peg_stkp.p_stkp_nipp = peg_unt.p_unt_nipp 
+			LEFT JOIN (SELECT peg_nipp,peg_nama FROM v3_pegawai GROUP BY peg_nipp) AS peg
+			ON peg_stkp.p_stkp_nipp = peg.peg_nipp
+			WHERE MONTH(peg_stkp.p_stkp_pelaksanaan) = '$bulan'
+			AND YEAR(peg_stkp.p_stkp_pelaksanaan) = '$tahun'
+			AND ( peg_stkp.p_stkp_jenis LIKE '%$jenis_stkp%')
+			ORDER BY peg_stkp.p_stkp_nipp,  peg_stkp.p_stkp_pelaksanaan ASC
+			
+		");
+		$query = $this->db->query($query);
+		return $query->result_array();
+	}
+	
+	
+	function search_report_nstkp_bulanan($bulan, $tahun, $jenis)
+	{
+		$jenis = str_replace('%20',' ',$jenis);
 		$query = ("
 			SELECT * FROM v3_peg_non_stkp AS peg_nstkp
 			LEFT JOIN (SELECT max(id_peg_unit),p_unt_nipp, p_unt_kode_unit FROM v3_peg_unit GROUP BY p_unt_nipp ) AS peg_unt 
@@ -110,7 +130,7 @@ class pendidikan extends CI_Model
 			ON peg_nstkp.p_nstkp_nipp = peg.peg_nipp
 			WHERE MONTH(peg_nstkp.p_nstkp_pelaksanaan) = '$bulan'
 			AND YEAR(peg_nstkp.p_nstkp_pelaksanaan) = '$tahun'
-			AND peg_nstkp.p_nstkp_jenis LIKE '%$rating%'
+			AND peg_nstkp.p_nstkp_jenis LIKE '%$jenis%'
 			ORDER BY peg_nstkp.p_nstkp_nipp,  peg_nstkp.p_nstkp_pelaksanaan ASC
 			
 		");

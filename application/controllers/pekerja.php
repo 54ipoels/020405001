@@ -83,35 +83,38 @@ class pekerja extends Application {
 		if ($this->input->post('jenis')==NULL)
 		{
 			$type = $this->uri->segment(3);
-			$kelamin = $this->uri->segment(4);
-			$stk = $this->uri->segment(5);
+			$unit = $this->uri->segment(4);
+			$kelamin = $this->uri->segment(5);
+			$stk = $this->uri->segment(6);
 		}else{
 			$type = $this->input->post('jenis');
+			$unit = $this->input->post('unit');
 			$kelamin = $this->input->post('kelamin');
 			$stk = $this->input->post('stk');
 		}
 		#pagination config
-		$config['base_url'] = base_url().'index.php/pekerja/sort_jenis_pegawai/'.$type.'/'.$kelamin.'/'.$stk.'/'; //set the base url for pagination
-		$config['total_rows'] = $this->kepegawaian->count_jenis_Pegawai($type,$kelamin,$stk); //total rows
+		$config['base_url'] = base_url().'index.php/pekerja/sort_jenis_pegawai/'.$type.'/'.$unit.'/'.$kelamin.'/'.$stk.'/'; //set the base url for pagination
+		$config['total_rows'] = $this->kepegawaian->count_jenis_Pegawai($type,$unit,$kelamin,$stk); //total rows
 		$config['per_page'] = 10; //the number of per page for pagination
-		$config['uri_segment'] = 6; //see from base_url. 3 for this case
+		$config['uri_segment'] = 7; //see from base_url. 3 for this case
 		$this->pagination->initialize($config);
-		$page = ($this->uri->segment(6)) ? $this->uri->segment(6) : 0;
+		$page = ($this->uri->segment(7)) ? $this->uri->segment(7) : 0;
 		
 		#data preparing
-		$data['pegawai'] = $this->kepegawaian->get_data_jenis_pegawai($config['per_page'],$page,$type,$kelamin,$stk);
+		$data['pegawai'] = $this->kepegawaian->get_data_jenis_pegawai($config['per_page'],$page,$type,$unit,$kelamin,$stk);
 		$data['list_unit'] = $this->kepegawaian->get_list_unit();
 		$data['count']	= $config['total_rows'];
 		$data['page'] = 'Pegawai';
 		$data['page_karyawan'] = 'yes';
 		
 		#calling view
-		if ($type=='all')
+		$this->load->view('kepegawaian/index',$data);
+		/*if ($type=='all')
 		{
 			redirect('pekerja/index');
 		}else{
 			$this->load->view('kepegawaian/index',$data);
-		}
+		}*/
 	}
 	
 	public function get_supervisor()
@@ -1617,31 +1620,41 @@ class pekerja extends Application {
 		$data['page'] = 'Data SDM';
 		$data['page_karyawan'] = 'yes';
 		$data['pegawai'] = $this->kepegawaian->get_data_pegawai_full($config['per_page'],$page);
+		$data['list_unit'] = $this->kepegawaian->get_list_unit();
 		//print_r($data['pegawai']);
 		$this->load->view('kepegawaian/index', $data);
 	}
 
 	function search_data_sdm()
 	{
-		if ($this->input->post('search') == NULL )
+		
+		if ($this->input->post('unit')==NULL)
 		{
-			$search_data = str_replace('%20',' ',$this->uri->segment(3));
+			$search_unit = $this->uri->segment(3);
+			$search_data = $this->uri->segment(4);
 		}else{
-			$search_data = $this->input->post('search');
+			$search_unit = $this->input->post('unit');
+			if ($this->input->post('search') == ""){$search_data = 'ALL'; }
+			else{$search_data = $this->input->post('search');}
+			//echo $this->input->post('search')."---$search_unit$search_data--kasldkaslk";
 		}
 		
+		
 		#pagination config
-		$config['base_url'] = base_url().'index.php/pekerja/search_data_sdm/'.$search_data.'/'; //set the base url for pagination
-		$config['total_rows'] = $this->kepegawaian->count_search_pegawai($search_data); //total rows
+		$config['base_url'] = base_url().'index.php/pekerja/search_data_sdm/'.$search_unit.'/'.$search_data.'/'; //set the base url for pagination
+		#$config['total_rows'] = $this->kepegawaian->count_search_pegawai($search_data); //total rows
+		$config['total_rows'] = $this->kepegawaian->count_search_pegawai_unit($search_data,$search_unit); //total rows
 		$config['per_page'] = 10; //the number of per page for pagination
-		$config['uri_segment'] = 4; //see from base_url. 3 for this case
+		$config['uri_segment'] = 5; //see from base_url. 3 for this case
 		$this->pagination->initialize($config);
-		$page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+		$page = ($this->uri->segment(5)) ? $this->uri->segment(5) : 0;
 		
 		$data['count'] = $config['total_rows'];
 		$data['page'] = 'Data SDM';
 		$data['page_karyawan'] = 'yes';
-		$data['pegawai'] = $this->kepegawaian->search_data_pegawai_full($config['per_page'],$page,$search_data);
+		#$data['pegawai'] = $this->kepegawaian->search_data_pegawai_full($config['per_page'],$page,$search_data);
+		$data['pegawai'] = $this->kepegawaian->search_data_pegawai_full_unit($config['per_page'],$page,$search_data,$search_unit);
+		$data['list_unit'] = $this->kepegawaian->get_list_unit();
 		//print_r($data['pegawai']);
 		$this->load->view('kepegawaian/index', $data);
 	}
@@ -1670,6 +1683,42 @@ class pekerja extends Application {
 		$data['month'] = mdate($monthstring, $time);
 		$data['year'] = mdate($yearstring, $time);
 		$this->load->view('kepegawaian/print/data_kompetensi',$data);	
+	?>	<script>window.print();	</script>
+	<?php
+	}
+	
+	function print_detail_pegawai($nipp)
+	{
+		$data['pegawai'] = $this->kepegawaian->get_data_pegawai_by_nipp($nipp);
+		$data['data_agama'] = $this->kepegawaian->get_detail_pegawai_agama($nipp);
+		$data['data_alamat'] = $this->kepegawaian->get_detail_pegawai_alamat($nipp);
+		$data['data_ayah'] = $this->kepegawaian->get_detail_pegawai_ayah($nipp);
+		$data['data_bahasa'] = $this->kepegawaian->get_detail_pegawai_bahasa($nipp);
+		$data['data_fisik'] = $this->kepegawaian->get_detail_pegawai_fisik($nipp);
+		$data['data_ibu'] = $this->kepegawaian->get_detail_pegawai_ibu($nipp);
+		$data['data_jabatan_tmt'] = $this->kepegawaian->get_detail_pegawai_jabatan_tmt($nipp);
+		$data['data_mert_ayah'] = $this->kepegawaian->get_detail_pegawai_mert_ayah($nipp);
+		$data['data_mert_ibu'] = $this->kepegawaian->get_detail_pegawai_mert_ibu($nipp);
+		$data['data_pasangan'] = $this->kepegawaian->get_detail_pegawai_pasangan($nipp);
+		$data['data_pendidikan'] = $this->kepegawaian->get_detail_pegawai_pendidikan($nipp);
+		$data['data_status_keluarga'] = $this->kepegawaian->get_detail_pegawai_status_keluarga($nipp);
+		$data['data_tmt'] = $this->kepegawaian->get_detail_pegawai_tmt($nipp);
+		$data['data_unit'] = $this->kepegawaian->get_detail_pegawai_unit($nipp);
+		$data['data_grade'] = $this->kepegawaian->get_detail_pegawai_grade($nipp);
+		$data['data_stkp'] = $this->kepegawaian->get_detail_pegawai_stkp($nipp);		
+		$data['data_nstkp'] = $this->kepegawaian->get_detail_pegawai_nstkp($nipp);
+		$data['data_anak'] = $this->kepegawaian->get_detail_pegawai_anak($nipp);
+		$data['data_jabatan'] = $this->kepegawaian->get_last_jabatan($nipp);
+		$data['data_jabatan_detail'] = $this->kepegawaian->get_detail_pegawai_jabatan($nipp);
+		#count data
+		$data['jumlah_bahasa'] = $this->kepegawaian->count_result_bahasa($nipp);
+		
+		$monthstring = "%m" ;
+		$yearstring = "%Y" ;
+		$time = time();
+		$data['month'] = mdate($monthstring, $time);
+		$data['year'] = mdate($yearstring, $time);
+		$this->load->view('kepegawaian/print/detail_pegawai',$data);	
 	?>	<script>window.print();	</script>
 	<?php
 	}

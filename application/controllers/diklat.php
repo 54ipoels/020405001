@@ -333,19 +333,21 @@ class diklat extends Application {
 			if ($this->input->post('jenis') == 'STKP')
 			{
 				$data['page'] = 'Report STKP Bulanan';
-				$data['pegawai_with_stkp_and_unit'] = $this->pendidikan->search_report_stkp_bulanan($this->input->post('bulan'), $this->input->post('tahun'), $this->input->post('rating'));
+				$data['pegawai_with_stkp_and_unit'] = $this->pendidikan->search_report_stkp_bulanan($this->input->post('bulan'), $this->input->post('tahun'), $this->input->post('jenis_stkp'));
 				$data['bulan'] = $this->input->post('bulan');
 				$data['year'] = $this->input->post('tahun');
-				$data['rating'] = $this->input->post('rating');
+				//$data['rating'] = $this->input->post('rating');
+				$data['jenis_stkp'] = $this->input->post('jenis_stkp');
 				$this->load->view('diklat/index', $data);
 			} else
 			if ($this->input->post('jenis') == 'NSTKP')
 			{
 				$data['page'] = 'Report NSTKP Bulanan';
-				$data['pegawai_with_stkp_and_unit'] = $this->pendidikan->search_report_nstkp_bulanan($this->input->post('bulan'), $this->input->post('tahun'), $this->input->post('rating'));
+				$data['pegawai_with_stkp_and_unit'] = $this->pendidikan->search_report_nstkp_bulanan($this->input->post('bulan'), $this->input->post('tahun'), $this->input->post('jenis_stkp'));
 				$data['bulan'] = $this->input->post('bulan');
 				$data['year'] = $this->input->post('tahun');
-				$data['rating'] = $this->input->post('rating');
+				//$data['rating'] = $this->input->post('rating');
+				$data['training'] = $this->input->post('jenis_stkp');
 				$this->load->view('diklat/index', $data);
 			}
 		}
@@ -413,7 +415,31 @@ class diklat extends Application {
 	{
 		#update data to table pegawai
 		$this->pendidikan->update_data_non_stkp($id,username());
-		redirect('diklat/get_non_stkp');
+		
+		$no_sertifikat = $this->input->post('license');
+		
+		$config['upload_path'] = './pegawai/diklat/';
+		$config['allowed_types'] = 'gif|jpg|png|pdf';
+		$config['overwrite']	=	TRUE;
+		
+		$config['file_name'] = trim($no_sertifikat)."-$id.jpg";
+		
+		
+		$this->load->library('upload', $config);
+
+		if ( ! $this->upload->do_upload())
+		{
+			$error = array('error' => $this->upload->display_errors());
+			$error['page'] = 'Upload';
+			$error['view_upload'] = 'class="this"';
+			$error['form_master'] = 'id="current"';
+			$this->load->view('kepegawaian/index', $error);
+		}
+		else
+		{
+			$data = array('upload_data' => $this->upload->data());
+			redirect('diklat/get_non_stkp');
+		}
 	}
 	
 	function edit_stkp($id)
@@ -430,9 +456,67 @@ class diklat extends Application {
 	{
 		#update data to table pegawai
 		$this->pendidikan->update_data_stkp($id,username());
-		redirect('diklat/get_stkp');
+		
+		$no_sertifikat = $this->input->post('license');
+		
+		$config['upload_path'] = './pegawai/diklat/';
+		$config['allowed_types'] = 'pdf';
+	#	$config['allowed_types'] = 'gif|jpg|png|pdf';
+		$config['overwrite']	=	TRUE;
+		/*$config['max_size']  = '100';
+		$config['max_width']  = '1024';
+		$config['max_height']  = '768';
+		*/
+	/*	if( $this->input->post('rating') == "FWM"){
+			$config['file_name'] = trim($no_sertifikat).'-FWM.jpg';
+		}else{
+			$config['file_name'] = trim($no_sertifikat).".jpg";
+		}
+	*/	
+		$config['file_name'] = trim($no_sertifikat);
+		$this->load->library('upload', $config);
+
+		if ( ! $this->upload->do_upload())
+		{
+			$error = array('error' => $this->upload->display_errors());
+			$error['page'] = 'Upload';
+			$error['view_upload'] = 'class="this"';
+			$error['form_master'] = 'id="current"';
+			$this->load->view('kepegawaian/index', $error);
+		}
+		else
+		{
+			$data = array('upload_data' => $this->upload->data());
+			redirect('diklat/get_stkp');
+		}
+		
 	}
 	
+	function view_pdf($nama_file){
+	
+		$file = "'".base_url()."pegawai/diklat/".$nama_file.".pdf'";
+		echo $file;
+		header('Content-type: application/pdf');
+		header('Content-Disposition: inline; filename="'.$nama_file.'.pdf "');
+		header('Content-Length: ' . filesize($file));
+		ob_clean();
+		flush();
+		readfile($file);
+		exit;
+		
+		/*
+		$file = base_url()."pegawai/diklat/".$nama_file.".pdf";
+		$filename = 'Custom file name for the.pdf'; /* Note: Always use .pdf at the end. */
+		/*
+		header('Content-type: application/pdf');
+		header('Content-Disposition: inline; filename="' . $filename . '"');
+		header('Content-Transfer-Encoding: binary');
+		header('Content-Length: ' . filesize($file));
+		header('Accept-Ranges: bytes');
+
+		@readfile($file);
+		*/
+	}
 	
 	function delete_non_stkp($id)
 	{
@@ -544,6 +628,7 @@ class diklat extends Application {
 		$this->load->view('diklat/index', $data);
 	}
 	
+	
 	function search_nstkp()
 	{ 
 		if ($this->input->post('search') == NULL )
@@ -581,9 +666,55 @@ class diklat extends Application {
 		$this->load->view('diklat/index',$data);
 	}
 	
+/*
+	function search_nstkp()
+	{ 
+		if ($this->input->post('jenis_stkp') == NULL )
+		{
+			$search_jenis = str_replace('%20',' ',$this->uri->segment(3));
+			$search_data_link = str_replace('%20',' ',$this->uri->segment(4));
+			$search_data = str_replace('%20',' ',$this->uri->segment(4));
+			echo "1 $search_jenis";
+		}else{
+			$search_jenis = $this->input->post('jenis_stkp');
+			$search_data_link = $this->input->post('search');
+			$search_data = $this->input->post('search');
+			echo "2 $search_jenis";
+		}
+		
+		$search_data_link = str_replace('/','_',$search_data_link);
+		$search_data = str_replace('/','_',$search_data);
+		
+		$monthstring = "%m" ;
+		$yearstring = "%Y" ;
+		$time = time();
+			
+		#pagination config
+		$config['base_url'] = base_url().'index.php/diklat/search_nstkp/'.$search_jenis.'/'.$search_data_link.'/'; //set the base url for pagination
+		$config['total_rows'] = $this->pendidikan->count_search_nstkp($search_data,$search_jenis); //total rows
+		$config['per_page'] = 10; //the number of per page for pagination
+		$config['uri_segment'] = 5; //see from base_url. 3 for this case
+		$this->pagination->initialize($config);
+		$page = ($this->uri->segment(5)) ? $this->uri->segment(5) : 0;
+		
+		$data['list_stkp'] = $this->pendidikan->get_list_stkp();
+		$data['list_unit'] = $this->pendidikan->get_list_unit();
+		$data['pegawai_with_stkp_and_unit'] = $this->pendidikan->search_nstkp($config['per_page'],$page,$search_data,$search_jenis);
+		$data['month'] = mdate($monthstring, $time);
+		$data['year'] = mdate($yearstring, $time);
+		$data['page'] = 'Report Non STKP';
+		$data['page_diklat'] = 'yes';
+		$data['view_nstkp'] = 'class="this"';
+		
+		$this->load->view('diklat/index',$data);
+	}
+*/
+	
+	
+	
 	function detail_kompetensi($nipp)
 	{
-		$data['pegawai'] = $this->kepegawaian->get_data_pegawai_by_nipp($nipp);
+		/*$data['pegawai'] = $this->kepegawaian->get_data_pegawai_by_nipp($nipp);
 		$data['data_agama'] = $this->kepegawaian->get_detail_pegawai_agama($nipp);
 		$data['data_alamat'] = $this->kepegawaian->get_detail_pegawai_alamat($nipp);
 		$data['data_bahasa'] = $this->kepegawaian->get_detail_pegawai_bahasa($nipp);
@@ -597,7 +728,30 @@ class diklat extends Application {
 		$data['data_stkp'] = $this->kepegawaian->get_detail_pegawai_stkp($nipp);
 		$data['data_nstkp'] = $this->kepegawaian->get_detail_pegawai_nstkp($nipp);
 		$data['jumlah_bahasa'] = $this->kepegawaian->count_result_bahasa($nipp);
-
+		*/
+		
+		$data['pegawai'] = $this->kepegawaian->get_data_pegawai_by_nipp($nipp);
+		$data['data_agama'] = $this->kepegawaian->get_detail_pegawai_agama($nipp);
+		$data['data_alamat'] = $this->kepegawaian->get_detail_pegawai_alamat($nipp);
+		$data['data_ayah'] = $this->kepegawaian->get_detail_pegawai_ayah($nipp);
+		$data['data_bahasa'] = $this->kepegawaian->get_detail_pegawai_bahasa($nipp);
+		$data['data_fisik'] = $this->kepegawaian->get_detail_pegawai_fisik($nipp);
+		$data['data_ibu'] = $this->kepegawaian->get_detail_pegawai_ibu($nipp);
+		$data['data_jabatan_tmt'] = $this->kepegawaian->get_detail_pegawai_jabatan_tmt($nipp);
+		$data['data_mert_ayah'] = $this->kepegawaian->get_detail_pegawai_mert_ayah($nipp);
+		$data['data_mert_ibu'] = $this->kepegawaian->get_detail_pegawai_mert_ibu($nipp);
+		$data['data_pasangan'] = $this->kepegawaian->get_detail_pegawai_pasangan($nipp);
+		$data['data_pendidikan'] = $this->kepegawaian->get_detail_pegawai_pendidikan($nipp);
+		$data['data_status_keluarga'] = $this->kepegawaian->get_detail_pegawai_status_keluarga($nipp);
+		$data['data_tmt'] = $this->kepegawaian->get_detail_pegawai_tmt($nipp);
+		$data['data_unit'] = $this->kepegawaian->get_detail_pegawai_unit($nipp);
+		$data['data_grade'] = $this->kepegawaian->get_detail_pegawai_grade($nipp);
+		$data['data_stkp'] = $this->kepegawaian->get_detail_pegawai_stkp($nipp);		
+		$data['data_nstkp'] = $this->kepegawaian->get_detail_pegawai_nstkp($nipp);
+		$data['data_anak'] = $this->kepegawaian->get_detail_pegawai_anak($nipp);
+		$data['data_jabatan'] = $this->kepegawaian->get_last_jabatan($nipp);
+		$data['jumlah_bahasa'] = $this->kepegawaian->count_result_bahasa($nipp);
+		
 		$monthstring = "%m" ;
 		$yearstring = "%Y" ;
 		$time = time();

@@ -5,7 +5,7 @@
 			foreach ($stkp as $row_stkp) :
 			{}endforeach;
 			$attributes = array('class'=>'form','id'=>'wizard3');
-			echo form_open('diklat/update_stkp/'.$row_stkp['id_peg_stkp'], $attributes) ?>
+			echo form_open_multipart('diklat/update_stkp/'.$row_stkp['id_peg_stkp'], $attributes) ?>
                 <fieldset class="step" id="w2first">
 					<?php //echo form_hidden('nipp',$this->uri->segment(3))
 						echo form_hidden('nipp',$row_stkp['peg_nipp']);
@@ -141,6 +141,12 @@
 						echo form_input($rating,$row_stkp['p_stkp_rating']) ?></div>
                         <div class="clear"></div>
                     </div>
+					<div class="formRow">
+                        <label>File:</label>
+                        <div class="formRight"><input type="file" name="userfile" size="20" /></div>
+						<div class="clear"></div>
+                    </div>
+					
 				</fieldset>
 				<div class="wizButtons"> 
                     <div class="status" id="status2"></div>

@@ -1,7 +1,7 @@
 
 
 <div class="widget">  
-		  <div class="title"><img src="<?php echo base_url()?>images/icons/dark/frames.png" alt="" class="titleIcon" /><h6>Report Data STKP <?php echo $rating.' / '.$bulan.'-'.$year;?></h6></div>
+		  <div class="title"><img src="<?php echo base_url()?>images/icons/dark/frames.png" alt="" class="titleIcon" /><h6>Report Data STKP <?php echo $jenis_stkp.' / '.$bulan.'-'.$year;?></h6></div>
             <table cellpadding="0" cellspacing="0" width="100%" class="sTable">
                 <thead>
                     <tr>
@@ -26,7 +26,7 @@
 					<tr>
                     	<td colspan=4 align="left"><?php 
 								$attr= array('target' => '_blank');
-								echo anchor('diklat/excel_stkp_bulanan/'.$bulan.'/'.$year.'/'.$rating,'Export to Excel',$attr); 
+								echo anchor('diklat/excel_stkp_bulanan/'.$bulan.'/'.$year.'/'.$jenis_stkp,'Export to Excel',$attr); 
 								?></td>
                         <td colspan="5"><div class="pagination"><?php echo $this->pagination->create_links();?></div></td>
                         <td colspan="4" align="right">EMS 2.0.1 | developed by www.studiokami.com</td>

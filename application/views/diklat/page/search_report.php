@@ -44,14 +44,16 @@
 						echo form_input($tahun);?></div>
                         <div class="clear"></div>
                     </div>
-					 <div class="formRow">
+					<div class="formRow">
                         <label>Training / Rating:</label>
                         <div class="formRight"><?php 
-						$rating = array(
-							'name' 	=> 'rating',
-							'id' 	=> 'rating',
-						);
-						echo form_input($rating) ?></div>
+						 
+						$jenis_stkp = array(
+							'name' 	=> 'jenis_stkp',
+							'id' 	=> 'jenis_stkp',
+						); 
+						echo form_input($jenis_stkp); 
+						?></div>
                         <div class="clear"></div>
                     </div>
 				</fieldset>

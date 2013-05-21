@@ -1,7 +1,7 @@
 
 
 <div class="widget">  
-		  <div class="title"><img src="<?php echo base_url()?>images/icons/dark/frames.png" alt="" class="titleIcon" /><h6>Report Data Non STKP <?php echo $rating.' / '.$bulan.'-'.$year;?></h6></div>
+		  <div class="title"><img src="<?php echo base_url()?>images/icons/dark/frames.png" alt="" class="titleIcon" /><h6>Report Data Non STKP <?php echo $training.' / '.$bulan.'-'.$year;?></h6></div>
             <table cellpadding="0" cellspacing="0" width="100%" class="sTable">
                 <thead>
                     <tr>
@@ -22,7 +22,7 @@
                     	<td colspan=3 align="left">
 							<?php 
 								$attr= array('target' => '_blank');
-								echo anchor('diklat/excel_non_stkp_bulanan/'.$bulan.'/'.$year.'/'.$rating,'Export to Excel',$attr);
+								echo anchor('diklat/excel_non_stkp_bulanan/'.$bulan.'/'.$year.'/'.$training,'Export to Excel',$attr);
 						 	?>
                        	</td>
                         <td colspan="3"><div class="pagination"><?php echo $this->pagination->create_links();?></div></td>

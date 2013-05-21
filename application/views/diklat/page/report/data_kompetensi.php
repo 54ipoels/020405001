@@ -75,7 +75,7 @@
 					}endforeach;
 				}
 				?>
-				<?php 
+				<?php  
 				foreach ($data_jabatan_tmt as $row_jbt_tmt) :
 				{
 					$datestring = "%d-%m-%Y" ;

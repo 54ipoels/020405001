@@ -143,7 +143,8 @@
 						<td><center><?php echo $nipp_anchor; ?></center></td>
 						<td><?php echo $nama; ?></td>
 						<td><?php echo $jenis_anchor; ?></td>
-						<td><center><?php echo $row_pegawai['p_nstkp_no_license']; ?></center></td>
+						<td><center><a href="<?php echo base_url(); ?>pegawai/diklat/<?php echo str_replace(' ','_',$row_pegawai['p_nstkp_no_license'])."-".$row_pegawai['id_peg_non_stkp'];?>.jpg" title="<?php echo $row_pegawai['p_nstkp_no_license']; ?>" rel="lightbox">
+									<?php echo $row_pegawai['p_nstkp_no_license']; ?></a></center></td>
 						<td><center><?php echo $mulai; ?></center></td>
 						<td><center><?php echo $selesai; ?></center></td>
 						<td><center><?php echo $lembaga_anchor; ?></center></td>
