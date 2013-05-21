@@ -143,7 +143,7 @@
                     </div>
 					<div class="formRow">
                         <label>File:</label>
-                        <div class="formRight"><input type="file" name="userfile" size="20" /></div>
+                        <div class="formRight"><input type="file" name="file" size="20" /></div>
 						<div class="clear"></div>
                     </div>
 					

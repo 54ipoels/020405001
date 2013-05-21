@@ -413,33 +413,80 @@ class diklat extends Application {
 	
 	function update_non_stkp($id)
 	{
-		#update data to table pegawai
-		$this->pendidikan->update_data_non_stkp($id,username());
+		#preparing date 
+		$update_on = date('YmdHis');
 		
-		$no_sertifikat = $this->input->post('license');
+		$datestring = "%Y-%m-%d" ;
+		$time = time();
+		$tanggal = mdate($datestring, $time);
+				
+		if ($this->input->post('tanggal_start')=="00/00/0000"){$tanggal_start="0000-00-00";}
+		else {$tanggal_start = mdate($datestring, strtotime(str_replace('/','-',($this->input->post('tanggal_start')))));}
+		if ($this->input->post('tanggal_end')=="00/00/0000"){$tanggal_end="0000-00-00";}
+		else {$tanggal_end = mdate($datestring, strtotime(str_replace('/','-',($this->input->post('tanggal_end')))));}
 		
-		$config['upload_path'] = './pegawai/diklat/';
-		$config['allowed_types'] = 'gif|jpg|png|pdf';
-		$config['overwrite']	=	TRUE;
+		$no_sertifikat = str_replace('/','',$this->input->post('license'));
 		
-		$config['file_name'] = trim($no_sertifikat)."-$id.jpg";
+		//upload file
 		
-		
-		$this->load->library('upload', $config);
-
-		if ( ! $this->upload->do_upload())
-		{
-			$error = array('error' => $this->upload->display_errors());
-			$error['page'] = 'Upload';
-			$error['view_upload'] = 'class="this"';
-			$error['form_master'] = 'id="current"';
-			$this->load->view('kepegawaian/index', $error);
+		if($_FILES["file"]["size"] > 0){
+			$tmpName = $_FILES["file"]['tmp_name'];         
+			$fp = fopen($tmpName, 'r');
+			$file = fread($fp, filesize($tmpName));
+			$file = addslashes($file);
+			fclose($fp);
 		}
-		else
-		{
-			$data = array('upload_data' => $this->upload->data());
-			redirect('diklat/get_non_stkp');
+		
+		//Check if the file exists in the form
+		
+		if($_FILES['file']['name']!=""){
+		
+			$config['upload_path'] = './pegawai/diklat/';
+			$config['allowed_types'] = 'gif|jpg|png';
+			$config['overwrite']	=	TRUE;
+			$filenamebantu = str_replace(' ','_',$no_sertifikat)."-$id-".$update_on.".jpg";
+			$config['file_name']=$filenamebantu;
+			
+			//$this->load->library('upload', $config);
+			//$data = array('upload_data' => $this->upload->data());
+			
+			//Initialize
+			$this->load->library('upload');
+			$this->upload->initialize($config);
+			//Upload file
+			if( ! $this->upload->do_upload("file")){
+				//echo the errors
+				echo $this->upload->display_errors();
+			} else {
+			//If the upload success
+				$file_name = $this->upload->file_name;
+			}
+			
+			//persiapan data yang akan diupdate
+			$data_non_stkp = array(
+					'p_nstkp_type' 			=> $this->input->post('type'),
+					'p_nstkp_jenis' 		=> $this->input->post('non_stkp'),
+					'p_nstkp_lembaga'		=> $this->input->post('lembaga'),
+					'p_nstkp_no_license'	=> $this->input->post('license'),
+					'p_nstkp_pelaksanaan'	=> $tanggal_start,
+					'p_nstkp_selesai'		=> $tanggal_end,
+					'p_nstkp_image'			=> $filenamebantu,
+					'p_nstkp_update_by'		=> username(),
+				);
+		} else {
+			$data_non_stkp = array(
+					'p_nstkp_type' 			=> $this->input->post('type'),
+					'p_nstkp_jenis' 		=> $this->input->post('non_stkp'),
+					'p_nstkp_lembaga'		=> $this->input->post('lembaga'),
+					'p_nstkp_no_license'	=> $this->input->post('license'),
+					'p_nstkp_pelaksanaan'	=> $tanggal_start,
+					'p_nstkp_selesai'		=> $tanggal_end,
+					'p_nstkp_update_by'		=> username(),
+				);
 		}
+		$this->pendidikan->update_data_non_stkp($id,$data_non_stkp);
+		redirect('diklat/get_non_stkp');
+	
 	}
 	
 	function edit_stkp($id)
@@ -454,46 +501,98 @@ class diklat extends Application {
 	
 	function update_stkp($id)
 	{
-		#update data to table pegawai
-		$this->pendidikan->update_data_stkp($id,username());
+		#preparing date 
+		$update_on = date('YmdHis');
 		
-		$no_sertifikat = $this->input->post('license');
+		$datestring = "%Y-%m-%d" ;
+		$time = time();
+		$tanggal = mdate($datestring, $time);
+		 
+		if ($this->input->post('pelaksanaan')=="00/00/0000"){$pelaksanaan="0000-00-00";}
+		else {$pelaksanaan = mdate($datestring, strtotime(str_replace('/','-',($this->input->post('pelaksanaan')))));}
+		if ($this->input->post('selesai')=="00/00/0000"){$selesai="0000-00-00";}
+		else {$selesai = mdate($datestring, strtotime(str_replace('/','-',($this->input->post('selesai')))));}
+		if ($this->input->post('validitas_awal')=="00/00/0000"){$validitas_awal="0000-00-00";}
+		else {$validitas_awal = mdate($datestring, strtotime(str_replace('/','-',($this->input->post('validitas_awal')))));}
+		if ($this->input->post('validitas_akhir')=="00/00/0000"){$validitas_akhir="0000-00-00";}
+		else {$validitas_akhir = mdate($datestring, strtotime(str_replace('/','-',($this->input->post('validitas_akhir')))));}
 		
-		$config['upload_path'] = './pegawai/diklat/';
-		$config['allowed_types'] = 'pdf';
-	#	$config['allowed_types'] = 'gif|jpg|png|pdf';
-		$config['overwrite']	=	TRUE;
-		/*$config['max_size']  = '100';
-		$config['max_width']  = '1024';
-		$config['max_height']  = '768';
-		*/
-	/*	if( $this->input->post('rating') == "FWM"){
-			$config['file_name'] = trim($no_sertifikat).'-FWM.jpg';
-		}else{
-			$config['file_name'] = trim($no_sertifikat).".jpg";
+		$no_sertifikat = str_replace('/','',$this->input->post('license'));
+		
+		//upload file
+		
+		if($_FILES["file"]["size"] > 0){
+			$tmpName = $_FILES["file"]['tmp_name'];         
+			$fp = fopen($tmpName, 'r');
+			$file = fread($fp, filesize($tmpName));
+			$file = addslashes($file);
+			fclose($fp);
 		}
-	*/	
-		if($this->input->post('rating') == "FWM" ){
-			$config['file_name'] = trim($no_sertifikat)."-".$id."(FWM)";
-		}else{
-			$config['file_name'] = trim($no_sertifikat)."-".$id;
-		}
-		$this->load->library('upload', $config);
-
-		if ( ! $this->upload->do_upload())
-		{
-			$error = array('error' => $this->upload->display_errors());
-			$error['page'] = 'Upload';
-			$error['view_upload'] = 'class="this"';
-			$error['form_master'] = 'id="current"';
-			$this->load->view('kepegawaian/index', $error);
-		}
-		else
-		{
-			$data = array('upload_data' => $this->upload->data());
+		
+		//Check if the file exists in the form
+		
+		if($_FILES['file']['name']!=""){
+		
+			$config['upload_path'] = './pegawai/diklat/';
+			$config['allowed_types'] = 'pdf';
+			$config['overwrite']	=	TRUE;
+			if($this->input->post('rating') == "FWM" ){
+				$filenamebantu = trim($no_sertifikat)."-".$id."-".$update_on."(FWM)";
+			}else{
+				$filenamebantu = trim($no_sertifikat)."-".$id."-".$update_on;
+			}
+			$config['file_name']=$filenamebantu;
+			
+			//$this->load->library('upload', $config);
+			//$data = array('upload_data' => $this->upload->data());
+			
+			//Initialize
+			$this->load->library('upload');
+			$this->upload->initialize($config);
+			//Upload file
+			if( ! $this->upload->do_upload("file")){
+				//echo the errors
+				echo $this->upload->display_errors();
+			} else {
+			//If the upload success
+				$file_name = $this->upload->file_name;
+			}
+			
+			//persiapan data yang akan diupdate
+			$data_stkp = array(
+					//'p_nstkp_nipp' 			=> $this->input->post('nipp'),
+					'p_stkp_type' 			=> $this->input->post('type'),
+					'p_stkp_jenis' 			=> $this->input->post('jenis_stkp'),
+					'p_stkp_lembaga'		=> $this->input->post('lembaga'),
+					'p_stkp_no_license'		=> $this->input->post('license'),
+					'p_stkp_pelaksanaan'	=> $pelaksanaan,
+					'p_stkp_selesai'		=> $selesai,
+					'p_stkp_mulai'			=> $validitas_awal,
+					'p_stkp_finish'			=> $validitas_akhir,
+					'p_stkp_rating'			=> $this->input->post('rating'),
+					'p_stkp_image'			=> $filenamebantu,
+					//'p_stkp_update_on'		=> $tanggal,
+					'p_stkp_update_by'		=> username(),
+				);
+			$this->pendidikan->update_data_stkp($id,$data_stkp);
+			redirect('diklat/view_pdf/'.$filenamebantu);
+		} else {
+			$data_stkp = array(
+					//'p_nstkp_nipp' 			=> $this->input->post('nipp'),
+					'p_stkp_type' 			=> $this->input->post('type'),
+					'p_stkp_jenis' 			=> $this->input->post('jenis_stkp'),
+					'p_stkp_lembaga'		=> $this->input->post('lembaga'),
+					'p_stkp_no_license'		=> $this->input->post('license'),
+					'p_stkp_pelaksanaan'	=> $pelaksanaan,
+					'p_stkp_selesai'		=> $selesai,
+					'p_stkp_mulai'			=> $validitas_awal,
+					'p_stkp_finish'			=> $validitas_akhir,
+					'p_stkp_rating'			=> $this->input->post('rating'),
+					'p_stkp_update_by'		=> username(),
+				);
+			$this->pendidikan->update_data_stkp($id,$data_stkp);
 			redirect('diklat/get_stkp');
 		}
-		
 	}
 	
 	function view_pdf($nama_file){

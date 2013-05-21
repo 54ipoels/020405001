@@ -428,64 +428,14 @@ class pendidikan extends CI_Model
 		return $query->num_rows();
 	}
 
-	function update_data_non_stkp($id,$user)
+	function update_data_non_stkp($id,$data_non_stkp)
 	{
-		$datestring = "%Y-%m-%d" ;
-		$time = time();
-		$tanggal = mdate($datestring, $time);
-				
-		if ($this->input->post('tanggal_start')=="00/00/0000"){$tanggal_start="0000-00-00";}
-		else {$tanggal_start = mdate($datestring, strtotime(str_replace('/','-',($this->input->post('tanggal_start')))));}
-		if ($this->input->post('tanggal_end')=="00/00/0000"){$tanggal_end="0000-00-00";}
-		else {$tanggal_end = mdate($datestring, strtotime(str_replace('/','-',($this->input->post('tanggal_end')))));}
-		
-		$data_non_stkp = array(
-					//'p_nstkp_nipp' 			=> $this->input->post('nipp'),
-					'p_nstkp_type' 			=> $this->input->post('type'),
-					'p_nstkp_jenis' 		=> $this->input->post('non_stkp'),
-					'p_nstkp_lembaga'		=> $this->input->post('lembaga'),
-					'p_nstkp_no_license'	=> $this->input->post('license'),
-					'p_nstkp_pelaksanaan'	=> $tanggal_start,
-					'p_nstkp_selesai'		=> $tanggal_end,
-					//'p_nstkp_update_on'		=> $tanggal,
-					'p_nstkp_update_by'		=> $user,
-				);
-
 		$this->db->where('id_peg_non_stkp',$id);
 		$this->db->update('v3_peg_non_stkp',$data_non_stkp);
 	}
 	
-	function update_data_stkp($id,$user)
+	function update_data_stkp($id,$data_stkp)
 	{
-		$datestring = "%Y-%m-%d" ;
-		$time = time();
-		$tanggal = mdate($datestring, $time);
-		echo $this->input->post('pelaksanaan')."<br>"; 
-		 
-		if ($this->input->post('pelaksanaan')=="00/00/0000"){$pelaksanaan="0000-00-00";}
-		else {$pelaksanaan = mdate($datestring, strtotime(str_replace('/','-',($this->input->post('pelaksanaan')))));}
-		if ($this->input->post('selesai')=="00/00/0000"){$selesai="0000-00-00";}
-		else {$selesai = mdate($datestring, strtotime(str_replace('/','-',($this->input->post('selesai')))));}
-		if ($this->input->post('validitas_awal')=="00/00/0000"){$validitas_awal="0000-00-00";}
-		else {$validitas_awal = mdate($datestring, strtotime(str_replace('/','-',($this->input->post('validitas_awal')))));}
-		if ($this->input->post('validitas_akhir')=="00/00/0000"){$validitas_akhir="0000-00-00";}
-		else {$validitas_akhir = mdate($datestring, strtotime(str_replace('/','-',($this->input->post('validitas_akhir')))));}
-		
-		$data_stkp = array(
-					//'p_nstkp_nipp' 			=> $this->input->post('nipp'),
-					'p_stkp_type' 			=> $this->input->post('type'),
-					'p_stkp_jenis' 			=> $this->input->post('jenis_stkp'),
-					'p_stkp_lembaga'		=> $this->input->post('lembaga'),
-					'p_stkp_no_license'		=> $this->input->post('license'),
-					'p_stkp_pelaksanaan'	=> $pelaksanaan,
-					'p_stkp_selesai'		=> $selesai,
-					'p_stkp_mulai'			=> $validitas_awal,
-					'p_stkp_finish'			=> $validitas_akhir,
-					'p_stkp_rating'			=> $this->input->post('rating'),
-					//'p_stkp_update_on'		=> $tanggal,
-					'p_stkp_update_by'		=> $user,
-				);
-		print_r($data_stkp);
 		$this->db->where('id_peg_stkp',$id);
 		$this->db->update('v3_peg_stkp',$data_stkp);
 	}
@@ -804,6 +754,30 @@ class pendidikan extends CI_Model
 		$query = $this->db->query($query); 
 		return $query->num_rows();
 		
+	}
+	
+	function get_data_stkp_by_id_last_time_update($id)
+	{
+		$query = ("
+			SELECT * FROM v3_peg_stkp AS peg_stkp
+			WHERE peg_stkp.id_peg_stkp = $id 
+			ORDER BY peg_stkp.p_stkp_update_on DESC
+			LIMIT 1			
+		");
+		$query = $this->db->query($query); 
+		return $query->result_array();
+	}
+	
+	function get_data_non_stkp_by_id_last_time_update($id)
+	{
+		$query = ("
+			SELECT * FROM v3_peg_non_stkp AS peg_stkp
+			WHERE peg_stkp.id_peg_non_stkp = $id 
+			ORDER BY peg_stkp.p_nstkp_update_on DESC
+			LIMIT 1			
+		");
+		$query = $this->db->query($query); 
+		return $query->result_array();
 	}
 	
 }
