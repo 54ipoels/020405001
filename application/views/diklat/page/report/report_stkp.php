@@ -211,9 +211,15 @@
 								<?php } 
 								*/
 								?>
-								<a href="<?php echo base_url(); ?>index.php/diklat/view_pdf/<?php echo str_replace("/","",$row_pegawai['p_stkp_no_license'])?>" target="_blank" >
+								<?php if($row_pegawai['p_stkp_rating'] == 'FWM'){ ?>
+								<a href="<?php echo base_url(); ?>index.php/diklat/view_pdf/<?php echo str_replace("/","",$row_pegawai['p_stkp_no_license'])."-".$row_pegawai['id_peg_stkp']."(FWM)" ?>" target="_blank" >
 									<?php echo $row_pegawai['p_stkp_no_license']; ?>
 								</a>
+								<?php } else { ?>
+								<a href="<?php echo base_url(); ?>index.php/diklat/view_pdf/<?php echo str_replace("/","",$row_pegawai['p_stkp_no_license'])."-".$row_pegawai['id_peg_stkp']?>" target="_blank" >
+									<?php echo $row_pegawai['p_stkp_no_license']; ?>
+								</a>
+								<?php } ?>
 								
 							</center>
 						</td>

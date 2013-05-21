@@ -473,7 +473,11 @@ class diklat extends Application {
 			$config['file_name'] = trim($no_sertifikat).".jpg";
 		}
 	*/	
-		$config['file_name'] = trim($no_sertifikat);
+		if($this->input->post('rating') == "FWM" ){
+			$config['file_name'] = trim($no_sertifikat)."-".$id."(FWM)";
+		}else{
+			$config['file_name'] = trim($no_sertifikat)."-".$id;
+		}
 		$this->load->library('upload', $config);
 
 		if ( ! $this->upload->do_upload())
@@ -493,29 +497,17 @@ class diklat extends Application {
 	}
 	
 	function view_pdf($nama_file){
-	
-		$file = "'".base_url()."pegawai/diklat/".$nama_file.".pdf'";
-		echo $file;
-		header('Content-type: application/pdf');
-		header('Content-Disposition: inline; filename="'.$nama_file.'.pdf "');
-		header('Content-Length: ' . filesize($file));
-		ob_clean();
-		flush();
-		readfile($file);
-		exit;
-		
-		/*
+		?>
+		<html>
+		<title><?php echo $nama_file;?></title>
+		<body align="center">
+		<?php
 		$file = base_url()."pegawai/diklat/".$nama_file.".pdf";
-		$filename = 'Custom file name for the.pdf'; /* Note: Always use .pdf at the end. */
-		/*
-		header('Content-type: application/pdf');
-		header('Content-Disposition: inline; filename="' . $filename . '"');
-		header('Content-Transfer-Encoding: binary');
-		header('Content-Length: ' . filesize($file));
-		header('Accept-Ranges: bytes');
-
-		@readfile($file);
-		*/
+		echo "<embed src= '".$file."' width='1200' height='700' ></embed>";
+		?>
+		</body>
+		</html>
+		<?php 
 	}
 	
 	function delete_non_stkp($id)
