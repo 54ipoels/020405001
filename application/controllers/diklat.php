@@ -442,9 +442,9 @@ class diklat extends Application {
 		if($_FILES['file']['name']!=""){
 		
 			$config['upload_path'] = './pegawai/diklat/';
-			$config['allowed_types'] = 'gif|jpg|png';
+			$config['allowed_types'] = 'pdf|gif|jpg|png';
 			$config['overwrite']	=	TRUE;
-			$filenamebantu = str_replace(' ','_',$no_sertifikat)."-$id-".$update_on.".jpg";
+			$filenamebantu = str_replace(' ','_',$no_sertifikat)."-$id-".$update_on;
 			$config['file_name']=$filenamebantu;
 			
 			//$this->load->library('upload', $config);
@@ -455,12 +455,10 @@ class diklat extends Application {
 			$this->upload->initialize($config);
 			//Upload file
 			if( ! $this->upload->do_upload("file")){
-				//echo the errors
 				echo $this->upload->display_errors();
 			} else {
 			//If the upload success
 				$file_name = $this->upload->file_name;
-			}
 			
 			//persiapan data yang akan diupdate
 			$data_non_stkp = array(
@@ -473,6 +471,7 @@ class diklat extends Application {
 					'p_nstkp_image'			=> $filenamebantu,
 					'p_nstkp_update_by'		=> username(),
 				);
+			}
 		} else {
 			$data_non_stkp = array(
 					'p_nstkp_type' 			=> $this->input->post('type'),
@@ -554,28 +553,31 @@ class diklat extends Application {
 				//echo the errors
 				echo $this->upload->display_errors();
 			} else {
-			//If the upload success
+				//If the upload success
 				$file_name = $this->upload->file_name;
+				
+				//persiapan data yang akan diupdate
+				$data_stkp = array(
+						//'p_nstkp_nipp' 			=> $this->input->post('nipp'),
+						'p_stkp_type' 			=> $this->input->post('type'),
+						'p_stkp_jenis' 			=> $this->input->post('jenis_stkp'),
+						'p_stkp_lembaga'		=> $this->input->post('lembaga'),
+						'p_stkp_no_license'		=> $this->input->post('license'),
+						'p_stkp_pelaksanaan'	=> $pelaksanaan,
+						'p_stkp_selesai'		=> $selesai,
+						'p_stkp_mulai'			=> $validitas_awal,
+						'p_stkp_finish'			=> $validitas_akhir,
+						'p_stkp_rating'			=> $this->input->post('rating'),
+						'p_stkp_image'			=> $filenamebantu,
+						//'p_stkp_update_on'		=> $tanggal,
+						'p_stkp_update_by'		=> username(),
+					);
+				$this->pendidikan->update_data_stkp($id,$data_stkp);
+				//update data stkp image yang memiliki no sertifikat yang sama
+				$this->pendidikan->update_image_no_sertifikat_data_stkp( $filenamebantu, $this->input->post('license'), $this->input->post('rating') );
+				//redirect('diklat/view_pdf/'.$filenamebantu);
+				redirect('diklat/get_stkp');
 			}
-			
-			//persiapan data yang akan diupdate
-			$data_stkp = array(
-					//'p_nstkp_nipp' 			=> $this->input->post('nipp'),
-					'p_stkp_type' 			=> $this->input->post('type'),
-					'p_stkp_jenis' 			=> $this->input->post('jenis_stkp'),
-					'p_stkp_lembaga'		=> $this->input->post('lembaga'),
-					'p_stkp_no_license'		=> $this->input->post('license'),
-					'p_stkp_pelaksanaan'	=> $pelaksanaan,
-					'p_stkp_selesai'		=> $selesai,
-					'p_stkp_mulai'			=> $validitas_awal,
-					'p_stkp_finish'			=> $validitas_akhir,
-					'p_stkp_rating'			=> $this->input->post('rating'),
-					'p_stkp_image'			=> $filenamebantu,
-					//'p_stkp_update_on'		=> $tanggal,
-					'p_stkp_update_by'		=> username(),
-				);
-			$this->pendidikan->update_data_stkp($id,$data_stkp);
-			redirect('diklat/view_pdf/'.$filenamebantu);
 		} else {
 			$data_stkp = array(
 					//'p_nstkp_nipp' 			=> $this->input->post('nipp'),
@@ -599,14 +601,34 @@ class diklat extends Application {
 		?>
 		<html>
 		<title><?php echo $nama_file;?></title>
+		<head>
+			<script>
+				function goBack()
+				{
+					window.history.go(-2);
+				}
+			</script>
+		</head>
 		<body align="center">
 		<?php
 		$file = base_url()."pegawai/diklat/".$nama_file.".pdf";
-		echo "<embed src= '".$file."' width='1200' height='700' ></embed>";
+		echo "<embed src= '".$file."' width='1200' height='666' ></embed>";
 		?>
+		<br><br>
+		<!-- <input type="button" value="Back" onclick="goBack()"> -->
 		</body>
 		</html>
 		<?php 
+	}
+	
+	function remove_file_stkp($id){
+		$this->pendidikan->remove_link_file_stkp($id);
+		redirect('diklat/get_stkp');
+	}
+	
+	function remove_file_non_stkp($id){
+		$this->pendidikan->remove_link_file_non_stkp($id);
+		redirect('diklat/get_non_stkp');
 	}
 	
 	function delete_non_stkp($id)
@@ -615,6 +637,7 @@ class diklat extends Application {
 		$this->pendidikan->delete_data_non_stkp($id);
 		redirect('diklat/get_non_stkp');
 	}
+	
 	function delete_stkp($id)
 	{
 		#update data to table pegawai
@@ -858,9 +881,11 @@ class diklat extends Application {
 	
 	# EXPORT TO EXCEL
 	
-	
 	function excel_non_stkp()
 	{
+		//pengalokasian memory untuk run this function
+		ini_set("memory_limit","300M");
+		
 		$datestring = "%Y-%m-%d" ;
 		$time = time();
 		$tanggal = mdate($datestring, $time);
@@ -876,26 +901,52 @@ class diklat extends Application {
 		$this->excel->getActiveSheet()->setTitle("Diklat Non STKP ");
 		//set cell A1 content with some text
 		
-		$this->excel->getActiveSheet()->setCellValue('A1', 'No');
-		$this->excel->getActiveSheet()->setCellValue('B1', 'NIPP');
-		$this->excel->getActiveSheet()->setCellValue('C1', 'Nama');
-		$this->excel->getActiveSheet()->setCellValue('D1', 'Training');
-		$this->excel->getActiveSheet()->setCellValue('E1', 'No Sertifikat');
-		$this->excel->getActiveSheet()->setCellValue('F1', 'Pelaksanaan');
-		$this->excel->getActiveSheet()->setCellValue('H1', 'Lembaga');
-		$this->excel->getActiveSheet()->setCellValue('H2', 'Pelaksanaan');
-		$this->excel->getActiveSheet()->setCellValue('F2', 'From');
-		$this->excel->getActiveSheet()->setCellValue('G2', 'Until');
+		$this->excel->getActiveSheet()->setCellValue('A6', 'NO');
+		$this->excel->getActiveSheet()->setCellValue('B6', 'NIPP');
+		$this->excel->getActiveSheet()->setCellValue('C6', 'NAMA');
+		$this->excel->getActiveSheet()->setCellValue('D6', 'TRAINING');
+		$this->excel->getActiveSheet()->setCellValue('E6', 'NO SERTIFIKAT');
+		$this->excel->getActiveSheet()->setCellValue('F6', 'PELAKSANAAN');
+		$this->excel->getActiveSheet()->setCellValue('H6', 'LEMBAGA PELAKSANAAN');
+		//$this->excel->getActiveSheet()->setCellValue('H2', 'Pelaksanaan');
+		$this->excel->getActiveSheet()->setCellValue('F7', 'From');
+		$this->excel->getActiveSheet()->setCellValue('G7', 'Until');
 		
-		$i=2;
+		//JUDUL KOP
+		$this->excel->getActiveSheet()->setCellValue('A2', 'DATA NON STKP');
+		$this->excel->getActiveSheet()->setCellValue('A3', 'PT. GAPURA ANGKASA CABANG BANDARA NGURAH RAI');
+		$this->excel->getActiveSheet()->setCellValue('A4', 'DENPASAR');
+				
+		$i=7;
 		$number=0;
-		
+		$unit="kosong";
+		$sub_unit="kosong";
 		
 		$nipp = '';
 		foreach ($pegawai_with_stkp_and_unit as $row_pegawai) :
 		{ 
 			$i++;
 			$number++;
+			
+			if($row_pegawai['p_unt_kode_unit'] !== $unit){
+				$this->excel->getActiveSheet()->setCellValue("C$i", strtoupper("$row_pegawai[nama_unit]"));
+				$this->excel->getActiveSheet()->getStyle("C$i")->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('ffff00');
+				$this->excel->getActiveSheet()->getStyle("C$i")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+				$this->excel->getActiveSheet()->getStyle("C$i")->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+				$this->excel->getActiveSheet()->getStyle("C$i")->getFont()->setBold(true);
+				$i++;
+			}
+			if($row_pegawai['p_unt_kode_sub_unit'] !== $sub_unit){
+				$this->excel->getActiveSheet()->setCellValue("C$i", strtoupper("$row_pegawai[su_sub_unit]"));
+				$this->excel->getActiveSheet()->getStyle("C$i")->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('ffff77');
+				$this->excel->getActiveSheet()->getStyle("C$i")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+				$this->excel->getActiveSheet()->getStyle("C$i")->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+				$this->excel->getActiveSheet()->getStyle("C$i")->getFont()->setBold(true);
+				$i++;
+			}
+			
+			
+			//untuk memasukkan data ke excel
 			if ($row_pegawai['p_nstkp_nipp'] == $nipp)
 			{
 				$nipp = '';
@@ -922,7 +973,7 @@ class diklat extends Application {
 			{
 				$stkp_selesai = mdate($datestring,strtotime($row_pegawai['p_nstkp_selesai']));
 			}
-			
+					
 			//masukkan data ke tabel excel
 			$this->excel->getActiveSheet()->setCellValue("A$i", "$number");
 			$this->excel->getActiveSheet()->setCellValue("B$i", "$nipp");
@@ -932,28 +983,57 @@ class diklat extends Application {
 			$this->excel->getActiveSheet()->setCellValue("F$i", "$pelaksanaan");
 			$this->excel->getActiveSheet()->setCellValue("G$i", "$stkp_selesai");
 			$this->excel->getActiveSheet()->setCellValue("H$i", "$row_pegawai[p_nstkp_lembaga]");
-			
+					
 			$nipp = $row_pegawai['peg_nipp'];
+			$unit = $row_pegawai['p_unt_kode_unit'];
+			$sub_unit = $row_pegawai['p_unt_kode_sub_unit'];
 			
 		}endforeach;
 		
 		//change the font size
-		$this->excel->getActiveSheet()->getStyle('A1:H1')->getFont()->setSize(14);
-		$this->excel->getActiveSheet()->getStyle('H2')->getFont()->setSize(14);
+		$this->excel->getActiveSheet()->getStyle("A2:A4")->getFont()->setSize(14);
+		$this->excel->getActiveSheet()->getStyle("A6:H7")->getFont()->setSize(11);
+		$this->excel->getActiveSheet()->getStyle("A8:H$i")->getFont()->setSize(8);
+		//$this->excel->getActiveSheet()->getStyle('H2')->getFont()->setSize(11);
 		//make the font become bold
-		$this->excel->getActiveSheet()->getStyle('A1:H1')->getFont()->setBold(true);
-		$this->excel->getActiveSheet()->getStyle('F2:H2')->getFont()->setBold(true);
+		$this->excel->getActiveSheet()->getStyle('A2:A4')->getFont()->setBold(true);
+		$this->excel->getActiveSheet()->getStyle('A6:H6')->getFont()->setBold(true);
+		$this->excel->getActiveSheet()->getStyle('F7:H7')->getFont()->setBold(true);
 		//merge cell A1 until D1
-		$this->excel->getActiveSheet()->mergeCells('A1:A2');
-		$this->excel->getActiveSheet()->mergeCells('B1:B2');
-		$this->excel->getActiveSheet()->mergeCells('C1:C2');
-		$this->excel->getActiveSheet()->mergeCells('D1:D2');
-		$this->excel->getActiveSheet()->mergeCells('E1:E2');
-		$this->excel->getActiveSheet()->mergeCells('F1:G1');
+		$this->excel->getActiveSheet()->mergeCells('A6:A7');
+		$this->excel->getActiveSheet()->mergeCells('B6:B7');
+		$this->excel->getActiveSheet()->mergeCells('C6:C7');
+		$this->excel->getActiveSheet()->mergeCells('D6:D7');
+		$this->excel->getActiveSheet()->mergeCells('E6:E7');
+		$this->excel->getActiveSheet()->mergeCells('F6:G6');
+		$this->excel->getActiveSheet()->mergeCells('H6:H7');
+		$this->excel->getActiveSheet()->mergeCells('A2:H2');
+		$this->excel->getActiveSheet()->mergeCells('A3:H3');
+		$this->excel->getActiveSheet()->mergeCells('A4:H4');
 		
 		//set aligment to center for that merged cell (A1 to D1)
-		$this->excel->getActiveSheet()->getStyle('A1:H1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-		$this->excel->getActiveSheet()->getStyle('A1:H1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		$this->excel->getActiveSheet()->getStyle('A6:H6')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$this->excel->getActiveSheet()->getStyle('A6:H6')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		$this->excel->getActiveSheet()->getStyle('A2:A4')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$this->excel->getActiveSheet()->getStyle('A2:A4')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		
+		//Set Border
+		//$this->excel->getActiveSheet()->getStyle('A6:H6')->getBorders()->getAllBorders()->setColor(new PHPExcel_Style_Color(PHPExcel_Style_Color::COLOR_RED));
+		//$this->excel->getActiveSheet()->getStyle('A7:H7')->getBorders()->getAllBorders()->setColor(new PHPExcel_Style_Color(PHPExcel_Style_Color::COLOR_RED));
+		
+		//Set column widths                                                       
+		$this->excel->getActiveSheet()->getColumnDimension('A')->setWidth(5.54);  
+		$this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(10.75); 
+		$this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(26);    
+		$this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(47.5);  
+		$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(20.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(14.63); 
+		$this->excel->getActiveSheet()->getColumnDimension('G')->setWidth(14.63); 
+		$this->excel->getActiveSheet()->getColumnDimension('H')->setWidth(25.88); 
+		
+		//Set paper size to A4
+		//$this->excel->getActiveSheet()->getPageSetup()->setPaperSize(PHPExcel_Worksheet_PageSetup::PAPERSIZE_A4);
+		
 		
 		$filename="Report Non STKP.xls"; //save our workbook as this file name
 		header('Content-Type: application/vnd.ms-excel'); //mime type
@@ -974,6 +1054,166 @@ class diklat extends Application {
 		$time = time();
 		$tanggal = mdate($datestring, $time);
 		
+		$pegawai_with_stkp_and_unit = $this->pendidikan->search_report_nstkp_bulanan($this->uri->segment(3), $this->uri->segment(4), $this->uri->segment(5));
+				
+		//load our new PHPExcel library
+		$this->load->library('excel');
+		//activate worksheet number 1
+		$this->excel->setActiveSheetIndex(0);
+		//name the worksheet
+		$this->excel->getActiveSheet()->setTitle("Diklat Non STKP ");
+		//set cell A1 content with some text
+		$this->excel->getActiveSheet()->setCellValue('A6', 'NO');
+		$this->excel->getActiveSheet()->setCellValue('B6', 'NIPP');
+		$this->excel->getActiveSheet()->setCellValue('C6', 'NAMA');
+		$this->excel->getActiveSheet()->setCellValue('D6', 'TRAINING');
+		$this->excel->getActiveSheet()->setCellValue('E6', 'NO SERTIFIKAT');
+		$this->excel->getActiveSheet()->setCellValue('F6', 'PELAKSANAAN');
+		$this->excel->getActiveSheet()->setCellValue('H6', 'LEMBAGA PELAKSANAAN');
+		//$this->excel->getActiveSheet()->setCellValue('H2', 'Pelaksanaan');
+		$this->excel->getActiveSheet()->setCellValue('F7', 'From');
+		$this->excel->getActiveSheet()->setCellValue('G7', 'Until');
+		
+		//JUDUL KOP
+		$this->excel->getActiveSheet()->setCellValue('A2', 'DATA NON STKP');
+		$this->excel->getActiveSheet()->setCellValue('A3', 'PT. GAPURA ANGKASA CABANG BANDARA NGURAH RAI');
+		$this->excel->getActiveSheet()->setCellValue('A4', 'DENPASAR');
+				
+		$i=7;
+		$number=0;
+		$unit="kosong";
+		$sub_unit="kosong";
+		
+		$nipp = '';
+		foreach ($pegawai_with_stkp_and_unit as $row_pegawai) :
+		{ 
+			$i++;
+			$number++;
+			
+			if($row_pegawai['p_unt_kode_unit'] !== $unit){
+				$this->excel->getActiveSheet()->setCellValue("C$i", strtoupper("$row_pegawai[nama_unit]"));
+				$this->excel->getActiveSheet()->getStyle("C$i")->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('ffff00');
+				$this->excel->getActiveSheet()->getStyle("C$i")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+				$this->excel->getActiveSheet()->getStyle("C$i")->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+				$this->excel->getActiveSheet()->getStyle("C$i")->getFont()->setBold(true);
+				$i++;
+			}
+			if($row_pegawai['p_unt_kode_sub_unit'] !== $sub_unit){
+				$this->excel->getActiveSheet()->setCellValue("C$i", strtoupper("$row_pegawai[su_sub_unit]"));
+				$this->excel->getActiveSheet()->getStyle("C$i")->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('ffff77');
+				$this->excel->getActiveSheet()->getStyle("C$i")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+				$this->excel->getActiveSheet()->getStyle("C$i")->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+				$this->excel->getActiveSheet()->getStyle("C$i")->getFont()->setBold(true);
+				$i++;
+			}
+			
+			
+			//untuk memasukkan data ke excel
+			if ($row_pegawai['p_nstkp_nipp'] == $nipp)
+			{
+				$nipp = '';
+				$nama = '';
+			}
+			else
+			{
+				$nipp = $row_pegawai['p_nstkp_nipp'];
+				$nama = $row_pegawai['peg_nama'];
+			}
+			if ($row_pegawai['p_nstkp_pelaksanaan'] == '0000-00-00')
+			{
+				$pelaksanaan = '-';
+			}
+			else
+			{
+				$pelaksanaan = $row_pegawai['p_nstkp_pelaksanaan'];
+			}
+			if ($row_pegawai['p_nstkp_selesai'] == '0000-00-00')
+			{
+				$stkp_selesai = '-';
+			}
+			else
+			{
+				$stkp_selesai = mdate($datestring,strtotime($row_pegawai['p_nstkp_selesai']));
+			}
+					
+			//masukkan data ke tabel excel
+			$this->excel->getActiveSheet()->setCellValue("A$i", "$number");
+			$this->excel->getActiveSheet()->setCellValue("B$i", "$nipp");
+			$this->excel->getActiveSheet()->setCellValue("C$i", strtoupper("$nama"));
+			$this->excel->getActiveSheet()->setCellValue("D$i", "$row_pegawai[p_nstkp_jenis]");
+			$this->excel->getActiveSheet()->setCellValue("E$i", "$row_pegawai[p_nstkp_no_license]");
+			$this->excel->getActiveSheet()->setCellValue("F$i", "$pelaksanaan");
+			$this->excel->getActiveSheet()->setCellValue("G$i", "$stkp_selesai");
+			$this->excel->getActiveSheet()->setCellValue("H$i", "$row_pegawai[p_nstkp_lembaga]");
+					
+			$nipp = $row_pegawai['peg_nipp'];
+			$unit = $row_pegawai['p_unt_kode_unit'];
+			$sub_unit = $row_pegawai['p_unt_kode_sub_unit'];
+			
+		}endforeach;
+		
+		//change the font size
+		$this->excel->getActiveSheet()->getStyle("A2:A4")->getFont()->setSize(12);
+		$this->excel->getActiveSheet()->getStyle("A6:H$i")->getFont()->setSize(11);
+		//$this->excel->getActiveSheet()->getStyle('H2')->getFont()->setSize(11);
+		//make the font become bold
+		$this->excel->getActiveSheet()->getStyle('A2:A4')->getFont()->setBold(true);
+		$this->excel->getActiveSheet()->getStyle('A6:H6')->getFont()->setBold(true);
+		$this->excel->getActiveSheet()->getStyle('F7:H7')->getFont()->setBold(true);
+		//merge cell A1 until D1
+		$this->excel->getActiveSheet()->mergeCells('A6:A7');
+		$this->excel->getActiveSheet()->mergeCells('B6:B7');
+		$this->excel->getActiveSheet()->mergeCells('C6:C7');
+		$this->excel->getActiveSheet()->mergeCells('D6:D7');
+		$this->excel->getActiveSheet()->mergeCells('E6:E7');
+		$this->excel->getActiveSheet()->mergeCells('F6:G6');
+		$this->excel->getActiveSheet()->mergeCells('H6:H7');
+		$this->excel->getActiveSheet()->mergeCells('A2:H2');
+		$this->excel->getActiveSheet()->mergeCells('A3:H3');
+		$this->excel->getActiveSheet()->mergeCells('A4:H4');
+		
+		//set aligment to center for that merged cell (A1 to D1)
+		$this->excel->getActiveSheet()->getStyle('A6:H6')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$this->excel->getActiveSheet()->getStyle('A6:H6')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		$this->excel->getActiveSheet()->getStyle('A2:A4')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$this->excel->getActiveSheet()->getStyle('A2:A4')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		
+		//Set Border
+		//$this->excel->getActiveSheet()->getStyle('A6:H6')->getBorders()->getAllBorders()->setColor(new PHPExcel_Style_Color(PHPExcel_Style_Color::COLOR_RED));
+		//$this->excel->getActiveSheet()->getStyle('A7:H7')->getBorders()->getAllBorders()->setColor(new PHPExcel_Style_Color(PHPExcel_Style_Color::COLOR_RED));
+		
+		//Set column widths                                                       
+		$this->excel->getActiveSheet()->getColumnDimension('A')->setWidth(5.54);  
+		$this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(10.75); 
+		$this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(26);    
+		$this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(47.5);  
+		$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(20.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(14.63); 
+		$this->excel->getActiveSheet()->getColumnDimension('G')->setWidth(14.63); 
+		$this->excel->getActiveSheet()->getColumnDimension('H')->setWidth(25.88); 
+		
+		
+		$filename="Report Non STKP Bulan ".$this->uri->segment(3)."-".$this->uri->segment(4).".xls"; //save our workbook as this file name
+		header('Content-Type: application/vnd.ms-excel'); //mime type
+		header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
+		header('Cache-Control: max-age=0'); //no cache
+					 
+		//save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
+		//if you want to save it as .XLSX Excel 2007 format
+		$objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel5');  
+		//force user to download the Excel file without writing it to server's HD
+		$objWriter->save('php://output');
+		
+	}
+	
+	
+	
+	/*
+	function excel_non_stkp_bulanan()
+	{
+		$datestring = "%Y-%m-%d" ;
+		$time = time();
+		$tanggal = mdate($datestring, $time);
 		
 		$pegawai_with_stkp_and_unit = $this->pendidikan->search_report_nstkp_bulanan($this->uri->segment(3), $this->uri->segment(4), $this->uri->segment(5));
 				
@@ -1076,6 +1316,7 @@ class diklat extends Application {
 		$objWriter->save('php://output');
 		
 	}
+	*/
 	
 	function excel_stkp()
 	{

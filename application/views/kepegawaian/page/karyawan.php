@@ -1,8 +1,9 @@
 <div class="widget">
 <?php echo form_open('pekerja/sort_jenis_pegawai/') ?>
 <fieldset class="step" id="w2first">
-<table><tr><td width="1040px" colspan="2">
-<div class="formBaru"><label>Jenis Pegawai: &nbsp </label>
+<table>
+<tr><td width="1040px" colspan="2">
+<div class="formBaru"><label> &nbsp </label>
 <?php
 	$var_jenis=$this->input->post('jenis');
 	if($var_jenis==NULL){$var_jenis = $this->uri->segment(3);}
@@ -14,14 +15,14 @@
 	if($var_stk==NULL){$var_stk = $this->uri->segment(6);}
 	
 	$jenis = array(
-		'all' => 'ALL',
+		'all' => 'jenis pegawai',
 		'Tetap' => 'TETAP',
 		'PKWT' => 'PKWT',
 		'Outsource' => 'Outsource',
 		);
 	echo form_dropdown('jenis',$jenis,$var_jenis) ;
 	
-	$unit['all'] = "ALL";
+	$unit['all'] = "unit";
 	foreach ($list_unit as $row_unit) :
 		{
 			$unit[$row_unit['kode_unit']] = ($row_unit['nama_unit']);
@@ -29,14 +30,14 @@
 	echo form_dropdown('unit',$unit,$var_unit); 
 	
 	$kelamin = array(
-		'all' => 'ALL',
+		'all' => 'jenis kelamin',
 		'L' => 'LAKI-LAKI',
 		'P' => 'PEREMPUAN',
 		);
 	echo form_dropdown('kelamin',$kelamin,$var_kelamin) ;
 	
 	$stk = array(
-		'all' => 'ALL',
+		'all' => 'status keluarga',
 		'TK' => 'TK',
 		'K'  => 'K',
 		'K1' => 'K1',

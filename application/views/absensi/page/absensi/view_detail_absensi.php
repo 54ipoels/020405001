@@ -58,8 +58,13 @@
                     </tr>
                     <?php } ?>
                     <tr>
-                    	<td colspan="6" style="text-align:left; padding:5px;">
+                    	<td colspan="5" style="text-align:left; padding:5px;">
                         <input class="basic" value="Back" type="reset" onClick="javascript:history.back(1)" />
+                        </td>
+                    	<td colspan="5" style="text-align:right; padding:5px;">
+							<a href ="<?php echo base_url()?>index.php/c_absensi/print_detail_absensi/<?php echo $sd['fschpegabs_fschpeg_id'].'/'.$this->uri->segment(4).'/'.$this->uri->segment(5); ?>">
+								<image src="<?php echo base_url();?>images/icons/control/32/print.png" title="print" />
+							</a>
                         </td>
                     </tr>
                  </tbody>

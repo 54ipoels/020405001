@@ -62,6 +62,10 @@
 		{
 			$this->load->view('kepegawaian/page/pegawai_keluar');
 		}else
+		if ($page == 'Data PHK')
+		{
+			$this->load->view('kepegawaian/page/phk');
+		}else
 		if ($page == 'Data SDM')
 		{
 			$this->load->view('kepegawaian/page/data_sdm');

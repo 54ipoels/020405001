@@ -30,7 +30,7 @@
 							<td ><?php echo $i;?></td>
 							<td ><?php echo strtoupper($row['temp_nama']);?> </td>
 							<td ><?php echo $row['temp_nipp'];?> </td>
-							<td ><?php echo romawi($row['temp_grade']);?></td>
+							<td ><?php echo $row['temp_grade']; //echo romawi($row['temp_grade']);?></td>
 							<td ><?php echo strtoupper($row['temp_jabatan']);?></td>
 							<td ><?php echo $row['temp_gaji_bruto'];?></td>
 							<td ><?php echo $row['temp_insentive'];?></td>

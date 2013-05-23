@@ -68,9 +68,11 @@
 					$datestring = "%d-%M-%Y" ;
 					$tgl_lahir = mdate($datestring,strtotime($row_pegawai['peg_tgl_lahir']));
 					$tgl_lahir_ps = mdate($datestring,strtotime($row_pegawai['p_ps_tgl_lahir']));
-					
-					$unit_tmt= mdate($datestring,strtotime($row_pegawai['p_unt_tmt_start']));
-					
+					if($row_pegawai['p_unt_tmt_start'] == '0000-00-00' OR $row_pegawai['p_unt_tmt_start']==""){
+						$unit_tmt= "-";
+					}else{
+						$unit_tmt= mdate($datestring,strtotime($row_pegawai['p_unt_tmt_start']));
+					}
 					if ($row_pegawai['peg_jns_kelamin'] == 'L')
 					{
 						$status_ps = 'ISTERI';

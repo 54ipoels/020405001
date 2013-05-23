@@ -623,6 +623,22 @@ class C_absensi extends Application {
 		$this->load->view('absensi/index',$data);
 	}
 	
+	function print_detail_absensi()
+	{
+		$fschpeg_id = $this->uri->segment(3);
+		$year = $this->uri->segment(5);
+		
+		//showdata 
+		$data['bulan']	=	$this->uri->segment(4);
+		$data['tahun']	=	$this->uri->segment(5);
+		$data['showdata'] = $this->m_absensi->ambil_data_detail_absensi($fschpeg_id,$year);
+		
+		$this->load->view('absensi/page/absensi/print_detail_absensi',$data);
+		?>	
+		<script>window.print();	</script>
+		<?php
+	}
+	
 	function edit_detail_absensi()
 	{
 		$fschpeg_id = $this->uri->segment(3);

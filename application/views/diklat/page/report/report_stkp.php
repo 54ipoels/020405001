@@ -201,7 +201,7 @@
 							<center>
 							<?php if ($row_pegawai['p_stkp_image'] !== ""){?>
 								<a href="<?php echo base_url(); ?>index.php/diklat/view_pdf/<?php echo $row_pegawai['p_stkp_image'];?>" target="_blank" >
-									<?php echo $row_pegawai['p_stkp_no_license']; ?>
+									<?php echo $row_pegawai['p_stkp_no_license']; ?> 
 								</a>
 							<?php } else {
 									echo $row_pegawai['p_stkp_no_license'];
@@ -225,8 +225,11 @@
 							echo anchor('diklat/edit_stkp/'.$row_pegawai['id_peg_stkp'], 'edit');
 							echo " | ";
 							echo anchor('diklat/delete_stkp/'.$row_pegawai['id_peg_stkp'], 'delete');
-							
+							echo " | ";
 						?> 
+							<a href="<?php echo base_url().'index.php/diklat/remove_file_stkp/'.$row_pegawai['id_peg_stkp']; ?>">
+									<image src="<?php echo base_url();?>images/minus.png" title="remove file stkp">
+							</a>
 						</td>
                     </tr> 
 						<?php

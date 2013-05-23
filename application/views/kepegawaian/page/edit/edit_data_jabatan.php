@@ -74,13 +74,21 @@
                         <label>Kode Sub Unit:</label>
                         <div class="formRight">
 						<?php 
+						$sub_unit['']="";
+						foreach($list_sub_unit as $row_sub_unit_list){
+							$sub_unit[$row_sub_unit_list['su_kode_sub_unit']] = $row_sub_unit_list['su_sub_unit'];
+						}
+						echo  form_dropdown('sub_unit',$sub_unit,$row_unit['p_unt_kode_sub_unit']);
+						/*
 						$sub_unit = array(
 							'name' => 'sub_unit',
 							'id'   => 'sub_unit',
 							'style'=> 'width:30%',
 							'value'=> $row_unit['p_unt_kode_sub_unit']
 						);
-						echo form_input($sub_unit) ?></div>
+						echo form_input($sub_unit) 
+						*/
+						?></div>
                         <div class="clear"></div>
                     </div>
 					 <div class="formRow">
@@ -99,7 +107,7 @@
                         <div class="clear"></div>
                     </div>
 					<div class="formRow">
-                        <label>Grade:</label>
+                        <label>Grade (romawi):</label>
                         <div class="formRight"><?php 
 						$grade = array(
 							'name' => 'grade',

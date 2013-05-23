@@ -270,6 +270,21 @@ class kepegawaian extends CI_Model
 		return $query->result_array();
 	}
 	
+	function get_data_pegawai_phk($num,$offset)
+	{
+		$query = "
+					SELECT * FROM v3_peg_tmt AS tmt
+					LEFT JOIN (SELECT * FROM v3_pegawai) AS peg
+					ON tmt.p_tmt_nipp = peg.peg_nipp
+					WHERE tmt.p_tmt_reason = 'PHK' 
+					AND	tmt.p_tmt_ket <> 'aktif'
+					ORDER BY tmt.p_tmt_nipp DESC
+					LIMIT $offset , $num
+			";
+		$query = $this->db->query($query); 
+		return $query->result_array();
+	}
+	
 	function search_pegawai_pindah_cabang($num, $offset ,$search)
 	{
 		$query = "
@@ -288,6 +303,22 @@ class kepegawaian extends CI_Model
 		return $query->result_array();
 		
 	
+	}
+	
+	function search_pegawai_phk($num, $offset ,$search)
+	{
+		$query = "
+					SELECT * FROM v3_peg_tmt AS tmt
+					LEFT JOIN (SELECT * FROM v3_pegawai) AS peg
+					ON tmt.p_tmt_nipp = peg.peg_nipp
+					WHERE tmt.p_tmt_reason = 'PHK'  
+					AND	tmt.p_tmt_ket <> 'aktif' 
+					AND ( peg.peg_nipp LIKE '%$search%' OR peg.peg_nama LIKE '%$search%' OR tmt.p_tmt_end LIKE '%$search%'  )
+					ORDER BY tmt.p_tmt_nipp DESC
+					LIMIT $offset , $num
+			";
+		$query = $this->db->query($query); 
+		return $query->result_array();
 	}
 	
 	function get_data_jenis_pegawai($num, $offset, $type, $unit, $kelamin, $stk)
@@ -309,11 +340,11 @@ class kepegawaian extends CI_Model
 		
 		$query = ('
 			SELECT * FROM v3_pegawai AS peg
-			LEFT JOIN (SELECT * FROM v3_peg_tmt) AS peg_tmt
+			LEFT JOIN (SELECT * FROM v3_peg_tmt ORDER BY id_peg_tmt DESC) AS peg_tmt
 			ON peg.peg_nipp = peg_tmt.p_tmt_nipp
 			LEFT JOIN (SELECT * FROM v3_peg_unit ORDER BY id_peg_unit DESC ) AS peg_unit
 			ON peg.peg_nipp = peg_unit.p_unt_nipp
-			LEFT JOIN (SELECT * FROM v3_peg_status_keluarga ORDER BY id_peg_status_keluarga DESC LIMIT 1) AS peg_stk 
+			LEFT JOIN (SELECT * FROM v3_peg_status_keluarga ORDER BY id_peg_status_keluarga DESC) AS peg_stk 
 			ON peg.peg_nipp = peg_stk.p_stk_nipp
 			WHERE peg_tmt.p_tmt_end = 0000-00-00 '.$selection.'
 			GROUP BY peg.peg_nipp
@@ -557,6 +588,16 @@ class kepegawaian extends CI_Model
 		return $query->result_array();
 	}
 	
+	function get_list_sub_unit()
+	{
+		$query = "
+				SELECT * FROM v3_sub_unit
+				ORDER BY su_kode_unit,su_kode_sub_unit
+		";	
+		$query = $this->db->query($query);
+		return $query->result_array();
+	}
+	
 	function get_list_jabatan()
 	{
 		$query = $this->db->get('v3_peg_tab_jabatan');
@@ -632,11 +673,11 @@ class kepegawaian extends CI_Model
 		
 		$query = ('
 			SELECT * FROM v3_pegawai AS peg
-			LEFT JOIN (SELECT * FROM v3_peg_tmt) AS peg_tmt
+			LEFT JOIN (SELECT * FROM v3_peg_tmt ORDER BY id_peg_tmt DESC) AS peg_tmt
 			ON peg.peg_nipp = peg_tmt.p_tmt_nipp
 			LEFT JOIN (SELECT * FROM v3_peg_unit ORDER BY id_peg_unit DESC ) AS peg_unit
 			ON peg.peg_nipp = peg_unit.p_unt_nipp
-			LEFT JOIN (SELECT * FROM v3_peg_status_keluarga ORDER BY id_peg_status_keluarga DESC LIMIT 1) AS peg_stk 
+			LEFT JOIN (SELECT * FROM v3_peg_status_keluarga ORDER BY id_peg_status_keluarga DESC) AS peg_stk 
 			ON peg.peg_nipp = peg_stk.p_stk_nipp
 			WHERE peg_tmt.p_tmt_end = 0000-00-00 '.$selection.'
 			GROUP BY peg.peg_nipp
@@ -749,6 +790,20 @@ class kepegawaian extends CI_Model
 		return $query->num_rows();
 	}
 	
+	function count_phk()
+	{
+		$query = "
+					SELECT * FROM v3_peg_tmt AS tmt
+					LEFT JOIN (SELECT * FROM v3_pegawai) AS peg
+					ON tmt.p_tmt_nipp = peg.peg_nipp
+					WHERE tmt.p_tmt_reason = 'PHK' 
+					AND	tmt.p_tmt_ket <> 'aktif'
+					ORDER BY tmt.p_tmt_nipp DESC
+			";
+		$query = $this->db->query($query);
+		return $query->num_rows();
+	}
+	
 	function count_search_pindah_cabang($search)
 	{
 		$query = "
@@ -760,6 +815,21 @@ class kepegawaian extends CI_Model
 					WHERE tmt.p_tmt_reason = 'pindah cabang'  
 					AND	tmt.p_tmt_ket <> 'aktif' 
 					AND ( peg.peg_nipp LIKE '%$search%' OR cab.p_cab_tmt_start LIKE '%$search%' OR peg.peg_nama LIKE '%$search%' OR cab.p_cab_kode_cabang LIKE '%$search%' )
+					ORDER BY tmt.p_tmt_nipp DESC
+				";
+		$query = $this->db->query($query);
+		return $query->num_rows();
+	}
+	
+	function count_search_phk($search)
+	{
+		$query = "
+					SELECT * FROM v3_peg_tmt AS tmt
+					LEFT JOIN (SELECT * FROM v3_pegawai) AS peg
+					ON tmt.p_tmt_nipp = peg.peg_nipp
+					WHERE tmt.p_tmt_reason = 'PHK'  
+					AND	tmt.p_tmt_ket <> 'aktif' 
+					AND ( peg.peg_nipp LIKE '%$search%' OR peg.peg_nama LIKE '%$search%' OR tmt.p_tmt_end LIKE '%$search%' )
 					ORDER BY tmt.p_tmt_nipp DESC
 				";
 		$query = $this->db->query($query);
@@ -1016,9 +1086,21 @@ class kepegawaian extends CI_Model
 	function get_data_pegawai_unlimited()
 	{
 		$query="
-			SELECT * FROM `v3_pegawai`
-			LEFT JOIN `v3_peg_agama` ON `v3_pegawai`.`peg_nipp` = `v3_peg_agama`.`p_ag_nipp` 
-			LEFT JOIN `v3_peg_alamat` ON `v3_pegawai`.`peg_nipp` = `v3_peg_alamat`.`p_al_nipp` 
+			SELECT * FROM v3_pegawai AS peg
+			LEFT JOIN v3_peg_agama ON peg.peg_nipp = v3_peg_agama.p_ag_nipp 
+			LEFT JOIN v3_peg_alamat ON peg.peg_nipp = v3_peg_alamat.p_al_nipp
+			LEFT JOIN ( SELECT * FROM v3_peg_grade ORDER BY id_peg_grade DESC) AS peg_grade 
+			ON peg.peg_nipp = peg_grade.p_grd_nipp
+			LEFT JOIN (SELECT id_peg_unit, p_unt_nipp, p_unt_kode_unit, p_unt_kode_sub_unit FROM v3_peg_unit ORDER BY id_peg_unit DESC ) AS peg_unt 
+			ON peg.peg_nipp = peg_unt.p_unt_nipp 
+			LEFT JOIN (SELECT * FROM unit ORDER BY kode_unit DESC) AS unit
+			ON unit.kode_unit = peg_unt.p_unt_kode_unit
+			LEFT JOIN (SELECT * FROM v3_sub_unit ORDER BY su_kode_sub_unit DESC) AS sub_unit
+			ON sub_unit.su_kode_sub_unit = peg_unt.p_unt_kode_sub_unit
+			
+			GROUP BY peg.id_pegawai 
+			ORDER BY unit.kode_unit,sub_unit.su_kode_sub_unit,peg.peg_nipp ASC
+			
 		";
 		$query = $this->db->query($query);
 		return $query->result_array();

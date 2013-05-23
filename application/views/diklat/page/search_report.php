@@ -45,7 +45,7 @@
                         <div class="clear"></div>
                     </div>
 					<div class="formRow">
-                        <label>Training / Rating:</label>
+                        <label>Training / Jenis STKP:</label>
                         <div class="formRight"><?php 
 						 
 						$jenis_stkp = array(

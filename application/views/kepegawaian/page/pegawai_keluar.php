@@ -6,6 +6,7 @@
 				<div class="searchWidget1">
 					<a href="<?php echo 'pegawai_pensiun' ;?>"><input type="button" name="Pensiun" value="Pensiun" class="blueB m110"/></a>
 					<a href="<?php echo 'get_pindah_cabang' ;?>"><input type="button" name="Pindah" value="Pindah Cabang" class="blueB m110"/></a>
+					<a href="<?php echo 'get_pegawai_phk' ;?>"><input type="button" name="PHK" value="PHK" class="blueB m110"/></a>
 				</div>
             </td>
 	<td width="250px"><div class="searchWidget1"><?php echo form_open('pekerja/search_pegawai_keluar');?>
