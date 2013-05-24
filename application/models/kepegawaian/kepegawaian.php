@@ -369,11 +369,21 @@ class kepegawaian extends CI_Model
 	
 	function search_data_pegawai($num, $offset, $search)
 	{
+		$query = "SELECT * from v3_peg_tmt  AS tmt
+				LEFT JOIN (SELECT * FROM v3_pegawai) AS peg ON tmt.p_tmt_nipp = peg.peg_nipp
+				WHERE tmt.p_tmt_end = '0000-00-00' AND (peg.peg_nipp LIKE '%$search%'  OR peg.peg_nama LIKE '%$search%')
+				ORDER BY tmt.p_tmt_nipp DESC
+				LIMIT $offset , $num ";
+		$query = $this->db->query($query);
+		return $query->result_array();
+		
+		/*
 		$this->db->select('*');
 		$this->db->like('peg_nipp', $search);
 		$this->db->or_like('peg_nama', $search);
 		$query = $this->db->get('v3_pegawai', $num, $offset);
 		return $query->result_array();
+		*/
 	}
 	
 	function get_data_pegawai_by_nipp($nipp)
@@ -708,11 +718,19 @@ class kepegawaian extends CI_Model
 	
 	function count_search_pegawai($search)
 	{
-		$this->db->select('*');
+		$query = "SELECT * from v3_peg_tmt  AS tmt
+				LEFT JOIN (SELECT * FROM v3_pegawai) AS peg ON tmt.p_tmt_nipp = peg.peg_nipp
+				WHERE tmt.p_tmt_end = '0000-00-00' AND (peg.peg_nipp LIKE '%$search%'  OR peg.peg_nama LIKE '%$search%')
+				ORDER BY tmt.p_tmt_nipp DESC";
+		$query = $this->db->query($query);
+		return $query->num_rows();
+		
+		/*$this->db->select('*');
 		$this->db->like('peg_nipp', $search);
 		$this->db->or_like('peg_nama', $search);
 		$this->db->from('v3_pegawai');
 		return $this->db->count_all_results();
+		*/
 	}
 	
 	function count_search_pegawai_unit($search,$unit)
