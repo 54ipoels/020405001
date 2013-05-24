@@ -426,6 +426,7 @@ class diklat extends Application {
 		else {$tanggal_end = mdate($datestring, strtotime(str_replace('/','-',($this->input->post('tanggal_end')))));}
 		
 		$no_sertifikat = str_replace('/','',$this->input->post('license'));
+		$no_sertifikat = str_replace('.','-',$no_sertifikat);
 		
 		//upload file
 		
@@ -443,6 +444,7 @@ class diklat extends Application {
 		
 			$config['upload_path'] = './pegawai/diklat/';
 			$config['allowed_types'] = 'pdf|gif|jpg|png';
+			$config['max_size']  = '9999';
 			$config['overwrite']	=	TRUE;
 			$filenamebantu = str_replace(' ','_',$no_sertifikat)."-$id-".$update_on;
 			$config['file_name']=$filenamebantu;
@@ -517,6 +519,7 @@ class diklat extends Application {
 		else {$validitas_akhir = mdate($datestring, strtotime(str_replace('/','-',($this->input->post('validitas_akhir')))));}
 		
 		$no_sertifikat = str_replace('/','',$this->input->post('license'));
+		$no_sertifikat = str_replace('.','-',$no_sertifikat);
 		
 		//upload file
 		
@@ -534,6 +537,7 @@ class diklat extends Application {
 		
 			$config['upload_path'] = './pegawai/diklat/';
 			$config['allowed_types'] = 'pdf';
+			$config['max_size']  = '9999';
 			$config['overwrite']	=	TRUE;
 			if($this->input->post('rating') == "FWM" ){
 				$filenamebantu = trim($no_sertifikat)."-".$id."-".$update_on."(FWM)";
@@ -890,15 +894,62 @@ class diklat extends Application {
 		$time = time();
 		$tanggal = mdate($datestring, $time);
 		
-		
 		$pegawai_with_stkp_and_unit = $this->pendidikan->get_data_nstkp_with_unit_and_name_unlimited();
 				
 		//load our new PHPExcel library
 		$this->load->library('excel');
-		//activate worksheet number 1
-		$this->excel->setActiveSheetIndex(0);
+		
+		
+		for($n=0;$n<3;$n++){
 		//name the worksheet
-		$this->excel->getActiveSheet()->setTitle("Diklat Non STKP ");
+		if($n == 0){
+			$status="Tetap";
+		}
+		if($n == 1){
+			$status="Outsource";
+			$this->excel->createSheet(1);
+		}
+		if($n == 2){
+			$status="PKWT";
+			$this->excel->createSheet(2);
+		}
+			$this->excel->getActiveSheet()->setTitle("Diklat Non STKP $status");
+			//set cell A1 content with some text
+		
+			$this->excel->getActiveSheet()->setCellValue('A6', 'NO');
+			$this->excel->getActiveSheet()->setCellValue('B6', 'NIPP');
+			$this->excel->getActiveSheet()->setCellValue('C6', 'NAMA');
+			$this->excel->getActiveSheet()->setCellValue('D6', 'TRAINING');
+			$this->excel->getActiveSheet()->setCellValue('E6', 'NO SERTIFIKAT');
+			$this->excel->getActiveSheet()->setCellValue('F6', 'PELAKSANAAN');
+			$this->excel->getActiveSheet()->setCellValue('H6', 'LEMBAGA PELAKSANAAN');
+			//$this->excel->getActiveSheet()->setCellValue('H2', 'Pelaksanaan');
+			$this->excel->getActiveSheet()->setCellValue('F7', 'From');
+			$this->excel->getActiveSheet()->setCellValue('G7', 'Until');
+			
+			//JUDUL KOP
+			$this->excel->getActiveSheet()->setCellValue('A2', 'DATA NON STKP');
+			$this->excel->getActiveSheet()->setCellValue('A3', 'PT. GAPURA ANGKASA CABANG BANDARA NGURAH RAI');
+			$this->excel->getActiveSheet()->setCellValue('A4', 'DENPASAR');
+					
+			$tetap=7;
+			$os=7;
+			$pkwt=7;
+			$number=0;
+			$unit="kosong";
+			$sub_unit="kosong";
+			
+			$nipp = '';
+			$nipp_tetap = '';
+			$nipp_os = '';
+			$nipp_pkwt = '';
+		
+		}
+		
+		
+		$pegawai_with_stkp_and_unit = $this->pendidikan->get_data_nstkp_with_unit_and_name_and_status_unlimited();
+		/*
+		$this->excel->getActiveSheet()->setTitle("Diklat Non STKP $status");
 		//set cell A1 content with some text
 		
 		$this->excel->getActiveSheet()->setCellValue('A6', 'NO');
@@ -923,9 +974,28 @@ class diklat extends Application {
 		$sub_unit="kosong";
 		
 		$nipp = '';
+		*/
 		foreach ($pegawai_with_stkp_and_unit as $row_pegawai) :
 		{ 
-			$i++;
+			if($row_pegawai['p_tmt_status'] == "Tetap"){
+				$i=$tetap++;
+				$n=0;
+				
+			}
+			if($row_pegawai['p_tmt_status'] == "Outsource"){
+				$i=$os++;
+				$n=1;
+				
+				
+			}
+			if($row_pegawai['p_tmt_status'] == "PKWT"){
+				$i=$pkwt++;	
+				$n=2;
+				
+			}
+			$this->excel->setActiveSheetIndex($n);
+			
+		
 			$number++;
 			
 			if($row_pegawai['p_unt_kode_unit'] !== $unit){
@@ -946,17 +1016,17 @@ class diklat extends Application {
 			}
 			
 			
-			//untuk memasukkan data ke excel
-			if ($row_pegawai['p_nstkp_nipp'] == $nipp)
+			if ($row_pegawai['p_nstkp_nipp'] == $nipp_tetap)
 			{
-				$nipp = '';
-				$nama = '';
+				$nipp_tetap = '';
+				$nama_tetap = '';
 			}
 			else
-			{
-				$nipp = $row_pegawai['p_nstkp_nipp'];
-				$nama = $row_pegawai['peg_nama'];
+			{	
+				$nipp_tetap = $row_pegawai['p_nstkp_nipp'];
+				$nama_tetap = $row_pegawai['peg_nama'];
 			}
+			
 			if ($row_pegawai['p_nstkp_pelaksanaan'] == '0000-00-00')
 			{
 				$pelaksanaan = '-';
@@ -973,6 +1043,7 @@ class diklat extends Application {
 			{
 				$stkp_selesai = mdate($datestring,strtotime($row_pegawai['p_nstkp_selesai']));
 			}
+			
 					
 			//masukkan data ke tabel excel
 			$this->excel->getActiveSheet()->setCellValue("A$i", "$number");
@@ -1045,6 +1116,9 @@ class diklat extends Application {
 		$objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel5');  
 		//force user to download the Excel file without writing it to server's HD
 		$objWriter->save('php://output');
+		
+		
+		
 		
 	}
 	

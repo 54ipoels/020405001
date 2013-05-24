@@ -45,7 +45,7 @@
                     </tr>
                 </thead>
 				<tfoot>
-					<tr><td colspan=12><center><div class="pagination"><?php echo $this->pagination->create_links();?></div></center></td></td></tr>
+					<tr><td colspan=14><center><div class="pagination"><?php echo $this->pagination->create_links();?></div></center></td></td></tr>
 				</tfoot>
 				<tbody>
 				<?php 
@@ -145,7 +145,7 @@
 					$num_anak++;
 					}
 					}
-					$number++; ?> <tr><td colspan="12" style="background-color:#ffdfdf"></td></tr><?php
+					$number++; ?> <tr><td colspan="14" style="background-color:#ffdfdf"></td></tr><?php
 				}endforeach; 
 				?>
                 </tbody>

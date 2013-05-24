@@ -98,11 +98,12 @@
                         <td>Tanggal Lahir</td>
                         <td>Jenis Kelamin</td>
                         <td>Golongan Darah</td>
+                        <td>M.K.A</td>
                         <td>Detail</td>
                     </tr>
                 </thead>
 				<tfoot>
-					<tr><td colspan=8><center><div class="pagination"><?php echo $this->pagination->create_links();?></div></center></td></td></tr>
+					<tr><td colspan=9><center><div class="pagination"><?php echo $this->pagination->create_links();?></div></center></td></td></tr>
 				</tfoot>
 				<tbody>
 				<?php 
@@ -131,6 +132,17 @@
 					{
 						$gol_darah = $row_pegawai['peg_gol_darah'];
 					}
+					if (($row_pegawai['p_tmt_tmt'] == NULL) OR ($row_pegawai['p_tmt_tmt'] == '0000-00-00'))
+					{
+						$tmt = '-';
+						$mka = '-';
+					}
+					else
+					{
+						$time=time();
+						$mka = floor(($time-strtotime($row_pegawai['p_tmt_tmt']))/(365*24*60*60));
+					} 
+					
 					$datestring = "%d-%m-%Y" ;
 					$tgl_lahir = mdate($datestring,strtotime($row_pegawai['peg_tgl_lahir']));
 					$detail = anchor('pekerja/get_pegawai/'.$row_pegawai['peg_nipp'],'Detail');  ?>
@@ -142,6 +154,7 @@
 						<td><center><?php echo $tgl_lahir; ?></center></td>
 						<td><center><?php echo strtoupper($kelamin); ?></center></td>
 						<td><center><?php echo $gol_darah; ?></center></td>
+						<td><center><?php echo $mka; ?></center></td>
 						<td><center><?php echo $detail ?></center></td>
                     </tr> <?php
 					$number++;
