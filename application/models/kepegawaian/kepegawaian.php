@@ -87,6 +87,7 @@ class kepegawaian extends CI_Model
 	
 	function search_data_pegawai_full($num, $offset, $search)
 	{
+		$search=str_replace("'", '', $search);
 		$query = ("
 			SELECT * FROM v3_pegawai AS peg
 			LEFT JOIN (SELECT p_stk_nipp, p_stk_status_keluarga FROM v3_peg_status_keluarga) AS stk
@@ -112,6 +113,7 @@ class kepegawaian extends CI_Model
 	
 	function search_data_pegawai_full_unit($num, $offset, $search, $unit)
 	{
+		$search=str_replace("'", '', $search);
 		$selection = " ";
 		if (strtoupper($unit) !== 'ALL'){
 			$selection .= " AND unit.p_unt_kode_unit = '$unit' ";
@@ -219,6 +221,7 @@ class kepegawaian extends CI_Model
 	
 	function search_data_pegawai_keluar($num, $offset, $tahun, $type, $limit, $search)
 	{
+		$search=str_replace("'", '', $search);
 		$query = ('
 					SELECT * FROM v3_pegawai AS peg
 					LEFT JOIN (	SELECT * FROM v3_peg_jabatan ORDER BY id_peg_jabatan DESC) AS peg_jbt ON peg.peg_nipp = peg_jbt.p_jbt_nipp
@@ -237,6 +240,7 @@ class kepegawaian extends CI_Model
 	}
 	function countSearchPegawaiKeluar( $tahun, $type, $limit, $search)
 	{
+		$search=str_replace("'", '', $search);
 		$query = ('
 					SELECT * FROM v3_pegawai AS peg
 					LEFT JOIN (	SELECT * FROM v3_peg_jabatan ORDER BY id_peg_jabatan DESC) AS peg_jbt ON peg.peg_nipp = peg_jbt.p_jbt_nipp
@@ -287,6 +291,7 @@ class kepegawaian extends CI_Model
 	
 	function search_pegawai_pindah_cabang($num, $offset ,$search)
 	{
+		$search=str_replace("'", '', $search);
 		$query = "
 					SELECT * FROM v3_peg_tmt AS tmt
 					LEFT JOIN (SELECT * FROM v3_pegawai) AS peg
@@ -307,6 +312,7 @@ class kepegawaian extends CI_Model
 	
 	function search_pegawai_phk($num, $offset ,$search)
 	{
+		$search=str_replace("'", '', $search);
 		$query = "
 					SELECT * FROM v3_peg_tmt AS tmt
 					LEFT JOIN (SELECT * FROM v3_pegawai) AS peg
@@ -369,6 +375,7 @@ class kepegawaian extends CI_Model
 	
 	function search_data_pegawai($num, $offset, $search)
 	{
+		$search=str_replace("'", '', $search);
 		$query = "SELECT * from v3_peg_tmt  AS tmt
 				LEFT JOIN (SELECT * FROM v3_pegawai) AS peg ON tmt.p_tmt_nipp = peg.peg_nipp
 				WHERE tmt.p_tmt_end = '0000-00-00' AND (peg.peg_nipp LIKE '%$search%'  OR peg.peg_nama LIKE '%$search%')
@@ -717,7 +724,7 @@ class kepegawaian extends CI_Model
 	}
 	
 	function count_search_pegawai($search)
-	{
+	{	$search=str_replace("'", '', $search);
 		$query = "SELECT * from v3_peg_tmt  AS tmt
 				LEFT JOIN (SELECT * FROM v3_pegawai) AS peg ON tmt.p_tmt_nipp = peg.peg_nipp
 				WHERE tmt.p_tmt_end = '0000-00-00' AND (peg.peg_nipp LIKE '%$search%'  OR peg.peg_nama LIKE '%$search%')
@@ -735,6 +742,7 @@ class kepegawaian extends CI_Model
 	
 	function count_search_pegawai_unit($search,$unit)
 	{
+		$search=str_replace("'", '', $search);
 		$selection = " ";
 		if (strtoupper($unit) !== 'ALL'){
 			$selection .= " AND unit.p_unt_kode_unit = '$unit' ";
@@ -824,6 +832,7 @@ class kepegawaian extends CI_Model
 	
 	function count_search_pindah_cabang($search)
 	{
+		$search=str_replace("'", '', $search);
 		$query = "
 					SELECT * FROM v3_peg_tmt AS tmt
 					LEFT JOIN (SELECT * FROM v3_pegawai) AS peg
@@ -841,6 +850,7 @@ class kepegawaian extends CI_Model
 	
 	function count_search_phk($search)
 	{
+		$search=str_replace("'", '', $search);
 		$query = "
 					SELECT * FROM v3_peg_tmt AS tmt
 					LEFT JOIN (SELECT * FROM v3_pegawai) AS peg
