@@ -999,6 +999,12 @@ class kepegawaian extends CI_Model
 		$nipp = $this->uri->segment(3);
 		$this->db->where('p_ay_nipp', $nipp);
 		$this->db->update('v3_peg_ayah',$data_ayah);
+		
+		if($this->db->affected_rows()){
+      		return '1';
+      	}else{
+      		return '0';
+		}
 	}
 	
 	function update_data_ibu($data_ibu)
@@ -1006,6 +1012,11 @@ class kepegawaian extends CI_Model
 		$nipp = $this->uri->segment(3);
 		$this->db->where('p_ibu_nipp', $nipp);
 		$this->db->update('v3_peg_ibu',$data_ibu);
+		if($this->db->affected_rows()){
+      		return '1';
+      	}else{
+      		return '0';
+		}
 	}
 	
 	function update_data_mert_ayah($data_mert_ayah)
@@ -1013,6 +1024,11 @@ class kepegawaian extends CI_Model
 		$nipp = $this->uri->segment(3);
 		$this->db->where('p_may_nipp', $nipp);
 		$this->db->update('v3_peg_mert_ayah',$data_mert_ayah);
+		if($this->db->affected_rows()){
+      		return '1';
+      	}else{
+      		return '0';
+		}
 	}
 	
 	function update_data_mert_ibu($data_mert_ibu)
@@ -1020,6 +1036,11 @@ class kepegawaian extends CI_Model
 		$nipp = $this->uri->segment(3);
 		$this->db->where('p_mib_nipp', $nipp);
 		$this->db->update('v3_peg_mert_ibu',$data_mert_ibu);
+		if($this->db->affected_rows()){
+      		return '1';
+      	}else{
+      		return '0';
+		}
 	}
 	
 	function update_data_anak($data_anak)

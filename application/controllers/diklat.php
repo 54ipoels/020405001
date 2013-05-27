@@ -888,7 +888,8 @@ class diklat extends Application {
 	function excel_non_stkp()
 	{
 		//pengalokasian memory untuk run this function
-		ini_set("memory_limit","300M");
+		ini_set("memory_limit","1024M");
+		ini_set('max_execution_time','600');
 		
 		$datestring = "%Y-%m-%d" ;
 		$time = time();
@@ -913,6 +914,8 @@ class diklat extends Application {
 			$status="PKWT";
 			$this->excel->createSheet(2);
 		}
+		
+			$this->excel->setActiveSheetIndex($n);
 			$this->excel->getActiveSheet()->setTitle("Diklat Non STKP $status");
 			//set cell A1 content with some text
 		
@@ -943,7 +946,15 @@ class diklat extends Application {
 			$nipp_tetap = '';
 			$nipp_os = '';
 			$nipp_pkwt = '';
-		
+			$unit_tetap = '';
+			$sub_unit_tetap = '';
+			$unit_os = '';
+			$sub_unit_os = '';
+			$unit_pkwt = '';
+			$sub_unit_pkwt = '';
+			$number_tetap=0;
+			$number_pkwt=0;
+			$number_os=0;
 		}
 		
 		
@@ -975,28 +986,42 @@ class diklat extends Application {
 		
 		$nipp = '';
 		*/
+		$n=0;
 		foreach ($pegawai_with_stkp_and_unit as $row_pegawai) :
 		{ 
+			//echo "xxxxxx".$row_pegawai['p_tmt_status']." ".$n;;
+			if ($row_pegawai['p_tmt_status'] !== NULL){
 			if($row_pegawai['p_tmt_status'] == "Tetap"){
-				$i=$tetap++;
+				$tetap++;
+				$i=$tetap;
 				$n=0;
-				
+				$unit=$unit_tetap;
+				$sub_unit=$sub_unit_tetap;
+				$number_tetap++;
+				$number=$number_tetap;
 			}
 			if($row_pegawai['p_tmt_status'] == "Outsource"){
-				$i=$os++;
+				$os++;
+				$i=$os;
 				$n=1;
-				
-				
+				$unit=$unit_os;
+				$sub_unit=$sub_unit_os;
+				$number_os++;
+				$number=$number_os;
 			}
 			if($row_pegawai['p_tmt_status'] == "PKWT"){
-				$i=$pkwt++;	
+				$pkwt++;
+				$i=$pkwt;	
 				$n=2;
-				
+				$unit=$unit_pkwt;
+				$sub_unit=$sub_unit_pkwt;
+				$number_pkwt++;
+				$number=$number_pkwt;
 			}
+			
 			$this->excel->setActiveSheetIndex($n);
 			
-		
-			$number++;
+			//$number++;
 			
 			if($row_pegawai['p_unt_kode_unit'] !== $unit){
 				$this->excel->getActiveSheet()->setCellValue("C$i", strtoupper("$row_pegawai[nama_unit]"));
@@ -1016,15 +1041,15 @@ class diklat extends Application {
 			}
 			
 			
-			if ($row_pegawai['p_nstkp_nipp'] == $nipp_tetap)
+			if ($row_pegawai['p_nstkp_nipp'] == $nipp)
 			{
-				$nipp_tetap = '';
-				$nama_tetap = '';
+				$nipp = '';
+				$nama = '';
 			}
 			else
 			{	
-				$nipp_tetap = $row_pegawai['p_nstkp_nipp'];
-				$nama_tetap = $row_pegawai['peg_nama'];
+				$nipp = $row_pegawai['p_nstkp_nipp'];
+				$nama = $row_pegawai['peg_nama'];
 			}
 			
 			if ($row_pegawai['p_nstkp_pelaksanaan'] == '0000-00-00')
@@ -1055,12 +1080,36 @@ class diklat extends Application {
 			$this->excel->getActiveSheet()->setCellValue("G$i", "$stkp_selesai");
 			$this->excel->getActiveSheet()->setCellValue("H$i", "$row_pegawai[p_nstkp_lembaga]");
 					
-			$nipp = $row_pegawai['peg_nipp'];
-			$unit = $row_pegawai['p_unt_kode_unit'];
-			$sub_unit = $row_pegawai['p_unt_kode_sub_unit'];
+			if($row_pegawai['p_tmt_status'] == "Tetap"){
+				$tetap = $i;
+				$unit_tetap = $row_pegawai['p_unt_kode_unit'];
+				$sub_unit_tetap = $row_pegawai['p_unt_kode_sub_unit'];
+			}
+			if($row_pegawai['p_tmt_status'] == "Outsource"){
+				$os = $i;
+				$unit_os = $row_pegawai['p_unt_kode_unit'];
+				$sub_unit_os = $row_pegawai['p_unt_kode_sub_unit'];
+			}
+			if($row_pegawai['p_tmt_status'] == "PKWT"){
+				$pkwt = $i;	
+				$unit_pkwt = $row_pegawai['p_unt_kode_unit'];
+				$sub_unit_pkwt = $row_pegawai['p_unt_kode_sub_unit'];
+			}
 			
+			$nipp = $row_pegawai['peg_nipp'];
+			//$unit = $row_pegawai['p_unt_kode_unit'];
+			//$sub_unit = $row_pegawai['p_unt_kode_sub_unit'];
+			
+			}
 		}endforeach;
 		
+		for($no=0;$no<3;$no++){
+		
+		if($no == 0){ $i=$tetap; }
+		else if($no == 1){ $i=$os;}
+		else if($no == 2){ $i=$pkwt;}
+		
+		$this->excel->setActiveSheetIndex($no);
 		//change the font size
 		$this->excel->getActiveSheet()->getStyle("A2:A4")->getFont()->setSize(14);
 		$this->excel->getActiveSheet()->getStyle("A6:H7")->getFont()->setSize(11);
@@ -1105,6 +1154,7 @@ class diklat extends Application {
 		//Set paper size to A4
 		//$this->excel->getActiveSheet()->getPageSetup()->setPaperSize(PHPExcel_Worksheet_PageSetup::PAPERSIZE_A4);
 		
+		}
 		
 		$filename="Report Non STKP.xls"; //save our workbook as this file name
 		header('Content-Type: application/vnd.ms-excel'); //mime type
@@ -1116,9 +1166,6 @@ class diklat extends Application {
 		$objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel5');  
 		//force user to download the Excel file without writing it to server's HD
 		$objWriter->save('php://output');
-		
-		
-		
 		
 	}
 	

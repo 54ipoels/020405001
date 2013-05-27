@@ -642,8 +642,8 @@ class pekerja extends Application {
 		
 		$data_pasangan = array(
 				'p_ps_nipp' 			=> $nipp,
-				'p_ps_nama' 			=> $this->input->post('nama_psg'),
-				'p_ps_tmpt_lahir'		=> $this->input->post('tmpt_psgn'),
+				'p_ps_nama' 			=> $this->input->post('nama_psgn'),
+				'p_ps_tmpt_lahir'		=> $this->input->post('tempat_psgn'),
 				'p_ps_tgl_lahir'		=> $tanggal_psgn,
 				'p_ps_tgl_meninggal'	=> $meninggal_psgn,
 				'p_ps_alamat'			=> $this->input->post('almt_psgn'),
@@ -1140,8 +1140,12 @@ class pekerja extends Application {
 				'p_ay_update_by'		=> 'admin'
 			);
 			
-		$this->kepegawaian->update_data_ayah($data_ayah);
-		
+		if ($this->input->post('nama_ayah') !== ""){	
+			if ($this->kepegawaian->update_data_ayah($data_ayah) == 0){
+				$data_ayah['p_ay_nipp'] = $nipp;
+				$this->kepegawaian->insert_data_pegawai_ayah($data_ayah);
+			}
+		}
 		
 		if($this->input->post('tgl_ibu')=="00/00/0000"){$tgl_ibu="0000-00-00";}
 		else{$tgl_ibu = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tgl_ibu'))));}
@@ -1158,9 +1162,12 @@ class pekerja extends Application {
 				//'p_ibu_update_on'		=> $tanggal,
 				'p_ibu_update_by'		=> 'admin'
 			);
-			
-		$this->kepegawaian->update_data_ibu($data_ibu);
-		
+		if ($this->input->post('nama_ibu') !== ""){	
+			if ($this->kepegawaian->update_data_ibu($data_ibu) == 0){
+				$data_ibu['p_ibu_nipp'] = $nipp;
+				$this->kepegawaian->insert_data_pegawai_ibu($data_ibu);
+			}
+		}
 		redirect('pekerja/get_pegawai/'.$nipp);
 	}
 	
@@ -1190,7 +1197,7 @@ class pekerja extends Application {
 			);
 			
 		$this->kepegawaian->update_data_mert_ayah($data_mert_ayah);
-	
+		
 		if($this->input->post('tgl_ibu')=="00/00/0000"){$tgl_ibu="0000-00-00";}
 		else{$tgl_ibu = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tgl_ibu'))));}
 		if($this->input->post('meninggal_ibu')=="00/00/0000"){$meninggal_ibu="0000-00-00";}
@@ -1208,6 +1215,8 @@ class pekerja extends Application {
 			);
 			
 		$this->kepegawaian->update_data_mert_ibu($data_mert_ibu);
+		
+		
 		redirect('pekerja/get_pegawai/'.$nipp);
 	}
 	
