@@ -32,9 +32,19 @@ class kepegawaian extends CI_Model
 	
 	function get_data_pegawai_aktif($num,$offset)
 	{
+		/*
 		$query = "	SELECT * from v3_peg_tmt  AS tmt
 					LEFT JOIN (SELECT * FROM v3_pegawai) AS peg ON tmt.p_tmt_nipp = peg.peg_nipp
 					WHERE tmt.p_tmt_end = '0000-00-00'
+					GROUP BY tmt.p_tmt_nipp 
+					ORDER BY tmt.p_tmt_nipp DESC
+					LIMIT $offset , $num
+				";
+		*/
+		$query = "	SELECT * FROM v3_pegawai AS peg
+					LEFT JOIN (SELECT * from v3_peg_tmt ORDER BY id_peg_tmt DESC) AS tmt ON tmt.p_tmt_nipp = peg.peg_nipp
+					WHERE tmt.p_tmt_end = '0000-00-00'
+					GROUP BY peg.peg_nipp 
 					ORDER BY tmt.p_tmt_nipp DESC
 					LIMIT $offset , $num
 				";
@@ -62,9 +72,9 @@ class kepegawaian extends CI_Model
 		*/
 		$query = ("
 			SELECT * FROM v3_pegawai AS peg
-			LEFT JOIN (SELECT p_stk_nipp, p_stk_status_keluarga FROM v3_peg_status_keluarga) AS stk
+			LEFT JOIN (SELECT p_stk_nipp, p_stk_status_keluarga FROM v3_peg_status_keluarga ORDER BY id_peg_status_keluarga DESC) AS stk
 			ON peg.peg_nipp = stk.p_stk_nipp
-			LEFT JOIN (SELECT p_ag_nipp, p_ag_agama FROM v3_peg_agama) AS agm
+			LEFT JOIN (SELECT p_ag_nipp, p_ag_agama FROM v3_peg_agama ORDER BY id_peg_agama DESC) AS agm
 			ON peg.peg_nipp = agm.p_ag_nipp
 			LEFT JOIN (SELECT p_al_nipp, p_al_jalan, p_al_kelurahan, p_al_kecamatan, p_al_kabupaten, p_al_provinsi, p_al_no_telp FROM v3_peg_alamat) AS alm
 			ON peg.peg_nipp = alm.p_al_nipp
@@ -90,9 +100,9 @@ class kepegawaian extends CI_Model
 		$search=str_replace("'", '', $search);
 		$query = ("
 			SELECT * FROM v3_pegawai AS peg
-			LEFT JOIN (SELECT p_stk_nipp, p_stk_status_keluarga FROM v3_peg_status_keluarga) AS stk
+			LEFT JOIN (SELECT p_stk_nipp, p_stk_status_keluarga FROM v3_peg_status_keluarga ORDER BY id_peg_status_keluarga DESC) AS stk
 			ON peg.peg_nipp = stk.p_stk_nipp
-			LEFT JOIN (SELECT p_ag_nipp, p_ag_agama FROM v3_peg_agama) AS agm
+			LEFT JOIN (SELECT p_ag_nipp, p_ag_agama FROM v3_peg_agama ORDER BY id_peg_agama DESC) AS agm
 			ON peg.peg_nipp = agm.p_ag_nipp
 			LEFT JOIN (SELECT p_al_nipp, p_al_jalan, p_al_kelurahan, p_al_kecamatan, p_al_kabupaten, p_al_provinsi, p_al_no_telp FROM v3_peg_alamat) AS alm
 			ON peg.peg_nipp = alm.p_al_nipp
@@ -122,9 +132,9 @@ class kepegawaian extends CI_Model
 		
 		$query = ("
 			SELECT * FROM v3_pegawai AS peg
-			LEFT JOIN (SELECT p_stk_nipp, p_stk_status_keluarga FROM v3_peg_status_keluarga) AS stk
+			LEFT JOIN (SELECT p_stk_nipp, p_stk_status_keluarga FROM v3_peg_status_keluarga ORDER BY id_peg_status_keluarga DESC) AS stk
 			ON peg.peg_nipp = stk.p_stk_nipp
-			LEFT JOIN (SELECT p_ag_nipp, p_ag_agama FROM v3_peg_agama) AS agm
+			LEFT JOIN (SELECT p_ag_nipp, p_ag_agama FROM v3_peg_agama ORDER BY id_peg_agama DESC) AS agm
 			ON peg.peg_nipp = agm.p_ag_nipp
 			LEFT JOIN (SELECT p_al_nipp, p_al_jalan, p_al_kelurahan, p_al_kecamatan, p_al_kabupaten, p_al_provinsi, p_al_no_telp FROM v3_peg_alamat) AS alm
 			ON peg.peg_nipp = alm.p_al_nipp
@@ -148,9 +158,9 @@ class kepegawaian extends CI_Model
 	{
 		$query = ("
 			SELECT * FROM v3_pegawai AS peg
-			LEFT JOIN (SELECT p_stk_nipp, p_stk_status_keluarga FROM v3_peg_status_keluarga) AS stk
+			LEFT JOIN (SELECT p_stk_nipp, p_stk_status_keluarga FROM v3_peg_status_keluarga ORDER BY id_peg_status_keluarga DESC) AS stk
 			ON peg.peg_nipp = stk.p_stk_nipp
-			LEFT JOIN (SELECT p_ag_nipp, p_ag_agama FROM v3_peg_agama) AS agm
+			LEFT JOIN (SELECT p_ag_nipp, p_ag_agama FROM v3_peg_agama ORDER BY id_peg_agama DESC) AS agm
 			ON peg.peg_nipp = agm.p_ag_nipp
 			LEFT JOIN (SELECT p_al_nipp, p_al_jalan, p_al_kelurahan, p_al_kecamatan, p_al_kabupaten, p_al_provinsi, p_al_no_telp FROM v3_peg_alamat) AS alm
 			ON peg.peg_nipp = alm.p_al_nipp
@@ -168,14 +178,20 @@ class kepegawaian extends CI_Model
 	
 	function get_data_pegawai_pensiun($num, $offset, $tahun, $type, $limit)
 	{
+		$type2=$type+1; // utk pegawai lahir desember
+		$tahun2=$tahun-1;
 		$query = ('
 			SELECT * FROM v3_pegawai AS peg 
-			LEFT JOIN (SELECT p_jbt_nipp, p_jbt_jabatan FROM v3_peg_jabatan) AS peg_jbt 
+			LEFT JOIN (SELECT p_jbt_nipp, p_jbt_jabatan FROM v3_peg_jabatan ORDER BY id_peg_jabatan DESC) AS peg_jbt 
 			ON peg.peg_nipp = peg_jbt.p_jbt_nipp 
-			LEFT JOIN (SELECT p_tmt_nipp, p_tmt_tmt, p_tmt_end FROM v3_peg_tmt) AS peg_tmt 
+			LEFT JOIN (SELECT p_tmt_nipp, p_tmt_tmt, p_tmt_end FROM v3_peg_tmt ORDER BY id_peg_tmt DESC) AS peg_tmt 
 			ON peg.peg_nipp = peg_tmt.p_tmt_nipp 
-			WHERE \''.$tahun.'\' - YEAR(peg.peg_tgl_lahir) > \''.$type.'\'
+			LEFT JOIN (SELECT * FROM v3_peg_ppb ORDER BY p_ppb_update_on DESC) AS peg_ppb
+			ON peg.peg_nipp = peg_ppb.p_ppb_nipp
+			WHERE (\''.$tahun.'\' - YEAR(peg.peg_tgl_lahir) > \''.$type.'\'  
 			AND \''.$tahun.'\' - YEAR(peg.peg_tgl_lahir) < \''.$limit.'\'
+			AND MONTH(peg.peg_tgl_lahir) <> 12 ) 
+			OR (MONTH(peg.peg_tgl_lahir) = 12 AND DATE(peg.peg_tgl_lahir) > 1 AND  \''.$tahun2.'\' - YEAR(peg.peg_tgl_lahir) > \''.$type.'\' AND \''.$tahun2.'\' - YEAR(peg.peg_tgl_lahir) < \''.$limit.'\')
 			AND peg_tmt.p_tmt_end = \'0000-00-00\'
 			GROUP BY peg.peg_nipp DESC
 			ORDER BY peg.peg_tgl_lahir DESC
@@ -327,20 +343,23 @@ class kepegawaian extends CI_Model
 		return $query->result_array();
 	}
 	
-	function get_data_jenis_pegawai($num, $offset, $type, $unit, $kelamin, $stk)
+	function get_data_jenis_pegawai($num, $offset, $type, $unit, $kelamin, $stk, $sub_unit)
 	{
 		$selection = "";
 		if ($type !== 'all'){
 			$selection .= " AND peg_tmt.p_tmt_status = '$type' "  ;
 		}
 		if ($unit !== 'all'){
-			$selection .= " AND peg_unit.p_unt_kode_unit = '$unit' "  ;
+			$selection .= " AND peg_unit.p_unt_kode_unit = '$unit' AND peg_unit.p_unt_tmt_end='0000-00-00' "  ;
 		}
 		if ($kelamin !== 'all'){
 			$selection .= " AND peg.peg_jns_kelamin = '$kelamin' "  ;
 		}
 		if ($stk !== 'all'){
-			$selection .= " AND peg_stk.p_stk_status_keluarga = '$stk' "  ;
+			$selection .= " AND peg_stk.p_stk_status_keluarga = '$stk' AND peg_stk.p_stk_aktif='1' "  ;
+		}
+		if ($sub_unit !== 'all'){
+			$selection .= " AND peg_unit.p_unt_kode_sub_unit = '$sub_unit'  "  ;
 		}
 		
 		
@@ -621,6 +640,23 @@ class kepegawaian extends CI_Model
 		return $query->result_array();
 	}
 	
+	function get_data_pegawai_last_status_keluarga($nipp)
+	{
+		$query = "
+				SELECT * FROM v3_peg_status_keluarga 
+				WHERE p_stk_nipp = '$nipp'
+				ORDER BY p_stk_update_on,id_peg_status_keluarga DESC
+				LIMIT 1
+		";	
+		$query = $this->db->query($query);
+		$result = $query->result_array();
+		$id_peg_stk= "";
+		foreach($result as $row){
+			$id_peg_stk = $row['id_peg_status_keluarga'];
+		}
+		return $id_peg_stk;
+	}
+	
 	function add_list_jabatan()
 	{
 		$data = array('peg_tab_jab' => $this->input->post('jabatan'));
@@ -662,16 +698,30 @@ class kepegawaian extends CI_Model
 	
 	function countPegawaiPensiun($tahun, $type, $limit)
 	{
+		$type2=$type+1; // utk pegawai lahir desember
+		$tahun2=$tahun-1;
 		$query = ('
-			SELECT * FROM v3_pegawai AS peg
-			WHERE \''.$tahun.'\' - YEAR(peg.peg_tgl_lahir) > \''.$type.'\'
+			SELECT * FROM v3_pegawai AS peg 
+			LEFT JOIN (SELECT p_jbt_nipp, p_jbt_jabatan FROM v3_peg_jabatan ORDER BY id_peg_jabatan DESC) AS peg_jbt 
+			ON peg.peg_nipp = peg_jbt.p_jbt_nipp 
+			LEFT JOIN (SELECT p_tmt_nipp, p_tmt_tmt, p_tmt_end FROM v3_peg_tmt ORDER BY id_peg_tmt DESC) AS peg_tmt 
+			ON peg.peg_nipp = peg_tmt.p_tmt_nipp 
+			LEFT JOIN (SELECT * FROM v3_peg_ppb ORDER BY p_ppb_update_on DESC) AS peg_ppb
+			ON peg.peg_nipp = peg_ppb.p_ppb_nipp
+			WHERE (\''.$tahun.'\' - YEAR(peg.peg_tgl_lahir) > \''.$type.'\'  
 			AND \''.$tahun.'\' - YEAR(peg.peg_tgl_lahir) < \''.$limit.'\'
+			AND MONTH(peg.peg_tgl_lahir) <> 12 ) 
+			OR (MONTH(peg.peg_tgl_lahir) = 12 AND DATE(peg.peg_tgl_lahir) > 1 AND  \''.$tahun2.'\' - YEAR(peg.peg_tgl_lahir) > \''.$type.'\' AND \''.$tahun2.'\' - YEAR(peg.peg_tgl_lahir) < \''.$limit.'\')
+			AND peg_tmt.p_tmt_end = \'0000-00-00\'
+			GROUP BY peg.peg_nipp DESC
+			ORDER BY peg.peg_tgl_lahir DESC
 		');
+		
 		$query = $this->db->query($query); 
 		return $query->num_rows();
 	}
 	
-	function count_jenis_Pegawai($type,$unit,$kelamin,$stk)
+	function count_jenis_Pegawai($type,$unit,$kelamin,$stk,$sub_unit)
 	{
 		$selection = "";
 		if ($type !== 'all'){
@@ -684,7 +734,10 @@ class kepegawaian extends CI_Model
 			$selection .= " AND peg.peg_jns_kelamin = '$kelamin' "  ;
 		}
 		if ($stk !== 'all'){
-			$selection .= " AND peg_stk.p_stk_status_keluarga = '$stk' "  ;
+			$selection .= " AND peg_stk.p_stk_status_keluarga = '$stk' AND peg_stk.p_stk_aktif='1' "  ;
+		}
+		if ($sub_unit !== 'all'){
+			$selection .= " AND peg_unit.p_unt_kode_sub_unit = '$sub_unit' "  ;
 		}
 		
 		
@@ -792,10 +845,18 @@ class kepegawaian extends CI_Model
 		/*$this->db->where('p_tmt_end','0000-00-00' );
 		return $this->db->count_all_results('v3_peg_tmt');
 		*/
-	
+		/*
 		$query = "	SELECT * FROM v3_peg_tmt  AS tmt
 					LEFT JOIN (SELECT * FROM v3_pegawai) AS peg ON tmt.p_tmt_nipp = peg.peg_nipp
 					WHERE tmt.p_tmt_end = '0000-00-00'
+					GROUP BY tmt.p_tmt_nipp
+					ORDER BY tmt.p_tmt_nipp DESC
+				";
+		*/
+		$query = "	SELECT * FROM v3_pegawai AS peg
+					LEFT JOIN (SELECT * from v3_peg_tmt ORDER BY id_peg_tmt DESC) AS tmt ON tmt.p_tmt_nipp = peg.peg_nipp
+					WHERE tmt.p_tmt_end = '0000-00-00'
+					GROUP BY peg.peg_nipp 
 					ORDER BY tmt.p_tmt_nipp DESC
 				";
 		$query = $this->db->query($query);
@@ -1098,6 +1159,13 @@ class kepegawaian extends CI_Model
 		$this->db->delete('v3_peg_pasangan');
 	}
 	
+	function update_data_status_keluarga($data_stk,$id_stk)
+	{
+		$this->db->where('id_peg_status_keluarga', $id_stk);
+		$this->db->update('v3_peg_status_keluarga',$data_stk);
+	}
+	
+	
 	function delete_pegawai($nipp)
 	{
 		$this->db->where('peg_nipp', $nipp);
@@ -1219,6 +1287,20 @@ class kepegawaian extends CI_Model
 		return $query->result_array();
 	}
 	
+	function get_data_ppb($nipp){
+		$query = "SELECT * FROM v3_peg_ppb WHERE p_ppb_nipp = '$nipp' ORDER BY p_ppb_update_on DESC LIMIT 1";
+		$query = $this->db->query($query);
+		if ($query->num_rows()>0){
+			return $query->result_array();
+		} else {
+			return 0;
+		}
+	}
+	
+	function insert_data_ppb($data)
+	{
+		$this->db->insert('v3_peg_ppb',$data);
+	}
 	
 	
 	function update_tmt_end($id,$tmt)

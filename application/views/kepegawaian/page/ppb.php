@@ -58,11 +58,12 @@
                         <td>Tanggal Pensiun</td>
                         <td>Jenis Kelamin</td>
                         <td>Jabatan</td>
-                        <td>Detail</td>
+                        <td>Keterangan</td>
+						<td>Detail</td>
                     </tr>
                 </thead>
 				<tfoot>
-					<tr><td colspan=9><center><div class="pagination"><?php echo $this->pagination->create_links();?></div></center></td></td></tr>
+					<tr><td colspan=10><center><div class="pagination"><?php echo $this->pagination->create_links();?></div></center></td></td></tr>
 				</tfoot>
 				<tbody>
 				<?php 
@@ -84,7 +85,10 @@
 					}
 					$datestring = "%d-%m-%Y" ;
 					$tgl_lahir = mdate($datestring,strtotime($row_pegawai['peg_tgl_lahir']));
-					$detail = anchor('pekerja/get_pegawai/'.$row_pegawai['peg_nipp'],'Detail'); 
+					if (($row_pegawai['p_ppb_tanggal'] == '0000-00-00')OR($row_pegawai['p_ppb_tanggal']==NULL)){$tgl_ppb = '00-00-0000';}
+					else { $tgl_ppb = mdate($datestring,strtotime($row_pegawai['p_ppb_tanggal'])); }
+					$detail = anchor('pekerja/get_pegawai/'.$row_pegawai['peg_nipp'],img(array('src' => 'admin/images/icons/control/16/customers.png', 'alt' => 'Detail',  'title' => 'Detail'))); 
+					$edit_ppb = anchor('pekerja/edit_ppb_pegawai/'.$row_pegawai['peg_nipp'],img(array('src' => 'admin/images/icons/control/16/pencil.png', 'alt' => 'edit ppb',  'title' => 'edit ppb'))); 
 					$tanggal_pensiun = tanggal_pensiun($tgl_lahir);
 					?>
 					<tr>
@@ -96,7 +100,10 @@
 						<td><center><?php echo $tanggal_pensiun; ?></center></td>
 						<td><center><?php echo strtoupper($kelamin); ?></center></td>
 						<td><center><?php echo strtoupper($row_pegawai['p_jbt_jabatan']); ?></center></td>
-						<td><center><?php echo $detail ?></center></td>
+						<td><?php echo $tgl_ppb; 
+								if($row_pegawai['p_ppb_status'] == 1){echo "<img src=".base_url()."admin/images/icons/control/16/check.png >";}
+							?></td>
+						<td><center><?php echo $detail." ".$edit_ppb;  ?></center></td>
                     </tr> <?php
 					$number++;
 				}endforeach; 

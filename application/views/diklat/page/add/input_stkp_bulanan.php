@@ -41,6 +41,19 @@
                         <div class="clear"></div>
                     </div>
                     <div class="formRow">
+                        <label>Instruktur :<span class="req">*</span></label>
+                        <div class="formRight"><?php 
+						$instruktur = array(
+							'name' => 'instruktur',
+							'id'   => 'instruktur',
+							'style'=> 'width:80%',
+						);
+						echo form_input($instruktur) ?><br/>
+						<?php echo form_error('instruktur')?></div>
+                        <div class="clear"></div>
+                    </div>
+					
+					<div class="formRow">
                         <label>Jumlah Pegawai :<span class="req">*</span></label>
                         <div class="formRight"><?php 
 						$jumlah = array(

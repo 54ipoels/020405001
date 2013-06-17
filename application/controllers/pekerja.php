@@ -11,21 +11,6 @@ class pekerja extends Application {
 		$this->ag_auth->restrict('user');
     }
 
-	/** 
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -  
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in 
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see http://codeigniter.com/user_guide/general/urls.html
-	 */
 	public function index()
 	{
 		#pagination config
@@ -41,6 +26,7 @@ class pekerja extends Application {
 		//$data['pegawai'] = $this->kepegawaian->get_data_pegawai($config['per_page'],$page);
 		$data['pegawai'] = $this->kepegawaian->get_data_pegawai_aktif($config['per_page'],$page);
 		$data['list_unit'] = $this->kepegawaian->get_list_unit();
+		$data['list_sub_unit'] = $this->kepegawaian->get_list_sub_unit();
 		$data['count']	= $config['total_rows'];
 		$data['page'] = 'Pegawai';
 		$data['view_pekerja'] = 'class="this"';
@@ -77,6 +63,64 @@ class pekerja extends Application {
 		#calling view
 		$this->load->view('kepegawaian/index',$data);
 	}
+	public function pegawai_ppb()
+	{
+		$datestring = "%Y" ;
+		$time = time();
+		$tanggal = mdate($datestring, $time);
+		
+		$type = '52';
+		$limit = '54';
+		
+		#pagination config
+		//$config['base_url'] = base_url().'index.php/pekerja/pegawai_pensiun/'; //set the base url for pagination
+		$config['base_url'] = base_url().'index.php/pekerja/sort_tahun_pensiun/'.$tanggal.'/PPB'; //set the base url for pagination
+		$config['total_rows'] = $this->kepegawaian->countPegawaiPensiun($tanggal,$type, $limit); //total rows
+		$config['per_page'] = 10; //the number of per page for pagination
+		$config['uri_segment'] = 3; //see from base_url. 3 for this case
+		$this->pagination->initialize($config);
+		$page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+		
+		#data preparing
+		$data['pegawai'] = $this->kepegawaian->get_data_pegawai_pensiun($config['per_page'],$page, $tanggal, $type, $limit);
+		$data['count']	= $config['total_rows'];
+		$data['page'] = 'Data PPB';
+		$data['tanggal'] = $tanggal;
+		$data['type'] = 'ALL';
+		$data['view_ppb'] = 'class="this"';
+		$data['page_karyawan'] = 'yes';
+		#calling view
+		$this->load->view('kepegawaian/index',$data);
+	}
+	public function pegawai_mpp()
+	{
+		$datestring = "%Y" ;
+		$time = time();
+		$tanggal = mdate($datestring, $time);
+		
+		$type = '54';
+		$limit = '56';
+		
+		#pagination config
+		//$config['base_url'] = base_url().'index.php/pekerja/pegawai_pensiun/'; //set the base url for pagination
+		$config['base_url'] = base_url().'index.php/pekerja/sort_tahun_pensiun/'.$tanggal.'/MPP'; //set the base url for pagination
+		$config['total_rows'] = $this->kepegawaian->countPegawaiPensiun($tanggal,$type, $limit); //total rows
+		$config['per_page'] = 10; //the number of per page for pagination
+		$config['uri_segment'] = 3; //see from base_url. 3 for this case
+		$this->pagination->initialize($config);
+		$page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+		
+		#data preparing
+		$data['pegawai'] = $this->kepegawaian->get_data_pegawai_pensiun($config['per_page'],$page, $tanggal, $type, $limit);
+		$data['count']	= $config['total_rows'];
+		$data['page'] = 'Data Pensiun';
+		$data['tanggal'] = $tanggal;
+		$data['type'] = 'ALL';
+		$data['view_mpp'] = 'class="this"';
+		$data['page_karyawan'] = 'yes';
+		#calling view
+		$this->load->view('kepegawaian/index',$data);
+	}
 	
 	public function sort_jenis_pegawai()
 	{
@@ -86,23 +130,26 @@ class pekerja extends Application {
 			$unit = $this->uri->segment(4);
 			$kelamin = $this->uri->segment(5);
 			$stk = $this->uri->segment(6);
+			$sub_unit = $this->uri->segment(7);
 		}else{
 			$type = $this->input->post('jenis');
 			$unit = $this->input->post('unit');
 			$kelamin = $this->input->post('kelamin');
 			$stk = $this->input->post('stk');
+			$sub_unit = $this->input->post('sub_unit');
 		}
 		#pagination config
-		$config['base_url'] = base_url().'index.php/pekerja/sort_jenis_pegawai/'.$type.'/'.$unit.'/'.$kelamin.'/'.$stk.'/'; //set the base url for pagination
-		$config['total_rows'] = $this->kepegawaian->count_jenis_Pegawai($type,$unit,$kelamin,$stk); //total rows
+		$config['base_url'] = base_url().'index.php/pekerja/sort_jenis_pegawai/'.$type.'/'.$unit.'/'.$kelamin.'/'.$stk.'/'.$sub_unit.'/'; //set the base url for pagination
+		$config['total_rows'] = $this->kepegawaian->count_jenis_Pegawai($type,$unit,$kelamin,$stk,$sub_unit); //total rows
 		$config['per_page'] = 10; //the number of per page for pagination
-		$config['uri_segment'] = 7; //see from base_url. 3 for this case
+		$config['uri_segment'] = 8; //see from base_url. 3 for this case
 		$this->pagination->initialize($config);
-		$page = ($this->uri->segment(7)) ? $this->uri->segment(7) : 0;
+		$page = ($this->uri->segment(8)) ? $this->uri->segment(8) : 0;
 		
 		#data preparing
-		$data['pegawai'] = $this->kepegawaian->get_data_jenis_pegawai($config['per_page'],$page,$type,$unit,$kelamin,$stk);
+		$data['pegawai'] = $this->kepegawaian->get_data_jenis_pegawai($config['per_page'],$page,$type,$unit,$kelamin,$stk,$sub_unit);
 		$data['list_unit'] = $this->kepegawaian->get_list_unit();
+		$data['list_sub_unit'] = $this->kepegawaian->get_list_sub_unit();
 		$data['count']	= $config['total_rows'];
 		$data['page'] = 'Pegawai';
 		$data['page_karyawan'] = 'yes';
@@ -276,9 +323,15 @@ class pekerja extends Application {
 		$data['tanggal'] = $tanggal;
 		$data['type']	 = $type;
 		$data['count']	= $config['total_rows'];
-		$data['page'] = 'Data Pensiun';
+		if($type == 'PPB'){ 
+			$data['page'] = 'Data PPB';
+			$data['view_ppb'] = 'class="this"';
+		}else{ 
+			$data['page'] = 'Data Pensiun'; 
+			$data['view_pensiun'] = 'class="this"';
+		}
+		
 		$data['page_karyawan'] = 'yes';
-		$data['view_pensiun'] = 'class="this"';
 		
 		#calling view
 		$this->load->view('kepegawaian/index',$data);
@@ -339,6 +392,7 @@ class pekerja extends Application {
 		
 		$data['pegawai'] = $this->kepegawaian->search_data_pegawai($config['per_page'], $page, $search_data);
 		$data['list_unit'] = $this->kepegawaian->get_list_unit();
+		$data['list_sub_unit'] = $this->kepegawaian->get_list_sub_unit();
 		$data['count']	= $config['total_rows'];
 		$data['page'] = 'Search Result';
 		$data['page_karyawan'] = 'yes';
@@ -386,6 +440,7 @@ class pekerja extends Application {
 	public function add_pegawai()
 	{
 		$data['list_unit'] = $this->kepegawaian->get_list_unit();
+		$data['list_sub_unit'] = $this->kepegawaian->get_list_sub_unit();
 		$data['list_jabatan'] = $this->kepegawaian->get_list_jabatan();
 		$data['view_add_pekerja'] = 'class="this"';
 		$data['page'] = 'Input Data Diri';
@@ -436,6 +491,7 @@ class pekerja extends Application {
 		$time = time();
 		$tanggal = mdate($datestring, $time);
 		$data['list_unit'] = $this->kepegawaian->get_list_unit();
+		$data['list_sub_unit'] = $this->kepegawaian->get_list_sub_unit();
 		$data['list_jabatan'] = $this->kepegawaian->get_list_jabatan();
 		
 		#set validation		
@@ -466,7 +522,7 @@ class pekerja extends Application {
 			else{ $tgl_lahir = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tanggal'))));}
 		
 			$data_pegawai = array(
-					'peg_nipp' 			=> $this->input->post('nipp'),
+					'peg_nipp' 			=> trim($this->input->post('nipp')),
 					'peg_nama' 			=> $this->input->post('nama'),
 					'peg_tmpt_lahir'	=> $this->input->post('tempat'),
 					'peg_tgl_lahir'		=> $tgl_lahir,
@@ -480,7 +536,7 @@ class pekerja extends Application {
 			$this->kepegawaian->insert_data_pegawai($data_pegawai);
 			
 			$data_agama = array(
-					'p_ag_nipp' 		=> $this->input->post('nipp'),
+					'p_ag_nipp' 		=> trim($this->input->post('nipp')),
 					'p_ag_agama' 		=> $this->input->post('agama'),
 					//'p_ag_update_on'	=> $tanggal,
 					'p_ag_update_by'	=> 'admin'
@@ -489,7 +545,7 @@ class pekerja extends Application {
 			$this->kepegawaian->insert_data_pegawai_agama($data_agama);
 			
 			$data_alamat = array(
-					'p_al_nipp' 		=> $this->input->post('nipp'),
+					'p_al_nipp' 		=> trim($this->input->post('nipp')),
 					'p_al_jalan' 		=> $this->input->post('jalan'),
 					'p_al_kelurahan'	=> $this->input->post('kelurahan'),
 					'p_al_kecamatan' 	=> $this->input->post('kecamatan'),
@@ -504,7 +560,7 @@ class pekerja extends Application {
 			$this->kepegawaian->insert_data_pegawai_alamat($data_alamat);
 			
 			$data_bahasa = array(
-					'p_bhs_nipp' 		=> $this->input->post('nipp'),
+					'p_bhs_nipp' 		=> trim($this->input->post('nipp')),
 					'p_bhs_bahasa' 		=> $this->input->post('bahasa'),
 					'p_bhs_update_on'	=> $tanggal,
 					'p_bhs_update_by'	=> 'admin'
@@ -513,7 +569,7 @@ class pekerja extends Application {
 			$this->kepegawaian->insert_data_pegawai_bahasa($data_bahasa);
 				
 			$data_fisik = array(
-					'p_fs_nipp' 		=> $this->input->post('nipp'),
+					'p_fs_nipp' 		=> trim($this->input->post('nipp')),
 					'p_fs_tinggi' 		=> $this->input->post('tinggi'),
 					'p_fs_berat' 		=> $this->input->post('berat'),
 					'p_fs_foto'	 		=> '',
@@ -524,7 +580,7 @@ class pekerja extends Application {
 			$this->kepegawaian->insert_data_pegawai_fisik($data_fisik);
 				
 			$data_jabatan = array(
-					'p_jbt_nipp' 		=> $this->input->post('nipp'),
+					'p_jbt_nipp' 		=> trim($this->input->post('nipp')),
 					'p_jbt_jabatan' 	=> $this->input->post('jabatan'),
 					//'p_jbt_update_on'	=> $tanggal,
 					'p_jbt_update_by'	=> 'admin'
@@ -533,7 +589,7 @@ class pekerja extends Application {
 			$this->kepegawaian->insert_data_pegawai_jabatan($data_jabatan);
 			
 			$data_pendidikan = array(
-					'p_pdd_nipp' 		=> $this->input->post('nipp'),
+					'p_pdd_nipp' 		=> trim($this->input->post('nipp')),
 					'p_pdd_tingkat' 	=> $this->input->post('tgk_pdd'),
 					'p_pdd_lp' 			=> $this->input->post('lembaga'),
 					'p_pdd_masuk'		=> $this->input->post('masuk'),
@@ -555,7 +611,7 @@ class pekerja extends Application {
 			}
 			
 			$data_tmt = array(
-					'p_tmt_nipp' 			=> $this->input->post('nipp'),
+					'p_tmt_nipp' 			=> trim($this->input->post('nipp')),
 					'p_tmt_status'			=> $this->input->post('stp'),
 					'p_tmt_provider'		=> $provider,
 					'p_tmt_tmt'				=> mdate($datestring, strtotime($this->input->post('tmt'))),
@@ -566,8 +622,10 @@ class pekerja extends Application {
 			$this->kepegawaian->insert_data_pegawai_tmt($data_tmt);
 				
 			$data_unit = array(
-					'p_unt_nipp' 			=> $this->input->post('nipp'),
+					'p_unt_nipp' 			=> trim($this->input->post('nipp')),
 					'p_unt_kode_unit'		=> $this->input->post('unit'),
+					'p_unt_kode_sub_unit'	=> $this->input->post('sub_unit'),
+					'p_unt_tmt_start'				=> mdate($datestring, strtotime($this->input->post('tmt'))),
 					//'p_unt_update_on'		=> $tanggal,
 					'p_unt_update_by'		=> 'admin'
 				);
@@ -575,8 +633,9 @@ class pekerja extends Application {
 			$this->kepegawaian->insert_data_pegawai_unit($data_unit);
 			
 			$data_stk = array(
-					'p_stk_nipp' 			  => $this->input->post('nipp'),
+					'p_stk_nipp' 			  => trim($this->input->post('nipp')),
 					'p_stk_status_keluarga'   => $this->input->post('stk'),
+					'p_stk_aktif'   		  => '0',
 					//'p_stk_update_on'		  => $tanggal,
 					'p_stk_update_by'		  => 'admin'
 				);
@@ -586,11 +645,11 @@ class pekerja extends Application {
 			#redirecting
 			if ($this->input->post('stk') != 'TK')
 			{
-				redirect('pekerja/add_pegawai_pasangan/'.$this->input->post('nipp'));
+				redirect('pekerja/add_pegawai_pasangan/'.trim($this->input->post('nipp')));
 			}
 			else
 			{
-				redirect('pekerja/add_pegawai_ortu/pribadi/'.$this->input->post('nipp'));
+				redirect('pekerja/add_pegawai_ortu/pribadi/'.trim($this->input->post('nipp')));
 			}
 			}
 		} else {
@@ -1035,9 +1094,18 @@ class pekerja extends Application {
 				
 		$this->kepegawaian->insert_data_pegawai_agama($data_agama);
 		
+		//update data stk terakhir
+		$id_stk = $this->kepegawaian->get_data_pegawai_last_status_keluarga($nipp);		
+		$data_stk_last = array(
+					'p_stk_aktif'			  => '0',
+					'p_stk_update_by'		  => 'admin'
+				);
+		$this->kepegawaian->update_data_pegawai_status_keluarga($data_stk_last,$id_stk);		
+				
 		$data_stk = array(
 					'p_stk_nipp' 			  => $nipp,
 					'p_stk_status_keluarga'   => $this->input->post('stk'),
+					'p_stk_aktif'			=>	'1',
 					//'p_stk_update_on'		  => $tanggal,
 					'p_stk_update_by'		  => 'admin'
 				);
@@ -1742,6 +1810,7 @@ class pekerja extends Application {
 	<?php
 	}
 	
+	
 	function print_detail_pegawai($nipp)
 	{
 		$data['pegawai'] = $this->kepegawaian->get_data_pegawai_by_nipp($nipp);
@@ -1904,6 +1973,30 @@ class pekerja extends Application {
 		$this->kepegawaian->delete_data_anak($id);
 		$this->kepegawaian->insert_data_pegawai_status_keluarga($data_stk);	
 		redirect('pekerja/get_pegawai/'.$nipp);
+	}
+	
+	public function edit_ppb_pegawai(){
+		$nipp = $this->uri->segment(3);
+		$data['nipp'] = $nipp;
+		$data['ppb']  = $this->kepegawaian->get_data_ppb($nipp);
+		$data['page'] = 'Edit PPB';
+		$data['view_ppb'] = 'class="this"';
+		$data['page_karyawan'] = 'yes';
+		$this->load->view('kepegawaian/index',$data);
+	}
+	
+	function submit_ppb_pegawai(){
+		$datestring = "%Y-%m-%d" ;
+		if ($this->input->post('tanggal') == '00/00/0000'){$tanggal = "00-00-0000";}
+		else { $tanggal = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tanggal'))));}
+		$data = array(
+						"p_ppb_nipp"	=> $this->input->post('nipp'),
+						"p_ppb_tanggal"	=> $tanggal,
+						"p_ppb_status"	=> $this->input->post('status_ppb'),
+						"p_ppb_update_by" => username(),
+			);
+		$this->kepegawaian->insert_data_ppb($data);
+		redirect('pekerja/pegawai_ppb');
 	}
 	
 	
@@ -2394,7 +2487,8 @@ class pekerja extends Application {
 		$time = time();
 		$tanggal = mdate($datestring, $time);
 		
-		$type = '52';
+		//$type = '52';
+		$type = '55';
 		$limit = '100';
 		
 		#pagination config
@@ -2430,7 +2524,8 @@ class pekerja extends Application {
 		$time = time();
 		$tanggal = mdate($datestring, $time);
 		
-		$type = '52';
+		//$type = '52';
+		$type = '55';
 		$limit = '100';
 		
 		#pagination config
@@ -2443,6 +2538,7 @@ class pekerja extends Application {
 		
 		#data preparing
 		$data['pegawai'] = $this->kepegawaian->search_data_pegawai_keluar($config['per_page'],$page, $tanggal, $type, $limit, $search_data);
+		$data['count'] = $config['total_rows'];
 		$data['page'] = 'Data Pegawai Keluar';
 		$data['tanggal'] = $tanggal;
 		$data['type'] = 'ALL';
@@ -2451,6 +2547,7 @@ class pekerja extends Application {
 		#calling view
 		$this->load->view('kepegawaian/index',$data);
 	}
+	
 	
 	
 	public function upload()

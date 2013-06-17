@@ -66,6 +66,14 @@
 		{
 			$this->load->view('kepegawaian/page/phk');
 		}else
+		if ($page == 'Data PPB')
+		{
+			$this->load->view('kepegawaian/page/ppb');
+		}else
+		if ($page == 'Edit PPB')
+		{
+			$this->load->view('kepegawaian/page/edit/edit_data_ppb');
+		}else
 		if ($page == 'Data SDM')
 		{
 			$this->load->view('kepegawaian/page/data_sdm');

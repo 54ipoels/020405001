@@ -10,7 +10,7 @@
            	</div>
       	</td>
 		-->
-        <td width="410px">
+        <td width="810px">
 			<div class="formBaru"><label><!--Unit Kerja: &nbsp --></label>
 				<?php $unit = array();
 					$unit['ALL'] = 'Unit Kerja';
@@ -21,7 +21,15 @@
 					endforeach; 
 					echo form_dropdown('unit',$unit,$this->uri->segment(4)); 
 				?>&nbsp 
-	
+				<?php $subunit = array();
+					$sub_unit['ALL'] = 'Sub Unit';
+					foreach ($list_sub_unit as $row_sub_unit) :
+					{
+						$sub_unit[$row_sub_unit['su_kode_sub_unit']] = ($row_sub_unit['su_sub_unit']);
+					} 
+					endforeach; 
+					echo form_dropdown('sub_unit',$sub_unit,$this->uri->segment(5)); 
+				?>&nbsp 
 				<?php $submit = array(
 					'class' => 'blueB m110',
 					'id'	=> 'next2',
@@ -62,6 +70,7 @@
                         <td rowspan="2">No Sertifikat</td>
                         <td colspan="2">Pelaksanaan</td>
                         <td rowspan="2">Lembaga</td>
+						<td rowspan="2">Instruktur</td>
 						<td rowspan="2">Actions</td>
                     </tr>
 					<tr>
@@ -69,13 +78,13 @@
                 </thead> 
 				<tfoot>
 					<tr>
-                    	<td colspan=3 align="left">
+                    	<td colspan="3" align="left">
 							<?php 
 								$attr= array('target' => '_blank');
 								echo anchor('diklat/excel_non_stkp','Export to Excel',$attr);
 						 	?>
                        	</td>
-                        <td colspan="3"><div class="pagination"><?php echo $this->pagination->create_links();?></div></td>
+                        <td colspan="4"><div class="pagination"><?php echo $this->pagination->create_links();?></div></td>
                         <td colspan="3" align="right">EMS 2.0.1 | developed by www.studiokami.com</td>
                    	</tr>
 				</tfoot>
@@ -161,6 +170,7 @@
 						<td><center><?php echo $mulai; ?></center></td>
 						<td><center><?php echo $selesai; ?></center></td>
 						<td><center><?php echo $lembaga_anchor; ?></center></td>
+						<td><center><?php echo $row_pegawai['p_nstkp_instruktur']; ?></center></td>
 						<td><center><?php 
 										echo anchor('diklat/search_pegawai/'.$row_pegawai['peg_nipp'], "add"); 
 										echo " | ";

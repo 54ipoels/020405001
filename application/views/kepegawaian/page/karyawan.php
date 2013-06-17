@@ -2,7 +2,7 @@
 <?php echo form_open('pekerja/sort_jenis_pegawai/') ?>
 <fieldset class="step" id="w2first">
 <table>
-<tr><td width="1040px" colspan="2">
+<tr><td width="750px">
 <div class="formBaru"><label> &nbsp </label>
 <?php
 	$var_jenis=$this->input->post('jenis');
@@ -13,6 +13,8 @@
 	if($var_kelamin==NULL){$var_kelamin = $this->uri->segment(5);}
 	$var_stk=$this->input->post('stk');
 	if($var_stk==NULL){$var_stk = $this->uri->segment(6);}
+	$var_sub_unit=$this->input->post('sub_unit');
+	if($var_sub_unit==NULL){$var_sub_unit = $this->uri->segment(7);}
 	
 	$jenis = array(
 		'all' => 'jenis pegawai',
@@ -29,56 +31,57 @@
 		} endforeach; 
 	echo form_dropdown('unit',$unit,$var_unit); 
 	
-	$kelamin = array(
+	$sub_unit['all'] = "sub unit";
+	foreach ($list_sub_unit as $row_sub_unit) :
+		{
+			$sub_unit[$row_sub_unit['su_kode_sub_unit']] = ($row_sub_unit['su_sub_unit']);
+		} endforeach; 
+	echo form_dropdown('sub_unit',$sub_unit,$var_sub_unit); 
+	?>
+	</div></td>
+	<td></td>
+</tr>
+
+<tr>
+	<td width="750px" align ="left">
+		<div class="formBaru"><label> &nbsp </label>
+		<?php
+		$kelamin = array(
 		'all' => 'jenis kelamin',
 		'L' => 'LAKI-LAKI',
 		'P' => 'PEREMPUAN',
 		);
-	echo form_dropdown('kelamin',$kelamin,$var_kelamin) ;
+		echo form_dropdown('kelamin',$kelamin,$var_kelamin) ;
+		
+		$stk = array(
+			'all' => 'status keluarga',
+			'TK' => 'TK',
+			'K'  => 'K',
+			'K1' => 'K1',
+			'K2' => 'K2',
+			'K3' => 'K3',
+			'K4' => 'K4',
+			'K5' => 'K5',
+			);
+		echo form_dropdown('stk',$stk, $var_stk) ;
+		?>
+		</form>&nbsp
+		<?php $submit = array(
+			'class' => 'blueB m110',
+			'id'	=> 'next2',
+			'value'	=> 'Sort',
+			);
+		echo form_submit($submit)?></form>
+		</div>
+	</td>
+	<td width="250px">
+		<div class="searchWidget1"><?php echo form_open('pekerja/search_pegawai');?>
+            <input type="text" name="search"  placeholder="Enter search text..." />
+            <input type="submit" name="find" value="" class="blueB m110"/></div>
+        </form>
+	</td>
+</tr>
 	
-	$stk = array(
-		'all' => 'status keluarga',
-		'TK' => 'TK',
-		'K'  => 'K',
-		'K1' => 'K1',
-		'K2' => 'K2',
-		'K3' => 'K3',
-		'K4' => 'K4',
-		'K5' => 'K5',
-		);
-	echo form_dropdown('stk',$stk, $var_stk) ;
-	?>
-	</form>&nbsp
-	<?php $submit = array(
-		'class' => 'blueB m110',
-		'id'	=> 'next2',
-		'value'	=> 'Sort',
-		);
-	echo form_submit($submit)?></form></div></td></tr>
-
-<tr>
-<td width="410px">
-<?php /* ?>
-<?php echo form_open('pekerja/sort_unit_pegawai/'); ?>
-<div class="formBaru"><label>Unit Kerja: &nbsp </label>
-<?php $unit = array();
-	foreach ($list_unit as $row_unit) :
-		{
-			$unit[$row_unit['kode_unit']] = ($row_unit['nama_unit']);
-		} endforeach; 
-	echo form_dropdown('unit',$unit); ?></form>&nbsp 
-	<?php $submit = array(
-		'class' => 'blueB m110',
-		'id'	=> 'next2',
-		'value'	=> 'Sort',
-		); 
-	echo form_submit($submit)?></form></div>
-<?php */ ?>
-</td>
-	<td width="250px"><div class="searchWidget1"><?php echo form_open('pekerja/search_pegawai');?>
-                        <input type="text" name="search"  placeholder="Enter search text..." />
-                        <input type="submit" name="find" value="" class="blueB m110"/></div>
-                    </form></td></tr>
 </div></div></table></fieldset>
 </div>
 <div class="oneTwo"> 

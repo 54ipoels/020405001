@@ -130,6 +130,7 @@ class diklat extends Application {
 		$page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
 		
 		$data['list_unit'] = $this->pendidikan->get_list_unit();
+		$data['list_sub_unit'] = $this->kepegawaian->get_list_sub_unit();
 		$data['pegawai_with_stkp_and_unit'] = $this->pendidikan->get_data_nstkp_with_unit_and_name($config['per_page'],$page);
 		$data['page'] = 'Report Non STKP';
 		$data['view_input_nstkp'] = 'class="this"';
@@ -214,6 +215,7 @@ class diklat extends Application {
 		$data['pegawai_with_stkp_and_unit'] = $this->pendidikan->search_data_stkp_with_unit_and_name($config['per_page'],$page, $jenis, $stkp, $unit);
 		$data['month'] = mdate($monthstring, $time);
 		$data['year'] = mdate($yearstring, $time);
+		$data['jenis_search'] = $jenis_search;
 		
 		$data['page'] = 'Report STKP';
 		$data['page_diklat'] = 'yes';
@@ -224,6 +226,7 @@ class diklat extends Application {
 	
 	public function sort_non_stkp()
 	{
+		/*
 		if ($this->input->post('license')== NULL)
 		{
 			$stkp = '%'.str_replace('%20',' ',$this->uri->segment(3)).'%';
@@ -266,10 +269,26 @@ class diklat extends Application {
 				$stkp_search = $this->input->post('license');
 			}
 		}
+		*/
+		
+		if (($this->input->post('unit')== NULL))
+		{
+			$unit = str_replace('%20',' ',$this->uri->segment(3));
+		}else{
+			$unit = $this->input->post('unit');
+		}
+		if (($this->input->post('sub_unit')== NULL))
+		{
+			$sub_unit = str_replace('%20',' ',$this->uri->segment(4));
+		}else{
+			$sub_unit = $this->input->post('sub_unit');
+		}
+		
 		
 		#pagination config
-		$config['base_url'] = base_url().'index.php/diklat/sort_non_stkp/'.$stkp_search.'/'.$unit_search; //set the base url for pagination
-		$config['total_rows'] = $this->pendidikan->count_non_STKP_Unit($stkp, $unit); //total rows
+		//$config['base_url'] = base_url().'index.php/diklat/sort_non_stkp/'.$stkp_search.'/'.$unit_search; //set the base url for pagination
+		$config['base_url'] = base_url().'index.php/diklat/sort_non_stkp/'.$unit.'/'.$sub_unit; //set the base url for pagination
+		$config['total_rows'] = $this->pendidikan->count_non_STKP_Unit($unit,$sub_unit); //total rows
 		$config['per_page'] = 10; //the number of per page for pagination
 		$config['uri_segment'] = 5; //see from base_url. 3 for this case
 		$this->pagination->initialize($config);
@@ -277,8 +296,9 @@ class diklat extends Application {
 		
 		$data['view_nstkp'] = 'class="this"';
 		$data['list_unit'] = $this->pendidikan->get_list_unit();
-		$data['pegawai_with_stkp_and_unit'] = $this->pendidikan->search_data_nstkp_with_unit_and_name($config['per_page'],$page, $stkp, $unit);
-		
+		$data['list_sub_unit'] = $this->kepegawaian->get_list_sub_unit();
+		//$data['pegawai_with_stkp_and_unit'] = $this->pendidikan->search_data_nstkp_with_unit_and_name($config['per_page'],$page, $stkp, $unit);
+		$data['pegawai_with_stkp_and_unit'] = $this->pendidikan->search_data_nstkp_with_unit_and_name($config['per_page'],$page,$unit,$sub_unit);		
 		$data['page'] = 'Report Non STKP';
 		$data['page_diklat'] = 'yes';
 		
@@ -374,6 +394,7 @@ class diklat extends Application {
 			$data['tanggal_end'] = $this->input->post('tanggal_end');
 			$data['license'] = $this->input->post('license');
 			$data['lp'] = $this->input->post('lp');
+			$data['instruktur'] = $this->input->post('instruktur');
 			$data['view_input_stkp'] = 'class="this"';
 			$data['page_diklat'] = 'yes';
 			
@@ -441,12 +462,14 @@ class diklat extends Application {
 		//Check if the file exists in the form
 		
 		if($_FILES['file']['name']!=""){
-		
+			$str=$_FILES['file']['name'];
+			$ext=explode('.',$str);
+			
 			$config['upload_path'] = './pegawai/diklat/';
 			$config['allowed_types'] = 'pdf|gif|jpg|png';
 			$config['max_size']  = '9999';
 			$config['overwrite']	=	TRUE;
-			$filenamebantu = str_replace(' ','_',$no_sertifikat)."-$id-".$update_on;
+			$filenamebantu = str_replace(' ','_',$no_sertifikat)."-$id-".$update_on.".".$ext[1];
 			$config['file_name']=$filenamebantu;
 			
 			//$this->load->library('upload', $config);
@@ -471,6 +494,7 @@ class diklat extends Application {
 					'p_nstkp_pelaksanaan'	=> $tanggal_start,
 					'p_nstkp_selesai'		=> $tanggal_end,
 					'p_nstkp_image'			=> $filenamebantu,
+					'p_nstkp_instruktur'	=> $this->input->post('instruktur'),
 					'p_nstkp_update_by'		=> username(),
 				);
 			}
@@ -482,6 +506,7 @@ class diklat extends Application {
 					'p_nstkp_no_license'	=> $this->input->post('license'),
 					'p_nstkp_pelaksanaan'	=> $tanggal_start,
 					'p_nstkp_selesai'		=> $tanggal_end,
+					'p_nstkp_instruktur'	=> $this->input->post('instruktur'),
 					'p_nstkp_update_by'		=> username(),
 				);
 		}
@@ -534,15 +559,17 @@ class diklat extends Application {
 		//Check if the file exists in the form
 		
 		if($_FILES['file']['name']!=""){
-		
+			$str=$_FILES['file']['name'];
+			$ext=explode('.',$str);
+			
 			$config['upload_path'] = './pegawai/diklat/';
-			$config['allowed_types'] = 'pdf';
+			$config['allowed_types'] = 'pdf|gif|jpg|png';
 			$config['max_size']  = '9999';
 			$config['overwrite']	=	TRUE;
 			if($this->input->post('rating') == "FWM" ){
-				$filenamebantu = trim($no_sertifikat)."-".$id."-".$update_on."(FWM)";
+				$filenamebantu = trim($no_sertifikat)."-".$id."-".$update_on."FWM.".$ext[1];
 			}else{
-				$filenamebantu = trim($no_sertifikat)."-".$id."-".$update_on;
+				$filenamebantu = trim($no_sertifikat)."-".$id."-".$update_on.".".$ext[1];
 			}
 			$config['file_name']=$filenamebantu;
 			
@@ -573,6 +600,7 @@ class diklat extends Application {
 						'p_stkp_finish'			=> $validitas_akhir,
 						'p_stkp_rating'			=> $this->input->post('rating'),
 						'p_stkp_image'			=> $filenamebantu,
+						'p_stkp_instruktur'		=> $this->input->post('instruktur'),
 						//'p_stkp_update_on'		=> $tanggal,
 						'p_stkp_update_by'		=> username(),
 					);
@@ -594,6 +622,7 @@ class diklat extends Application {
 					'p_stkp_mulai'			=> $validitas_awal,
 					'p_stkp_finish'			=> $validitas_akhir,
 					'p_stkp_rating'			=> $this->input->post('rating'),
+					'p_stkp_instruktur'		=> $this->input->post('instruktur'),
 					'p_stkp_update_by'		=> username(),
 				);
 			$this->pendidikan->update_data_stkp($id,$data_stkp);
@@ -615,7 +644,7 @@ class diklat extends Application {
 		</head>
 		<body align="center">
 		<?php
-		$file = base_url()."pegawai/diklat/".$nama_file.".pdf";
+		$file = base_url()."pegawai/diklat/".$nama_file;
 		echo "<embed src= '".$file."' width='1200' height='666' ></embed>";
 		?>
 		<br><br>
@@ -698,12 +727,13 @@ class diklat extends Application {
 		
 		$data['list_stkp'] = $this->pendidikan->get_list_stkp();
 		$data['list_unit'] = $this->pendidikan->get_list_unit();
+		$data['list_sub_unit'] = $this->kepegawaian->get_list_sub_unit();
 		$data['pegawai_with_stkp_and_unit'] = $this->pendidikan->get_data_nstkp_with_unit_and_name_selection($config['per_page'],$page,$type,$select);
 		$data['month'] = mdate($monthstring, $time);
 		$data['year'] = mdate($yearstring, $time);
 		$data['page'] = 'Report Non STKP';
 		$data['page_diklat'] = 'yes';
-		$data['view_stkp'] = 'class="this"';
+		$data['view_nstkp'] = 'class="this"';
 		
 		$this->load->view('diklat/index',$data);
 	}
@@ -774,6 +804,7 @@ class diklat extends Application {
 		
 		$data['list_stkp'] = $this->pendidikan->get_list_stkp();
 		$data['list_unit'] = $this->pendidikan->get_list_unit();
+		$data['list_sub_unit'] = $this->kepegawaian->get_list_sub_unit();
 		$data['pegawai_with_stkp_and_unit'] = $this->pendidikan->search_nstkp($config['per_page'],$page,$search_data);
 		$data['month'] = mdate($monthstring, $time);
 		$data['year'] = mdate($yearstring, $time);
@@ -1445,6 +1476,8 @@ class diklat extends Application {
 		$time = time();
 		$tanggal = mdate($datestring, $time);
 		
+		$jenis_stkp=$this->uri->segment(3);
+		
 		$pegawai_with_stkp_and_unit = $this->pendidikan->get_data_stkp_with_unit_and_name_unlimited();
 				
 		//load our new PHPExcel library
@@ -1452,25 +1485,31 @@ class diklat extends Application {
 		//activate worksheet number 1
 		$this->excel->setActiveSheetIndex(0);
 		//name the worksheet
-		$this->excel->getActiveSheet()->setTitle("Diklat STKP ");
+		$this->excel->getActiveSheet()->setTitle("Diklat STKP $jenis_stkp ");
 		//set cell A1 content with some text
 		
-		$this->excel->getActiveSheet()->setCellValue('A1', 'No');
-		$this->excel->getActiveSheet()->setCellValue('B1', 'NIPP');
-		$this->excel->getActiveSheet()->setCellValue('C1', 'Nama');
-		$this->excel->getActiveSheet()->setCellValue('D1', 'Jenis');
-		$this->excel->getActiveSheet()->setCellValue('E1', 'Rating');
-		$this->excel->getActiveSheet()->setCellValue('F1', 'No Sertifikat');
-		$this->excel->getActiveSheet()->setCellValue('G1', 'Validitas');
-		$this->excel->getActiveSheet()->setCellValue('I1', 'Lembaga');
-		$this->excel->getActiveSheet()->setCellValue('J1', 'Tanggal Pelaksanaan');
-		$this->excel->getActiveSheet()->setCellValue('L1', 'Jenis STKP');
-		$this->excel->getActiveSheet()->setCellValue('G2', 'From');
-		$this->excel->getActiveSheet()->setCellValue('H2', 'Until');
-		$this->excel->getActiveSheet()->setCellValue('J2', 'From');
-		$this->excel->getActiveSheet()->setCellValue('K2', 'Until');
+		$this->excel->getActiveSheet()->setCellValue('A2', "$jenis_stkp LICENSE HOLDER");
+		$this->excel->getActiveSheet()->setCellValue('A3', 'PT. GAPURA ANGKASA CABANG BANDARA NGURAH RAI');
+		$this->excel->getActiveSheet()->setCellValue('A4', 'DENPASAR');
+			
 		
-		$i=2;
+		$this->excel->getActiveSheet()->setCellValue('A6', 'No');
+		$this->excel->getActiveSheet()->setCellValue('B6', 'NIPP');
+		$this->excel->getActiveSheet()->setCellValue('C6', 'Nama');
+		$this->excel->getActiveSheet()->setCellValue('D6', 'Jenis');
+		$this->excel->getActiveSheet()->setCellValue('E6', 'Rating');
+		$this->excel->getActiveSheet()->setCellValue('F6', 'No Sertifikat');
+		$this->excel->getActiveSheet()->setCellValue('G6', 'Validitas');
+		$this->excel->getActiveSheet()->setCellValue('I6', 'Lembaga');
+		$this->excel->getActiveSheet()->setCellValue('J6', 'Tanggal Pelaksanaan');
+		$this->excel->getActiveSheet()->setCellValue('L6', 'Jenis STKP');
+		$this->excel->getActiveSheet()->setCellValue('M6', 'Instruktur');
+		$this->excel->getActiveSheet()->setCellValue('G7', 'From');
+		$this->excel->getActiveSheet()->setCellValue('H7', 'Until');
+		$this->excel->getActiveSheet()->setCellValue('J7', 'From');
+		$this->excel->getActiveSheet()->setCellValue('K7', 'Until');
+		
+		$i=7;
 		$number=0;
 		
 		$nipp = '';
@@ -1534,33 +1573,64 @@ class diklat extends Application {
 			$this->excel->getActiveSheet()->setCellValue("J$i", "$pelaksanaan");
 			$this->excel->getActiveSheet()->setCellValue("K$i", "$selesai");
 			$this->excel->getActiveSheet()->setCellValue("L$i", "$row_pegawai[p_stkp_type]");
+			$this->excel->getActiveSheet()->setCellValue("M$i", "$row_pegawai[p_stkp_instruktur]");
 			
 			$nipp = $row_pegawai['peg_nipp'];
 			
 		}endforeach;
 		
+		// change cells color
+		$this->excel->getActiveSheet()->getStyle("A6:M7")->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('AAAAAA');
+				
 		//change the font size
-		$this->excel->getActiveSheet()->getStyle('A1:L1')->getFont()->setSize(14);
+		$this->excel->getActiveSheet()->getStyle("A2:A4")->getFont()->setSize(14);
+		$this->excel->getActiveSheet()->getStyle("A6:M7")->getFont()->setSize(11);
+		$this->excel->getActiveSheet()->getStyle("A8:M$i")->getFont()->setSize(8);
 		//make the font become bold
-		$this->excel->getActiveSheet()->getStyle('A1:L1')->getFont()->setBold(true);
-		$this->excel->getActiveSheet()->getStyle('G2:H2')->getFont()->setBold(true);
-		//merge cell A1 until D1
-		$this->excel->getActiveSheet()->mergeCells('A1:A2');
-		$this->excel->getActiveSheet()->mergeCells('B1:B2');
-		$this->excel->getActiveSheet()->mergeCells('C1:C2');
-		$this->excel->getActiveSheet()->mergeCells('D1:D2');
-		$this->excel->getActiveSheet()->mergeCells('E1:E2');
-		$this->excel->getActiveSheet()->mergeCells('F1:F2');
-		$this->excel->getActiveSheet()->mergeCells('G1:H1');
-		$this->excel->getActiveSheet()->mergeCells('I1:I2');
-		$this->excel->getActiveSheet()->mergeCells('J1:K1');
-		$this->excel->getActiveSheet()->mergeCells('L1:L2');
+		$this->excel->getActiveSheet()->getStyle('A2:A4')->getFont()->setBold(true);
+		$this->excel->getActiveSheet()->getStyle('A6:M6')->getFont()->setBold(true);
+		$this->excel->getActiveSheet()->getStyle('A7:M7')->getFont()->setBold(true);
+		
+		//merge cell 
+		$this->excel->getActiveSheet()->mergeCells('A2:M2');
+		$this->excel->getActiveSheet()->mergeCells('A3:M3');
+		$this->excel->getActiveSheet()->mergeCells('A4:M4');
+		
+		$this->excel->getActiveSheet()->mergeCells('A6:A7');
+		$this->excel->getActiveSheet()->mergeCells('B6:B7');
+		$this->excel->getActiveSheet()->mergeCells('C6:C7');
+		$this->excel->getActiveSheet()->mergeCells('D6:D7');
+		$this->excel->getActiveSheet()->mergeCells('E6:E7');
+		$this->excel->getActiveSheet()->mergeCells('F6:F7');
+		$this->excel->getActiveSheet()->mergeCells('G6:H6');
+		$this->excel->getActiveSheet()->mergeCells('I6:I7');
+		$this->excel->getActiveSheet()->mergeCells('J6:K6');
+		$this->excel->getActiveSheet()->mergeCells('L6:L7');
+		$this->excel->getActiveSheet()->mergeCells('M6:M7');
 		
 		//set aligment to center for that merged cell (A1 to D1)
-		$this->excel->getActiveSheet()->getStyle('A1:J1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-		$this->excel->getActiveSheet()->getStyle('A1:J1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER); 
+		$this->excel->getActiveSheet()->getStyle('A6:M6')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$this->excel->getActiveSheet()->getStyle('A6:M6')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		$this->excel->getActiveSheet()->getStyle('A2:A4')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$this->excel->getActiveSheet()->getStyle('A2:A4')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 		
-		$filename="Report STKP.xls"; //save our workbook as this file name
+		//set coloumn's width
+		$this->excel->getActiveSheet()->getColumnDimension('A')->setWidth(5.54);  
+		$this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(10.75); 
+		$this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(26);    
+		$this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(7.5);  
+		$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(8.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(14.63); 
+		$this->excel->getActiveSheet()->getColumnDimension('G')->setWidth(8.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('H')->setWidth(8.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('I')->setWidth(20.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('J')->setWidth(8.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('K')->setWidth(8.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('L')->setWidth(8.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('M')->setWidth(20.88); 
+		
+		
+		$filename="Report STKP $jenis_stkp.xls"; //save our workbook as this file name
 		header('Content-Type: application/vnd.ms-excel'); //mime type
 		header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
 		header('Cache-Control: max-age=0'); //no cache
@@ -1579,6 +1649,7 @@ class diklat extends Application {
 		$time = time();
 		$tanggal = mdate($datestring, $time);
 		
+		$jenis_stkp=$this->uri->segment(5);
 		$pegawai_with_stkp_and_unit = $this->pendidikan->search_report_stkp_bulanan($this->uri->segment(3), $this->uri->segment(4), $this->uri->segment(5));
 				
 		//load our new PHPExcel library
@@ -1586,25 +1657,31 @@ class diklat extends Application {
 		//activate worksheet number 1
 		$this->excel->setActiveSheetIndex(0);
 		//name the worksheet
-		$this->excel->getActiveSheet()->setTitle("Diklat STKP ");
+		$this->excel->getActiveSheet()->setTitle("Diklat STKP $jenis_stkp");
 		//set cell A1 content with some text
 		
-		$this->excel->getActiveSheet()->setCellValue('A1', 'No');
-		$this->excel->getActiveSheet()->setCellValue('B1', 'NIPP');
-		$this->excel->getActiveSheet()->setCellValue('C1', 'Nama');
-		$this->excel->getActiveSheet()->setCellValue('D1', 'Jenis');
-		$this->excel->getActiveSheet()->setCellValue('E1', 'Rating');
-		$this->excel->getActiveSheet()->setCellValue('F1', 'No Sertifikat');
-		$this->excel->getActiveSheet()->setCellValue('G1', 'Validitas');
-		$this->excel->getActiveSheet()->setCellValue('I1', 'Lembaga');
-		$this->excel->getActiveSheet()->setCellValue('J1', 'Tanggal Pelaksanaan');
-		$this->excel->getActiveSheet()->setCellValue('L1', 'Jenis STKP');
-		$this->excel->getActiveSheet()->setCellValue('G2', 'From');
-		$this->excel->getActiveSheet()->setCellValue('H2', 'Until');
-		$this->excel->getActiveSheet()->setCellValue('J2', 'From');
-		$this->excel->getActiveSheet()->setCellValue('K2', 'Until');
+		$this->excel->getActiveSheet()->setCellValue('A2', "$jenis_stkp LICENSE HOLDER");
+		$this->excel->getActiveSheet()->setCellValue('A3', 'PT. GAPURA ANGKASA CABANG BANDARA NGURAH RAI');
+		$this->excel->getActiveSheet()->setCellValue('A4', 'DENPASAR');
+			
+		$this->excel->getActiveSheet()->setCellValue('A6', 'No');
+		$this->excel->getActiveSheet()->setCellValue('B6', 'NIPP');
+		$this->excel->getActiveSheet()->setCellValue('C6', 'Nama');
+		$this->excel->getActiveSheet()->setCellValue('D6', 'Jenis');
+		$this->excel->getActiveSheet()->setCellValue('E6', 'Rating');
+		$this->excel->getActiveSheet()->setCellValue('F6', 'No Sertifikat');
+		$this->excel->getActiveSheet()->setCellValue('G6', 'Validitas');
+		$this->excel->getActiveSheet()->setCellValue('I6', 'Lembaga');
+		$this->excel->getActiveSheet()->setCellValue('J6', 'Tanggal Pelaksanaan');
+		$this->excel->getActiveSheet()->setCellValue('L6', 'Jenis STKP');
+		$this->excel->getActiveSheet()->setCellValue('M6', 'Instruktur');
+		$this->excel->getActiveSheet()->setCellValue('G7', 'From');
+		$this->excel->getActiveSheet()->setCellValue('H7', 'Until');
+		$this->excel->getActiveSheet()->setCellValue('J7', 'From');
+		$this->excel->getActiveSheet()->setCellValue('K7', 'Until');
 		
-		$i=2;
+		
+		$i=7;
 		$number=0;
 		
 		$nipp = '';
@@ -1668,33 +1745,63 @@ class diklat extends Application {
 			$this->excel->getActiveSheet()->setCellValue("J$i", "$pelaksanaan");
 			$this->excel->getActiveSheet()->setCellValue("K$i", "$selesai");
 			$this->excel->getActiveSheet()->setCellValue("L$i", "$row_pegawai[p_stkp_type]");
+			$this->excel->getActiveSheet()->setCellValue("M$i", "$row_pegawai[p_stkp_instruktur]");
 			
 			$nipp = $row_pegawai['peg_nipp'];
 			
 		}endforeach;
 		
+		// change cells color
+		$this->excel->getActiveSheet()->getStyle("A6:M7")->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('AAAAAA');
 		//change the font size
-		$this->excel->getActiveSheet()->getStyle('A1:L1')->getFont()->setSize(14);
+		$this->excel->getActiveSheet()->getStyle("A2:A4")->getFont()->setSize(14);
+		$this->excel->getActiveSheet()->getStyle("A6:M7")->getFont()->setSize(11);
+		$this->excel->getActiveSheet()->getStyle("A8:M$i")->getFont()->setSize(8);
 		//make the font become bold
-		$this->excel->getActiveSheet()->getStyle('A1:L1')->getFont()->setBold(true);
-		$this->excel->getActiveSheet()->getStyle('G2:H2')->getFont()->setBold(true);
-		//merge cell A1 until D1
-		$this->excel->getActiveSheet()->mergeCells('A1:A2');
-		$this->excel->getActiveSheet()->mergeCells('B1:B2');
-		$this->excel->getActiveSheet()->mergeCells('C1:C2');
-		$this->excel->getActiveSheet()->mergeCells('D1:D2');
-		$this->excel->getActiveSheet()->mergeCells('E1:E2');
-		$this->excel->getActiveSheet()->mergeCells('F1:F2');
-		$this->excel->getActiveSheet()->mergeCells('G1:H1');
-		$this->excel->getActiveSheet()->mergeCells('I1:I2');
-		$this->excel->getActiveSheet()->mergeCells('J1:K1');
-		$this->excel->getActiveSheet()->mergeCells('L1:L2');
+		$this->excel->getActiveSheet()->getStyle('A2:A4')->getFont()->setBold(true);
+		$this->excel->getActiveSheet()->getStyle('A6:M6')->getFont()->setBold(true);
+		$this->excel->getActiveSheet()->getStyle('A7:M7')->getFont()->setBold(true);
+		
+		//merge cell 
+		$this->excel->getActiveSheet()->mergeCells('A2:M2');
+		$this->excel->getActiveSheet()->mergeCells('A3:M3');
+		$this->excel->getActiveSheet()->mergeCells('A4:M4');
+		
+		$this->excel->getActiveSheet()->mergeCells('A6:A7');
+		$this->excel->getActiveSheet()->mergeCells('B6:B7');
+		$this->excel->getActiveSheet()->mergeCells('C6:C7');
+		$this->excel->getActiveSheet()->mergeCells('D6:D7');
+		$this->excel->getActiveSheet()->mergeCells('E6:E7');
+		$this->excel->getActiveSheet()->mergeCells('F6:F7');
+		$this->excel->getActiveSheet()->mergeCells('G6:H6');
+		$this->excel->getActiveSheet()->mergeCells('I6:I7');
+		$this->excel->getActiveSheet()->mergeCells('J6:K6');
+		$this->excel->getActiveSheet()->mergeCells('L6:L7');
+		$this->excel->getActiveSheet()->mergeCells('M6:M7');
 		
 		//set aligment to center for that merged cell (A1 to D1)
-		$this->excel->getActiveSheet()->getStyle('A1:J1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-		$this->excel->getActiveSheet()->getStyle('A1:J1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER); 
+		$this->excel->getActiveSheet()->getStyle('A6:M6')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$this->excel->getActiveSheet()->getStyle('A6:M6')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		$this->excel->getActiveSheet()->getStyle('A2:A4')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$this->excel->getActiveSheet()->getStyle('A2:A4')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 		
-		$filename="Report STKP Bulan ".$this->uri->segment(3)."-".$this->uri->segment(4).".xls"; //save our workbook as this file name
+		//set coloumn's width
+		$this->excel->getActiveSheet()->getColumnDimension('A')->setWidth(5.54);  
+		$this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(10.75); 
+		$this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(26);    
+		$this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(7.5);  
+		$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(8.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(14.63); 
+		$this->excel->getActiveSheet()->getColumnDimension('G')->setWidth(8.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('H')->setWidth(8.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('I')->setWidth(20.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('J')->setWidth(8.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('K')->setWidth(8.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('L')->setWidth(8.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('M')->setWidth(20.88); 
+		
+		
+		$filename="Report STKP $jenis_stkp Bulan ".$this->uri->segment(3)."-".$this->uri->segment(4).".xls"; //save our workbook as this file name
 		header('Content-Type: application/vnd.ms-excel'); //mime type
 		header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
 		header('Cache-Control: max-age=0'); //no cache

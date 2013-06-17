@@ -369,7 +369,8 @@
 					$nipp=$row_pegawai['peg_nipp'];
 					$attr=" target='_blank'";
 					$print = anchor('pekerja/print_kompetensi/'.$nipp,'Print',$attr);
-					echo $print;	
+					$create_pdf = anchor('creator/create_pdf_kompetensi/'.$nipp,'PDF',$attr);
+					echo $print." ".$create_pdf;	
 				?> 
         </div>
 </div>

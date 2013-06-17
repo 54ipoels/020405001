@@ -10,6 +10,8 @@
 				<li <?php //if(isset($view_pindah_cabang)){ echo $view_pindah_cabang; } ?>><?php //echo anchor('pekerja/get_pindah_cabang', 'Pindah Cabang' ); ?></li>
 				-->
 				<li <?php if(isset($view_keluar)){ echo $view_keluar; } ?>><?php echo anchor('pekerja/pegawai_keluar', 'Pegawai Keluar' ); ?></li>
+				<li <?php if(isset($view_ppb)){ echo $view_ppb; } ?>><?php echo anchor('pekerja/pegawai_ppb', 'PPB' ); ?></li>
+				<li <?php if(isset($view_mpp)){ echo $view_mpp; } ?>><?php echo anchor('pekerja/pegawai_mpp', 'MPP' ); ?></li>
 				<li <?php if(isset($view_sdm)){ echo $view_sdm; } ?>><?php echo anchor('pekerja/view_data_sdm', 'Data SDM & Keluarga' ); ?></li>
 				<li <?php if(isset($view_upload)){ echo $view_upload; } ?>><?php echo anchor('pekerja/upload/', 'Upload File' ); ?></li>
 				

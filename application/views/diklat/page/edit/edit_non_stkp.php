@@ -102,6 +102,17 @@
                         <div class="clear"></div>
                     </div>
 					<div class="formRow">
+                        <label>Instruktur:</label>
+                        <div class="formRight">
+						<?php 
+						$instruktur = array(
+							'name' => 'instruktur',
+							'id'   => 'instruktur',
+						);
+						echo form_input($instruktur,$row_nstkp['p_nstkp_instruktur']) ?></div>
+                        <div class="clear"></div>
+                    </div>
+					<div class="formRow">
                         <label>File:</label>
                         <div class="formRight"><input type="file" name="file" size="20" /></div>
 						<div class="clear"></div>
