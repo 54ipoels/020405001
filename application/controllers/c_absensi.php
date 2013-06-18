@@ -216,9 +216,7 @@ class C_absensi extends Application {
 					//insert data ke tabel v3_fsch_time
 					$result = $this->m_absensi->fsch_add_next($fschtime_fsch_id, $fschtime_order, $fschtime_time_in, $fschtime_break_out, $fschtime_break_in, $fschtime_time_out, $fschtime_update_by, $fschtime_off_status, $fschtime_break_status);
 				}
-			
 			}
-				
 			redirect('c_absensi/format_schedule');
 		}
 	}		
@@ -1483,7 +1481,7 @@ class C_absensi extends Application {
 			//print_r($buffer);
 			echo "<table>";
 			echo "<tr>";
-			echo "<td>NIPP</td><td>Date</td><td>Status</td><td>Verified</td>";
+			echo "<td>NIPP</td><td>Date</td><td>Status</td><td>Grab</td><td>Verified</td>";
 			
 			for($a=1;$a<count($buffer);$a++)
 			{
@@ -1494,18 +1492,18 @@ class C_absensi extends Application {
 				$verified = $this->parse_data($data,"<Verified>","</Verified>");
 							
 				#masukkan data dari mesin ke database tampung / backup
-				$this->m_absensi->input_data_backup_mesin($pin,$datetime,$status);
 				
-				echo "<tr><td>" . $pin . "</td><td>" . $datetime . "</td><td>" . $status . "</td><td>" . $verified . "</td></tr>";
-				#foreach ($query as $row)
-				#	{
-				#		echo $row->dbmesin_nipp . '<br />';
-						#echo $row['name'];
-						#echo $row['email'];
-				#	}
-				#ambil data dari mesin dimasukkan ke database absensi
-				#$this->m_absensi->input_data_absensi_mesin($pin,$datetime,$status);
 				
+				$cek = $this->m_absensi->cek_data_backup_mesin($pin,$datetime,$status);
+				if($cek > 0){ 
+					$grab = 0;
+				} else {
+					$grab = 1;
+				}
+				$this->m_absensi->input_data_backup_mesin($pin,$datetime,$status,$grab);
+				
+				
+				echo "<tr><td>" . $pin . "</td><td>" . $datetime . "</td><td>" . $status . "</td><td>". $grab ."</td><td>" . $verified . "</td></tr>";
 			}
 			
 			echo "</tr>";
@@ -1514,21 +1512,34 @@ class C_absensi extends Application {
 		};
 		
 		# hapus null nipp dari table
-		$this->m_absensi->del_null_dbmesin_nipp();
+		$this->m_absensi->copy_dbmesin_to_datatampung();
 		
-		# back up to excell 
-		#hapus data dari mesin
-		
-		#redirect('c_absensi/absensi');
-		
-		// tambahan
-		$this->copy_data_tampung_to_absensi($tanggal);
-		
+		$this->copy_data_tampung_to_absensi();
+		$this->m_absensi->truncate_data_tampung(); // mengosongkan tabel datatampung  dengan menyisakan 1 data terakhir sebagai kondisi selanjutnya 
 	}
 	
-	public function copy_data_tampung_to_absensi($tanggal)
+	public function copy_data_tampung_to_absensi()
 	{
-		$backup = $this->m_absensi->get_data_backup_mesin($tanggal);
+		$backup = $this->m_absensi->get_data_tampung();
+		foreach ($backup as $row){
+			$year 		=substr($row['dt_datetime'],0,4);
+			$nipp		=$row['dt_nipp'];
+			$datetime	=$row['dt_datetime'];
+			$status		=$row['dt_status'];
+			$dup = $this->m_absensi->cek_dup_tabel_absensi($nipp,$datetime,$status);
+			foreach ($dup as $row_dup)
+			{
+				$this->m_absensi->cek_selisih_absen_terdekat($datetime,$nipp,$status,$row_dup,$year);
+			}
+		}
+	}
+	
+	
+	
+
+	/*public function copy_data_tampung_to_absensi($tanggal)
+	{
+		$backup = $this->m_absensi->get_data_tampung($tanggal);
 		foreach ($backup as $row){
 			$year 		=substr($row['dbmesin_datetime'],0,4);
 			$nipp		=$row['dbmesin_nipp'];
@@ -1541,7 +1552,7 @@ class C_absensi extends Application {
 			}
 		}
 	}
-	
+	*/
 	/*
 	public function copy_data_tampung_to_absensi()
 	{

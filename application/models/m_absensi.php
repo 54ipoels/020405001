@@ -531,16 +531,16 @@ class M_absensi extends CI_Model {
 	}
 	
 	#insert data mesin backup
-	function input_data_backup_mesin($pin,$datetime,$status)
+	function input_data_backup_mesin($pin,$datetime,$status,$grab)
 	{
 		$data = array(
-		'dbmesin_nipp' => $pin,
-      	'dbmesin_datetime' => $datetime, 
-		'dbmesin_status' => $status,
-		'dbmesin_update_by' => 'admin'
+			'dbmesin_nipp' => $pin,
+			'dbmesin_datetime' => $datetime, 
+			'dbmesin_status' => $status,
+			'dbmesin_grab' => $grab,
+			'dbmesin_update_by' => 'admin'
       	);
-      
-	  	$this->db->insert('v3_databackup_mesin', $data); 	
+      	$this->db->insert('v3_databackup_mesin', $data); 	
 	}
 	
 	#insert data mesin to db absensi
@@ -557,12 +557,30 @@ class M_absensi extends CI_Model {
 		return $query->result_array();
 	}
 	
+	
+	
 	function cek_dup_tabel_absensi($nipp,$datetime,$status)
 	{
 		$tahun = substr($datetime,0,4);
 		$bulan = substr($datetime,5,2);
-		if ($status == '0'){$selection = " AND v3_fschpeg_absensi_$tahun.fschpegabs_sch_time_in LIKE '".substr($datetime,0,10)."%' ";}
-		else if ($status == '1'){$selection = " AND v3_fschpeg_absensi_$tahun.fschpegabs_sch_time_out LIKE '".substr($datetime,0,10)."%' ";}
+		$selection="";
+		if ($status == '0')
+		{
+			$selection = " AND v3_fschpeg_absensi_$tahun.fschpegabs_sch_time_in LIKE '".substr($datetime,0,10)."%' ";
+		}
+		elseif ($status == '1')
+		{
+			$selection = " AND v3_fschpeg_absensi_$tahun.fschpegabs_sch_time_out LIKE '".substr($datetime,0,10)."%' ";
+		} 
+		elseif ($status == '2')
+		{
+			$selection = " AND v3_fschpeg_absensi_$tahun.fschpegabs_sch_break_in LIKE '".substr($datetime,0,10)."%' ";
+		} 
+		elseif ($status == '3')
+		{
+			$selection = " AND v3_fschpeg_absensi_$tahun.fschpegabs_sch_break_out LIKE '".substr($datetime,0,10)."%' ";
+		} 
+		
 		$query = " SELECT * FROM v3_fschpeg_absensi_$tahun
 					LEFT JOIN (SELECT * FROM v3_fsch_pegawai) AS fschpeg
 					ON fschpeg.fschpeg_id = v3_fschpeg_absensi_$tahun.fschpegabs_fschpeg_id 
@@ -571,7 +589,6 @@ class M_absensi extends CI_Model {
 					WHERE peg.peg_nipp=$nipp 
 					$selection
 				";
-				//AND  v3_fschpeg_absensi_$tahun.fschpegabs_fschpeg_id LIKE '$tahun-$bulan%' 1
 					
 		$query = $this->db->query($query);
 		return $query->result_array();
@@ -688,7 +705,82 @@ class M_absensi extends CI_Model {
 		}
 		
 	}
-	  
+	
+	function cek_data_backup_mesin($pin,$datetime,$status){
+		$tgl=substr($datetime,0,10);
+		if(($status == 0) OR ($status == 2) ){
+			$query ="
+					SELECT * FROM v3_databackup_mesin 
+					WHERE dbmesin_nipp='$pin'
+					AND dbmesin_datetime LIKE '$datetime%'  
+					AND dbmesin_status = '$status'
+				";
+			$query = $this->db->query($query);
+			return $query->num_rows(); 
+		} else if( ($status == 1) OR ($status=3)) {
+			$queryupdate = "
+					UPDATE v3_databackup_mesin 
+					SET dbmesin_grab = 0
+					WHERE dbmesin_nipp='$pin'
+					AND dbmesin_datetime LIKE '$datetime%'  
+					AND dbmesin_status = '$status' 
+				";
+			$query = $this->db->query($query);
+			return 0; 
+		}
+	}
+	
+	function copy_dbmesin_to_datatampung(){
+		$last = $this->latestpull();
+		$query ="
+				SELECT * FROM v3_databackup_mesin
+				WHERE dbmesin_grab = 1
+				AND dbmesin_update_on > '".$last."'
+				";
+		$query = $this->db->query($query);
+		$result = $query->result_array();
+		foreach($result as $row){
+			$data = array(
+						'dt_nipp' 		=> $row['dbmesin_nipp'] , 
+						'dt_datetime' 	=> $row['dbmesin_datetime'] , 
+						'dt_status' 	=> $row['dbmesin_status'] , 
+						'dt_update_by'	=> 'admin',
+					);
+			$this->db->insert('v3_datatampung', $data); 
+			$data2 = array(
+						'filabs_nipp' 		=> $row['dbmesin_nipp'] , 
+						'filabs_datetime' 	=> $row['dbmesin_datetime'] , 
+						'filabs_status' 	=> $row['dbmesin_status'] , 
+						'filabs_update_by'	=> 'admin',
+					);
+			$this->db->insert('v3_filter_absensi', $data); 			
+		}
+	}
+	
+	function latestpull(){
+		$query = " SELECT MAX(filabs_update_on) AS 'lastime' FROM v3_filter_absensi ";
+		$query = $this->db->query($query);
+		$result = $query->result_array();
+		if ($query->num_rows() > 0 ){
+			foreach($result as $row){}
+			return $row['lasttime'];
+		} else {
+			return "0000-00-00 00:00:00";
+		}
+	}
+	
+	function get_data_tampung()
+	{
+		$query = "SELECT * FROM v3_datatampung";
+		$query = $this->db->query($query);
+		return $query->result_array();
+	}
+	
+	function truncate_data_tampung()
+	{
+		$query = " truncate table v3_datatampung ";
+		$this->db->query($query);
+	}
 }
 
 ?>
