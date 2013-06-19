@@ -39,10 +39,9 @@
 | routes must come before any wildcard or regular expression routes.
 |
 */
-$route['404_override'] = "my404";
+
 $route['default_controller'] = "welcome";
 $route['scaffolding_trigger'] = "";
-
 
 
 // BEGIN AUTHENTICATION LIBRARY ROUTES
