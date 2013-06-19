@@ -15,23 +15,24 @@ class M_tarik_absensi extends CI_Model {
 			$query ="
 					SELECT * FROM v3_databackup_mesin 
 					WHERE dbmesin_nipp='$pin'
-					AND dbmesin_datetime LIKE '$datetime%'  
+					AND dbmesin_datetime LIKE '$tgl%'  
 					AND dbmesin_status = '$status'
 				";
 			$query = $this->db->query($query);
 			return $query->num_rows(); 
 		} else if( ($status == 1) OR ($status=3)) {
-			$queryupdate = "
+			$query = "
 					UPDATE v3_databackup_mesin 
 					SET dbmesin_grab = 0
 					WHERE dbmesin_nipp='$pin'
-					AND dbmesin_datetime LIKE '$datetime%'  
+					AND dbmesin_datetime LIKE '$tgl%'  
 					AND dbmesin_status = '$status' 
 				";
 			$query = $this->db->query($query);
 			return 0; 
 		}
 	}
+	
 	
 	#insert data mesin backup
 	function input_data_backup_mesin($pin,$datetime,$status,$grab)

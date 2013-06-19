@@ -286,6 +286,7 @@ class M_absensi extends CI_Model {
 		$this->db->join('v3_pegawai', 'v3_pegawai.peg_nipp = v3_peg_unit.p_unt_nipp', 'left');
 		$this->db->join('v3_fsch_pegawai', 'v3_fsch_pegawai.fschpeg_id_pegawai = v3_pegawai.id_pegawai', 'left');
 		$this->db->where('v3_peg_unit.p_unt_kode_unit', $unit);
+		$this->db->where('v3_peg_unit.p_unt_tmt_end', '0000-00-00');
 		$this->db->where('v3_fsch_pegawai.fschpeg_month', $month); 
 		$this->db->where('v3_fsch_pegawai.fschpeg_year', $year); 
 		$data = $this->db->get('v3_peg_unit');
@@ -323,6 +324,7 @@ class M_absensi extends CI_Model {
 		$this->db->join('v3_pegawai', 'v3_pegawai.id_pegawai = v3_cuti_master.cm_id_peg', 'left');
 		$this->db->join('v3_peg_unit', 'v3_peg_unit.p_unt_nipp = v3_pegawai.peg_nipp', 'left');
 		$this->db->where('v3_peg_unit.p_unt_kode_unit', $unit);
+		$this->db->where('v3_peg_unit.p_unt_tmt_end', '0000-00-00');
 		$this->db->where('v3_cuti_master.cm_year', $year);
 		$data = $this->db->get('v3_cuti_master');
 		
@@ -402,6 +404,7 @@ class M_absensi extends CI_Model {
 		$this->db->join('v3_pegawai', 'v3_pegawai.peg_nipp = v3_peg_unit.p_unt_nipp', 'left');
 		$this->db->join('v3_fsch_pegawai', 'v3_fsch_pegawai.fschpeg_id_pegawai = v3_pegawai.id_pegawai', 'left');
 		$this->db->where('v3_peg_unit.p_unt_kode_unit', $unit);
+		$this->db->where('v3_peg_unit.p_unt_tmt_end', '0000-00-00');
 		$this->db->where('v3_fsch_pegawai.fschpeg_month', $month); 
 		$this->db->where('v3_fsch_pegawai.fschpeg_year', $year); 
 		$data = $this->db->get('v3_peg_unit');
@@ -415,8 +418,11 @@ class M_absensi extends CI_Model {
 		$this->db->join('v3_pegawai', 'v3_pegawai.id_pegawai = v3_fsch_pegawai.fschpeg_id_pegawai', 'left');
 		$this->db->where('fschpegabs_fschpeg_id', $fschpeg_id); 
 		$data = $this->db->get('v3_fschpeg_absensi_'.$year);
-		
-		return $data->result_array();
+		if($data->num_rows() > 0){
+			return $data->result_array();
+		} else {
+			return 0;
+		}
 	}
 	
 	function ambil_data_detail_absensi_by_tanggal($fschpeg_id, $fschpeg_tanggal, $year) 
@@ -561,6 +567,7 @@ class M_absensi extends CI_Model {
 	
 	function cek_dup_tabel_absensi($nipp,$datetime,$status)
 	{
+		if($datetime == "0000-00-00 00:00:00"){$datetime = date('Y-m-d H:i:s');}
 		$tahun = substr($datetime,0,4);
 		$bulan = substr($datetime,5,2);
 		$selection="";
@@ -581,12 +588,12 @@ class M_absensi extends CI_Model {
 			$selection = " AND v3_fschpeg_absensi_$tahun.fschpegabs_sch_break_out LIKE '".substr($datetime,0,10)."%' ";
 		} 
 		
-		$query = " SELECT * FROM v3_fschpeg_absensi_$tahun
+		$query = "  SELECT * FROM v3_fschpeg_absensi_$tahun
 					LEFT JOIN (SELECT * FROM v3_fsch_pegawai) AS fschpeg
 					ON fschpeg.fschpeg_id = v3_fschpeg_absensi_$tahun.fschpegabs_fschpeg_id 
 					LEFT JOIN (SELECT * FROM v3_pegawai) AS peg
 					ON fschpeg.fschpeg_id_pegawai = peg.id_pegawai 
-					WHERE peg.peg_nipp=$nipp 
+					WHERE peg.peg_nipp = '$nipp' 
 					$selection
 				";
 					
@@ -712,17 +719,17 @@ class M_absensi extends CI_Model {
 			$query ="
 					SELECT * FROM v3_databackup_mesin 
 					WHERE dbmesin_nipp='$pin'
-					AND dbmesin_datetime LIKE '$datetime%'  
+					AND dbmesin_datetime LIKE '$tgl%'  
 					AND dbmesin_status = '$status'
 				";
 			$query = $this->db->query($query);
 			return $query->num_rows(); 
 		} else if( ($status == 1) OR ($status=3)) {
-			$queryupdate = "
+			$query = "
 					UPDATE v3_databackup_mesin 
 					SET dbmesin_grab = 0
 					WHERE dbmesin_nipp='$pin'
-					AND dbmesin_datetime LIKE '$datetime%'  
+					AND dbmesin_datetime LIKE '$tgl%'  
 					AND dbmesin_status = '$status' 
 				";
 			$query = $this->db->query($query);
@@ -747,18 +754,18 @@ class M_absensi extends CI_Model {
 						'dt_update_by'	=> 'admin',
 					);
 			$this->db->insert('v3_datatampung', $data); 
-			$data2 = array(
+			$datafilter = array(
 						'filabs_nipp' 		=> $row['dbmesin_nipp'] , 
 						'filabs_datetime' 	=> $row['dbmesin_datetime'] , 
 						'filabs_status' 	=> $row['dbmesin_status'] , 
 						'filabs_update_by'	=> 'admin',
 					);
-			$this->db->insert('v3_filter_absensi', $data); 			
+			$this->db->insert('v3_filter_absensi', $datafilter); 			
 		}
 	}
 	
 	function latestpull(){
-		$query = " SELECT MAX(filabs_update_on) AS 'lastime' FROM v3_filter_absensi ";
+		$query = " SELECT MAX(filabs_update_on) AS 'lasttime' FROM v3_filter_absensi ";
 		$query = $this->db->query($query);
 		$result = $query->result_array();
 		if ($query->num_rows() > 0 ){
@@ -773,7 +780,11 @@ class M_absensi extends CI_Model {
 	{
 		$query = "SELECT * FROM v3_datatampung";
 		$query = $this->db->query($query);
-		return $query->result_array();
+		if($query->num_rows() > 0){
+			return $query->result_array();
+		}else{
+			return 0;
+		}
 	}
 	
 	function truncate_data_tampung()

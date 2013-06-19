@@ -25,18 +25,18 @@ class M_filter_absensi extends CI_Model {
 						'dt_update_by'	=> 'admin',
 					);
 			$this->db->insert('v3_datatampung', $data); 
-			$data2 = array(
+			$datafilter = array(
 						'filabs_nipp' 		=> $row['dbmesin_nipp'] , 
 						'filabs_datetime' 	=> $row['dbmesin_datetime'] , 
 						'filabs_status' 	=> $row['dbmesin_status'] , 
 						'filabs_update_by'	=> 'admin',
 					);
-			$this->db->insert('v3_filter_absensi', $data); 			
+			$this->db->insert('v3_filter_absensi', $datafilter); 			
 		}
 	}
 	
 	function latestpull(){
-		$query = " SELECT MAX(filabs_update_on) AS 'lastime' FROM v3_filter_absensi ";
+		$query = " SELECT MAX(filabs_update_on) AS 'lasttime' FROM v3_filter_absensi ";
 		$query = $this->db->query($query);
 		$result = $query->result_array();
 		if ($query->num_rows() > 0 ){
@@ -191,7 +191,11 @@ class M_filter_absensi extends CI_Model {
 	{
 		$query = "SELECT * FROM v3_datatampung";
 		$query = $this->db->query($query);
-		return $query->result_array();
+		if($query->num_rows() > 0){
+			return $query->result_array();
+		}else{
+			return 0;
+		}
 	}
 	
 	function truncate_data_tampung()

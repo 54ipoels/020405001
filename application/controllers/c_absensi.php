@@ -537,7 +537,9 @@ class C_absensi extends Application {
 			$this->load->view('absensi/index',$data);
 		
 		} //end else if
-		
+		else{
+			redirect('c_absensi/schedule_pegawai');
+		}
 	}
 	
 	
@@ -614,11 +616,14 @@ class C_absensi extends Application {
 		
 		//showdata 
 		$data['showdata'] = $this->m_absensi->ambil_data_detail_absensi($fschpeg_id,$year);
-		
-		$data['page'] = 'view_detail_absensi';		
-		$data['view_schedule_pegawai'] = 'class="this"';
-		$data['form_absensi'] = 'id="current"';
-		$this->load->view('absensi/index',$data);
+		if($data['showdata'] !== 0){
+			$data['page'] = 'view_detail_absensi';		
+			$data['view_schedule_pegawai'] = 'class="this"';
+			$data['form_absensi'] = 'id="current"';
+			$this->load->view('absensi/index',$data);
+		}else{
+			redirect('c_absensi/absensi');
+		}
 	}
 	
 	function print_detail_absensi()
@@ -1515,22 +1520,24 @@ class C_absensi extends Application {
 		$this->m_absensi->copy_dbmesin_to_datatampung();
 		
 		$this->copy_data_tampung_to_absensi();
-		$this->m_absensi->truncate_data_tampung(); // mengosongkan tabel datatampung  dengan menyisakan 1 data terakhir sebagai kondisi selanjutnya 
 	}
 	
 	public function copy_data_tampung_to_absensi()
 	{
 		$backup = $this->m_absensi->get_data_tampung();
-		foreach ($backup as $row){
-			$year 		=substr($row['dt_datetime'],0,4);
-			$nipp		=$row['dt_nipp'];
-			$datetime	=$row['dt_datetime'];
-			$status		=$row['dt_status'];
-			$dup = $this->m_absensi->cek_dup_tabel_absensi($nipp,$datetime,$status);
-			foreach ($dup as $row_dup)
-			{
-				$this->m_absensi->cek_selisih_absen_terdekat($datetime,$nipp,$status,$row_dup,$year);
+		if($backup !== 0){
+			foreach ($backup as $row){
+				$year 		=substr($row['dt_datetime'],0,4);
+				$nipp		=$row['dt_nipp'];
+				$datetime	=$row['dt_datetime'];
+				$status		=$row['dt_status'];
+				$dup = $this->m_absensi->cek_dup_tabel_absensi($nipp,$datetime,$status);
+				foreach ($dup as $row_dup)
+				{
+					$this->m_absensi->cek_selisih_absen_terdekat($datetime,$nipp,$status,$row_dup,$year);
+				}
 			}
+			$this->m_absensi->truncate_data_tampung(); // mengosongkan tabel datatampung  dengan menyisakan 1 data terakhir sebagai kondisi selanjutnya 
 		}
 	}
 	

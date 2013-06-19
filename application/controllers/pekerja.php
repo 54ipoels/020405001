@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class pekerja extends Application {
+class Pekerja extends Application {
 
 	public function __construct()
     {

@@ -36,13 +36,22 @@ class M_asset extends CI_Model
 	// ambil data pegawai berdasarkan unit
 	function ambil_data_pegawai($unit) 
 	{
-		$query = $this->db->join('v3_pegawai', 'v3_pegawai.peg_nipp = v3_peg_unit.p_unt_nipp', 'left')->get_where('v3_peg_unit', array('p_unt_kode_unit' => $unit));
-		return $query->result_array();
+		//$query = $this->db->join('v3_pegawai', 'v3_pegawai.peg_nipp = v3_peg_unit.p_unt_nipp', 'left')->get_where('v3_peg_unit', array('p_unt_kode_unit' => $unit));
+		//return $query->result_array();
+		$query = "
+					SELECT * FROM v3_pegawai AS peg
+					LEFT JOIN (	SELECT * FROM v3_peg_unit ORDER BY id_peg_unit DESC	) AS peg_unit ON peg.peg_nipp = peg_unit.p_unt_nipp
+					WHERE peg_unit.p_unt_kode_unit =  '$unit'
+					AND peg_unit.p_unt_tmt_end =  '0000-00-00'
+				";
+		$query = $this->db->query($query);
+		return  $query->result_array();
 	}
 	
 	function hitung_jumlah_pegawai_per_unit($unit)
 	{
 		$this->db->where('p_unt_kode_unit',$unit);
+		$this->db->where('p_unt_tmt_end', '0000-00-00');
 		return $this->db->count_all_results('v3_peg_unit');
 	}
 	
@@ -53,7 +62,6 @@ class M_asset extends CI_Model
 	function ambil_data_pegawai_berdasarkan_nipp($nipp) 
 	{
 		$data = $this->db->get_where('v3_pegawai', array('peg_nipp' => $nipp));
-		
 		if($this->db->affected_rows())
 		{
 			foreach ($data->result() as $row)
@@ -252,7 +260,7 @@ class M_asset extends CI_Model
 		} else {
 			$sel="  `v3_lembur`.`lmb_id_peg`= '$id' AND";
 		}
-		$sel = " WHERE ".$sel." lmb_bulan='$month' ";
+		$sel = " WHERE ".$sel." v3_lembur.lmb_bulan='$month' AND v3_peg_unit.p_unt_tmt_end='0000-00-00'  ";
 		$query="
 				SELECT * FROM `v3_lembur_$year` AS v3_lembur
 				LEFT JOIN v3_pegawai ON v3_pegawai.id_pegawai  = v3_lembur.lmb_id_peg
@@ -394,7 +402,7 @@ class M_asset extends CI_Model
 			$sel="  `v3_penggajian`.`pgj_id_peg`= '$id' AND";
 		}
 		//$sel = " WHERE ".$sel." pgj_bulan='$month' AND pgj_tahun='$year' ";
-		$sel = " WHERE ".$sel." pgj_bulan='$month' ";
+		$sel = " WHERE ".$sel." pgj_bulan='$month' AND v3_peg_unit.p_unt_tmt_end='0000-00-00' ";
 		$query="
 				SELECT * FROM `v3_penggajian_$year` AS v3_penggajian 
 				LEFT JOIN v3_pegawai ON v3_pegawai.id_pegawai  = v3_penggajian.pgj_id_peg
