@@ -69,13 +69,6 @@ class Detail_kepegawaian extends CI_Model
 	
 	function get_detail_pegawai_jabatan($nipp)
 	{
-		/*
-		$this->db->select('*');
-		$this->db->where('p_jbt_nipp',$nipp);
-		$this->db->order_by('id_peg_jabatan', 'DESC');
-		$query = $this->db->get('v3_peg_jabatan');
-		return $query->result_array();
-		*/
 		$query = " 
 				SELECT * FROM  `v3_peg_jabatan` AS jabatan
 				LEFT JOIN (	SELECT * FROM  `v3_peg_unit` ORDER BY id_peg_unit DESC) AS unit 
