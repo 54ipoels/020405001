@@ -10,7 +10,7 @@ class Detail_kepegawaian extends CI_Model
 	
 	function get_data_pegawai_by_nipp($nipp)
 	{
-		$query = (" SELECT * FROM v3_pegawai WHERE peg_nipp = '$nipp' ");
+		$query = ("SELECT * FROM v3_pegawai WHERE peg_nipp = '$nipp'");
 		$query = $this->db->query($query); 
 		if ($query->num_rows() > 0){
 			return $query->result_array();
