@@ -240,24 +240,81 @@ class M_absensi extends CI_Model {
 		return $this->db->get('v3_format_schedule')->result();
 	}
 	
+	
+	function cek_dup_data_format_schedule_pegawai($id_pegawai, $month, $year)
+	{
+		$query = " 	SELECT * FROM v3_fsch_pegawai 
+					WHERE fschpeg_id_pegawai = '$id_pegawai' 
+					AND fschpeg_month = '$month' 
+					AND fschpeg_year = '$year' 
+				";
+		$query = $this->db->query($query);
+	
+		if( $query->num_rows() > 0 ){
+			$result = $query->result_array();
+			foreach($result as $row){}
+			return $row['fschpeg_id'];
+		} else {
+			return 0;
+		}
+    }
+	
 	function insert_data_format_schedule_pegawai($fschpeg_id, $fsch, $id_pegawai, $month, $year, $update_by )
 	{
 		$data = array(
-		'fschpeg_id' => $fschpeg_id,
-      	'fschpeg_fsch_id' => $fsch, 
-		'fschpeg_id_pegawai' => $id_pegawai,
-		'fschpeg_month' => $month,
-		'fschpeg_year' => $year,
-		'fschpeg_update_by' => $update_by
-      );
+			'fschpeg_id' => $fschpeg_id,
+			'fschpeg_fsch_id' => $fsch, 
+			'fschpeg_id_pegawai' => $id_pegawai,
+			'fschpeg_month' => $month,
+			'fschpeg_year' => $year,
+			'fschpeg_update_by' => $update_by
+		);
       
-	  $this->db->insert('v3_fsch_pegawai', $data); 
-      
-	  if($this->db->affected_rows())
-      	return '1';
-      else
-      	return '0';
+		$this->db->insert('v3_fsch_pegawai', $data); 
+		  
+		if($this->db->affected_rows())
+			return '1';
+		else
+			return '0';
 	}
+	
+	function update_data_format_schedule_pegawai($fschpeg_id, $fsch, $update_by )
+	{
+		
+		$data = array(
+			'fschpeg_fsch_id' => $fsch, 
+			'fschpeg_update_by' => $update_by,
+		);
+		
+		$this->db->where('fschpeg_id', $fschpeg_id);
+		$this->db->update('v3_fsch_pegawai', $data); 
+		  
+		if( $this->db->affected_rows() )
+		{	return '1';}
+		else
+		{	return '0';}
+	
+	}
+	
+	 
+	function cek_dup_data_format_schedule_pegawai_absensi($fschpeg_id, $time_in, $year)
+	{
+		$waktu = substr($time_in,0,10);
+		$query = " 	SELECT * FROM v3_fschpeg_absensi_$year 
+					WHERE fschpegabs_fschpeg_id = '$fschpeg_id' 
+					AND fschpegabs_sch_time_in LIKE '$waktu%' 
+				";
+		$query = $this->db->query($query);
+	
+		if( $query->num_rows() > 0 ){
+			$result = $query->result_array();
+			foreach($result as $row){}
+			return $row['fschpegabs_id'];
+		} else {
+			return 0;
+		}
+	}
+	
 	
 	function insert_data_format_schedule_pegawai_absensi($fschpeg_id, $time_in, $break_out, $break_in, $time_out, $offstatus, $update_by, $year)
 	{
@@ -277,6 +334,29 @@ class M_absensi extends CI_Model {
       	return '1';
       else
       	return '0';
+	}
+	
+	
+	
+	function update_data_format_schedule_pegawai_absensi($fschpegabs_id,$fschpeg_id, $time_in, $break_out, $break_in, $time_out, $offstatus, $update_by, $year)
+	{
+		$data = array(
+				'fschpegabs_fschpeg_id' => $fschpeg_id,
+				'fschpegabs_sch_time_in' => $time_in, 
+				'fschpegabs_sch_break_out' => $break_out, 
+				'fschpegabs_sch_break_in' => $break_in, 
+				'fschpegabs_sch_time_out' => $time_out,
+				'fschpegabs_off_status' => $offstatus,
+				'fschpegabs_update_by' => $update_by
+			);
+      
+	    $this->db->where('fschpegabs_id', $fschpegabs_id); 
+        $this->db->update('v3_fschpeg_absensi_'.$year, $data); 
+      
+	    if($this->db->affected_rows())
+        	return '1';
+        else
+			return '0';
 	}
 	
 	//untuk ambil schedule pegwai
@@ -680,7 +760,7 @@ class M_absensi extends CI_Model {
 					$real => $datetime,
 					'fschpegabs_update_by' => 'admin',
 				);
-		print_r($data);echo " terdekat=$terdekat  status=$status  <br> ";
+		//print_r($data);echo " terdekat=$terdekat  status=$status  <br> ";
 		
 		if (($status == 0) OR ($status == 2)) {
 			if($terdekat == 0){

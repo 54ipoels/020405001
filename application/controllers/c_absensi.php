@@ -333,7 +333,6 @@ class C_absensi extends Application {
 			$year = $this->input->post('year');
 			$update_by = "admin";
 		
-			
 			if($id_pegawai == "all") 
 			{
 				//ambil data pegawai per nipp per 1 unit
@@ -349,9 +348,17 @@ class C_absensi extends Application {
 					//ambil total day dari format schedule yang digunakan
 					$totalday = $this->m_asset->ambil_totalday_fsch_id($fsch);
 					
-					// insert data ke table v3_fsch_pegawai
-					$this->m_absensi->insert_data_format_schedule_pegawai($fschpeg_id, $fsch, $id_pegawai, $month, $year, $update_by );
 					
+					//cek dup  v3_fsch_pegawai
+					$cekdup_fschpeg_id = $this->m_absensi->cek_dup_data_format_schedule_pegawai($id_pegawai, $month, $year);
+					if($cekdup_fschpeg_id > 0){
+						// update table v3_fsch_pegawai
+						$fschpeg_id = $cekdup_fschpeg_id;
+						$this->m_absensi->update_data_format_schedule_pegawai($fschpeg_id, $fsch, $update_by );
+					} else {
+						// insert data ke table v3_fsch_pegawai
+						$this->m_absensi->insert_data_format_schedule_pegawai($fschpeg_id, $fsch, $id_pegawai, $month, $year, $update_by );
+					}
 					$start_order = $starttime;
 					
 					//insert data schedule ke table v3_fschpeg_absensi_(year)
@@ -360,8 +367,8 @@ class C_absensi extends Application {
 					$newmonth = $this->month($month);
 						
 					//Jika Bulan Desember, maka startdate tahunnya 2012, enddatenya tahunnya 2013 and next monthnya 01
-					if($month == 12) { $newnextmonth = $this->month(1); $nextyear = $year+1; 
-					} else { $newnextmonth = $this->month($month+1);	$nextyear = $year; 	}
+					if($month == 12) { $newnextmonth = $this->month(1); $nextyear = $year+1; } 
+					else { $newnextmonth = $this->month($month+1);	$nextyear = $year; 	}
 						
 					//inisial date start dan end date
 					$startdate = "".$year."-".$newmonth."-01";
@@ -409,19 +416,23 @@ class C_absensi extends Application {
 							$break_out = "0000-00-00 00:00:00";
 							$break_in = "0000-00-00 00:00:00";
 						}
+						 
+						$cek_dup_fschpeg_abs = $this->m_absensi->cek_dup_data_format_schedule_pegawai_absensi($fschpeg_id, $time_in, $year);
+						//echo  $cek_dup_fschpeg_abs." aksjdkja ";
+						if($cek_dup_fschpeg_abs > 0){
+							$this->m_absensi->update_data_format_schedule_pegawai_absensi($cek_dup_fschpeg_abs, $fschpeg_id, $time_in, $break_out, $break_in, $time_out, $offstatus, $update_by, $year);
+						} else {
+							$this->m_absensi->insert_data_format_schedule_pegawai_absensi($fschpeg_id, $time_in, $break_out, $break_in, $time_out, $offstatus, $update_by, $year);
+						}	
 						
-						$this->m_absensi->insert_data_format_schedule_pegawai_absensi($fschpeg_id, $time_in, $break_out, $break_in, $time_out, $offstatus, $update_by, $year);
-							
 						if($start_order == $totalday) { $start_order = 1;} else { $start_order = $start_order + 1; }
 						
 					}
-						
-						
 					
 				} endforeach;// endforeach
 				
 				redirect('c_absensi/schedule_pegawai');
-
+			
 				
 			} // end all
 			else if($id_pegawai != "all") 
@@ -434,8 +445,16 @@ class C_absensi extends Application {
 					//ambil total day dari format schedule yang digunakan
 					$totalday = $this->m_asset->ambil_totalday_fsch_id($fsch);
 					
-					// insert data ke table v3_fsch_pegawai
-					$this->m_absensi->insert_data_format_schedule_pegawai($fschpeg_id, $fsch, $id_pegawai, $month, $year, $update_by );
+					//cek dup  v3_fsch_pegawai
+					$cekdup_fschpeg_id = $this->m_absensi->cek_dup_data_format_schedule_pegawai($id_pegawai, $month, $year);
+					if($cekdup_fschpeg_id > 0){
+						// update table v3_fsch_pegawai
+						$fschpeg_id = $cekdup_fschpeg_id;
+						$this->m_absensi->update_data_format_schedule_pegawai($fschpeg_id, $fsch, $update_by );
+					} else {
+						// insert data ke table v3_fsch_pegawai
+						$this->m_absensi->insert_data_format_schedule_pegawai($fschpeg_id, $fsch, $id_pegawai, $month, $year, $update_by );
+					}
 										
 					//insert data schedule ke table v3_fschpeg_absensi_2012
 						
@@ -489,10 +508,14 @@ class C_absensi extends Application {
 						$break_out = "".$tgl3." ".$break_out."";							
 						$break_in = "".$tgl4." ".$break_in."";							
 							
-						$this->m_absensi->insert_data_format_schedule_pegawai_absensi($fschpeg_id, $time_in, $break_out, $break_in, $time_out,	$offstatus, $update_by, $year);
+						$cek_dup_fschpeg_abs = $this->m_absensi->cek_dup_data_format_schedule_pegawai_absensi($fschpeg_id, $time_in, $year);
+						if($cek_dup_fschpeg_abs > 0){
+							$this->m_absensi->update_data_format_schedule_pegawai_absensi($cek_dup_fschpeg_abs, $fschpeg_id, $time_in, $break_out, $break_in, $time_out, $offstatus, $update_by, $year);
+						} else {
+							$this->m_absensi->insert_data_format_schedule_pegawai_absensi($fschpeg_id, $time_in, $break_out, $break_in, $time_out, $offstatus, $update_by, $year);
+						}	
 							
 						if($start_order == $totalday) { $start_order = 1;} else { $start_order = $start_order + 1; }
-						
 					}
 						
 				redirect('c_absensi/schedule_pegawai');
@@ -937,7 +960,8 @@ class C_absensi extends Application {
 		}
 	}
 	
-	function detail_cuti_pegawai(){
+	function detail_cuti_pegawai()
+	{
 		$cm_id = $this->uri->segment(3);
 		$year = $this->uri->segment(4);
 		$data['showdata'] = $this->m_asset->get_detail_cuti_pegawai($cm_id,$year);
@@ -1222,14 +1246,12 @@ class C_absensi extends Application {
 		<select class="nipp" name="nipp">
 			<option value="all">ALL</option>
             
-			<?php foreach($data as $data) : { ?>
-		   	<option value="<?php echo $data['id_pegawai']; ?>"><?php echo $data['p_unt_nipp']; ?></option>
+			<?php foreach($data as $row) : { ?>
+		   	<option value="<?php echo $row['id_pegawai']; ?>"><?php echo $row['p_unt_nipp']; ?></option>
 		    <?php } endforeach; ?>
             
 		</select>
-        
-		<?php	
-				
+    	<?php	
 	}
 	
 	// ambil data nipp pegawai berdasarkan unit
@@ -1243,11 +1265,8 @@ class C_absensi extends Application {
 		   	<option value="<?php echo $data->fschtime_order; ?>">
 			<?php echo "Day ".$data->fschtime_order. " / "; if($data->fschtime_off_status == "1") { echo "LIBUR"; } else { echo substr($data->fschtime_time_in, 0, 5); } ?></option>
 		    <?php } ?>
-            
-		</select>
-        
-		<?php	
-				
+    	</select>
+    	<?php	
 	}
 	
 	//Function membuat array tanggal sesuai range
@@ -1269,12 +1288,19 @@ class C_absensi extends Application {
 	//function untuk menambah atau mengurangi tanggal
 	function adddate($vardate,$added)
 	{
+		$tanggal = new DateTime($vardate);            
+		$tanggal->modify("".$added."");
+		$hari= $tanggal->format("Y-m-d");
+		return $hari;   
+
+		/*
 		$data = explode("-", $vardate);
 		$date = new DateTime();            
 		$date->setDate($data[0], $data[1], $data[2]);
 		$date->modify("".$added."");
 		$day= $date->format("Y-m-d");
 		return $day;    
+		*/
 	}
 		
 	//function menghitung jumlah hari

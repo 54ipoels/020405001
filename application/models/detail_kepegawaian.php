@@ -1,5 +1,5 @@
 <?php
-class kepegawaian extends CI_Model
+class Detail_kepegawaian extends CI_Model
 {
 
 	function __construct()
@@ -12,7 +12,7 @@ class kepegawaian extends CI_Model
 	{
 		$query = (" SELECT * FROM v3_pegawai WHERE peg_nipp = '$nipp' ");
 		$query = $this->db->query($query); 
-		if ($query->num_rows()>0){
+		if ($query->num_rows() > 0){
 			return $query->result_array();
 		} else {
 			return 0;

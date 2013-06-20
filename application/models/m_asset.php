@@ -36,16 +36,17 @@ class M_asset extends CI_Model
 	// ambil data pegawai berdasarkan unit
 	function ambil_data_pegawai($unit) 
 	{
-		//$query = $this->db->join('v3_pegawai', 'v3_pegawai.peg_nipp = v3_peg_unit.p_unt_nipp', 'left')->get_where('v3_peg_unit', array('p_unt_kode_unit' => $unit));
-		//return $query->result_array();
+		
 		$query = "
 					SELECT * FROM v3_pegawai AS peg
-					LEFT JOIN (	SELECT * FROM v3_peg_unit ORDER BY id_peg_unit DESC	) AS peg_unit ON peg.peg_nipp = peg_unit.p_unt_nipp
+					LEFT JOIN (	SELECT * FROM v3_peg_unit ORDER BY p_unt_update_on DESC ) AS peg_unit ON peg.peg_nipp = peg_unit.p_unt_nipp
 					WHERE peg_unit.p_unt_kode_unit =  '$unit'
 					AND peg_unit.p_unt_tmt_end =  '0000-00-00'
+					GROUP BY peg_unit.p_unt_nipp
 				";
 		$query = $this->db->query($query);
 		return  $query->result_array();
+		
 	}
 	
 	function hitung_jumlah_pegawai_per_unit($unit)
