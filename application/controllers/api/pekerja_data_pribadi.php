@@ -76,8 +76,7 @@ class Pekerja_data_pribadi extends REST_Controller {
 		else
 		{
 			$nipp = $this->get('nipp');
-			$data = $this->detail_kepegawaian->get_detail_pegawai_ayah($nipp);
-			$data = $this->detail_kepegawaian->get_detail_pegawai_ibu($nipp);
+			$data = $this->detail_kepegawaian->get_detail_orangtua($nipp);
 			$this->response($data, 200); // 200 being the HTTP response code
 		}
 	}
@@ -91,8 +90,7 @@ class Pekerja_data_pribadi extends REST_Controller {
 		else
 		{
 			$nipp = $this->get('nipp');
-			$data = $this->detail_kepegawaian->get_detail_pegawai_mert_ayah($nipp);
-			$data = $this->detail_kepegawaian->get_detail_pegawai_mert_ibu($nipp);
+			$data = $this->detail_kepegawaian->get_detail_mertua($nipp);
 			$this->response($data, 200); // 200 being the HTTP response code
 		}
 	}

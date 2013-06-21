@@ -66,38 +66,29 @@ class Detail_kepegawaian extends CI_Model
 		return $query->result_array();
 	}
 	
-	function get_detail_pegawai_ayah($nipp)
+	function get_detail_orangtua($nipp)
 	{
 		$this->db->select('*');
+		$this->db->from('v3_peg_ayah');
 		$this->db->where('p_ay_nipp',$nipp);
-		$query = $this->db->get('v3_peg_ayah');
+		$this->db->join('v3_peg_ibu', 'v3_peg_ibu.p_ibu_nipp = v3_peg_ayah.p_ay_nipp');
+		$query = $this->db->get();
 		return $query->result_array();
+		
 	}
 	
-	function get_detail_pegawai_ibu($nipp)
+	function get_detail_mertua($nipp)
 	{
 		$this->db->select('*');
-		$this->db->where('p_ibu_nipp',$nipp);
-		$query = $this->db->get('v3_peg_ibu');
-		return $query->result_array();
-	}
-	
-	
-	function get_detail_pegawai_mert_ayah($nipp)
-	{
-		$this->db->select('*');
+		$this->db->from('v3_peg_mert_ayah');
 		$this->db->where('p_may_nipp',$nipp);
-		$query = $this->db->get('v3_peg_mert_ayah');
+		$this->db->join('v3_peg_mert_ibu', 'v3_peg_mert_ibu.p_mib_nipp = v3_peg_mert_ayah.p_may_nipp');
+		$query = $this->db->get();
 		return $query->result_array();
+		
 	}
 	
-	function get_detail_pegawai_mert_ibu($nipp)
-	{
-		$this->db->select('*');
-		$this->db->where('p_mib_nipp',$nipp);
-		$query = $this->db->get('v3_peg_mert_ibu');
-		return $query->result_array();
-	}
+
 	
 	
 	function get_detail_pegawai_bahasa($nipp)
