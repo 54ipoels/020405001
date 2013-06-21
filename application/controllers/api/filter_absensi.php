@@ -20,8 +20,6 @@ class Filter_absensi extends Application {
 				$nipp		=$row['dt_nipp'];
 				$datetime	=$row['dt_datetime'];
 				$status		=$row['dt_status'];
-				echo "$year $nipp $datetime $status";
-				echo "<br><br>";
 				if(($datetime !== "0000-00-00 00:00:00") OR ($nipp !== "") ){
 					$dup = $this->m_filter_absensi->cek_dup_tabel_absensi($nipp,$datetime,$status);
 					foreach ($dup as $row_dup)
@@ -30,7 +28,7 @@ class Filter_absensi extends Application {
 					}
 				}
 			}
-			//$this->m_filter_absensi->truncate_data_tampung(); // mengosongkan tabel datatampung  dengan menyisakan 1 data terakhir sebagai kondisi selanjutnya 
+			$this->m_filter_absensi->truncate_data_tampung(); // mengosongkan tabel datatampung  dengan menyisakan 1 data terakhir sebagai kondisi selanjutnya 
 		}
 	}
 

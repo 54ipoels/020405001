@@ -8,6 +8,17 @@ class M_tarik_absensi extends CI_Model {
 		$this->load->database();
 	}
 	
+	function cek_dup_backup_mesin($pin,$datetime,$status){
+		$tgl=$datetime;
+		$query ="
+					SELECT * FROM v3_databackup_mesin 
+					WHERE dbmesin_nipp = '$pin'
+					AND dbmesin_datetime = '$tgl'  
+					AND dbmesin_status = '$status'
+				";
+		$query = $this->db->query($query);
+		return $query->num_rows(); 
+	}
 	
 	function cek_data_backup_mesin($pin,$datetime,$status){
 		$tgl=substr($datetime,0,10);
@@ -20,7 +31,7 @@ class M_tarik_absensi extends CI_Model {
 				";
 			$query = $this->db->query($query);
 			return $query->num_rows(); 
-		} else if( ($status == 1) OR ($status=3)) {
+		} else if( ($status == 1) OR ($status=3)){
 			$query = "
 					UPDATE v3_databackup_mesin 
 					SET dbmesin_grab = 0

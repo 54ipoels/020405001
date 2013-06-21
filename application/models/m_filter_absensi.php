@@ -25,13 +25,42 @@ class M_filter_absensi extends CI_Model {
 						'dt_update_by'	=> 'admin',
 					);
 			$this->db->insert('v3_datatampung', $data); 
-			$datafilter = array(
-						'filabs_nipp' 		=> $row['dbmesin_nipp'] , 
-						'filabs_datetime' 	=> $row['dbmesin_datetime'] , 
-						'filabs_status' 	=> $row['dbmesin_status'] , 
-						'filabs_update_by'	=> 'admin',
-					);
-			$this->db->insert('v3_filter_absensi', $datafilter); 			
+			
+			$cekfilter = $this->cek_filter_absensi($row['dbmesin_nipp'], $row['dbmesin_datetime'], $row['dbmesin_status'] );
+			if($cekfilter == 0 ){
+				$datafilter = array(
+							'filabs_nipp' 		=> $row['dbmesin_nipp'] , 
+							'filabs_datetime' 	=> $row['dbmesin_datetime'] , 
+							'filabs_status' 	=> $row['dbmesin_status'] , 
+							'filabs_update_by'	=> 'admin',
+						);
+				$this->db->insert('v3_filter_absensi', $datafilter); 			
+			} else {
+				$datafilter = array(
+							'filabs_datetime' 	=> $row['dbmesin_datetime'] , 
+						);
+				$this->db->where('filabs_id', $cekfilter);
+				$this->db->update('v3_filter_absensi', $datafilter); 			
+			}
+		}
+	}
+	
+	function cek_filter_absensi($nipp,$datetime,$status)
+	{
+		$tgl = substr($datetime,0,10);
+		$query ="
+					SELECT * FROM v3_filter_absensi
+					WHERE filabs_nipp = '$nipp'
+					AND filabs_status = '$status'
+					AND filabs_datetime LIKE '$tgl%';
+				";	
+		$query = $this->db->query($query);
+		if( $query->num_rows() > 0 ){
+			$cek = $query->result_array();
+			foreach ($cek as $row){}
+			return $row['filabs_id'];
+		} else {
+			return 0;
 		}
 	}
 	
@@ -154,7 +183,7 @@ class M_filter_absensi extends CI_Model {
 					$real => $datetime,
 					'fschpegabs_update_by' => 'admin',
 				);
-		print_r($data);echo " terdekat=$terdekat  status=$status  <br> ";
+		//print_r($data);echo " terdekat=$terdekat  status=$status  <br> ";
 		
 		if (($status == 0) OR ($status == 2)) {
 			if($terdekat == 0){

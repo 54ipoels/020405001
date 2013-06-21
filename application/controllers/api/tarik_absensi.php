@@ -52,16 +52,35 @@ class Tarik_absensi extends Application {
 				$verified = $this->parse_data($data,"<Verified>","</Verified>");
 								
 				#masukkan data dari mesin ke database tampung / backup
+					
+				#data pada finger print tidak dihapus
+				if(($pin !== "") AND ($datetime !=="" )){
+					$cekdup = $this->m_tarik_absensi->cek_dup_backup_mesin($pin,$datetime,$status);
+					if($cekdup == 0)
+					{
+						$cek = $this->m_tarik_absensi->cek_data_backup_mesin($pin,$datetime,$status);
+						if($cek > 0){ 
+							$grab = 0;  
+						} else {
+							$grab = 1;
+						}
+						$this->m_tarik_absensi->input_data_backup_mesin($pin,$datetime,$status,$grab);
+						echo "<tr><td>" . $pin . "</td><td>" . $datetime . "</td><td>" . $status . "</td><td>". $grab ."</td><td>" . $verified . "</td></tr>";
+					}
+				}
 				
+				/* jika data di finger print dihapus setelah tarik absensi 
 				$cek = $this->m_tarik_absensi->cek_data_backup_mesin($pin,$datetime,$status);
 				if($cek > 0){ 
-					$grab = 0;
+					$grab = 0;  
 				} else {
-					$grab = 1;
+					$grab = 1; 
 				}
+				
 				$this->m_tarik_absensi->input_data_backup_mesin($pin,$datetime,$status,$grab);
 					
 				echo "<tr><td>" . $pin . "</td><td>" . $datetime . "</td><td>" . $status . "</td><td>". $grab ."</td><td>" . $verified . "</td></tr>";
+				*/
 			}
 				
 			echo "</tr>";
