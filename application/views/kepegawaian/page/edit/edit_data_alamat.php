@@ -68,6 +68,18 @@
 						<?php echo form_error('provinsi')?></div>
                         <div class="clear"></div>
                     </div>
+                	<div class="formRow">
+                        <label>Email:</label>
+                        <div class="formRight"><?php 
+						$email = array(
+							'name' => 'email',
+							'id'   => 'email',
+							'value'=> $row_alamat['p_al_email']
+						);
+						echo form_input($email) ?><br/>
+						<?php echo form_error('email')?></div>
+                        <div class="clear"></div>
+                    </div>
                 </fieldset>
 				<div class="wizButtons"> 
                     <div class="status" id="status2"></div>

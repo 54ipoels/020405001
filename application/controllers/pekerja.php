@@ -1001,6 +1001,7 @@ class Pekerja extends Application {
 		$data['list_jabatan'] = $this->kepegawaian->get_list_jabatan();
 		$data['list_unit'] = $this->kepegawaian->get_list_unit();
 		$data['list_sub_unit'] = $this->kepegawaian->get_list_sub_unit();
+		$data['list_team'] = $this->kepegawaian->get_list_team();
 		$data['unit'] = $this->kepegawaian->get_detail_pegawai_unit($nipp);
 		$data['grade'] = $this->kepegawaian->get_detail_pegawai_grade($nipp);
 		$data['page'] = 'Edit Data Jabatan';
@@ -1141,6 +1142,7 @@ class Pekerja extends Application {
 				'p_al_kecamatan'	=> $this->input->post('kecamatan'),
 				'p_al_kabupaten'	=> $this->input->post('kabupaten'),
 				'p_al_provinsi'		=> $this->input->post('provinsi'),
+				'p_al_email'		=> $this->input->post('email'),
 				//'p_al_update_on'	=> $tanggal,
 				'p_al_update_by'	=> 'admin'
 			);
@@ -1334,6 +1336,7 @@ class Pekerja extends Application {
 				'p_unt_nipp'		=> $nipp,
 				'p_unt_kode_unit'	=> $this->input->post('unit'),
 				'p_unt_kode_sub_unit'	=> $this->input->post('sub_unit'),
+				'p_unt_team'		=> $this->input->post('team'),
 				'p_unt_tmt_start'	=> $tanggal_tmt_unit,
 				//'p_unt_update_on'	=> $tanggal,
 				'p_unt_update_by'	=> 'admin'
@@ -1346,15 +1349,22 @@ class Pekerja extends Application {
 				'p_grd_update_by'	=> 'admin'
 			);
 		
-		$data_jabatan_tmt_end = array ('p_jbt_tmt_end' => $tanggal);
-		$data_unit_tmt_end = array ('p_unt_tmt_end' => $tanggal);
-		$this->kepegawaian->update_data_pegawai_jabatan($data_jabatan_tmt_end,$this->input->post('id_peg_jabatan'));
-		$this->kepegawaian->update_data_pegawai_unit($data_unit_tmt_end,$this->input->post('id_peg_unit'));
+		
+		if ($tanggal_tmt_jbt !== '0000-00-00'){
+			$data_jabatan_tmt_end = array ('p_jbt_tmt_end' => $tanggal);
+			$this->kepegawaian->update_data_pegawai_jabatan($data_jabatan_tmt_end,$this->input->post('id_peg_jbt'));
+			$this->kepegawaian->insert_data_pegawai_jabatan($data_jabatan);
+		}
+		if ($tanggal_tmt_unit !== '0000-00-00'){
+			$data_unit_tmt_end = array ('p_unt_tmt_end' => $tanggal);
+			$this->kepegawaian->update_data_pegawai_unit($data_unit_tmt_end,$this->input->post('id_peg_unit'));
+			$this->kepegawaian->insert_data_pegawai_unit($data_unit);
+		}		
 				
 		#input data to table pegawai
-		$this->kepegawaian->insert_data_pegawai_jabatan($data_jabatan);
-		$this->kepegawaian->insert_data_pegawai_unit($data_unit);
-		$this->kepegawaian->insert_data_pegawai_grade($data_grade);
+		if($this->input->post('grade') !== 0){
+			$this->kepegawaian->insert_data_pegawai_grade($data_grade);
+		}
 		redirect('pekerja/get_pegawai/'.$nipp);
 	}
 	

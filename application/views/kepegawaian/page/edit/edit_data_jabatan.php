@@ -14,12 +14,16 @@
 			else{$unit_tmt = mdate($datestring,strtotime($row_unit['p_unt_tmt_start']));}
 			
 			if ($grade == NULL)
-				{ $grade = '';} else {
-					foreach ($grade as $row_grade) :
-					{
-						$grade = $row_grade['p_grd_grade'];
-					} endforeach;
-				}
+			{
+				$grade = '';
+			} else {
+				foreach ($grade as $row_grade) :
+				{
+					$grade = $row_grade['p_grd_grade'];
+				} endforeach;
+			}
+			
+			
 			$attributes = array('class'=>'form','id'=>'wizard3');
 			echo form_open('pekerja/edit_data_jabatan/'.$this->uri->segment(3), $attributes) ?>
                 <fieldset class="step" id="w2first">
@@ -27,7 +31,6 @@
                     <div class="formRow">
                         <label>Jabatan Terakhir:</label>
                         <div class="formRight searchDrop">
-						<input type="text" name="id_peg_jbt" id="id_peg_jbt" value=<?php echo $row_jbt_tmt['id_peg_jabatan']; ?> /hidden>
 						<select name="jabatan" data-placeholder="Pilih Jabatan..." class="chzn-select" tabindex="1" value="<?php echo $row_jbt_tmt['p_jbt_jabatan'];?>"><?php 
 						foreach ($list_jabatan as $row_jabatan) :
 						{ 
@@ -40,10 +43,12 @@
 							<?php }
 							} endforeach; ?>
 						</select></div>
+						<input type="text" name="id_peg_jbt" id="id_peg_jbt" value=<?php echo $row_jbt_tmt['id_peg_jabatan']; ?> /hidden>
+						
                         <div class="clear"></div>
                     </div>
                     <div class="formRow">
-                        <label>Terhitung Mulai Tanggal:</label>
+                        <label>Terhitung Mulai Tanggal:<span class="req">*</span></label>
                         <div class="formRight"><?php 
 						$tmt_jbt = array(
 							'name' => 'tmt_jbt',
@@ -79,20 +84,24 @@
 							$sub_unit[$row_sub_unit_list['su_kode_sub_unit']] = $row_sub_unit_list['su_sub_unit'];
 						}
 						echo  form_dropdown('sub_unit',$sub_unit,$row_unit['p_unt_kode_sub_unit']);
-						/*
-						$sub_unit = array(
-							'name' => 'sub_unit',
-							'id'   => 'sub_unit',
-							'style'=> 'width:30%',
-							'value'=> $row_unit['p_unt_kode_sub_unit']
-						);
-						echo form_input($sub_unit) 
-						*/
 						?></div>
                         <div class="clear"></div>
                     </div>
-					 <div class="formRow">
-                        <label>Terhitung Mulai Tanggal:</label>
+					<div class="formRow">
+                        <label>Team :</label>
+                        <div class="formRight">
+						<?php 
+						$team_list['']="";
+						foreach($list_team as $row_team_list){
+							$team_list[$row_team_list['sut_team']] = $row_team_list['sut_team'];
+						}
+						echo  form_dropdown('team',$team_list,$row_unit['p_unt_team']);
+						
+						?></div>
+                        <div class="clear"></div>
+                    </div>
+					<div class="formRow">
+                        <label>Terhitung Mulai Tanggal:<span class="req">*</span></label>
                         <div class="formRight"><?php 
 						$tmt_unt = array(
 							'name' => 'tmt_unt',
@@ -100,7 +109,6 @@
 							'class'=> 'maskDate',
 							'style'=> 'width:30%',
 							'value'=> $unit_tmt
-							
 						);
 						echo form_input($tmt_unt) ?><br/>
 						<?php echo form_error('tmt_unt')?></div>

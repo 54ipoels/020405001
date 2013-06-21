@@ -49,7 +49,9 @@
 					  $kelurahan = '-';
 					  $kecamatan = '-';
 					  $kabupaten = '-';
-					  $provinsi = '-';}
+					  $provinsi = '-';
+					  $email = '-';
+					  }
 				foreach ($data_alamat as $row_alamat) :
 				{ 
 					$telp = $row_alamat['p_al_no_telp'];
@@ -58,6 +60,7 @@
 					$kecamatan = $row_alamat['p_al_kecamatan'];
 					$kabupaten = $row_alamat['p_al_kabupaten'];
 					$provinsi = $row_alamat['p_al_provinsi'];
+					$email = $row_alamat['p_al_email'];
 				}endforeach;
 				if ($data_status_keluarga == NULL)
 					{ $row_stk['p_stk_status_keluarga'] = '-';}
@@ -77,29 +80,8 @@
 				}
 				?>  
 				<?php
-				/*
-				if($data_jabatan_tmt==NULL){
-					$status="-";
-					$tmt = "-";
-					$provider ="-";
-					$jabatan = "-";
-					
-				}
-				else{
-				foreach ($data_jabatan_tmt as $row_jbt_tmt) :
-				{
-					$datestring = "%d-%m-%Y" ;
-					$tmt = mdate($datestring,strtotime($row_jbt_tmt['p_tmt_tmt']));
-					$status = $row_jbt_tmt['p_tmt_status'];
-					$provider = $row_jbt_tmt['p_tmt_provider'];
-					$jabatan = $row_jbt_tmt['p_jbt_jabatan'];
-				} endforeach;
-				}
-				*/
+				
 				if($data_jabatan==NULL){
-					#$status="-";
-					#$tmt = "-";
-					#$provider ="-";
 					$jabatan = "-";
 					$tmt_jabatan = "-";
 					
@@ -108,9 +90,6 @@
 				foreach ($data_jabatan as $row_jbt) :
 				{
 					$datestring = "%d-%m-%Y" ;
-					#$tmt = mdate($datestring,strtotime($row_jbt['p_tmt_tmt']));
-					#$status = $row_jbt['p_tmt_status'];
-					#$provider = $row_jbt['p_tmt_provider'];
 					$jabatan = $row_jbt['p_jbt_jabatan'];
 					$tmt_jabatan = mdate($datestring,strtotime($row_jbt['p_jbt_tmt_start']));
 				} endforeach;
@@ -135,22 +114,28 @@
 					
 				}
 				
-				if($data_unit==NULL){
+				if($data_unit == NULL){
 					$kode_unit="-";
+					$sub_unit ="-";
+					$team = "-";
 					$grade = "-";
 				} else {
-				foreach ($data_unit as $row_unit) :
-				{
-					$kode_unit = $row_unit['p_unt_kode_unit'];
-				} endforeach;
-				if ($data_grade == NULL)
-				{ $grade = '';} else {
-					foreach ($data_grade as $row_grade) :
+					foreach ($data_unit as $row_unit) :
 					{
-						$grade = $row_grade['p_grd_grade'];
+						$kode_unit = $row_unit['p_unt_kode_unit'];
+						$sub_unit = $row_unit['su_sub_unit'];
+						$team = $row_unit['p_unt_team'];
 					} endforeach;
+					if ($data_grade == NULL)
+					{ $grade = '';} else {
+						foreach ($data_grade as $row_grade) :
+						{
+							$grade = $row_grade['p_grd_grade'];
+						} endforeach;
+					}
 				}
-				}
+				
+				
 				?>
 			<table cellpadding="0" cellspacing="0" width="100%" class="sTable">
                 <tfoot>
@@ -291,7 +276,8 @@ if( $tmt_reason==""){?>
 								<tr><td>Kecamatan</td><td><?php echo $kecamatan;?></td></tr>
 								<tr><td>Kabupaten</td><td><?php echo $kabupaten;?></td></tr>
 								<tr><td>Provinsi</td><td><?php echo $provinsi;?></td></tr>
-                            </tr>
+                            	<tr><td>Email</td><td><?php echo $email;?></td></tr>
+                            
                         </tbody>
                     </table>
                 </div>
@@ -352,6 +338,8 @@ if( $tmt_reason==""){?>
                             <tr><td width="30%">Jabatan Terakhir</td><td><?php echo $jabatan;?></td></tr>
                             <tr><td>Terhitung Mulai Tanggal</td><td><?php echo $tmt_jabatan; #echo $tmt; ?></td></tr>
 							<tr><td>Unit</td><td><?php echo $kode_unit;?></td></tr>
+							<tr><td>Sub Unit</td><td><?php echo $sub_unit;?></td></tr>
+							<tr><td>Team</td><td><?php echo $team;?></td></tr>
 							<tr><td>Grade</td><td><?php echo $grade?></td></tr>
 							<?php if($tmt_reason==""){?>
 							<tr><td>Status Pegawai</td><td><?php echo $status;?></td></tr>

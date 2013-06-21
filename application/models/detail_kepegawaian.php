@@ -8,6 +8,7 @@ class Detail_kepegawaian extends CI_Model
 		$this->load->database();
     }
 	
+	
 	function get_data_pegawai_by_nipp($nipp)
 	{
 		$query = ("SELECT * FROM v3_pegawai WHERE peg_nipp = '$nipp'");
@@ -17,6 +18,36 @@ class Detail_kepegawaian extends CI_Model
 		} else {
 			return 0;
 		}
+	}
+	
+	/*
+	function get_data_pegawai_by_nipp($nipp)
+	{
+		$query = ("SELECT * FROM v3_pegawai WHERE peg_nipp = '$nipp'");
+		$query = $this->db->query($query); 
+		if ($query->num_rows() > 0){
+			return $query->result_array();
+		} else {
+			return 0;
+		}
+	}
+	*/
+	
+	function get_detail_pegawai_jabatan_unit_grade_by_nipp($nipp)
+	{
+		$query = " 
+				SELECT * FROM v3_pegawai
+				LEFT JOIN ( SELECT * FROM `v3_peg_jabatan` ORDER BY id_peg_jabatan DESC ) AS jabatan 
+				ON ( p_jbt_nipp = peg_nipp)
+				LEFT JOIN (	SELECT * FROM  `v3_peg_unit` ORDER BY id_peg_unit DESC) AS unit 
+				ON ( p_jbt_nipp = p_unt_nipp AND jabatan.p_jbt_tmt_start >= unit.p_unt_tmt_start )
+				LEFT JOIN ( SELECT * FROM `v3_peg_grade` ORDER BY id_peg_grade DESC) AS grade
+				ON ( p_grd_nipp = p_jbt_nipp )
+				WHERE peg_nipp = '$nipp'
+				ORDER BY id_peg_jabatan, id_peg_unit DESC
+				";
+		$query = $this->db->query($query); 
+		return $query->result_array();
 	}
 	
 	function get_detail_pegawai_agama($nipp)

@@ -403,27 +403,10 @@ class kepegawaian extends CI_Model
 		$query = $this->db->query($query);
 		return $query->result_array();
 		
-		/*
-		$this->db->select('*');
-		$this->db->like('peg_nipp', $search);
-		$this->db->or_like('peg_nama', $search);
-		$query = $this->db->get('v3_pegawai', $num, $offset);
-		return $query->result_array();
-		*/
 	}
 	
 	function get_data_pegawai_by_nipp($nipp)
 	{
-		/*
-		$this->db->select('*');
-		$this->db->where('peg_nipp',$nipp);
-		if ($this->db->count_all_results('v3_pegawai') > 0 ) {
-			$query = $this->db->get('v3_pegawai');
-			return $query->result_array();
-		} else {
-			return 0;
-		}
-		*/
 		$query = (" SELECT * FROM v3_pegawai WHERE peg_nipp = '$nipp' ");
 		$query = $this->db->query($query); 
 		if ($query->num_rows()>0){
@@ -484,13 +467,6 @@ class kepegawaian extends CI_Model
 	
 	function get_detail_pegawai_jabatan($nipp)
 	{
-		/*
-		$this->db->select('*');
-		$this->db->where('p_jbt_nipp',$nipp);
-		$this->db->order_by('id_peg_jabatan', 'DESC');
-		$query = $this->db->get('v3_peg_jabatan');
-		return $query->result_array();
-		*/
 		$query = " 
 				SELECT * FROM  `v3_peg_jabatan` AS jabatan
 				LEFT JOIN (	SELECT * FROM  `v3_peg_unit` ORDER BY id_peg_unit DESC) AS unit 
@@ -579,9 +555,29 @@ class kepegawaian extends CI_Model
 	
 	function get_detail_pegawai_unit($nipp)
 	{
-		$this->db->select('*');
-		$this->db->where('p_unt_nipp',$nipp);
-		$query = $this->db->get('v3_peg_unit');
+		$query = "
+					SELECT * FROM v3_peg_unit AS peg_unit 
+					LEFT JOIN (SELECT * FROM v3_sub_unit ) AS sub_unit
+					ON peg_unit.p_unt_kode_sub_unit = sub_unit.su_kode_sub_unit
+					WHERE peg_unit.p_unt_nipp = '$nipp'
+					ORDER BY peg_unit.id_peg_unit ASC
+				";
+		$query = $this->db->query($query);
+		return $query->result_array();
+	}
+	
+	
+	function get_last_pegawai_unit_team($nipp)
+	{
+		$query = "	
+					SELECT * FROM v3_peg_unit AS peg_unt
+					LEFT JOIN ( SELECT * FROM v3_peg_unit_team ORDER BY id_peg_unit_team DESC ) AS peg_team
+					ON peg_unt.id_peg_unit = peg_team.id_peg_unit_team 
+					WHERE peg_unt.p_unt_nipp = '$nipp'
+					ORDER BY id_peg_unit DESC, id_peg_unit_team DESC
+					LIMIT 1
+				";
+		$query = $this->db->query($query);
 		return $query->result_array();
 	}
 	
@@ -629,6 +625,16 @@ class kepegawaian extends CI_Model
 		$query = "
 				SELECT * FROM v3_sub_unit
 				ORDER BY su_kode_unit,su_kode_sub_unit
+		";	
+		$query = $this->db->query($query);
+		return $query->result_array();
+	}
+	
+	function get_list_team()
+	{
+		$query = "
+				SELECT * FROM v3_subunit_team
+				ORDER BY sut_kode_sub_unit,sut_kode_team
 		";	
 		$query = $this->db->query($query);
 		return $query->result_array();
