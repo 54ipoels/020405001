@@ -74,6 +74,32 @@ class Detail_kepegawaian extends CI_Model
 		return $query->result_array();
 	}
 	
+	function get_detail_pegawai_ibu($nipp)
+	{
+		$this->db->select('*');
+		$this->db->where('p_ibu_nipp',$nipp);
+		$query = $this->db->get('v3_peg_ibu');
+		return $query->result_array();
+	}
+	
+	
+	function get_detail_pegawai_mert_ayah($nipp)
+	{
+		$this->db->select('*');
+		$this->db->where('p_may_nipp',$nipp);
+		$query = $this->db->get('v3_peg_mert_ayah');
+		return $query->result_array();
+	}
+	
+	function get_detail_pegawai_mert_ibu($nipp)
+	{
+		$this->db->select('*');
+		$this->db->where('p_mib_nipp',$nipp);
+		$query = $this->db->get('v3_peg_mert_ibu');
+		return $query->result_array();
+	}
+	
+	
 	function get_detail_pegawai_bahasa($nipp)
 	{
 		$this->db->select('*');
@@ -90,13 +116,7 @@ class Detail_kepegawaian extends CI_Model
 		return $query->result_array();
 	}
 	
-	function get_detail_pegawai_ibu($nipp)
-	{
-		$this->db->select('*');
-		$this->db->where('p_ibu_nipp',$nipp);
-		$query = $this->db->get('v3_peg_ibu');
-		return $query->result_array();
-	}
+	
 	
 	function get_detail_pegawai_jabatan($nipp)
 	{
@@ -128,21 +148,7 @@ class Detail_kepegawaian extends CI_Model
 	}
 	
 	
-	function get_detail_pegawai_mert_ayah($nipp)
-	{
-		$this->db->select('*');
-		$this->db->where('p_may_nipp',$nipp);
-		$query = $this->db->get('v3_peg_mert_ayah');
-		return $query->result_array();
-	}
 	
-	function get_detail_pegawai_mert_ibu($nipp)
-	{
-		$this->db->select('*');
-		$this->db->where('p_mib_nipp',$nipp);
-		$query = $this->db->get('v3_peg_mert_ibu');
-		return $query->result_array();
-	}
 	
 	function get_detail_pegawai_pasangan($nipp)
 	{
