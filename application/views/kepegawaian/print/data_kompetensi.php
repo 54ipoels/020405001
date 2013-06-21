@@ -4,32 +4,27 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>DATA KOMPETENSI PEGAWAI</title>
 
-<link href="<?php echo base_url(); ?>admin/css/kompetensi.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <?php 
 $datestring = "%d-%m-%Y" ;
 foreach($pegawai as $row_peg){}
 foreach($data_jabatan_tmt as $row_jt){}
-/*
-if($data_saudara == NULL)
-	{
-		$row_grd['p_grd_grade'] = '-';
-	} else {foreach($data_grade as $row_grd){}}
-*/
+
 foreach($data_unit as $row_unit){}
 foreach($data_status_keluarga as $row_stk){}
 foreach($data_fisik as $row_fis){}
 foreach($data_alamat as $row_al){}
-foreach($data_pendidikan as $row_pdk){}
+if($data_pendidikan == NULL)
+{
+	$pendidikan_terakhir="-";
+}
+else 
+{
+	foreach($data_pendidikan as $row_pdk){}
+	$pendidikan_terakhir = $row_pdk['p_pdd_tingkat'];
+}
 
-/*
-if($data_saudara == NULL)
-	{
-		$row_sdr['p_sdr_ke'] = '-';
-		$row_sdr['p_sdr_jumlah_sdr'] = '-';
-	} else {foreach($data_saudara as $row_sdr){}}
-*/
 if ($data_grade==NULL){
 	$grade="";
 }else {
@@ -43,30 +38,6 @@ if ($data_unit == NULL){
 	foreach($data_unit as $row_unit){}
 	$unit = $row_unit['p_unt_kode_unit'];
 }
-/*
-if ($data_bahasa==NULL){
-	$bhs=0;
-	$bahasa[0]="";
-} else {
-	$bhs=0;
-	foreach($data_bahasa as $row_bahasa){
-		$bhs++;
-		$bahasa[$bhs] = $row_bahasa['p_bhs_bahasa'];
-	}
-}
-*/
-/*
-if ($data_saudara==NULL){
-	$sdr_ke = 0;
-	$jumlah_sdr = 0;
-} else {
-	foreach ($data_saudara as $row_sdr){
-		$sdr_ke = $row_sdr['p_sdr_ke'];
-		$jumlah_sdr = $row_sdr['p_sdr_jumlah_sdr'];
-	}
-
-}
-*/
 
 ?>
 <h1>DATA KOMPETENSI</h1>
@@ -147,7 +118,7 @@ if ($data_saudara==NULL){
 	</tr>
 	<tr>
 		<td><strong>Pendidikan terakhir</strong></td>
-		<td colspan="2">: <?php echo $row_pdk['p_pdd_tingkat'];?></td>
+		<td colspan="2">: <?php echo $pendidikan_terakhir;?></td>
 	</tr>
 	<tr>
 		<td><strong>No Telepon</strong></td>
@@ -179,12 +150,7 @@ if ($data_saudara==NULL){
 							<?php }
 							$jumlah_bhs++;
 							}endforeach; ?>
-	<!--
-	<tr>
-		<td><strong>Anak ke</strong></td>
-		<td colspan="2">: <?php //echo $sdr_ke.' dari '.$jumlah_sdr.' bersaudara';?></td>
-	</tr>
-	-->
+	
 </table>
 <br />
 <!-- =============================================================================== -->
@@ -336,14 +302,6 @@ if ($data_saudara==NULL){
     <td bgcolor="#CCCCCC"><div align="center">Nomor</div></td>
     <td bgcolor="#CCCCCC"><div align="center">Tanggal</div></td>
   </tr>
-    <!--<td><div align='center'>$nomor</div></td>
-    <td><div align='center'>$cc[pangkat]</div></td>
-    <td><div align='center'>";$indo = explode("-",$cc[tmt_capeg_pegttp]);echo "$indo[2]-$indo[1]-$indo[0]";echo"</div></td>
-    <td><div align='center'>$cc[pejabat]</div></td>
-    <td><div align='center'>$cc[nomor]</div></td>
-	<td><div align='center'>";$indo = explode("-",$cc[tanggal]);echo "$indo[2]-$indo[1]-$indo[0]";echo"</div></td>
-	<td><div align='center'>$cc[ket]</div></td>
-  </tr> -->
 </table>
 <br>
 
@@ -362,16 +320,6 @@ if ($data_saudara==NULL){
     <td bgcolor="#CCCCCC"><div align="center">Nomor</div></td>
     <td bgcolor="#CCCCCC"><div align="center">Tanggal</div></td>
   </tr>
- <!-- <tr>
-    <td><div align='center'>$nomor</div></td>
-    <td><div align='center'>$dd[jabatan]</div></td>
-	<td><div align='center'>$dd[unit]</div></td>
-    <td><div align='center'>";$indo = explode("-",$dd[tmt_capeg_pegttp]);echo "$indo[2]-$indo[1]-$indo[0]";echo"</div></td>
-    <td><div align='center'>$dd[pejabat]</div></td>
-    <td><div align='center'>$dd[nomor]</div></td>
-	<td><div align='center'>";$indo = explode("-",$dd[tanggal]);echo "$indo[2]-$indo[1]-$indo[0]";echo"</div></td>
-	<td><div align='center'>$dd[ket]</div></td>
-  </tr> -->
 </table>
 <br>
 
@@ -387,13 +335,7 @@ if ($data_saudara==NULL){
     <td bgcolor="#CCCCCC"><div align="center">Dari</div></td>
     <td bgcolor="#CCCCCC"><div align="center">Sampai</div>      <div align="center"></div></td>
   </tr>
-  <!--<tr>
-    <td><div align='center'>$nomor</div></td>
-    <td><div align='center'>$ee[jenis_sanksi]</div></td>
-	<td><div align='center'>";$indo = explode("-",$ee[dari]);echo "$indo[2]-$indo[1]-$indo[0]";echo"</div></td>
-    <td><div align='center'>";$indo = explode("-",$ee[sampai]);echo "$indo[2]-$indo[1]-$indo[0]";echo"</div></td>
-    <td><div align='center'>$ee[jenis_pelanggaran]</div></td>
-  </tr>-->
+  
 </table>
 <br>
 </body>

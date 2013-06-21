@@ -2,7 +2,6 @@
 <head>
 	<title>DATA PEGAWAI</title>
 </head>
-<link href="<?php echo base_url(); ?>admin/css/kompetensi.css" rel="stylesheet" type="text/css" />
 <body>
 <?php 
 				foreach ($pegawai as $row_pegawai) :
