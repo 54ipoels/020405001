@@ -395,7 +395,7 @@ class Gaji extends Application {
 	}
 	
 	
-	function view_lembur_pegawai()
+	/*function view_lembur_pegawai()
 	{	
 		//ambil data unit
 		$data['showdata'] = $this->m_asset->ambil_data_lembur(); 
@@ -404,7 +404,7 @@ class Gaji extends Application {
 		$data['view_lembur_pegawai'] = 'class="this"';
 		$data['form_gaji'] = 'id="current"';
 		$this->load->view('gaji/index',$data);
-	}
+	}*/
 	
 	function view_detail_lembur()
 	{	
@@ -485,7 +485,6 @@ class Gaji extends Application {
 	
 	function generate_lembur_pegawai()
 	{
-		
 		if ($unit = $this->input->post('unit') == "pilih")
 		{
 			redirect('gaji/lembur_pegawai');

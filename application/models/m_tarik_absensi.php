@@ -58,5 +58,17 @@ class M_tarik_absensi extends CI_Model {
       	$this->db->insert('v3_databackup_mesin', $data); 	
 	}
 	
+	#cek status terakhir 
+	function get_last_filter_absensi_by_nipp($nipp)
+	{
+		$query = " 	SELECT * FROM v3_filter_absensi
+					WHERE filabs_nipp = '$nipp' 
+					ORDER BY filabs_id DESC
+					LIMIT 1
+				 ";
+		$query = $this->db->query($query);
+		return $query->result_array();
+	}
+	
 }	
 ?>

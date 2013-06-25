@@ -1553,20 +1553,80 @@ class C_absensi extends Application {
 		$backup = $this->m_absensi->get_data_tampung();
 		if($backup !== 0){
 			foreach ($backup as $row){
-				$year 		=substr($row['dt_datetime'],0,4);
-				$nipp		=$row['dt_nipp'];
-				$datetime	=$row['dt_datetime'];
-				$status		=$row['dt_status'];
-				$dup = $this->m_absensi->cek_dup_tabel_absensi($nipp,$datetime,$status);
-				foreach ($dup as $row_dup)
+				$year 		= substr($row['dt_datetime'],0,4);
+				$nipp		= $row['dt_nipp'];
+				$datetime	= $row['dt_datetime'];
+				$status		= $row['dt_status'];
+				
+				if(($status == 1) OR ($status == 2) OR ($status == 3))
 				{
-					$this->m_absensi->cek_selisih_absen_terdekat($datetime,$nipp,$status,$row_dup,$year);
+					$hariini = date('Y-m-d', strtotime($datetime));
+					$cek = $this->m_absensi->cek_date_null_tabel_absensi($nipp,$hariini,$status);
+					if($cek == 0){
+						$kemarin = date('Y-m-d', strtotime($datetime) - (24*60*60));
+						$cek = $this->m_absensi->cek_date_null_tabel_absensi($nipp,$kemarin,$status);
+					}
+
+					if($status==1)
+					{
+						$subjek == "fschpegabs_real_time_out";
+					} else if($status==2)
+					{
+						$subjek == "fschpegabs_real_break_in";
+					} else if($status==3)
+					{
+						$subjek == "fschpegabs_real_break_out";
+					} 
+					
+					foreach ($cek as $row_cek){
+						$year	= substr($row_cek['fschpegabs_sch_time_in'],0,4);
+						$nipp	= $row_cek['peg_nipp'];
+						$id 	= $row_cek['fschpegabs_id']; //tanggal sebagai patokan row yg akan diupdate
+					}
+					
+				} else if($status == 0)
+				{
+					$subjek = 'fschpegabs_real_break_out';
+					$dataget = $this->m_absensi->ambil_data_absensi_by_time_in($year,$nipp,$datetime);
+					foreach ($dataget as $row_data){}
+					$id = $row_data['fschpegabs_id'];
 				}
+				$data = array(
+						$subjek	=> $datetime,
+					);
+				$this->m_absensi->update_absensi_pegawai($data,$id,$year);
 			}
 			$this->m_absensi->truncate_data_tampung(); // mengosongkan tabel datatampung  dengan menyisakan 1 data terakhir sebagai kondisi selanjutnya 
 		}
 	}
 	
+	/*
+	public function copy_data_tampung_to_absensi()
+	{
+		$backup = $this->m_absensi->get_data_tampung();
+		if($backup !== 0){
+		$nipp_sblm ="";
+		$status_sblm ="";
+			foreach ($backup as $row){
+				// tambahkan seleksi $row['dt_status'] dengan $row['dt_status'] sebelumnya, jika bernilai sama maka masuk ke besok, jika 0(kemarin)-1(hr ini) update absensi tgl keluar di tgl kemarin 
+				# if ($nipp_sblm == $row['dt_nipp'] ){}
+				
+				$year 		= substr($row['dt_datetime'],0,4);
+				$nipp		= $row['dt_nipp'];
+				$datetime	= $row['dt_datetime'];
+				$status		= $row['dt_status'];
+				$dup 		= $this->m_absensi->cek_dup_tabel_absensi($nipp,$datetime,$status);
+				foreach ($dup as $row_dup)
+				{
+					$this->m_absensi->cek_selisih_absen_terdekat($datetime,$nipp,$status,$row_dup,$year);
+				}
+				# $nipp_sblm = $row['dt_nipp'];
+				# $status_sblm = $row['dt_status']; 
+			}
+			$this->m_absensi->truncate_data_tampung(); // mengosongkan tabel datatampung  dengan menyisakan 1 data terakhir sebagai kondisi selanjutnya 
+		}
+	}
+	*/
 	
 	
 

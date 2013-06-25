@@ -86,7 +86,7 @@
                         <div class="clear"></div>
                     </div>
 					<div class="formRow">
-                        <label>Shift Al:<span class="req">*</span></label>
+                        <label>Shift Allowance:<span class="req">*</span></label>
                         <div class="formRight">
 							<?php
 								$shift = array(

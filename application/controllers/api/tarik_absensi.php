@@ -54,7 +54,20 @@ class Tarik_absensi extends Application {
 				#masukkan data dari mesin ke database tampung / backup
 					
 				#data pada finger print tidak dihapus
-				if(($pin !== "") AND ($datetime !=="" )){
+				if(($pin !== "") AND ($datetime !=="" ))
+				{
+					// start sini
+					if($status > 0)
+					{ 
+						$last_status = $this->m_tarik_absensi->get_last_filter_absensi_by_nipp($pin);	
+						foreach($last_status as $ls)
+						{}
+					} 
+					else 
+					{
+						
+					}
+					// akhir sini
 					$cekdup = $this->m_tarik_absensi->cek_dup_backup_mesin($pin,$datetime,$status);
 					if($cekdup == 0)
 					{
@@ -67,6 +80,7 @@ class Tarik_absensi extends Application {
 						$this->m_tarik_absensi->input_data_backup_mesin($pin,$datetime,$status,$grab);
 						echo "<tr><td>" . $pin . "</td><td>" . $datetime . "</td><td>" . $status . "</td><td>". $grab ."</td><td>" . $verified . "</td></tr>";
 					}
+					
 				}
 				
 				/* jika data di finger print dihapus setelah tarik absensi 

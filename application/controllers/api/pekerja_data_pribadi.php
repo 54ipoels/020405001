@@ -95,5 +95,23 @@ class Pekerja_data_pribadi extends REST_Controller {
 		}
 	}
 	
+	public function pribadiemail_get()
+	{
+		if(!$this->get('email'))
+        {
+        	$this->response(NULL, 400);
+        }
+		else
+		{
+			$email = $this->get('email');
+			$data = $this->detail_kepegawaian->get_data_pegawai_by_email($email);
+			if($data=0){
+				$this->response(NULL, 400);
+			} else {
+				$this->response($data, 200); // 200 being the HTTP response code
+			}
+		}
+	}
+	
 }
 ?>

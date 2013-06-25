@@ -329,25 +329,27 @@ class M_gaji extends CI_Model
 	
 	function ambil_data_absen($unit,$month,$year)
 	{
-			$query = "
-				
-				SELECT * FROM v3_fschpeg_absensi_$year AS absen
-				LEFT JOIN (SELECT * FROM v3_fsch_pegawai) AS sch
-				ON absen.fschpegabs_fschpeg_id = sch.fschpeg_id
-				LEFT JOIN (SELECT * FROM v3_pegawai) AS peg
-				ON peg.id_pegawai =  sch.fschpeg_id_pegawai
-				LEFT JOIN (SELECT * FROM v3_peg_unit ORDER BY id_peg_unit DESC) AS unit
-				ON peg.peg_nipp = unit.p_unt_nipp 
-				LEFT JOIN (SELECT id_peg_jabatan,p_jbt_nipp,p_jbt_jabatan FROM v3_peg_jabatan ORDER BY id_peg_jabatan DESC) AS jbt 
-				ON jbt.p_jbt_nipp = peg.peg_nipp
-				LEFT JOIN (SELECT * FROM v3_peg_grade ORDER BY id_peg_grade DESC) AS grade
-				ON grade.p_grd_nipp = peg.peg_nipp
-				LEFT JOIN (SELECT * FROM v3_master_lembur) AS maslembur
-				ON maslembur.ml_grade = grade.p_grd_grade
-				WHERE unit.p_unt_kode_unit = '$unit'
-				AND sch.fschpeg_month = '$month'
-				AND sch.fschpeg_year = '$year'
-		";
+		$query = "
+					SELECT * FROM v3_fschpeg_absensi_$year AS absen
+					LEFT JOIN (SELECT * FROM v3_fsch_pegawai) AS sch
+					ON absen.fschpegabs_fschpeg_id = sch.fschpeg_id
+					LEFT JOIN (SELECT * FROM v3_pegawai) AS peg
+					ON peg.id_pegawai =  sch.fschpeg_id_pegawai
+					LEFT JOIN (SELECT * FROM v3_peg_unit ORDER BY id_peg_unit DESC) AS unit
+					ON peg.peg_nipp = unit.p_unt_nipp 
+					LEFT JOIN (SELECT id_peg_jabatan,p_jbt_nipp,p_jbt_jabatan FROM v3_peg_jabatan ORDER BY id_peg_jabatan DESC) AS jbt 
+					ON jbt.p_jbt_nipp = peg.peg_nipp
+					LEFT JOIN (SELECT * FROM v3_peg_grade ORDER BY id_peg_grade DESC) AS grade
+					ON grade.p_grd_nipp = peg.peg_nipp
+					LEFT JOIN (SELECT * FROM v3_master_lembur ORDER BY id_master_lembur DESC) AS ml
+					ON ml.ml_grade = grade.p_grd_grade
+					
+					WHERE unit.p_unt_kode_unit = '$unit'
+					AND sch.fschpeg_month = '$month'
+					AND sch.fschpeg_year = '$year'
+					GROUP BY peg_nipp, fschpegabs_id DESC, id_peg_lembur DESC
+					ORDER BY fschpegabs_id
+			";
 		
 		$query = $this->db->query($query);
 		return  $query->result_array();
@@ -385,7 +387,6 @@ class M_gaji extends CI_Model
 				'ml_exvo'	=>	$this->input->post('exvoed'),
 				'ml_hari_kerja'	=>	$this->input->post('harikerja'),
 				'ml_hari_libur'	=>	$this->input->post('harilibur'),
-				'ml_hari_kerja'	=>	$this->input->post('harikerja'),
 				'ml_shift'	=>	$this->input->post('shift'),
 				'ml_tunj_spv'	=>	$this->input->post('tunj_spv'),
 				'ml_natura'	=>	$this->input->post('natura'),
@@ -406,7 +407,6 @@ class M_gaji extends CI_Model
 				'ml_exvo'	=>	$this->input->post('exvoed'),
 				'ml_hari_kerja'	=>	$this->input->post('harikerja'),
 				'ml_hari_libur'	=>	$this->input->post('harilibur'),
-				'ml_hari_kerja'	=>	$this->input->post('harikerja'),
 				'ml_shift'	=>	$this->input->post('shift'),
 				'ml_tunj_spv'	=>	$this->input->post('tunj_spv'),
 				'ml_natura'	=>	$this->input->post('natura'),
@@ -466,23 +466,20 @@ class M_gaji extends CI_Model
 						'lmb_uang_makan'	=>	$jumlahhk * $row_absen['ml_makan'],
 						'lmb_uang_transport'=>	$ml_trans,
 						'lmb_jumlah_hari_kerja'	=>	$jumlahhk,
-						'lmb_hari_kerja'	=>	$lemburhk * $row_absen['ml_hari_kerja'], // jumlah uang/jam
+						'lmb_hari_kerja'	=>	$lemburhk * $row_absen['ml_hari_kerja'], // jumlah uang
 						'lmb_jml_hr_kerja' 	=> 	$lemburhk, // jumlah jam
-						'lmb_hari_libur'	=>	$lemburhl * $row_absen['ml_hari_libur'], // jumlah uang/jam
+						'lmb_hari_libur'	=>	$lemburhl * $row_absen['ml_hari_libur'], // jumlah uang
 						'lmb_jml_hr_libur '	=>	$lemburhl, // jumlah jam
 						'lmb_jml_ex_voed'	=>	$exvo, 
 						'lmb_ex_voed'		=>	$exvo * $row_absen['ml_exvo'], 
 						'lmb_shift_all'		=>	'',
 						'lmb_natura'		=>	'',
 						'lmb_tunj_stkp'		=>	'',
-						//'lmb_potongan'		=>	'',
 						'lmb_apresiasi'		=>	'',
 						'lmb_koreksi'		=>	'',
 						'lmb_bulan'			=>	$month,
-						//'lmb_tahun'			=> 	$year,
 						'lmb_update_by'		=>	'admin' ,
 					);
-				//print_r($data_lembur);echo "<br>";
 				# insert ke db 
 				$this->db->insert('v3_lembur_'.$year,$data_lembur);
 				

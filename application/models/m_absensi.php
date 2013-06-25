@@ -688,6 +688,53 @@ class M_absensi extends CI_Model {
 		//return $id;
 	}
 	
+	# cek tanggal abensi null
+	function cek_date_null_tabel_absensi($nipp,$kemarin,$status)
+	{
+		$year = substr($kemarin,0,4);
+		if($status == 1){
+			$subjek = 'fschpegabs_real_time_out';
+		}elseif($status == 2){
+			$subjek = 'fschpegabs_real_break_in';
+		}elseif($status == 3){
+			$subjek = 'fschpegabs_real_break_out';
+		}
+		
+		$query = " 	SELECT * FROM v3_fschpeg_absensi_$year AS absen 
+					LEFT JOIN (SELECT fschpeg_id,fschpeg_id_pegawai FROM v3_fsch_pegawai) AS schpeg
+					ON schpeg.fschpeg_id = absen.fschpegabs_fschpeg_id 
+					LEFT JOIN (SELECT id_pegawai,peg_nipp FROM v3_pegawai) AS peg
+					ON peg.id_pegawai = schpeg.fschpeg_id_pegawai
+					WHERE absen.fschpegabs_real_time_in LIKE '$kemarin%'
+					AND peg.peg_nipp = '$nipp'
+				";
+		$query = $this->db->query($query);
+		$result = $query->result_array();
+		foreach ($result as $row){}
+		if( (substr($row[$subjek],11,8) == "00:00:00")  AND  ( $row['fschpegabs_real_time_in'] !== "0000-00-00 00:00:00" ) )
+		{
+			return $result;
+		} else {
+			return 0;
+		}
+	}
+	
+	function ambil_data_absensi_by_time_in($year,$nipp,$datetime)
+	{
+		$query = " 	SELECT * FROM v3_fschpeg_absensi_$year AS absen 
+					LEFT JOIN (SELECT fschpeg_id,fschpeg_id_pegawai FROM v3_fsch_pegawai) AS schpeg
+					ON schpeg.fschpeg_id = absen.fschpegabs_fschpeg_id 
+					LEFT JOIN (SELECT id_pegawai,peg_nipp FROM v3_pegawai) AS peg
+					ON peg.id_pegawai = schpeg.fschpeg_id_pegawai
+					WHERE absen.fschpegabs_real_time_in LIKE '$datetime%'
+					AND peg.peg_nipp = '$nipp'
+				";
+		$query = $this->db->query($query);
+		return $query->result_array();
+	}
+	
+	# akhir cek 
+	
 	function cek_selisih_absen_terdekat($datetime,$nipp,$status,$row_dup,$year)
 	{
 		$kemarin = date('Y-m-d',(strtotime($datetime) - (24*60*60)));
@@ -762,7 +809,7 @@ class M_absensi extends CI_Model {
 				);
 		//print_r($data);echo " terdekat=$terdekat  status=$status  <br> ";
 		
-		if (($status == 0) OR ($status == 2)) {
+		if (($status == 0) OR ($status == 2)){
 			if($terdekat == 0){
 				if($row_dup[$real]=="0000-00-00 00:00:00"){
 					$this->update_absensi_pegawai($data,$row_dup['fschpegabs_id'],$year);
@@ -858,7 +905,7 @@ class M_absensi extends CI_Model {
 	
 	function get_data_tampung()
 	{
-		$query = "SELECT * FROM v3_datatampung";
+		$query = "SELECT * FROM v3_datatampung ORDER BY dt_nipp,dt_datetime";
 		$query = $this->db->query($query);
 		if($query->num_rows() > 0){
 			return $query->result_array();

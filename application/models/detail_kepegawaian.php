@@ -20,19 +20,6 @@ class Detail_kepegawaian extends CI_Model
 		}
 	}
 	
-	/*
-	function get_data_pegawai_by_nipp($nipp)
-	{
-		$query = ("SELECT * FROM v3_pegawai WHERE peg_nipp = '$nipp'");
-		$query = $this->db->query($query); 
-		if ($query->num_rows() > 0){
-			return $query->result_array();
-		} else {
-			return 0;
-		}
-	}
-	*/
-	
 	function get_detail_pegawai_jabatan_unit_grade_by_nipp($nipp)
 	{
 		$query = " 
@@ -45,6 +32,7 @@ class Detail_kepegawaian extends CI_Model
 				ON ( p_grd_nipp = p_jbt_nipp )
 				WHERE peg_nipp = '$nipp'
 				ORDER BY id_peg_jabatan, id_peg_unit DESC
+				LIMIT 1
 				";
 		$query = $this->db->query($query); 
 		return $query->result_array();
@@ -224,5 +212,32 @@ class Detail_kepegawaian extends CI_Model
 		return $query->result_array();
 	}
 
+	function get_data_pegawai_by_email($email)
+	{
+		$query = " 
+				SELECT * FROM v3_pegawai
+				LEFT JOIN ( SELECT id_peg_alamat, p_al_nipp, p_al_email FROM `v3_peg_alamat`) AS alamat
+				ON ( alamat.p_al_nipp = peg_nipp)
+				LEFT JOIN ( SELECT * FROM `v3_peg_jabatan` ORDER BY id_peg_jabatan DESC ) AS jabatan 
+				ON ( p_jbt_nipp = peg_nipp)
+				LEFT JOIN (	SELECT * FROM  `v3_peg_unit` ORDER BY id_peg_unit DESC) AS unit 
+				ON ( p_jbt_nipp = p_unt_nipp AND jabatan.p_jbt_tmt_start >= unit.p_unt_tmt_start )
+				LEFT JOIN ( SELECT * FROM `v3_peg_grade` ORDER BY id_peg_grade DESC) AS grade
+				ON ( p_grd_nipp = p_jbt_nipp )
+				WHERE p_al_email = '$email'
+				ORDER BY id_peg_jabatan, id_peg_unit DESC
+				LIMIT 1
+				";
+		$query = $this->db->query($query);
+		//return $query->result_array();
+		
+		if($query->num_rows() > 0){
+			return $query->result_array();
+		} else {
+			return 0;
+		}
+		
+	}
+	
 } 
 ?>	
