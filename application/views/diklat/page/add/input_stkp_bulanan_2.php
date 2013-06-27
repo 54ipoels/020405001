@@ -28,6 +28,7 @@
 				echo form_hidden('license', $license);
 				echo form_hidden('lp', $lp);
 				echo form_hidden('instruktur', $instruktur);
+				echo form_hidden('instruktur_from', $instruktur_from);
 				for($i=1;$i<=$jumlah;$i++)
 					{ 
 					echo '<tr>';

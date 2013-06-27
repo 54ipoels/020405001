@@ -142,7 +142,7 @@
                         <div class="clear"></div>
                     </div>
 					<div class="formRow">
-                        <label>Instruktur:</label>
+                        <label>Instruktur Nama:</label>
                         <div class="formRight">
 						<?php 
 						$instruktur = array(
@@ -150,6 +150,17 @@
 							'id'   => 'instruktur',
 						);
 						echo form_input($instruktur,$row_stkp['p_stkp_instruktur']) ?></div>
+                        <div class="clear"></div>
+                    </div>
+					<div class="formRow">
+                        <label>Instruktur From:</label>
+                        <div class="formRight">
+						<?php 
+						$instruktur_from = array(
+							'name' => 'instruktur_from',
+							'id'   => 'instruktur_from',
+						);
+						echo form_input($instruktur,$row_stkp['p_stkp_instruktur_from']) ?></div>
                         <div class="clear"></div>
                     </div>
 					<div class="formRow">

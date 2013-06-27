@@ -70,11 +70,11 @@
                         <td rowspan="2">No Sertifikat</td>
                         <td colspan="2">Pelaksanaan</td>
                         <td rowspan="2">Lembaga</td>
-						<td rowspan="2">Instruktur</td>
+						<td colspan="2">Instruktur</td>
 						<td rowspan="2">Actions</td>
                     </tr>
 					<tr>
-					<td>From</td><td>Until</td></tr>
+					<td>From</td><td>Until</td><td>Nama</td><td>From</td></tr>
                 </thead> 
 				<tfoot>
 					<tr>
@@ -84,7 +84,7 @@
 								echo anchor('diklat/excel_non_stkp','Export to Excel',$attr);
 						 	?>
                        	</td>
-                        <td colspan="4"><div class="pagination"><?php echo $this->pagination->create_links();?></div></td>
+                        <td colspan="5"><div class="pagination"><?php echo $this->pagination->create_links();?></div></td>
                         <td colspan="3" align="right">EMS 2.0.1 | developed by www.studiokami.com</td>
                    	</tr>
 				</tfoot>
@@ -171,6 +171,7 @@
 						<td><center><?php echo $selesai; ?></center></td>
 						<td><center><?php echo $lembaga_anchor; ?></center></td>
 						<td><center><?php echo $row_pegawai['p_nstkp_instruktur']; ?></center></td>
+						<td><center><?php echo $row_pegawai['p_nstkp_instruktur_from']; ?></center></td>
 						<td><center><?php 
 										echo anchor('diklat/search_pegawai/'.$row_pegawai['peg_nipp'], "add"); 
 										echo " | ";

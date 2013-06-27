@@ -76,15 +76,29 @@
 				}
 				?>
 				<?php  
-				foreach ($data_jabatan_tmt as $row_jbt_tmt) :
-				{
-					$datestring = "%d-%m-%Y" ;
-					$tmt = mdate($datestring,strtotime($row_jbt_tmt['p_tmt_tmt']));
-					$status = $row_jbt_tmt['p_tmt_status'];
-					$provider = $row_jbt_tmt['p_tmt_provider'];
-				} endforeach;
-				foreach ($data_unit as $row_unit) :
-				{} endforeach;
+				if($data_jabatan_tmt == NULL){
+					$tmt = "-";
+					$status = "-";
+					$provider = "-";
+					$jabatan = "-";
+				} else {
+					foreach ($data_jabatan_tmt as $row_jbt_tmt) :
+						{
+							$datestring = "%d-%m-%Y" ;
+							$tmt = mdate($datestring,strtotime($row_jbt_tmt['p_tmt_tmt']));
+							$status = $row_jbt_tmt['p_tmt_status'];
+							$provider = $row_jbt_tmt['p_tmt_provider'];
+							$jabatan = $row_jbt_tmt['p_jbt_jabatan'];
+						} endforeach;
+				}
+				if($data_unit == NULL){
+					$unit = "-";
+				} else {
+					foreach ($data_unit as $row_unit) :
+					{
+						$unit = $row_unit['p_unt_kode_unit'];
+					} endforeach;
+				}
 				if ($data_grade == NULL)
 				{ $grade = '';} else {
 					foreach ($data_grade as $row_grade) :
@@ -185,9 +199,9 @@
 							<tr><td colspan=8></td></tr>
 						</tfoot>
                         <tbody>
-                            <tr><td width="30%">Jabatan Terakhir</td><td><?php echo $row_jbt_tmt['p_jbt_jabatan']?></td></tr>
+                            <tr><td width="30%">Jabatan Terakhir</td><td><?php echo $jabatan?></td></tr>
                             <tr><td>Terhitung Mulai Tanggal</td><td><?php echo $tmt; ?></td></tr>
-							<tr><td>Unit</td><td><?php echo $row_unit['p_unt_kode_unit']?></td></tr>
+							<tr><td>Unit</td><td><?php echo $unit ?></td></tr>
 							<tr><td>Grade</td><td><?php echo $grade?></td></tr>
 							<tr><td>Status Pegawai</td><td><?php echo $status?></td></tr>
 							<tr><td>Provider</td><td><?php echo $provider?></td></tr>

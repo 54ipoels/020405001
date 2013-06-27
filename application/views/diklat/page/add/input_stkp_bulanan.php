@@ -41,7 +41,7 @@
                         <div class="clear"></div>
                     </div>
                     <div class="formRow">
-                        <label>Instruktur :<span class="req">*</span></label>
+                        <label>Instruktur Nama:<span class="req">*</span></label>
                         <div class="formRight"><?php 
 						$instruktur = array(
 							'name' => 'instruktur',
@@ -52,7 +52,18 @@
 						<?php echo form_error('instruktur')?></div>
                         <div class="clear"></div>
                     </div>
-					
+					 <div class="formRow">
+                        <label>Instruktur From:<span class="req">*</span></label>
+                        <div class="formRight"><?php 
+						$instruktur_from = array(
+							'name' => 'instruktur_from',
+							'id'   => 'instruktur_from',
+							'style'=> 'width:80%',
+						);
+						echo form_input($instruktur_from) ?><br/>
+						<?php echo form_error('instruktur_from')?></div>
+                        <div class="clear"></div>
+                    </div>
 					<div class="formRow">
                         <label>Jumlah Pegawai :<span class="req">*</span></label>
                         <div class="formRight"><?php 

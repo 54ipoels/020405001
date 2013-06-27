@@ -90,13 +90,13 @@
                         <td rowspan="2">No License / STKP</td>
                         <td colspan="2">Validitas</td>
                         <td rowspan="2">Lembaga</td>
-                        <td rowspan="2">Instruktur</td>
+                        <td colspan="2">Instruktur</td>
                         <td colspan="2">Tanggal Pelaksanaan</td>
 						<td rowspan="2">Type STKP</td>
 						<td rowspan="2">Action</td>
                     </tr>
 					<tr>
-						<td>Mulai</td><td>Sampai</td><td>Mulai</td><td>Sampai</td>
+						<td>Mulai</td><td>Sampai</td><td>Nama</td><td>From</td><td>Mulai</td><td>Sampai</td>
                     </tr>
                 </thead>
                 
@@ -110,7 +110,7 @@
 									}
 								}
 								?></td>
-                        <td colspan="6"><div class="pagination"><?php echo $this->pagination->create_links();?></div></td>
+                        <td colspan="7"><div class="pagination"><?php echo $this->pagination->create_links();?></div></td>
                         <td colspan="4" align="right">EMS 2.0.1 | developed by www.studiokami.com</td>
                    	</tr>
 				</tfoot>
@@ -218,6 +218,7 @@
 						<td <?php echo $color ?>><center><?php echo $stkp_selesai; ?></center></td>
 						<td <?php echo $color ?>><center><?php echo $lembaga_anchor; ?></center></td>
 						<td><center><?php echo $row_pegawai['p_stkp_instruktur']; ?></center></td>
+						<td><center><?php echo $row_pegawai['p_stkp_instruktur_from']; ?></center></td>
 						<td <?php echo $color ?>><center><?php echo $mulai; ?></center></td>
 						<td <?php echo $color ?>><center><?php echo $selesai; ?></center></td>
 						<td <?php echo $color ?>><center><?php echo $type_anchor; ?></center></td>
