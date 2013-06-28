@@ -110,6 +110,30 @@ class pendidikan extends CI_Model
 		$query = $this->db->query($query);
 		return $query->result_array();
 	}
+	
+	function search_report_nstkp_bulanan_sort_pelaksanaan_training($bulan, $tahun, $jenis)
+	{
+		$jenis = str_replace('%20',' ',$jenis);
+		
+		$query = ("
+			SELECT * FROM v3_peg_non_stkp AS peg_stkp
+			LEFT JOIN (SELECT peg_nipp,peg_nama FROM v3_pegawai ORDER BY peg_nipp DESC) AS peg
+			ON peg_stkp.p_nstkp_nipp = peg.peg_nipp
+			WHERE MONTH(peg_stkp.p_nstkp_pelaksanaan) = '$bulan'
+			AND YEAR(peg_stkp.p_nstkp_pelaksanaan) = '$tahun'
+			AND peg_stkp.p_nstkp_jenis LIKE '%$jenis%'
+			GROUP BY peg_stkp.id_peg_non_stkp
+			ORDER BY peg_stkp.p_nstkp_pelaksanaan,peg_stkp.p_nstkp_jenis,peg_stkp.p_nstkp_nipp ASC
+		");
+		//return $query;
+		$query = $this->db->query($query);
+		if($query->num_rows() > 0){
+			return $query->result_array();
+		} else {
+			return 0;
+		}
+		
+	}
 
 	function get_nilai_stkp($id)
 	{
@@ -712,6 +736,20 @@ class pendidikan extends CI_Model
 		$this->db->query($query);
 	}
 	
+	function myUrlEncode($string) {
+		//$replacements = array('%21', '%2A', '%27', '%28', '%29', '%3B', '%3A', '%40', '%26', '%3D', '%2B', '%24', '%2C', '%2F', '%3F',  '%23', '%5B', '%5D');
+		$replacements = array('_', '_', "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_",  "_", "_", "_");
+		$entities = array('!', '*', "'", "(", ")", ";", ":", "@", "&", "=", "+", "$", ",", "/", "?",  "#", "[", "]");
+		return str_replace($entities, $replacements, $string);
+		//return str_replace($entities, $replacements, urlencode($string));
+	}
+	
+	function myUrlDecode($string) {
+		$entities = array('%21', '%2A', '%27', '%28', '%29', '%3B', '%3A', '%40', '%26', '%3D', '%2B', '%24', '%2C', '%2F', '%3F', '%23', '%5B', '%5D');
+		$replacements = array('_', '_', "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_",  "_", "_", "_");
+		# $replacements = array('!', '*', "'", "(", ")", ";", ":", "@", "&", "=", "+", "$", ",", "/", "?",  "#", "[", "]"); 
+		return str_replace($entities, $replacements, $string);
+	}
 
 	
 }

@@ -22,7 +22,7 @@
                     	<td colspan=3 align="left">
 							<?php 
 								$attr= array('target' => '_blank');
-								echo anchor('diklat/excel_non_stkp_bulanan/'.$bulan.'/'.$year.'/'.$training,'Export to Excel',$attr);
+								echo anchor('diklat/excel_non_stkp_bulanan/'.$bulan.'/'.$year.'/'.$url_training,'Export to Excel',$attr);
 						 	?>
                        	</td>
                         <td colspan="3"><div class="pagination"><?php echo $this->pagination->create_links();?></div></td>
