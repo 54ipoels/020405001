@@ -462,8 +462,8 @@ class C_absensi extends Application {
 					$newmonth = $this->month($month);
 						
 					//Jika Bulan Desember, maka startdate tahunnya 2012, enddatenya tahunnya 2013 and next monthnya 01
-					if($month == 12) { $newnextmonth = $this->month(1); $nextyear = $year+1; 
-					} else { $newnextmonth = $this->month($month+1);	$nextyear = $year; 	}
+					if($month == 12) { $newnextmonth = $this->month(1); $nextyear = $year+1;} 
+					else { $newnextmonth = $this->month($month+1);	$nextyear = $year; 	}
 						
 					//inisial date start dan end date
 					$startdate = "".$year."-".$newmonth."-01";
@@ -504,10 +504,15 @@ class C_absensi extends Application {
 						if($break_in < $time_in){ $tgl4 = $this->adddate($tgl, "+1 day"); } else { $tgl4 = $tgl; }
 																						
 						$time_in = "".$tgl." ".$time_in."";
-						$time_out = "".$tgl2." ".$time_out."";								
-						$break_out = "".$tgl3." ".$break_out."";							
-						$break_in = "".$tgl4." ".$break_in."";							
-							
+						$time_out = "".$tgl2." ".$time_out."";							
+						if ($breakstatus == "1" ){
+							$break_out = "".$tgl3." ".$break_out."";							
+							$break_in = "".$tgl4." ".$break_in."";							
+						} else {
+							$break_out = "0000-00-00 00:00:00";
+							$break_in = "0000-00-00 00:00:00";
+						}
+						
 						$cek_dup_fschpeg_abs = $this->m_absensi->cek_dup_data_format_schedule_pegawai_absensi($fschpeg_id, $time_in, $year);
 						if($cek_dup_fschpeg_abs > 0){
 							$this->m_absensi->update_data_format_schedule_pegawai_absensi($cek_dup_fschpeg_abs, $fschpeg_id, $time_in, $break_out, $break_in, $time_out, $offstatus, $update_by, $year);
@@ -689,7 +694,7 @@ class C_absensi extends Application {
 		$fschpeg_tanggal = $this->input->post('fschpeg_tanggal');
 		
 		// tgl out
-		if (((mdate($jam, strtotime($this->input->post('real_out')))) - (mdate($jam,strtotime($this->input->post('real_in'))))) <= 0)
+		if (((mdate($jam, strtotime($this->input->post('real_out')))) - (mdate($jam,strtotime($this->input->post('real_in'))))) < 0)
 		{
 			$date_out = (int)$this->input->post('date')+ 1;
 		} else {
@@ -709,7 +714,7 @@ class C_absensi extends Application {
 		}
 		
 		// tgl break out
-		if (((mdate($jam, strtotime($this->input->post('real_break_out')))) - (mdate($jam,strtotime($this->input->post('real_in'))))) <= 0)
+		if (((mdate($jam, strtotime($this->input->post('real_break_out')))) - (mdate($jam,strtotime($this->input->post('real_in'))))) < 0)
 		{
 			$date_break_out = (int)$this->input->post('date')+ 1;
 		} else {
@@ -723,7 +728,7 @@ class C_absensi extends Application {
 		}
 		
 		// tgl break in
-		if (((mdate($jam, strtotime($this->input->post('real_break_in')))) - (mdate($jam,strtotime($this->input->post('real_in'))))) <= 0)
+		if (((mdate($jam, strtotime($this->input->post('real_break_in')))) - (mdate($jam,strtotime($this->input->post('real_in'))))) < 0)
 		{
 			$date_break_in = (int)$this->input->post('date')+ 1;
 		} else {
@@ -736,14 +741,12 @@ class C_absensi extends Application {
 			$date_break_in = $date_break_in;
 		}
 		
-		
-		
 		$month = $this->angkabulan($this->input->post('month'));
 		$year = $this->input->post('year');
 		$tanggal_in = $date.'-'.$month.'-'.$year; 
 		$tanggal_out = $date_out.'-'.$month.'-'.$year; 
-		$tanggal_break_in = $date_break_in.'-'.$month.'-'.$year; 
-		$tanggal_break_out = $date_break_out.'-'.$month.'-'.$year; 
+		$tanggal_break_in = $date_break_in.'-'.$month.'-'.$year;
+		$tanggal_break_out = $date_break_out.'-'.$month.'-'.$year;
 		
 		/* ini sebelum diedit
 		if ($this->input->post('sch_in') == NULL)
@@ -762,13 +765,46 @@ class C_absensi extends Application {
 		
 		$data['sch_in'] = mdate($datestring, strtotime($tanggal_in.' '.$this->input->post('sch_in').':00'));
 		$data['sch_out'] = mdate($datestring, strtotime($tanggal_out.' '.$this->input->post('sch_out').':00'));
-		$data['sch_break_in'] = mdate($datestring, strtotime($tanggal_break_in.' '.$this->input->post('sch_break_in').':00'));
-		$data['sch_break_out'] = mdate($datestring, strtotime($tanggal_break_out.' '.$this->input->post('sch_break_out').':00'));
-		
 		$data['real_in'] = mdate($datestring, strtotime($tanggal_in.' '.$this->input->post('real_in').':00'));
-		$data['real_break_in'] = mdate($datestring, strtotime($tanggal_break_in.' '.$this->input->post('real_break_in').':00'));
-		$data['real_break_out'] = mdate($datestring, strtotime($tanggal_break_out.' '.$this->input->post('real_break_out').':00'));
 		$data['real_out'] = mdate($datestring, strtotime($tanggal_out.' '.$this->input->post('real_out').':00'));
+	
+		if($this->input->post('sch_break_out') == "00:00")
+		{ 	
+			$data['sch_break_out'] = "0000-00-00 00:00:00"; 
+		}
+		else
+		{
+			$tanggal_sch_break_out = $date_break_out.'-'.$month.'-'.$year;
+			$data['sch_break_out'] = mdate($datestring, strtotime($tanggal_sch_break_out.' '.$this->input->post('sch_break_out').':00'));
+		}
+		
+		if($this->input->post('sch_break_in') == "00:00")
+		{
+			$data['sch_break_in'] = "0000-00-00 00:00:00"; 
+		}
+		else
+		{
+			$tanggal_sch_break_in = $date_break_in.'-'.$month.'-'.$year;
+			$data['sch_break_in'] = mdate($datestring, strtotime($tanggal_sch_break_in.' '.$this->input->post('sch_break_in').':00'));
+		}
+		
+		if($this->input->post('real_break_out') == "00:00"){ 
+			$data['real_break_out'] = "0000-00-00 00:00:00"; 
+		}
+		else
+		{
+			$tanggal_real_break_out = $date_break_out.'-'.$month.'-'.$year;
+			$data['real_break_out'] = mdate($datestring, strtotime($tanggal_real_break_out.' '.$this->input->post('real_break_out').':00'));
+		}
+		if($this->input->post('real_break_in') == "00:00")
+		{ 
+			$data['real_break_in'] = "0000-00-00 00:00:00"; 
+		}
+		else
+		{	
+			$tanggal_real_break_in = $date_break_in.'-'.$month.'-'.$year;
+			$data['real_break_in'] = mdate($datestring, strtotime($tanggal_real_break_in.' '.$this->input->post('real_break_in').':00'));
+		}
 		
 		$this->m_absensi->submit_edit_detail_absensi($fschpeg_id,$fschpeg_tanggal,$year, $data, username());
 				

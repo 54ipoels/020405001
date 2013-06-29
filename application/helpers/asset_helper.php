@@ -75,7 +75,7 @@
 			{	
 				if($row->fschpegabs_off_status == 0)
 				{
-					return "<a href=\"#\" title=\"".substr($row->fschpegabs_sch_time_in, 11, 5)."\">".substr($row->fschpegabs_sch_time_in, 11, 2).'|'.substr($row->fschpegabs_sch_time_out, 11, 2)."</a>";
+					return "<a href=\"#\" title=\"".substr($row->fschpegabs_sch_time_in, 11, 5)."\">".substr($row->fschpegabs_sch_time_in, 11, 5).'-'.substr($row->fschpegabs_sch_time_out, 11, 5)."</a>";
 				}
 				else if($row->fschpegabs_off_status == 1)
 				{
@@ -91,7 +91,7 @@
 		$ci=& get_instance();
 		$ci->load->database();
 		$ci->db->where('fschpegabs_fschpeg_id', $fschpeg_id);
-		$ci->db->like('fschpegabs_sch_break_in', $tgl, 'after');
+		$ci->db->like('fschpegabs_sch_time_in', $tgl, 'after');
 		$ci->db->limit(1);
 		$data = $ci->db->get('v3_fschpeg_absensi_'.$year);
 		
@@ -111,13 +111,19 @@
 			}
 			else				
 			{	
-				if($row->fschpegabs_off_status == 0)
-				{
-					return "<a href=\"#\" title=\"".substr($row->fschpegabs_sch_break_in, 11, 5)."\">".substr($row->fschpegabs_sch_break_out, 11, 2).substr($row->fschpegabs_sch_break_in, 11, 2)."</a>";
+				if ($row->fschpegabs_sch_break_in == "0000-00-00 00:00:00"){
+						return "";
 				}
-				else if($row->fschpegabs_off_status == 1)
-				{
-					return "<a href=\"#\" title=\"LIBUR\">L</a>";
+				else{
+					if($row->fschpegabs_off_status == 0)
+					{
+						return "<a href=\"#\" title=\"".substr($row->fschpegabs_sch_break_in, 11, 5)."\">".substr($row->fschpegabs_sch_break_out, 11,5)."-".substr($row->fschpegabs_sch_break_in, 11, 5)."</a>";
+						
+					}
+					else if($row->fschpegabs_off_status == 1)
+					{
+						return "<a href=\"#\" title=\"LIBUR\">L</a>";
+					}
 				}
 			}
 		}

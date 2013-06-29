@@ -6,6 +6,7 @@ class Tarik_absensi extends Application {
     {
         parent::__construct();
 		$this->load->model('m_tarik_absensi');
+		$this->load->model('m_filter_absensi');
 	}
 	
 	public function index()
@@ -39,9 +40,6 @@ class Tarik_absensi extends Application {
 			$buffer = $this->parse_data($buffer,"<GetAttLogResponse>","</GetAttLogResponse>");
 			$buffer = explode("\r\n",$buffer);
 			
-			echo "<table>";
-			echo "<tr>";
-			echo "<td>NIPP</td><td>Date</td><td>Status</td><td>Grab</td><td>Verified</td>";
 				
 			for($a=1;$a<count($buffer);$a++)
 			{
@@ -54,20 +52,7 @@ class Tarik_absensi extends Application {
 				#masukkan data dari mesin ke database tampung / backup
 					
 				#data pada finger print tidak dihapus
-				if(($pin !== "") AND ($datetime !=="" ))
-				{
-					// start sini
-					if($status > 0)
-					{ 
-						$last_status = $this->m_tarik_absensi->get_last_filter_absensi_by_nipp($pin);	
-						foreach($last_status as $ls)
-						{}
-					} 
-					else 
-					{
-						
-					}
-					// akhir sini
+				if(($pin !== "") AND ($datetime !=="" )){
 					$cekdup = $this->m_tarik_absensi->cek_dup_backup_mesin($pin,$datetime,$status);
 					if($cekdup == 0)
 					{
@@ -78,28 +63,10 @@ class Tarik_absensi extends Application {
 							$grab = 1;
 						}
 						$this->m_tarik_absensi->input_data_backup_mesin($pin,$datetime,$status,$grab);
-						echo "<tr><td>" . $pin . "</td><td>" . $datetime . "</td><td>" . $status . "</td><td>". $grab ."</td><td>" . $verified . "</td></tr>";
 					}
-					
 				}
-				
-				/* jika data di finger print dihapus setelah tarik absensi 
-				$cek = $this->m_tarik_absensi->cek_data_backup_mesin($pin,$datetime,$status);
-				if($cek > 0){ 
-					$grab = 0;  
-				} else {
-					$grab = 1; 
-				}
-				
-				$this->m_tarik_absensi->input_data_backup_mesin($pin,$datetime,$status,$grab);
-					
-				echo "<tr><td>" . $pin . "</td><td>" . $datetime . "</td><td>" . $status . "</td><td>". $grab ."</td><td>" . $verified . "</td></tr>";
-				*/
 			}
-				
-			echo "</tr>";
-			echo "</table>";
-			echo "<br>"; 
+			$this->filter_absensi();
 		} else {
 			echo "Error IP was not detected";
 		}
@@ -122,6 +89,30 @@ class Tarik_absensi extends Application {
 		echo 'hasil' . $hasil;	
 	}
 	
+	
+	public function filter_absensi()
+	{
+		$this->m_filter_absensi->copy_dbmesin_to_datatampung();
+		
+		$backup = $this->m_filter_absensi->get_data_tampung();
+		if($backup !== 0){
+			foreach ($backup as $row){
+				print_r($row);
+				$year 		=substr($row['dt_datetime'],0,4);
+				$nipp		=$row['dt_nipp'];
+				$datetime	=$row['dt_datetime'];
+				$status		=$row['dt_status'];
+				if(($datetime !== "0000-00-00 00:00:00") OR ($nipp !== "") ){
+					$dup = $this->m_filter_absensi->cek_dup_tabel_absensi($nipp,$datetime,$status);
+					foreach ($dup as $row_dup)
+					{
+						$this->m_filter_absensi->cek_selisih_absen_terdekat($datetime,$nipp,$status,$row_dup,$year);
+					}
+				}
+			}
+			$this->m_filter_absensi->truncate_data_tampung(); // mengosongkan tabel datatampung  dengan menyisakan 1 data terakhir sebagai kondisi selanjutnya 
+		}
+	}
 	
 	
 }

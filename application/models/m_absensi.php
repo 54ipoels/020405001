@@ -363,6 +363,7 @@ class M_absensi extends CI_Model {
 	// ambil data pegawai berdasarkan unit
 	function ambil_data_schedule_pegawai($unit, $month, $year) 
 	{
+		$this->db->group_by('v3_pegawai.peg_nipp');
 		$this->db->join('v3_pegawai', 'v3_pegawai.peg_nipp = v3_peg_unit.p_unt_nipp', 'left');
 		$this->db->join('v3_fsch_pegawai', 'v3_fsch_pegawai.fschpeg_id_pegawai = v3_pegawai.id_pegawai', 'left');
 		$this->db->where('v3_peg_unit.p_unt_kode_unit', $unit);
@@ -481,6 +482,20 @@ class M_absensi extends CI_Model {
 	
 	function ambil_data_absensi($unit, $month, $year) 
 	{
+		$query ="
+				SELECT * FROM (`v3_peg_unit`) 
+				LEFT JOIN `v3_pegawai` ON `v3_pegawai`.`peg_nipp` = `v3_peg_unit`.`p_unt_nipp` 
+				LEFT JOIN `v3_fsch_pegawai` ON `v3_fsch_pegawai`.`fschpeg_id_pegawai` = `v3_pegawai`.`id_pegawai` 
+				WHERE `v3_peg_unit`.`p_unt_kode_unit` = '$unit' 
+				AND `v3_peg_unit`.`p_unt_tmt_end` = '0000-00-00' 
+				AND `v3_fsch_pegawai`.`fschpeg_month` = '$month' 
+				AND `v3_fsch_pegawai`.`fschpeg_year` = '$year'
+				GROUP BY `v3_pegawai`.`peg_nipp` 
+				";
+		$query = $this->db->query($query);
+		return $query->result_array();
+		
+		/*
 		$this->db->join('v3_pegawai', 'v3_pegawai.peg_nipp = v3_peg_unit.p_unt_nipp', 'left');
 		$this->db->join('v3_fsch_pegawai', 'v3_fsch_pegawai.fschpeg_id_pegawai = v3_pegawai.id_pegawai', 'left');
 		$this->db->where('v3_peg_unit.p_unt_kode_unit', $unit);
@@ -490,6 +505,7 @@ class M_absensi extends CI_Model {
 		$data = $this->db->get('v3_peg_unit');
 		
 		return $data->result_array();
+		*/
 	}
 	
 	function ambil_data_detail_absensi($fschpeg_id,$year) 

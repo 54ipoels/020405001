@@ -19,7 +19,9 @@
                         <td><?php echo $z+1?></td>
                         <?php } ?>
                     </tr>
-                 <?php $numbering=1; foreach($showdata as $sd) { ?>
+                 <?php 	$numbering=1; 
+						foreach($showdata as $sd) { 
+				?>
 				<tr>
                 	<td rowspan="2"><?php echo $numbering++; ?></td>
                     <td rowspan="2"><?php echo $sd['peg_nipp'];?></td>
