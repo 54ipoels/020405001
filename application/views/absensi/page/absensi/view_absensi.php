@@ -27,11 +27,13 @@
 						{
 							$data = ambil_jam_absensi($sd['fschpeg_id'], $tgl[$i], $year);
 							//print_r($data);
-							$hitung = hit_telat_dan_lembur($data[0], $data[1], $data[2], $data[3], $data[4], $data[5], $data[6], $data[7], $data[8]);
-							$telathk  = $telathk  + $hitung[0];
-							$lemburhk = $lemburhk + $hitung[1];
-							$lemburhl = $lemburhl + $hitung[2];
-							$exvo = $exvo + $hitung[3];
+							if($data !== 0){
+								$hitung = hit_telat_dan_lembur($data[0], $data[1], $data[2], $data[3], $data[4], $data[5], $data[6], $data[7], $data[8]);
+								$telathk  = $telathk  + $hitung[0];
+								$lemburhk = $lemburhk + $hitung[1];
+								$lemburhl = $lemburhl + $hitung[2];
+								$exvo = $exvo + $hitung[3];
+							}
 						}
 					if ($telathk % 60 > 30){$telathk = round($telathk/60) + 1;} else {$telathk = round($telathk/60) ;}
 					if ($lemburhk % 60 > 30){$lemburhk = round($lemburhk/60) + 1;} else {$lemburhk = round($lemburhk/60) ;}

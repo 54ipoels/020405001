@@ -137,19 +137,22 @@
 		$ci->db->like('fschpegabs_sch_time_in', $tgl, 'after'); 
 		$ci->db->limit(1);
 		$data = $ci->db->get('v3_fschpeg_absensi_'.$year);
-		
-		foreach ($data->result() as $row)
-		{
-			$status = $row->fschpegabs_off_status;
-			
-			$ci->db->where('lnas_date', $tgl);
-			$data2 = $ci->db->get('v3_libur_nasional');
-			foreach ($data2->result() as $row2)
+		if ($data->num_rows() > 0){
+			foreach ($data->result() as $row)
 			{
-				$status = 1; //libur
-			}
+				$status = $row->fschpegabs_off_status;
 				
-			return array($row->fschpegabs_sch_time_in, $row->fschpegabs_sch_break_out, $row->fschpegabs_sch_break_in, $row->fschpegabs_sch_time_out, $row->fschpegabs_real_time_in, $row->fschpegabs_real_break_out, $row->fschpegabs_real_break_in, $row->fschpegabs_real_time_out, $status );
+				$ci->db->where('lnas_date', $tgl);
+				$data2 = $ci->db->get('v3_libur_nasional');
+				foreach ($data2->result() as $row2)
+				{
+					$status = 1; //libur
+				}
+					
+				return array($row->fschpegabs_sch_time_in, $row->fschpegabs_sch_break_out, $row->fschpegabs_sch_break_in, $row->fschpegabs_sch_time_out, $row->fschpegabs_real_time_in, $row->fschpegabs_real_break_out, $row->fschpegabs_real_break_in, $row->fschpegabs_real_time_out, $status );
+			}
+		} else {
+			return 0;
 		}
 	}
 	
@@ -174,7 +177,10 @@
 	//hitung selisih jam output dalam menit
 	function selisihjam($in,$out) 
 	{
-	list($tgl,$jam_masuk) = explode(" ", $in);
+		$selisihtime = strtotime($out) - strtotime($in); 
+		$totalmenit =  $selisihtime / 60;
+		return $totalmenit;
+	/*list($tgl,$jam_masuk) = explode(" ", $in);
 	list($tgl2,$jam_keluar) = explode(" ", $out);
 	
 	list($h,$m,$s) = explode(":",$jam_masuk);
@@ -195,6 +201,8 @@
 	$jml_jam = $jml_jam *60;
 	$totalmenit = $jml_jam+$sisamenit2;
 	return $totalmenit;
+	*/
+	
 	}
 	
 	function hit_telat_dan_lembur($in, $b_out, $b_in, $out, $realin, $realb_out, $realb_in, $realout, $statusoff) 
@@ -241,7 +249,7 @@
 					if ($cekbreakout < $cekbreakin){
 						$jml_break_jadwal = selisihjam($b_out,$b_in);
 						$jml_break_real = selisihjam($realb_out,$realb_in);
-					}else {
+					} else {
 						$jml_break_jadwal = selisihjam($b_out,"0000-00-00 24:00:00") + selisihjam("0000-00-00 00:00:00",$b_in) ;
 						$jml_break_real = selisihjam($realb_out,"0000-00-00 24:00:00") + selisihjam("0000-00-00 00:00:00",$realb_in);
 					}
@@ -259,7 +267,7 @@
 					if ($cekbreakout < $cekbreakin){
 						$jml_break_jadwal = selisihjam($b_out,$b_in);
 						$jml_break_real = selisihjam($realb_out,$realb_in);
-					}else {
+					} else {
 						$jml_break_jadwal = selisihjam($b_out,"0000-00-00 24:00:00") + selisihjam("0000-00-00 00:00:00",$b_in) ;
 						$jml_break_real = selisihjam($realb_out,"0000-00-00 24:00:00") + selisihjam("0000-00-00 00:00:00",$realb_in);
 					}
