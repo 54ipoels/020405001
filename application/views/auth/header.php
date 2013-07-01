@@ -68,4 +68,11 @@
     });
 </script>
 
+<!-- change background login to black-->
+<style>
+html { height: 100%; background: transparent url(../images/backgrounds/navBg.jpg); }
+.html { height: 100%;  }
+</style>
+<!-- end background -->
+
 </head>
