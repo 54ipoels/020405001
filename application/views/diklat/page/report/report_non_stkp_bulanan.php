@@ -23,6 +23,7 @@
 							<?php 
 								$attr= array('target' => '_blank');
 								if($year == ""){$year ="ALL";}
+								if($bulan == ""){$bulan ="ALL";}
 								echo anchor('diklat/excel_non_stkp_bulanan/'.$bulan.'/'.$year.'/'.$url_training,'Export to Excel',$attr);
 						 	?>
                        	</td>

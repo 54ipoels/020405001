@@ -66,16 +66,26 @@ class pendidikan extends CI_Model
 	function search_report_stkp_bulanan($bulan, $tahun, $jenis_stkp)
 	{
 		$jenis_stkp = str_replace('%20',' ',$jenis_stkp);
-		
+		if (($tahun=="") OR ($tahun=="ALL")){
+			$selection = "WHERE peg_stkp.p_stkp_jenis LIKE '%$jenis_stkp%' ";
+		}else
+		if (($bulan=="" AND $tahun !=="") OR ($bulan=="ALL" AND $tahun !=="ALL") ){
+			$selection = "  WHERE YEAR(peg_stkp.p_stkp_pelaksanaan) = '$tahun'
+							AND peg_stkp.p_stkp_jenis LIKE '%$jenis_stkp%' ";
+		}else
+		{
+			$selection = "  WHERE MONTH(peg_stkp.p_stkp_pelaksanaan) = '$bulan'
+							AND YEAR(peg_stkp.p_stkp_pelaksanaan) = '$tahun'
+							AND peg_stkp.p_stkp_jenis LIKE '%$jenis_stkp%'
+							";
+		}
 		$query = ("
 			SELECT * FROM v3_peg_stkp AS peg_stkp
 			LEFT JOIN (SELECT id_peg_unit,p_unt_nipp, p_unt_kode_unit FROM v3_peg_unit ORDER BY id_peg_unit DESC ) AS peg_unt 
 			ON peg_stkp.p_stkp_nipp = peg_unt.p_unt_nipp 
 			LEFT JOIN (SELECT peg_nipp,peg_nama FROM v3_pegawai ORDER BY id_pegawai DESC) AS peg
 			ON peg_stkp.p_stkp_nipp = peg.peg_nipp
-			WHERE MONTH(peg_stkp.p_stkp_pelaksanaan) = '$bulan'
-			AND YEAR(peg_stkp.p_stkp_pelaksanaan) = '$tahun'
-			AND ( peg_stkp.p_stkp_jenis LIKE '%$jenis_stkp%')
+			$selection 	
 			GROUP BY peg_stkp.id_peg_stkp 
 			ORDER BY peg_stkp.p_stkp_nipp,  peg_stkp.p_stkp_pelaksanaan ASC
 			
@@ -88,14 +98,18 @@ class pendidikan extends CI_Model
 	function search_report_nstkp_bulanan($bulan, $tahun, $jenis)
 	{
 		$jenis = str_replace('%20',' ',$jenis);
-		if ($tahun>0){
+		if ($tahun==""){
+			$selection = "WHERE peg_stkp.p_nstkp_jenis LIKE '%$jenis%' ";
+		}else
+		if ($bulan=="" AND $tahun !=="" ){
+			$selection = "  WHERE YEAR(peg_stkp.p_nstkp_pelaksanaan) = '$tahun'
+							AND peg_stkp.p_nstkp_jenis LIKE '%$jenis%' ";
+		}else
+		{
 			$selection = "  WHERE MONTH(peg_stkp.p_nstkp_pelaksanaan) = '$bulan'
 							AND YEAR(peg_stkp.p_nstkp_pelaksanaan) = '$tahun'
 							AND peg_stkp.p_nstkp_jenis LIKE '%$jenis%'
 							";
-		}else
-		{
-			$selection = "WHERE peg_stkp.p_nstkp_jenis LIKE '%$jenis%' ";
 		}
 		
 		$query = ("
@@ -123,6 +137,10 @@ class pendidikan extends CI_Model
 		$jenis = str_replace('%20',' ',$jenis);
 		if ($tahun == "ALL"){
 			$selection = "WHERE peg_stkp.p_nstkp_jenis LIKE '%$jenis%' ";
+		}else
+		if ($bulan=="ALL" AND $tahun !=="ALL" ){
+			$selection = "  WHERE YEAR(peg_stkp.p_nstkp_pelaksanaan) = '$tahun'
+							AND peg_stkp.p_nstkp_jenis LIKE '%$jenis%' ";
 		}else
 		{
 			$selection = "  WHERE MONTH(peg_stkp.p_nstkp_pelaksanaan) = '$bulan'

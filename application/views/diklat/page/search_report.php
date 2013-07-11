@@ -22,6 +22,7 @@
                         <label>Bulan / Tahun:</label>
                         <div class="formRight"><?php 
 						$bulan = array(
+							''	=>	'',
 							'01' => 'Januari',
 							'02' => 'Februari',
 							'03' => 'Maret',

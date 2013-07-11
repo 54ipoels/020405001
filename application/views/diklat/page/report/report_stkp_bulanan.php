@@ -26,6 +26,8 @@
 					<tr>
                     	<td colspan=4 align="left"><?php 
 								$attr= array('target' => '_blank');
+								if($year == ""){$year ="ALL";}
+								if($bulan == ""){$bulan ="ALL";}
 								echo anchor('diklat/excel_stkp_bulanan/'.$bulan.'/'.$year.'/'.$jenis_stkp,'Export to Excel',$attr); 
 								?></td>
                         <td colspan="5"><div class="pagination"><?php echo $this->pagination->create_links();?></div></td>
