@@ -88,6 +88,15 @@ class pendidikan extends CI_Model
 	function search_report_nstkp_bulanan($bulan, $tahun, $jenis)
 	{
 		$jenis = str_replace('%20',' ',$jenis);
+		if ($tahun>0){
+			$selection = "  WHERE MONTH(peg_stkp.p_nstkp_pelaksanaan) = '$bulan'
+							AND YEAR(peg_stkp.p_nstkp_pelaksanaan) = '$tahun'
+							AND peg_stkp.p_nstkp_jenis LIKE '%$jenis%'
+							";
+		}else
+		{
+			$selection = "WHERE peg_stkp.p_nstkp_jenis LIKE '%$jenis%' ";
+		}
 		
 		$query = ("
 			SELECT * FROM v3_peg_non_stkp AS peg_stkp
@@ -99,9 +108,7 @@ class pendidikan extends CI_Model
 			ON unit.kode_unit = peg_unt.p_unt_kode_unit
 			LEFT JOIN (SELECT * FROM v3_sub_unit ORDER BY su_kode_sub_unit DESC) AS sub_unit
 			ON sub_unit.su_kode_sub_unit = peg_unt.p_unt_kode_sub_unit
-			WHERE MONTH(peg_stkp.p_nstkp_pelaksanaan) = '$bulan'
-			AND YEAR(peg_stkp.p_nstkp_pelaksanaan) = '$tahun'
-			AND peg_stkp.p_nstkp_jenis LIKE '%$jenis%'
+			$selection 
 			GROUP BY peg_stkp.id_peg_non_stkp
 			ORDER BY unit.kode_unit,sub_unit.su_kode_sub_unit,peg_stkp.p_nstkp_nipp, peg_stkp.p_nstkp_pelaksanaan ASC
 			
@@ -114,14 +121,21 @@ class pendidikan extends CI_Model
 	function search_report_nstkp_bulanan_sort_pelaksanaan_training($bulan, $tahun, $jenis)
 	{
 		$jenis = str_replace('%20',' ',$jenis);
-		
+		if ($tahun == "ALL"){
+			$selection = "WHERE peg_stkp.p_nstkp_jenis LIKE '%$jenis%' ";
+		}else
+		{
+			$selection = "  WHERE MONTH(peg_stkp.p_nstkp_pelaksanaan) = '$bulan'
+							AND YEAR(peg_stkp.p_nstkp_pelaksanaan) = '$tahun'
+							AND peg_stkp.p_nstkp_jenis LIKE '%$jenis%'
+							";
+		}
+	
 		$query = ("
 			SELECT * FROM v3_peg_non_stkp AS peg_stkp
 			LEFT JOIN (SELECT peg_nipp,peg_nama FROM v3_pegawai ORDER BY peg_nipp DESC) AS peg
 			ON peg_stkp.p_nstkp_nipp = peg.peg_nipp
-			WHERE MONTH(peg_stkp.p_nstkp_pelaksanaan) = '$bulan'
-			AND YEAR(peg_stkp.p_nstkp_pelaksanaan) = '$tahun'
-			AND peg_stkp.p_nstkp_jenis LIKE '%$jenis%'
+			$selection 
 			GROUP BY peg_stkp.id_peg_non_stkp
 			ORDER BY peg_stkp.p_nstkp_pelaksanaan,peg_stkp.p_nstkp_jenis,peg_stkp.p_nstkp_nipp ASC
 		");
