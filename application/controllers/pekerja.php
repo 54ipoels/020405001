@@ -14,16 +14,14 @@ class Pekerja extends Application {
 	public function index()
 	{
 		#pagination config
-		$config['base_url'] = base_url().'index.php/pekerja/index/'; //set the base url for pagination
-		//$config['total_rows'] = $this->kepegawaian->countPegawai(); //total rows
-		$config['total_rows'] = $this->kepegawaian->count_pegawai_aktif(); //total rows
-		$config['per_page'] = 10; //the number of per page for pagination
-		$config['uri_segment'] = 3; //see from base_url. 3 for this case
+		$config['base_url'] = base_url().'index.php/pekerja/index/'; 
+		$config['total_rows'] = $this->kepegawaian->count_pegawai_aktif(); 
+		$config['per_page'] = 10; 
+		$config['uri_segment'] = 3; 
 		$this->pagination->initialize($config);
 		$page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
 		
 		#data preparing
-		//$data['pegawai'] = $this->kepegawaian->get_data_pegawai($config['per_page'],$page);
 		$data['pegawai'] = $this->kepegawaian->get_data_pegawai_aktif($config['per_page'],$page);
 		$data['list_unit'] = $this->kepegawaian->get_list_unit();
 		$data['list_sub_unit'] = $this->kepegawaian->get_list_sub_unit();
@@ -31,6 +29,7 @@ class Pekerja extends Application {
 		$data['page'] = 'Pegawai';
 		$data['view_pekerja'] = 'class="this"';
 		$data['page_karyawan'] = 'yes';
+		
 		#calling view
 		$this->load->view('kepegawaian/index',$data);
 	}
