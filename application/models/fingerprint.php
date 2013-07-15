@@ -281,15 +281,16 @@ class Fingerprint extends CI_Model {
 	
 	function get_my_data_today($nipp)
 	{
-		$today = mdate("%Y-%m-%d", time());
+		#$today = mdate("%Y-%m-%d", time());
+		$today = mdate("%Y-%m-%d", strtotime('-1 week', time())) ; 
 		
 		$this->db->where('fd_nipp', $nipp);
-		$this->db->where('DATE(fd_datetime)', $today);
-		$this->db->order_by('fd_id', 'ASC');
+		$this->db->where('DATE(fd_datetime) >', $today);
+		$this->db->order_by('fd_datetime', 'ASC');
 		$this->db->from('v3_fingerprint_data');	
 		
 		$query = $this->db->get();
-		return $query->result_array();
+		return $query->result();
 	}
 	
 	# api -----------------------------

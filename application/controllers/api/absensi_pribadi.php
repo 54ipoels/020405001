@@ -10,7 +10,7 @@ class Absensi_pribadi extends REST_Controller {
 		$this->load->model('fingerprint');
 	}
 	
-	public function absensi_hari_ini()
+	public function absensi_get()
 	{
 		if(!$this->get('nipp'))
         {
