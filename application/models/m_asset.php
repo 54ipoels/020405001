@@ -39,9 +39,11 @@ class M_asset extends CI_Model
 		
 		$query = "
 					SELECT * FROM v3_pegawai AS peg
+					LEFT JOIN (	SELECT * FROM v3_peg_tmt ORDER BY p_tmt_update_on DESC ) AS peg_tmt ON peg.peg_nipp = peg_tmt.p_tmt_nipp
 					LEFT JOIN (	SELECT * FROM v3_peg_unit ORDER BY p_unt_update_on DESC ) AS peg_unit ON peg.peg_nipp = peg_unit.p_unt_nipp
 					WHERE peg_unit.p_unt_kode_unit =  '$unit'
 					AND peg_unit.p_unt_tmt_end =  '0000-00-00'
+					AND peg_tmt.p_tmt_end =  '0000-00-00'
 					GROUP BY peg_unit.p_unt_nipp
 				";
 		$query = $this->db->query($query);
