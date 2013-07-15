@@ -84,7 +84,7 @@ class User extends CI_Controller {
 			
 			# check email on local database 
 			$result = $this->user_model->check_reg_email($email);
-			
+			print_r($result);
 			# check email on ams database 
 			#$result = $this->user_model->check_reg_email($email);
 			

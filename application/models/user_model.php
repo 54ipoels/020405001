@@ -37,7 +37,13 @@ class User_model extends CI_Model
 # check user on user indetity table ------------------------------------
 	function check_reg_email($email)
 	{
-		$query = $this->db->get_where('user_identity', array('ui_email' => $email), 1, 0);
+		$this->db->where('p_al_email', $email); 
+		$this->db->from('v3_peg_alamat');
+		$this->db->join('v3_pegawai', 'v3_pegawai.peg_nipp = v3_peg_alamat.p_al_nipp');
+		$this->db->join('v3_peg_unit', 'v3_peg_unit.p_unt_nipp = v3_peg_alamat.p_al_nipp');
+		$this->db->order_by('id_peg_unit', 'DESC');
+		$this->db->limit(1);
+		$query = $this->db->get();
 		return $query->result();	
 	}
 # check user on user indetity table ------------------------------------
