@@ -10,7 +10,7 @@ class Get_fingerprint extends Application{
 	 * App id :
 	 * App code :
 	 *
-	 * news controller
+	 * fingerprint controller
 	 *
 	 * url : http://ems.dps.gapura.co.id/
 	 * design : SIGAP Team
@@ -361,5 +361,5 @@ class Get_fingerprint extends Application{
 	}*/
 	
 }
-/* End of file news.php */
-/* Location: ./application/controllers/information/news.php */
+/* End of file get_fingerprint.php */
+/* Location: ./application/controllers/fingerprint/get_fingerprint.php */
