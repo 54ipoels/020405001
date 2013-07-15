@@ -19,7 +19,7 @@
                  <?php $numbering=1; foreach($showdata as $sd) { ?>
 				<tr>
                 	<td><?php echo $numbering++; ?></td>
-                    <td><?php echo $sd['peg_nipp'];?></td>
+                    <td><?php echo $sd['peg_nama'] . ' / ' . $sd['peg_nipp'];?></td>
                     <?php 
 					$telathk = 0; $lemburhk = 0; $lemburhl = 0; $exvo = 0;
 					$tgl = createDateRangeArray($startdate, $enddate); 

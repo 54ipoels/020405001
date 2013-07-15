@@ -827,12 +827,22 @@ class kepegawaian extends CI_Model
 	
 	function count_pegawai_aktif()
 	{
-		$query = "	
-		SELECT * FROM v3_pegawai AS peg
-		LEFT JOIN (SELECT * from v3_peg_tmt ORDER BY id_peg_tmt DESC) AS tmt ON tmt.p_tmt_nipp = peg.peg_nipp
-		WHERE tmt.p_tmt_end = '0000-00-00'
-		GROUP BY peg.peg_nipp 
-		ORDER BY tmt.p_tmt_nipp DESC
+		/*$this->db->where('p_tmt_end','0000-00-00' );
+		return $this->db->count_all_results('v3_peg_tmt');
+		*/
+		/*
+		$query = "	SELECT * FROM v3_peg_tmt  AS tmt
+					LEFT JOIN (SELECT * FROM v3_pegawai) AS peg ON tmt.p_tmt_nipp = peg.peg_nipp
+					WHERE tmt.p_tmt_end = '0000-00-00'
+					GROUP BY tmt.p_tmt_nipp
+					ORDER BY tmt.p_tmt_nipp DESC
+				";
+		*/
+		$query = "	SELECT * FROM v3_pegawai AS peg
+					LEFT JOIN (SELECT * from v3_peg_tmt ORDER BY id_peg_tmt DESC) AS tmt ON tmt.p_tmt_nipp = peg.peg_nipp
+					WHERE tmt.p_tmt_end = '0000-00-00'
+					GROUP BY peg.peg_nipp 
+					ORDER BY tmt.p_tmt_nipp DESC
 				";
 		$query = $this->db->query($query);
 		return $query->num_rows();

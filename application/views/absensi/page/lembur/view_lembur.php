@@ -1,7 +1,7 @@
 <?php $this->load->helper('asset'); ?>
 <div class="widget">
           <div class="title"><img src="<?php echo base_url()?>images/icons/dark/frames.png" alt="" class="titleIcon" />
-          <h6>DATA LEMBUR&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;UNIT <?php // echo $unitshow; ?></h6></div>
+          <h6>DATA LEMBUR&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;UNIT <?php  //echo $unitshow; ?></h6></div>
             <table cellpadding="0" cellspacing="0" width="100%" class="sTable">
                 <thead >
                     <tr>
@@ -44,11 +44,8 @@
 							?>
 							</td>
 							<td><?php 
-								echo anchor('gaji/view_detail_lembur/'.$row['id_lembur'].'/'.$row['lmb_bulan'].'/'.$year.'', 
-								img(array('src'=>'images/icons/control/16/project.png','border'=>'0','alt'=>'Detail')) , 'title="Detail"' );
-								echo anchor('gaji/edit_lembur/'.$row['id_lembur'].'/'.$row['lmb_bulan'].'/'.$year.'', 
-								img(array('src'=>'images/icons/control/16/pencil.png','border'=>'0','alt'=>'Edit')) , 'title="Edit"' );
-								?>
+								echo anchor('c_absensi/view_detail_lembur/'.$row['id_lembur'].'/'.$row['lmb_bulan'].'/'.$row['lmb_tahun'].'', 
+								img(array('src'=>'images/icons/control/16/project.png','border'=>'0','alt'=>'Detail')) , 'title="Detail"' ); ?>
         					</td>
 						</tr>
 					<?php 	} ?>
