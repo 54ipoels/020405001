@@ -150,6 +150,10 @@
 		{
 			$this->load->view('kepegawaian/page/edit/edit_data_provider');
 		}else
+		if ($page == 'Edit Data Status')
+		{
+			$this->load->view('kepegawaian/page/edit/edit_data_status_pegawai');
+		}else
 		//--------- delete data karyawan ---------------//
 		if ($page == 'Delete Pegawai')
 		{

@@ -4,9 +4,9 @@
 <fieldset class="step" id="w2first"><br> 
 <table><tr><td width='30px'></td><td width = "740px">    
 				<div class="searchWidget1">
-					<a href="<?php echo 'pegawai_pensiun' ;?>"><input type="button" name="Pensiun" value="Pensiun" class="blueB m110"/></a>
-					<a href="<?php echo 'get_pindah_cabang' ;?>"><input type="button" name="Pindah" value="Pindah Cabang" class="blueB m110"/></a>
-					<a href="<?php echo 'get_pegawai_phk' ;?>"><input type="button" name="PHK" value="PHK" class="blueB m110"/></a>
+					<a href="<?php echo base_url().'index.php/pekerja/pegawai_pensiun' ;?>"><input type="button" name="Pensiun" value="Pensiun" class="blueB m110"/></a>
+					<a href="<?php echo base_url().'index.php/pekerja/get_pindah_cabang' ;?>"><input type="button" name="Pindah" value="Pindah Cabang" class="blueB m110"/></a>
+					<a href="<?php echo base_url().'index.php/pekerja/get_pegawai_phk' ;?>"><input type="button" name="PHK" value="PHK" class="blueB m110"/></a>
 				</div>
             </td>
 	<td width="250px"><div class="searchWidget1"><?php echo form_open('pekerja/search_pegawai_keluar');?>

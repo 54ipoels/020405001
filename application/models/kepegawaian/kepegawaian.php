@@ -1115,6 +1115,13 @@ class kepegawaian extends CI_Model
 		$this->db->update('v3_peg_tmt',$tanggal);
 	}
 	
+	function update_data_last_tmt($data,$id)
+	{
+		$nipp = $this->uri->segment(3);
+		$this->db->where('id_peg_tmt', $id);
+		$this->db->update('v3_peg_tmt',$data);
+	}
+	
 	function update_data_bahasa($data_bahasa, $id_bahasa)
 	{
 		$this->db->where('id_peg_bahasa', $id_bahasa);

@@ -1008,6 +1008,40 @@ class Pekerja extends Application {
 		$this->load->view('kepegawaian/index',$data);
 	}
 	
+	#edit status pegawai
+	public function edit_status_pegawai($nipp)
+	{		
+		$data['peg_tmt'] = $this->kepegawaian->get_detail_pegawai_tmt($nipp);
+		$data['page'] = 'Edit Data Status';
+		$data['page_karyawan'] = 'yes';
+		$this->load->view('kepegawaian/index',$data);
+	}
+	public function edit_data_status_pegawai($nipp)
+	{		
+		$id_tmt = $this->input->post('id_tmt');
+		$datestring = "%Y-%m-%d" ;
+		$tmt = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tmt'))));
+		$data_baru = array(
+				'p_tmt_nipp' => $this->input->post('nipp'),
+				'p_tmt_status' => $this->input->post('status'),
+				'p_tmt_provider' => $this->input->post('provider'),
+				'p_tmt_tmt' => $tmt,
+				'p_tmt_update_by' => username(),
+			);
+		
+		//update tmt end, peg_tmt terakhir
+		$data_update_tmt = array (
+				'p_tmt_end' 	=> $tmt,
+			);
+		#input data to table pegawai
+				
+		$this->kepegawaian->update_data_last_tmt($data_update_tmt,$id_tmt); //update tmt terakhir 
+		$this->kepegawaian->insert_data_pegawai_tmt($data_baru);
+		
+		redirect('pekerja/get_pegawai/'.$nipp);
+	}
+	#akhir edit status pegawai
+	
 	public function edit_pendidikan_pegawai($nipp)
 	{		
 		$data['bahasa'] = $this->kepegawaian->get_detail_pegawai_bahasa($nipp);
@@ -1375,7 +1409,18 @@ class Pekerja extends Application {
 		$time = time();
 		$tanggal = mdate($datestring, $time);
 		
+		#validation
+		$this->load->library('form_validation');
+		$this->form_validation->set_rules('nipp_baru', 'nipp_baru', 'required');
 		$nipp = $this->uri->segment(3);
+		
+		if ($this->form_validation->run() == FALSE)
+		{
+			redirect('pekerja/edit_provider_pegawai/'.$nipp);
+		}
+		else
+		{
+		
 		$tanggal_tmt = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tmt'))));
 		$nipp_baru = $this->input->post('nipp_baru');
 		
@@ -1385,7 +1430,7 @@ class Pekerja extends Application {
 				'p_jbt_jabatan'		=> $this->input->post('jabatan'),
 				'p_jbt_tmt_start'	=> $tanggal_tmt,
 				//'p_jbt_update_on'	=> $tanggal,
-				'p_jbt_update_by'	=> 'admin'
+				'p_jbt_update_by'	=> username(),
 			);
 			
 		$data_unit = array(
@@ -1394,14 +1439,14 @@ class Pekerja extends Application {
 				'p_unt_kode_sub_unit'	=> $this->input->post('sub_unit'),
 				'p_unt_tmt_start'	=> $tanggal_tmt,
 				//'p_unt_update_on'	=> $tanggal,
-				'p_unt_update_by'	=> 'admin'
+				'p_unt_update_by'	=> username(),
 			);
 		
 		$data_grade = array(
 				'p_grd_nipp'		=> $nipp_baru,
 				'p_grd_grade'		=> $this->input->post('grade'),
 				//'p_grd_update_on'	=> $tanggal,
-				'p_grd_update_by'	=> 'admin'
+				'p_grd_update_by'	=> username(),
 			);
 			
 		$data_tmt = array(
@@ -1410,7 +1455,7 @@ class Pekerja extends Application {
 				'p_tmt_provider'	=> $this->input->post('provider'),
 				'p_tmt_tmt'			=> $tanggal_tmt,
 				//'p_tmt_update_on'	=> $tanggal,
-				'p_tmt_update_by'	=> 'admin'
+				'p_tmt_update_by'	=> username(),
 			);
 		
 		$data_jabatan_tmt_end = array ('p_jbt_tmt_end' => $tanggal);
@@ -1418,24 +1463,25 @@ class Pekerja extends Application {
 		$this->kepegawaian->update_data_pegawai_jabatan($data_jabatan_tmt_end,$this->input->post('id_peg_jabatan'));
 		$this->kepegawaian->update_data_pegawai_unit($data_unit_tmt_end,$this->input->post('id_peg_unit'));
 		
-		$data_update_tmt_tanggal = array (
+		$data_update_tmt = array (
 				'p_tmt_end' 	=> $tanggal,
 				'p_tmt_reason'	=> "PHK",
 				'p_tmt_ket'		=> "Pindah Provider",
 			);
+			
+		$id_tmt = $this->kepegawaian->get_last_tmt_by_nipp($nipp);
+		
 		
 		#input data to table pegawai
 				
 		$this->kepegawaian->insert_data_pegawai_jabatan($data_jabatan);
-		$this->kepegawaian->update_data_tmt($data_update_tmt_tanggal);
+		$this->kepegawaian->update_data_last_tmt($data_update_tmt,$id_tmt); //update tmt terakhir 
 		$this->kepegawaian->insert_data_pegawai_tmt($data_tmt);
 		//$this->kepegawaian->insert_data_pegawai_grade($data_grade);
 		
 		#copy data pegawai 
 		$this->copy_data_pegawai($nipp,$nipp_baru);
-		
-		
-		#redirect('pekerja/get_pegawai/'.$nipp_baru);
+		}
 	}
 	
 	function copy_data_pegawai($nipp,$nipp_baru)
