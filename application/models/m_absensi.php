@@ -547,6 +547,7 @@ class M_absensi extends CI_Model {
 			'fschpegabs_real_break_in' => $data['real_break_in'], 
 			'fschpegabs_real_break_out' => $data['real_break_out'],
 			'fschpegabs_real_time_out' => $data['real_out'],
+			'fschpegabs_off_status' => $data['off_status'],
 			//'fschpegabs_update_on' => $date,
 			'fschpegabs_update_by' => $user
 		);

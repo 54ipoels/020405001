@@ -806,6 +806,27 @@ class C_absensi extends Application {
 			$data['real_break_in'] = mdate($datestring, strtotime($tanggal_real_break_in.' '.$this->input->post('real_break_in').':00'));
 		}
 		
+		#real time in
+		if($this->input->post('real_in') == "00:00")
+		{ 
+			$data['real_in'] = "0000-00-00 00:00:00"; 
+		}
+		else
+		{	
+			$data['real_in'] = mdate($datestring, strtotime($tanggal_in.' '.$this->input->post('real_in').':00'));
+		}
+		#real time out
+		if($this->input->post('real_out') == "00:00")
+		{ 
+			$data['real_out'] = "0000-00-00 00:00:00"; 
+		}
+		else
+		{	
+			$data['real_out'] = mdate($datestring, strtotime($tanggal_out.' '.$this->input->post('real_out').':00'));
+		}
+		
+		$data['off_status'] = $this->input->post('status');
+		
 		$this->m_absensi->submit_edit_detail_absensi($fschpeg_id,$fschpeg_tanggal,$year, $data, username());
 				
 		redirect('c_absensi/view_detail_absensi/'.$fschpeg_id.'/'.$this->input->post('month').'/'.$year);
