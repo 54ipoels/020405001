@@ -285,8 +285,9 @@ if( $tmt_reason==""){?>
                         <tfoot>
 							<tr><td colspan=2><p align="right"><?php 
 							if ($status !== 'Outsource')
-							{echo anchor('pekerja/add_bahasa_pegawai/'.$row_pegawai['peg_nipp'],'[add]  '); 
-							echo anchor('pekerja/edit_pendidikan_pegawai/'.$row_pegawai['peg_nipp'],'[edit]');
+							{
+								echo anchor('pekerja/add_bahasa_pegawai/'.$row_pegawai['peg_nipp'],'[add]  '); 
+								echo anchor('pekerja/edit_pendidikan_pegawai/'.$row_pegawai['peg_nipp'],'[edit]');
 							}?></p></td></tr>
 						</tfoot>
                         <tbody>
@@ -325,12 +326,12 @@ if( $tmt_reason==""){?>
                     <table cellpadding="0" cellspacing="0" width="100%" class="sTable">
                         <tfoot>
 							<tr><td colspan=8><p align="right"><?php 
-							if ($status !== 'Outsource')
-							{
+							//if ($status !== 'Outsource')
+							//{
 								echo anchor('pekerja/edit_provider_pegawai/'.$row_pegawai['peg_nipp'],'[pindah provider]')?>
 								&nbsp;&nbsp;&nbsp; <?php echo anchor('pekerja/edit_status_pegawai/'.$row_pegawai['peg_nipp'],'[edit status]');?>
 								&nbsp;&nbsp;&nbsp; <?php echo anchor('pekerja/edit_jabatan_pegawai/'.$row_pegawai['peg_nipp'],'[edit]');
-							}	
+							//}	
 								?>
 								</p></td></tr>
 						</tfoot>
