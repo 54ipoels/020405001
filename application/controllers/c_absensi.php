@@ -687,6 +687,7 @@ class C_absensi extends Application {
 	
 	function submit_edit_detail_absensi()
 	{
+		$nipp = $this->input->post('nipp');
 		$datestring = "%Y-%m-%d %H:%i:%s" ;
 		$jam = "%H:%i";
 		$time = time();
@@ -829,7 +830,7 @@ class C_absensi extends Application {
 		
 		$this->m_absensi->submit_edit_detail_absensi($fschpeg_id,$fschpeg_tanggal,$year, $data, username());
 				
-		redirect('c_absensi/view_detail_absensi/'.$fschpeg_id.'/'.$this->input->post('month').'/'.$year);
+		redirect('c_absensi/view_detail_absensi/'.$fschpeg_id.'/'.$this->input->post('month').'/'.$year.'/'.$nipp);
 	}
 	
 	function tarik_absensi()

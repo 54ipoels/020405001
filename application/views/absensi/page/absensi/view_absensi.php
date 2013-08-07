@@ -44,7 +44,7 @@
                     <td><?php echo $lemburhk; ?></td>
                     <td><?php echo $lemburhl; ?></td>
                     <td><?php echo $exvo; ?></td>
-                    <td><?php echo anchor('c_absensi/view_detail_absensi/'.$sd['fschpeg_id'].'/'.$month.'/'.$year.'', 
+                    <td><?php echo anchor('c_absensi/view_detail_absensi/'.$sd['fschpeg_id'].'/'.$month.'/'.$year.'/'.$sd['peg_nipp'].'', 
 					img(array('src'=>'images/icons/control/16/project.png','border'=>'0','alt'=>'Detail')) , 'title="Detail"' ); ?>
         				</td>
                 </tr>

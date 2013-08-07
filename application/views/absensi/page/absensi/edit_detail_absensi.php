@@ -1,10 +1,11 @@
 <div class="widget">
           <div class="title"><img src="<?php echo base_url()?>images/icons/dark/frames.png" alt="" class="titleIcon" />
-          <h6>DATA ABSENSI <?php echo $this->uri->segment(5).'-'.$this->uri->segment(6).'-'.$this->uri->segment(7);?></h6></div>
+          <h6>DATA ABSENSI <?php echo $this->uri->segment(5).'-'.$this->uri->segment(6).'-'.$this->uri->segment(7)." ( NIPP : ".$this->uri->segment(8)." )" ;?></h6></div>
 		  <?php echo form_open('c_absensi/submit_edit_detail_absensi'); 
 		  echo form_hidden('date', $this->uri->segment(5));
 		  echo form_hidden('month', $this->uri->segment(6));
 		  echo form_hidden('year', $this->uri->segment(7));
+		  echo form_hidden('nipp', $this->uri->segment(8));
 		  echo form_hidden('fschpeg_id', $this->uri->segment(3));
 		  echo form_hidden('fschpeg_tanggal', $this->uri->segment(4));
 		  echo form_hidden('sch_out_date', $this->uri->segment(4));
