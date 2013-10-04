@@ -1361,6 +1361,18 @@ class kepegawaian extends CI_Model
 			}
 		}		
 	}
+	
+	function update_data_riwayat_jabatan($id_peg_jabatan,$data)
+	{
+		$this->db->where('id_peg_jabatan',$id_peg_jabatan);
+		$this->db->update('v3_peg_jabatan',$data);
+	}
+	function get_jabatan_by_id_jabatan($id_peg_jabatan)
+	{
+		$query = "SELECT * FROM v3_peg_jabatan WHERE id_peg_jabatan = $id_peg_jabatan";
+		$query = $this->db->query($query);
+		return $query->result_array();
+	}
 	/*
 	function copy_data_pegawai($nipp,$nipp_baru)
 	{

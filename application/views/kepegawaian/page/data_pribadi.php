@@ -259,6 +259,7 @@ if( $tmt_reason==""){?>
 				<li><a href="#tab8">Data Anak</a></li>
 				<li><a href="#tab5">Data Orang Tua</a></li>
 				<li><a href="#tab6">Data Mertua</a></li>
+        		<li><a href="#tab7">Riwayat Jabatan</a></li>
             </ul>
             <div class="tab_container">
                 <div id="tab1" class="tab_content np">
@@ -528,6 +529,47 @@ if( $tmt_reason==""){?>
                     </table>
                 </div>
                 <div class="clear"></div>
+				 <div id="tab7" class="tab_content np">
+                    <table cellpadding="0" cellspacing="0" width="100%" class="sTable">
+                        <thead>
+							<tr>
+								<td rowspan="2">Jabatan</td>
+								<td colspan="3">Surat Keputusan</td>
+								<td rowspan="2">Keterangan</td>
+								<td rowspan="2">Action</td>
+							</tr>
+							<tr>
+								<td>No</td>
+								<td>Pejabat</td>
+								<td>Tanggal</td>
+							</tr>
+						</thead>
+						<tfoot><tr><td colspan="6"> </td></tr></tfoot>
+						<tbody>
+								<?php foreach($data_jabatan as $rj){ ?>
+									<tr>
+										<td><?php echo $rj['p_jbt_jabatan'];?></td>
+										<td>
+											<?php if ($rj['p_jbt_skfile'] !== ""){
+													echo anchor("pekerja/view_skjabatanfile/".$rj['p_jbt_skfile'],$rj['p_jbt_skno']," target ='_blank' ");	
+												} else {
+													echo $rj['p_jbt_skno'];
+												}
+											?>	
+										</td>
+										<td><?php echo $rj['p_jbt_skpejabat'];?></td>
+										<td><?php echo $rj['p_jbt_sktanggal'];?></td>
+										<td><?php echo $rj['p_jbt_keterangan'];?></td>
+										<td><?php 
+											echo anchor("pekerja/edit_riwayat_jabatan/$rj[id_peg_jabatan]", img(array('src'=>"images/icons/control/16/edit.png", 'alt'=>'Edit Riwayat Jabatan', 'title'=>'Edit Riwayat Jabatan')));
+											echo '&nbsp';	
+											?>
+										</td>
+									</tr>
+								<?php } ?>
+                        </tbody>
+                    </table>
+                </div>
 				<div class="clear"></div>
 				<div id="tab8" class="tab_content np">
                     <table cellpadding="0" cellspacing="0" width="100%" class="sTable">

@@ -134,6 +134,10 @@
 		{
 			$this->load->view('kepegawaian/page/edit/edit_data_jabatan');
 		}else
+		if ($page == 'Edit Data Riwayat Jabatan')
+		{
+			$this->load->view('kepegawaian/page/edit/edit_data_riwayat_jabatan');
+		}else
 		if ($page == 'Edit Data Pendidikan')
 		{
 			$this->load->view('kepegawaian/page/edit/edit_data_pendidikan');

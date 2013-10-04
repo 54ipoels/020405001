@@ -1008,6 +1008,47 @@ class Pekerja extends Application {
 		$this->load->view('kepegawaian/index',$data);
 	}
 	
+	public function edit_riwayat_jabatan()
+	{		
+		$id_peg_jabatan = $this->uri->segment(3);
+		$data['id_peg_jabatan'] = $id_peg_jabatan;
+		$data['jabatan'] = $this->kepegawaian->get_jabatan_by_id_jabatan($id_peg_jabatan);
+		$data['list_jabatan'] = $this->kepegawaian->get_list_jabatan();
+		$data['page'] = 'Edit Data Riwayat Jabatan';
+		$data['page_karyawan'] = 'yes';
+		$this->load->view('kepegawaian/index',$data);
+	}
+	public function edit_data_riwayat_jabatan()
+	{
+		#preparing date update
+		$datestring = "%Y-%m-%d" ;
+		$time = time();
+		$tanggal = mdate($datestring, $time);
+		
+		if($this->input->post('tmt_jbt')=='00/00/0000'){$tanggal_tmt_jbt='0000-00-00';}
+		else{ $tanggal_tmt_jbt = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tmt_jbt'))));}
+		if($this->input->post('tmt_end_jbt')=='00/00/0000'){$tanggal_tmt_end='0000-00-00';}
+		else{ $tanggal_tmt_end = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tmt_end_jbt'))));}
+		if($this->input->post('sktanggal')=='00/00/0000'){$sktanggal='0000-00-00';}
+		else{ $sktanggal = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('sktanggal'))));}
+		
+		$id_peg_jabatan = $this->input->post('id_peg_jbt');
+		$nipp = $this->input->post('nipp');
+		$data_jabatan = array(
+				'p_jbt_nipp'		=> $nipp,
+				'p_jbt_jabatan'		=> $this->input->post('jabatan'),
+				'p_jbt_tmt_start'	=> $tanggal_tmt_jbt,
+				'p_jbt_tmt_end'		=> $tanggal_tmt_end,
+				'p_jbt_skno'		=> $this->input->post('skno'),
+				'p_jbt_skpejabat'	=> $this->input->post('skpejabat'),
+				'p_jbt_sktanggal'	=> $sktanggal,
+				'p_jbt_keterangan'	=> $this->input->post('keterangan'),
+				'p_jbt_update_by'	=> 'admin'
+			);
+		$this->kepegawaian->update_data_riwayat_jabatan($id_peg_jabatan,$data_jabatan);	
+		redirect('pekerja/get_pegawai/'.$nipp);
+	}
+	
 	#edit status pegawai
 	public function edit_status_pegawai($nipp)
 	{		
@@ -1134,7 +1175,8 @@ class Pekerja extends Application {
 					'p_stk_aktif'			  => '0',
 					'p_stk_update_by'		  => 'admin'
 				);
-		$this->kepegawaian->update_data_pegawai_status_keluarga($data_stk_last,$id_stk);		
+			
+		$this->kepegawaian->update_data_status_keluarga($data_stk_last,$id_stk);		
 				
 		$data_stk = array(
 					'p_stk_nipp' 			  => $nipp,
@@ -2669,6 +2711,89 @@ class Pekerja extends Application {
 
 	}
 	
+	function upload_sk_jabatan()
+	{
+		#preparing date 
+		$update_on = date('YmdHis');
+		
+		$datestring = "%Y-%m-%d" ;
+		$time = time();
+		$tanggal = mdate($datestring, $time);
+		$id_peg_jabatan = $this->input->post('id_peg_jbt');
+		$nipp = $this->input->post('nipp');
+		$no_sk = $this->input->post('no_sk');
+				
+		//upload file
+		
+		if($_FILES["file"]["size"] > 0){
+			$tmpName = $_FILES["file"]['tmp_name'];         
+			$fp = fopen($tmpName, 'r');
+			$file = fread($fp, filesize($tmpName));
+			$file = addslashes($file);
+			fclose($fp);
+		}
+		
+		//Check if the file exists in the form
+		
+		if($_FILES['file']['name']!=""){
+			$str=$_FILES['file']['name'];
+			$ext=explode('.',$str);
+			
+			$config['upload_path'] = './pegawai/skjabatan/';
+			$config['allowed_types'] = 'pdf|gif|jpg|png';
+			$config['max_size']  = '9999';
+			$config['overwrite']	=	TRUE;
+			//$filenamebantu = str_replace(' ','_',$no_sk)."-$id_peg_jabatan-".$update_on.".".$ext[1];
+			$filenamebantu = str_replace(' ','_',$no_sk).".".$ext[1]; //filenya ditindih dengan file baru
+			$config['file_name']=$filenamebantu;
+			
+			
+			//Initialize
+			$this->load->library('upload');
+			$this->upload->initialize($config);
+			//Upload file
+			if( ! $this->upload->do_upload("file")){
+				echo $this->upload->display_errors();
+			} else {
+			//If the upload success
+				$file_name = $this->upload->file_name;
+			
+			//persiapan data yang akan diupdate
+				$data_jabatan = array(
+					
+					'p_jbt_skfile'			=> $filenamebantu,
+					'p_jbt_update_by'		=> username(),
+				);
+				$this->kepegawaian->update_data_riwayat_jabatan($id_peg_jabatan,$data_jabatan);	
+			}
+		} 
+		redirect('pekerja/get_pegawai/'.$nipp);
+	}
+	
+	function view_skjabatanfile($nama_file)
+	{
+		?>
+		<html>
+		<title><?php echo $nama_file;?></title>
+		<head>
+			<script>
+				function goBack()
+				{
+					window.history.go(-2);
+				}
+			</script>
+		</head>
+		<body align="center">
+		<?php
+		$file = base_url()."pegawai/skjabatan/".$nama_file;
+		echo "<embed src= '".$file."' width='1200' height='666' ></embed>";
+		?>
+		<br><br>
+		<!-- <input type="button" value="Back" onclick="goBack()"> -->
+		</body>
+		</html>
+		<?php 
+	}
 }
 
 /* End of file welcome.php */
