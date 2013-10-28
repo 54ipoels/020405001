@@ -249,7 +249,7 @@ if( $tmt_reason==""){?>
 <?php } ?>
 
 <div class="twoOne2">
-	<div class="widget rightTabs"> 
+	<div class="widget rightTabs" style="width:1020px;"> 
             <div class="title"><img src="<?php echo base_url()?>images/icons/dark/frames.png" alt="" class="titleIcon" /></div>     
             <ul class="tabs">
                 <li><a href="#tab1">Alamat</a></li>
@@ -260,6 +260,8 @@ if( $tmt_reason==""){?>
 				<li><a href="#tab5">Data Orang Tua</a></li>
 				<li><a href="#tab6">Data Mertua</a></li>
         		<li><a href="#tab7">Riwayat Jabatan</a></li>
+				<li><a href="#tab9">Riwayat Golongan</a></li>
+            	<li><a href="#tab10">Sanksi Disiplin</a></li>
             </ul>
             <div class="tab_container">
                 <div id="tab1" class="tab_content np">
@@ -533,22 +535,20 @@ if( $tmt_reason==""){?>
                     <table cellpadding="0" cellspacing="0" width="100%" class="sTable">
                         <thead>
 							<tr>
-								<td rowspan="2">Jabatan</td>
-								<td colspan="3">Surat Keputusan</td>
-								<td rowspan="2">Keterangan</td>
-								<td rowspan="2">Action</td>
-							</tr>
-							<tr>
-								<td>No</td>
-								<td>Pejabat</td>
-								<td>Tanggal</td>
+								<td>Jabatan</td>
+								<td>Unit Kerja</td>
+								<td>Surat Keputusan</td>
+								<td>TMT</td>
+								<td>Keterangan</td>
+								<td>Action</td>
 							</tr>
 						</thead>
-						<tfoot><tr><td colspan="6"> </td></tr></tfoot>
+						<tfoot><tr><td colspan="6" align="right"><?php echo anchor('pekerja/add_riwayat_jabatan/'.$row_pegawai['peg_nipp'],'[add]');?></td></tr></tfoot>
 						<tbody>
-								<?php foreach($data_jabatan as $rj){ ?>
+								<?php foreach($data_riwayat_jabatan as $rj){ ?>
 									<tr>
 										<td><?php echo $rj['p_jbt_jabatan'];?></td>
+										<td><?php echo $rj['p_jbt_unit'];?></td>
 										<td>
 											<?php if ($rj['p_jbt_skfile'] !== ""){
 													echo anchor("pekerja/view_skjabatanfile/".$rj['p_jbt_skfile'],$rj['p_jbt_skno']," target ='_blank' ");	
@@ -557,8 +557,7 @@ if( $tmt_reason==""){?>
 												}
 											?>	
 										</td>
-										<td><?php echo $rj['p_jbt_skpejabat'];?></td>
-										<td><?php echo $rj['p_jbt_sktanggal'];?></td>
+										<td><?php echo mdate('%d-%m-%Y',strtotime($rj['p_jbt_tmt_start']));?></td>
 										<td><?php echo $rj['p_jbt_keterangan'];?></td>
 										<td><?php 
 											echo anchor("pekerja/edit_riwayat_jabatan/$rj[id_peg_jabatan]", img(array('src'=>"images/icons/control/16/edit.png", 'alt'=>'Edit Riwayat Jabatan', 'title'=>'Edit Riwayat Jabatan')));
@@ -608,7 +607,88 @@ if( $tmt_reason==""){?>
                         </tbody>
                     </table>
                 </div>
+				<div class="clear"></div>
+				<div id="tab9" class="tab_content np">
+                    <table cellpadding="0" cellspacing="0" width="100%" class="sTable">
+                        <thead>
+							<tr>
+								<td>Golongan</td>
+								<td>TMT</td>
+								<td>Surat Keputusan</td>
+								<td>Keterangan</td>
+								<td>Action</td>
+							</tr>
+						</thead>
+						<tfoot><tr><td colspan="5" align="right" ><?php echo anchor('pekerja/add_riwayat_golongan/'.$row_pegawai['peg_nipp'],'[add]');?></td></tr></tfoot>
+						<tbody>
+								<?php foreach($data_riwayat_golongan as $rg){ ?>
+									<tr>
+										<td><?php echo $rg['p_grd_grade'];?></td>
+										<td><?php if($rg['p_grd_tmt'] == "0000-00-00"){echo "-";}else{echo mdate('%d-%m-%Y',strtotime($rg['p_grd_tmt']));}?></td>
+										<td>
+											<?php 
+												if ($rg['p_grd_skfile'] !== ""){
+													echo anchor("pekerja/view_skgolonganfile/".$rg['p_grd_skfile'],$rg['p_grd_skno']," target ='_blank' ");	
+												} else {
+													echo $rg['p_grd_skno'];
+												}
+											?>	
+										</td>
+										<td><?php echo $rg['p_grd_keterangan'];?></td>
+										<td><?php 
+											echo anchor("pekerja/edit_riwayat_golongan/$rg[id_peg_grade]", img(array('src'=>"images/icons/control/16/edit.png", 'alt'=>'Edit Riwayat Golongan', 'title'=>'Edit Riwayat Golongan')));
+											echo '&nbsp';	
+											?>
+										</td>
+									</tr>
+								<?php } ?>
+                        </tbody>
+                    </table>
+                </div>
+				<div class="clear"></div>
+				<div id="tab10" class="tab_content np">
+                    <table cellpadding="0" cellspacing="0" width="100%" class="sTable">
+                        <thead>
+							<tr>
+								<td rowspan="2">Jenis Sanksi</td>
+								<td rowspan="2">No Surat</td>
+								<td colspan="2">Masa Sanksi</td>
+								<td rowspan="2">Keterangan</td>
+								<td rowspan="2">Action</td>
+							</tr>
+							<tr>
+								<td>Dari</td>
+								<td>Sampai</td>
+							</tr>
+						</thead>
+						<tfoot><tr><td colspan="6" align="right"><?php echo anchor('pekerja/add_riwayat_sanksi/'.$row_pegawai['peg_nipp'],'[add]');?></td></tr></tfoot>
+						<tbody>
+								<?php foreach($data_riwayat_sanksi as $rs){ ?>
+									<tr>
+										<td><?php echo $rs['p_snk_jenis'];?></td>
+										<td>
+											<?php if ($rs['p_snk_file'] !== ""){
+													echo anchor("pekerja/view_sksanksifile/".$rs['p_snk_file'],$rs['p_snk_no']," target ='_blank' ");	
+												} else {
+													echo $rs['p_snk_no'];
+												}
+											?>	
+										</td>
+										<td><?php if($rs['p_snk_start'] == "0000-00-00"){echo "-";}else{ echo mdate('%d-%m-%Y',strtotime($rs['p_snk_start']));}?></td>
+										<td><?php if($rs['p_snk_end'] == "0000-00-00"){echo "-";}else{ echo mdate('%d-%m-%Y',strtotime($rs['p_snk_end']));}?></td>
+										<td><?php echo $rs['p_snk_keterangan'];?></td>
+										<td><?php 
+											echo anchor("pekerja/edit_riwayat_sanksi/$rs[id_peg_sanksi]", img(array('src'=>"images/icons/control/16/edit.png", 'alt'=>'Edit Riwayat Sanksi', 'title'=>'Edit Riwayat Sanksi')));
+											echo '&nbsp';	
+											?>
+										</td>
+									</tr>
+								<?php } ?>
+                        </tbody>
+                    </table>
+                </div>
                 <div class="clear"></div>
+				
             </div>	
 			<?php 
 					foreach ($pegawai as $row_pegawai){}; 

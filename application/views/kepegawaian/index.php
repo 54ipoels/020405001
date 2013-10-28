@@ -133,11 +133,35 @@
 		if ($page == 'Edit Data Jabatan')
 		{
 			$this->load->view('kepegawaian/page/edit/edit_data_jabatan');
+		}
+		# riwayat jabatan golongan sanksi
+		else
+		if ($page == 'Add Data Riwayat Jabatan')
+		{
+			$this->load->view('kepegawaian/page/add/add_data_riwayat_jabatan');
+		}else
+		if ($page == 'Add Data Riwayat Golongan')
+		{
+			$this->load->view('kepegawaian/page/add/add_data_golongan');
+		}else
+		if ($page == 'Add Data Riwayat Sanksi')
+		{
+			$this->load->view('kepegawaian/page/add/add_data_sanksi');
 		}else
 		if ($page == 'Edit Data Riwayat Jabatan')
 		{
 			$this->load->view('kepegawaian/page/edit/edit_data_riwayat_jabatan');
 		}else
+		if ($page == 'Edit Data Riwayat Golongan')
+		{
+			$this->load->view('kepegawaian/page/edit/edit_data_riwayat_golongan');
+		}else
+		if ($page == 'Edit Data Riwayat Sanksi')
+		{
+			$this->load->view('kepegawaian/page/edit/edit_data_riwayat_sanksi');
+		}
+		#akhir riwayat jabatan golongan sanksi
+ 		else
 		if ($page == 'Edit Data Pendidikan')
 		{
 			$this->load->view('kepegawaian/page/edit/edit_data_pendidikan');

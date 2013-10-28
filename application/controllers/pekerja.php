@@ -426,6 +426,9 @@ class Pekerja extends Application {
 			$data['data_stkp'] = $this->kepegawaian->get_detail_pegawai_stkp($nipp);		
 			$data['data_anak'] = $this->kepegawaian->get_detail_pegawai_anak($nipp);
 			$data['data_jabatan'] = $this->kepegawaian->get_last_jabatan($nipp);
+			$data['data_riwayat_jabatan'] = $this->kepegawaian->get_riwayat_jabatan($nipp);
+			$data['data_riwayat_golongan'] = $this->kepegawaian->get_riwayat_golongan($nipp);
+			$data['data_riwayat_sanksi'] = $this->kepegawaian->get_riwayat_sanksi($nipp);
 			#count data
 			$data['jumlah_bahasa'] = $this->kepegawaian->count_result_bahasa($nipp);
 			$data['page_karyawan'] = 'yes';
@@ -1008,12 +1011,91 @@ class Pekerja extends Application {
 		$this->load->view('kepegawaian/index',$data);
 	}
 	
+	#riwayat jabatan
+	public function add_riwayat_jabatan()
+	{		
+		$data['nipp'] = $this->uri->segment(3);
+		$data['list_jabatan'] = $this->kepegawaian->get_list_jabatan();
+		$data['list_unit'] = $this->kepegawaian->get_list_unit();
+		$data['page'] = 'Add Data Riwayat Jabatan';
+		$data['page_karyawan'] = 'yes';
+		$this->load->view('kepegawaian/index',$data);
+	}
+	public function add_data_riwayat_jabatan()
+	{
+		#preparing date update
+		$datestring = "%Y-%m-%d" ;
+		$time = time();
+		$tanggal = mdate($datestring, $time);
+		$no_sk = $this->input->post('no_sk');
+		if($this->input->post('tmt_jbt')=='00/00/0000'){$tanggal_tmt_jbt='0000-00-00';}
+		else{ $tanggal_tmt_jbt = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tmt_jbt'))));}
+		if($this->input->post('tmt_end_jbt')=='00/00/0000'){$tanggal_tmt_end='0000-00-00';}
+		else{ $tanggal_tmt_end = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tmt_end_jbt'))));}
+		$filenamebantu = "";
+		$nipp = $this->input->post('nipp');
+		
+		//upload file
+		
+		if($_FILES["file"]["size"] > 0){
+			$tmpName = $_FILES["file"]['tmp_name'];         
+			$fp = fopen($tmpName, 'r');
+			$file = fread($fp, filesize($tmpName));
+			$file = addslashes($file);
+			fclose($fp);
+		}
+		
+		//Check if the file exists in the form
+		
+		if($_FILES['file']['name']!=""){
+			$str=$_FILES['file']['name'];
+			$ext=explode('.',$str);
+			
+			$config['upload_path'] = './pegawai/skjabatan/';
+			$config['allowed_types'] = 'pdf|gif|jpg|png';
+			$config['max_size']  = '9999';
+			$config['overwrite']	=	TRUE;
+			//$filenamebantu = str_replace(' ','_',$no_sk)."-$id_peg_jabatan-".$update_on.".".$ext[1];
+			$filenamebantu = str_replace(' ','_',$no_sk).".".$ext[1]; //filenya ditindih dengan file baru
+			$config['file_name']=$filenamebantu;
+			
+			
+			//Initialize
+			$this->load->library('upload');
+			$this->upload->initialize($config);
+			//Upload file
+			if( ! $this->upload->do_upload("file")){
+				echo $this->upload->display_errors();
+			} else {
+			//If the upload success
+				$file_name = $this->upload->file_name;
+			}
+		} 
+		else{
+			$data_jabatan = array(
+					'p_jbt_nipp'		=> $nipp,
+					'p_jbt_jabatan'		=> $this->input->post('jabatan'),
+					'p_jbt_unit'		=> $this->input->post('unit'),
+					'p_jbt_tmt_start'	=> $tanggal_tmt_jbt,
+					'p_jbt_tmt_end'		=> $tanggal_tmt_end,
+					'p_jbt_skno'		=> $no_sk,
+					'p_jbt_skfile'		=> $filenamebantu,
+					'p_jbt_keterangan'	=> $this->input->post('keterangan'),
+					'p_jbt_update_by'	=> username(),
+				);
+			$this->kepegawaian->insert_data_riwayat_jabatan($data_jabatan);	
+			redirect('pekerja/get_pegawai/'.$nipp);
+		}
+	}
+	
+	
 	public function edit_riwayat_jabatan()
 	{		
 		$id_peg_jabatan = $this->uri->segment(3);
 		$data['id_peg_jabatan'] = $id_peg_jabatan;
 		$data['jabatan'] = $this->kepegawaian->get_jabatan_by_id_jabatan($id_peg_jabatan);
 		$data['list_jabatan'] = $this->kepegawaian->get_list_jabatan();
+		$data['list_unit'] = $this->kepegawaian->get_list_unit();
 		$data['page'] = 'Edit Data Riwayat Jabatan';
 		$data['page_karyawan'] = 'yes';
 		$this->load->view('kepegawaian/index',$data);
@@ -1024,28 +1106,389 @@ class Pekerja extends Application {
 		$datestring = "%Y-%m-%d" ;
 		$time = time();
 		$tanggal = mdate($datestring, $time);
-		
+		$no_sk = $this->input->post('no_sk');
 		if($this->input->post('tmt_jbt')=='00/00/0000'){$tanggal_tmt_jbt='0000-00-00';}
 		else{ $tanggal_tmt_jbt = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tmt_jbt'))));}
 		if($this->input->post('tmt_end_jbt')=='00/00/0000'){$tanggal_tmt_end='0000-00-00';}
 		else{ $tanggal_tmt_end = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tmt_end_jbt'))));}
-		if($this->input->post('sktanggal')=='00/00/0000'){$sktanggal='0000-00-00';}
+		/*if($this->input->post('sktanggal')=='00/00/0000'){$sktanggal='0000-00-00';}
 		else{ $sktanggal = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('sktanggal'))));}
-		
+		*/
 		$id_peg_jabatan = $this->input->post('id_peg_jbt');
 		$nipp = $this->input->post('nipp');
-		$data_jabatan = array(
-				'p_jbt_nipp'		=> $nipp,
-				'p_jbt_jabatan'		=> $this->input->post('jabatan'),
-				'p_jbt_tmt_start'	=> $tanggal_tmt_jbt,
-				'p_jbt_tmt_end'		=> $tanggal_tmt_end,
-				'p_jbt_skno'		=> $this->input->post('skno'),
-				'p_jbt_skpejabat'	=> $this->input->post('skpejabat'),
-				'p_jbt_sktanggal'	=> $sktanggal,
-				'p_jbt_keterangan'	=> $this->input->post('keterangan'),
-				'p_jbt_update_by'	=> 'admin'
-			);
-		$this->kepegawaian->update_data_riwayat_jabatan($id_peg_jabatan,$data_jabatan);	
+		
+		//upload file
+		
+		if($_FILES["file"]["size"] > 0){
+			$tmpName = $_FILES["file"]['tmp_name'];         
+			$fp = fopen($tmpName, 'r');
+			$file = fread($fp, filesize($tmpName));
+			$file = addslashes($file);
+			fclose($fp);
+		}
+		
+		//Check if the file exists in the form
+		
+		if($_FILES['file']['name']!=""){
+			$str=$_FILES['file']['name'];
+			$ext=explode('.',$str);
+			
+			$config['upload_path'] = './pegawai/skjabatan/';
+			$config['allowed_types'] = 'pdf|gif|jpg|png';
+			$config['max_size']  = '9999';
+			$config['overwrite']	=	TRUE;
+			//$filenamebantu = str_replace(' ','_',$no_sk)."-$id_peg_jabatan-".$update_on.".".$ext[1];
+			$filenamebantu = str_replace(' ','_',$no_sk).".".$ext[1]; //filenya ditindih dengan file baru
+			$config['file_name']=$filenamebantu;
+			
+			
+			//Initialize
+			$this->load->library('upload');
+			$this->upload->initialize($config);
+			//Upload file
+			if( ! $this->upload->do_upload("file")){
+				echo $this->upload->display_errors();
+			} else {
+			//If the upload success
+				$file_name = $this->upload->file_name;
+				$data_jabatan = array(
+						'p_jbt_nipp'		=> $nipp,
+						'p_jbt_jabatan'		=> $this->input->post('jabatan'),
+						'p_jbt_tmt_start'	=> $tanggal_tmt_jbt,
+						'p_jbt_tmt_end'		=> $tanggal_tmt_end,
+						'p_jbt_skno'		=> $no_sk,
+						'p_jbt_skfile'		=> $filenamebantu,
+						'p_jbt_skpejabat'	=> $this->input->post('skpejabat'),
+						//'p_jbt_sktanggal'	=> $sktanggal,
+						'p_jbt_keterangan'	=> $this->input->post('keterangan'),
+						'p_jbt_update_by'	=> username(),
+					);
+				$this->kepegawaian->update_data_riwayat_jabatan($id_peg_jabatan,$data_jabatan);	
+				redirect('pekerja/get_pegawai/'.$nipp);
+			}
+		} 
+		else{
+			$data_jabatan = array(
+						'p_jbt_nipp'		=> $nipp,
+						'p_jbt_jabatan'		=> $this->input->post('jabatan'),
+						'p_jbt_tmt_start'	=> $tanggal_tmt_jbt,
+						'p_jbt_tmt_end'		=> $tanggal_tmt_end,
+						'p_jbt_skno'		=> $no_sk,
+						'p_jbt_skpejabat'	=> $this->input->post('skpejabat'),
+						//'p_jbt_sktanggal'	=> $sktanggal,
+						'p_jbt_keterangan'	=> $this->input->post('keterangan'),
+						'p_jbt_update_by'	=> username(),
+					);
+				$this->kepegawaian->update_data_riwayat_jabatan($id_peg_jabatan,$data_jabatan);	
+				redirect('pekerja/get_pegawai/'.$nipp);
+		}
+	}
+	
+	#riwayat golongan
+	public function add_riwayat_golongan()
+	{		
+		$data['nipp'] = $this->uri->segment(3);
+		$data['page'] = 'Add Data Riwayat Golongan';
+		$data['page_karyawan'] = 'yes';
+		$this->load->view('kepegawaian/index',$data);
+	}
+	public function add_data_golongan()
+	{
+		#preparing date update
+		$datestring = "%Y-%m-%d" ;
+		$time = time();
+		$tanggal = mdate($datestring, $time);
+		$no_sk = $this->input->post('no_sk');
+		if(($this->input->post('tmt')=='00/00/0000') OR ($this->input->post('tmt')=='')){$tmt='0000-00-00';}
+		else{ $tmt = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tmt'))));}
+		$filenamebantu = "";
+		$nipp = $this->input->post('nipp');
+		
+		//upload file
+		
+		if($_FILES["file"]["size"] > 0){
+			$tmpName = $_FILES["file"]['tmp_name'];         
+			$fp = fopen($tmpName, 'r');
+			$file = fread($fp, filesize($tmpName));
+			$file = addslashes($file);
+			fclose($fp);
+		}
+		
+		//Check if the file exists in the form
+		
+		if($_FILES['file']['name']!=""){
+			$str=$_FILES['file']['name'];
+			$ext=explode('.',$str);
+			
+			$config['upload_path'] = './pegawai/skgolongan/';
+			$config['allowed_types'] = 'pdf|gif|jpg|png';
+			$config['max_size']  = '9999';
+			$config['overwrite']	=	TRUE;
+			//$filenamebantu = str_replace(' ','_',$no_sk)."-$id_peg_jabatan-".$update_on.".".$ext[1];
+			$filenamebantu = str_replace(' ','_',$no_sk).".".$ext[1]; //filenya ditindih dengan file baru
+			$config['file_name']=$filenamebantu;
+			
+			
+			//Initialize
+			$this->load->library('upload');
+			$this->upload->initialize($config);
+			//Upload file
+			if( ! $this->upload->do_upload("file")){
+				echo $this->upload->display_errors();
+			} else {
+			//If the upload success
+				$file_name = $this->upload->file_name;
+			}
+		} 
+		$data_golongan = array(
+						'p_grd_nipp'		=> $nipp,
+						'p_grd_grade'		=> $this->input->post('golongan'),
+						'p_grd_skno'		=> $this->input->post('no_sk'),
+						'p_grd_skfile'		=> $filenamebantu,
+						'p_grd_tmt'			=> $tmt,
+						'p_grd_keterangan'	=> $this->input->post('keterangan'),
+						'p_grd_update_by'	=> username(),
+					);
+		$this->kepegawaian->insert_data_riwayat_golongan($data_golongan);
+		
+		redirect('pekerja/get_pegawai/'.$nipp);
+	}
+	
+	public function edit_riwayat_golongan()
+	{		
+		$id_peg_grade = $this->uri->segment(3);
+		$data['id_peg_grade'] = $id_peg_grade;
+		$data['golongan'] = $this->kepegawaian->get_golongan_by_id_golongan($id_peg_grade);
+		$data['page'] = 'Edit Data Riwayat Golongan';
+		$data['page_karyawan'] = 'yes';
+		$this->load->view('kepegawaian/index',$data);
+	}
+	public function edit_data_riwayat_golongan()
+	{
+		#preparing date update
+		$datestring = "%Y-%m-%d" ;
+		$time = time();
+		$tanggal = mdate($datestring, $time);
+		$no_sk = $this->input->post('no_sk');
+		if(($this->input->post('tmt')=='00/00/0000') OR ($this->input->post('tmt')=='')){$tmt='0000-00-00';}
+		else{ $tmt = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tmt'))));}
+		$nipp = $this->input->post('nipp');
+		$id_peg_grade = $this->input->post('id_peg_grade');
+		//upload file
+		
+		if($_FILES["file"]["size"] > 0){
+			$tmpName = $_FILES["file"]['tmp_name'];         
+			$fp = fopen($tmpName, 'r');
+			$file = fread($fp, filesize($tmpName));
+			$file = addslashes($file);
+			fclose($fp);
+		}
+		
+		//Check if the file exists in the form
+		
+		if($_FILES['file']['name']!=""){
+			$str=$_FILES['file']['name'];
+			$ext=explode('.',$str);
+			
+			$config['upload_path'] = './pegawai/skgolongan/';
+			$config['allowed_types'] = 'pdf|gif|jpg|png';
+			$config['max_size']  = '9999';
+			$config['overwrite']	=	TRUE;
+			//$filenamebantu = str_replace(' ','_',$no_sk)."-$id_peg_jabatan-".$update_on.".".$ext[1];
+			$filenamebantu = str_replace(' ','_',$no_sk).".".$ext[1]; //filenya ditindih dengan file baru
+			$config['file_name']=$filenamebantu;
+			
+			
+			//Initialize
+			$this->load->library('upload');
+			$this->upload->initialize($config);
+			//Upload file
+			if( ! $this->upload->do_upload("file")){
+				echo $this->upload->display_errors();
+			} else {
+			//If the upload success
+				$file_name = $this->upload->file_name;
+				$data_golongan = array(
+						'p_grd_nipp'		=> $nipp,
+						'p_grd_grade'		=> $this->input->post('golongan'),
+						'p_grd_skno'		=> $this->input->post('no_sk'),
+						'p_grd_skfile'		=> $filenamebantu,
+						'p_grd_tmt'			=> $tmt,
+						'p_grd_keterangan'	=> $this->input->post('keterangan'),
+						'p_grd_update_by'	=> username(),
+					);
+				$this->kepegawaian->update_data_riwayat_golongan($id_peg_grade,$data_golongan);
+			}
+		} 
+		else {
+				$data_golongan = array(
+						'p_grd_nipp'		=> $nipp,
+						'p_grd_grade'		=> $this->input->post('golongan'),
+						'p_grd_skno'		=> $this->input->post('no_sk'),
+						'p_grd_tmt'			=> $tmt,
+						'p_grd_keterangan'	=> $this->input->post('keterangan'),
+						'p_grd_update_by'	=> username(),
+					);
+				$this->kepegawaian->update_data_riwayat_golongan($id_peg_grade,$data_golongan);
+		}
+		redirect('pekerja/get_pegawai/'.$nipp);
+	}
+	
+	#riwayat sanksi
+	public function add_riwayat_sanksi()
+	{		
+		$data['nipp'] = $this->uri->segment(3);
+		$data['page'] = 'Add Data Riwayat Sanksi';
+		$data['page_karyawan'] = 'yes';
+		$this->load->view('kepegawaian/index',$data);
+	}
+	public function add_data_sanksi()
+	{
+		#preparing date update
+		$datestring = "%Y-%m-%d" ;
+		$time = time();
+		$tanggal = mdate($datestring, $time);
+		$no_sk = $this->input->post('no_sk');
+		if(($this->input->post('tmt_start')=='00/00/0000') OR ($this->input->post('tmt_start')=='')){$tmt_start='0000-00-00';}
+		else{ $tmt_start = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tmt_start'))));}
+		if(($this->input->post('tmt_end')=='00/00/0000') OR ($this->input->post('tmt_end')=='')){$tmt_end='0000-00-00';}
+		else{ $tmt_end = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tmt_end'))));}
+		$filenamebantu = "";
+		$nipp = $this->input->post('nipp');
+		
+		//upload file
+		
+		if($_FILES["file"]["size"] > 0){
+			$tmpName = $_FILES["file"]['tmp_name'];         
+			$fp = fopen($tmpName, 'r');
+			$file = fread($fp, filesize($tmpName));
+			$file = addslashes($file);
+			fclose($fp);
+		}
+		
+		//Check if the file exists in the form
+		
+		if($_FILES['file']['name']!=""){
+			$str=$_FILES['file']['name'];
+			$ext=explode('.',$str);
+			
+			$config['upload_path'] = './pegawai/sksanksi/';
+			$config['allowed_types'] = 'pdf|gif|jpg|png';
+			$config['max_size']  = '9999';
+			$config['overwrite']	=	TRUE;
+			//$filenamebantu = str_replace(' ','_',$no_sk)."-$id_peg_jabatan-".$update_on.".".$ext[1];
+			$filenamebantu = str_replace(' ','_',$no_sk).".".$ext[1]; //filenya ditindih dengan file baru
+			$config['file_name']=$filenamebantu;
+			
+			
+			//Initialize
+			$this->load->library('upload');
+			$this->upload->initialize($config);
+			//Upload file
+			if( ! $this->upload->do_upload("file")){
+				echo $this->upload->display_errors();
+			} else {
+			//If the upload success
+				$file_name = $this->upload->file_name;
+			}
+		} 
+		$data_sanksi = array(
+						'p_snk_nipp'		=> $nipp,
+						'p_snk_jenis'		=> $this->input->post('sanksi'),
+						'p_snk_no'			=> $this->input->post('no_sk'),
+						'p_snk_file'		=> $filenamebantu,
+						'p_snk_start'		=> $tmt_start,
+						'p_snk_end'			=> $tmt_end,
+						'p_snk_keterangan'	=> $this->input->post('keterangan'),
+						'p_snk_update_by'	=> username(),
+					);
+		$this->kepegawaian->insert_data_riwayat_sanksi($data_sanksi);
+		
+		redirect('pekerja/get_pegawai/'.$nipp);
+	}
+	
+	public function edit_riwayat_sanksi()
+	{		
+		$id_peg_sanksi = $this->uri->segment(3);
+		$data['id_peg_sanksi'] = $id_peg_sanksi;
+		$data['sanksi'] = $this->kepegawaian->get_sanksi_by_id_sanksi($id_peg_sanksi);
+		$data['page'] = 'Edit Data Riwayat Sanksi';
+		$data['page_karyawan'] = 'yes';
+		$this->load->view('kepegawaian/index',$data);
+	}
+	public function edit_data_riwayat_sanksi()
+	{
+		#preparing date update
+		$datestring = "%Y-%m-%d" ;
+		$time = time();
+		$tanggal = mdate($datestring, $time);
+		$no_sk = $this->input->post('no_sk');
+		if(($this->input->post('tmt_start')=='00/00/0000') OR ($this->input->post('tmt_start')=='')){$tmt_start='0000-00-00';}
+		else{ $tmt_start = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tmt_start'))));}
+		if(($this->input->post('tmt_end')=='00/00/0000') OR ($this->input->post('tmt_end')=='')){$tmt_end='0000-00-00';}
+		else{ $tmt_end = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tmt_end'))));}
+		$id_peg_sanksi = $this->input->post('id_peg_sanksi');
+		$nipp = $this->input->post('nipp');
+		
+		//upload file
+		
+		if($_FILES["file"]["size"] > 0){
+			$tmpName = $_FILES["file"]['tmp_name'];         
+			$fp = fopen($tmpName, 'r');
+			$file = fread($fp, filesize($tmpName));
+			$file = addslashes($file);
+			fclose($fp);
+		}
+		
+		//Check if the file exists in the form
+		
+		if($_FILES['file']['name']!=""){
+			$str=$_FILES['file']['name'];
+			$ext=explode('.',$str);
+			
+			$config['upload_path'] = './pegawai/sksanksi/';
+			$config['allowed_types'] = 'pdf|gif|jpg|png';
+			$config['max_size']  = '9999';
+			$config['overwrite']	=	TRUE;
+			//$filenamebantu = str_replace(' ','_',$no_sk)."-$id_peg_jabatan-".$update_on.".".$ext[1];
+			$filenamebantu = str_replace(' ','_',$no_sk).".".$ext[1]; //filenya ditindih dengan file baru
+			$config['file_name']=$filenamebantu;
+			
+			
+			//Initialize
+			$this->load->library('upload');
+			$this->upload->initialize($config);
+			//Upload file
+			if( ! $this->upload->do_upload("file")){
+				echo $this->upload->display_errors();
+			} else {
+			//If the upload success
+				$file_name = $this->upload->file_name;
+				$data_sanksi = array(
+						'p_snk_nipp'		=> $nipp,
+						'p_snk_jenis'		=> $this->input->post('sanksi'),
+						'p_snk_no'			=> $this->input->post('no_sk'),
+						'p_snk_file'		=> $filenamebantu,
+						'p_snk_start'		=> $tmt_start,
+						'p_snk_end'			=> $tmt_end,
+						'p_snk_keterangan'	=> $this->input->post('keterangan'),
+						'p_snk_update_by'	=> username(),
+					);
+				$this->kepegawaian->update_data_riwayat_sanksi($id_peg_sanksi,$data_sanksi);
+			}
+		} 
+		else {
+				$data_sanksi = array(
+						'p_snk_nipp'		=> $nipp,
+						'p_snk_jenis'		=> $this->input->post('sanksi'),
+						'p_snk_no'			=> $this->input->post('no_sk'),
+						'p_snk_start'		=> $tmt_start,
+						'p_snk_end'			=> $tmt_end,
+						'p_snk_keterangan'	=> $this->input->post('keterangan'),
+						'p_snk_update_by'	=> username(),
+					);
+				$this->kepegawaian->update_data_riwayat_sanksi($id_peg_sanksi,$data_sanksi);
+		}
 		redirect('pekerja/get_pegawai/'.$nipp);
 	}
 	
@@ -2786,6 +3229,54 @@ class Pekerja extends Application {
 		<body align="center">
 		<?php
 		$file = base_url()."pegawai/skjabatan/".$nama_file;
+		echo "<embed src= '".$file."' width='1200' height='666' ></embed>";
+		?>
+		<br><br>
+		<!-- <input type="button" value="Back" onclick="goBack()"> -->
+		</body>
+		</html>
+		<?php 
+	}
+	function view_skgolonganfile($nama_file)
+	{
+		?>
+		<html>
+		<title><?php echo $nama_file;?></title>
+		<head>
+			<script>
+				function goBack()
+				{
+					window.history.go(-2);
+				}
+			</script>
+		</head>
+		<body align="center">
+		<?php
+		$file = base_url()."pegawai/skgolongan/".$nama_file;
+		echo "<embed src= '".$file."' width='1200' height='666' ></embed>";
+		?>
+		<br><br>
+		<!-- <input type="button" value="Back" onclick="goBack()"> -->
+		</body>
+		</html>
+		<?php 
+	}
+	function view_sksanksifile($nama_file)
+	{
+		?>
+		<html>
+		<title><?php echo $nama_file;?></title>
+		<head>
+			<script>
+				function goBack()
+				{
+					window.history.go(-2);
+				}
+			</script>
+		</head>
+		<body align="center">
+		<?php
+		$file = base_url()."pegawai/sksanksi/".$nama_file;
 		echo "<embed src= '".$file."' width='1200' height='666' ></embed>";
 		?>
 		<br><br>

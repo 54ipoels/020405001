@@ -1361,6 +1361,31 @@ class kepegawaian extends CI_Model
 			}
 		}		
 	}
+
+	function get_riwayat_jabatan($nipp)
+	{
+		$this->db->select('*');
+		$this->db->where('p_jbt_nipp',$nipp);
+		$this->db->order_by('id_peg_jabatan', 'DESC');
+		$query = $this->db->get('v3_peg_jabatan');
+		return $query->result_array();
+	}
+	function get_riwayat_golongan($nipp)
+	{
+		$this->db->select('*');
+		$this->db->where('p_grd_nipp',$nipp);
+		$this->db->order_by('id_peg_grade', 'DESC');
+		$query = $this->db->get('v3_peg_grade');
+		return $query->result_array();
+	}
+	function get_riwayat_sanksi($nipp)
+	{
+		$this->db->select('*');
+		$this->db->where('p_snk_nipp',$nipp);
+		$this->db->order_by('id_peg_sanksi', 'DESC');
+		$query = $this->db->get('v3_peg_sanksi');
+		return $query->result_array();
+	}
 	
 	function update_data_riwayat_jabatan($id_peg_jabatan,$data)
 	{
@@ -1372,6 +1397,40 @@ class kepegawaian extends CI_Model
 		$query = "SELECT * FROM v3_peg_jabatan WHERE id_peg_jabatan = $id_peg_jabatan";
 		$query = $this->db->query($query);
 		return $query->result_array();
+	}
+	function update_data_riwayat_golongan($id_peg_grade,$data)
+	{
+		$this->db->where('id_peg_grade',$id_peg_grade);
+		$this->db->update('v3_peg_grade',$data);
+	}
+	function get_golongan_by_id_golongan($id_peg_grade)
+	{
+		$query = "SELECT * FROM v3_peg_grade WHERE id_peg_grade = $id_peg_grade";
+		$query = $this->db->query($query);
+		return $query->result_array();
+	}
+	function update_data_riwayat_sanksi($id_peg_sanksi,$data)
+	{
+		$this->db->where('id_peg_sanksi',$id_peg_sanksi);
+		$this->db->update('v3_peg_sanksi',$data);
+	}
+	function get_sanksi_by_id_sanksi($id_peg_sanksi)
+	{
+		$query = "SELECT * FROM v3_peg_sanksi WHERE id_peg_sanksi = $id_peg_sanksi";
+		$query = $this->db->query($query);
+		return $query->result_array();
+	}
+	function insert_data_riwayat_jabatan($data_jabatan)
+	{
+		$this->db->insert('v3_peg_jabatan',$data_jabatan);
+	}
+	function insert_data_riwayat_golongan($data_golongan)
+	{
+		$this->db->insert('v3_peg_grade',$data_golongan);
+	}
+	function insert_data_riwayat_sanksi($data_sanksi)
+	{
+		$this->db->insert('v3_peg_sanksi',$data_sanksi);
 	}
 	/*
 	function copy_data_pegawai($nipp,$nipp_baru)
