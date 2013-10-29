@@ -609,6 +609,25 @@ class kepegawaian extends CI_Model
 		return $query->result_array();
 	}
 	
+	function get_latest_unit_by_nipp($nipp)
+	{
+		$query = "
+				SELECT * FROM v3_peg_unit
+				WHERE p_unt_nipp = '$nipp'
+				AND p_unt_tmt_end = '0000-00-00'
+				ORDER BY p_unt_tmt_start DESC
+				LIMIT 1
+		";	
+		$query = $this->db->query($query);
+		$result = $query->result_array();
+		$last_unit_tmt = "0000-00-00";
+		foreach($result as $row)
+		{
+			$last_unit_tmt = $row->p_unt_tmt_start;
+		}
+		return $last_unit_tmt;
+	}
+	
 	function get_list_team()
 	{
 		$query = "
@@ -1431,6 +1450,12 @@ class kepegawaian extends CI_Model
 	function insert_data_riwayat_sanksi($data_sanksi)
 	{
 		$this->db->insert('v3_peg_sanksi',$data_sanksi);
+	}
+	function update_tmt_end_latest_unit($nipp,$tanggal_tmt_jbt)
+	{
+		$this->db->where('p_unt_nipp',$nipp);
+		$this->db->where('p_unt_tmt_end',"0000-00-00");
+		$this->db->update('v3_peg_unit',array('p_unt_tmt_end' => $tanggal_tmt_jbt));	
 	}
 	/*
 	function copy_data_pegawai($nipp,$nipp_baru)

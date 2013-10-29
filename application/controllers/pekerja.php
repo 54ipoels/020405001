@@ -1034,6 +1034,7 @@ class Pekerja extends Application {
 		else{ $tanggal_tmt_end = mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tmt_end_jbt'))));}
 		$filenamebantu = "";
 		$nipp = $this->input->post('nipp');
+		$last_unit_tmt = $this->kepegawaian->get_latest_unit_by_nipp($nipp); 
 		
 		//upload file
 		
@@ -1071,8 +1072,19 @@ class Pekerja extends Application {
 				$file_name = $this->upload->file_name;
 			}
 		} 
-		else{
-			$data_jabatan = array(
+		if($tanggal_tmt_jbt > $last_unit_tmt)
+		{
+			$this->kepegawaian->update_tmt_end_latest_unit($nipp,$tanggal_tmt_jbt);
+			$data_unit = array(
+						"p_unt_nipp"		=>	$nipp,
+						"p_unt_kode_unit"	=>	$this->input->post('unit'),
+						"p_unt_tmt_start"	=>	$tanggal_tmt_jbt,
+						"p_unt_update_by"	=>	username(),
+				);
+			$this->kepegawaian->insert_data_pegawai_unit($data_unit);
+		}
+		
+		$data_jabatan = array(
 					'p_jbt_nipp'		=> $nipp,
 					'p_jbt_jabatan'		=> $this->input->post('jabatan'),
 					'p_jbt_unit'		=> $this->input->post('unit'),
@@ -1083,9 +1095,9 @@ class Pekerja extends Application {
 					'p_jbt_keterangan'	=> $this->input->post('keterangan'),
 					'p_jbt_update_by'	=> username(),
 				);
-			$this->kepegawaian->insert_data_riwayat_jabatan($data_jabatan);	
-			redirect('pekerja/get_pegawai/'.$nipp);
-		}
+		$this->kepegawaian->insert_data_riwayat_jabatan($data_jabatan);	
+		redirect('pekerja/get_pegawai/'.$nipp);
+		
 	}
 	
 	
@@ -1116,6 +1128,7 @@ class Pekerja extends Application {
 		*/
 		$id_peg_jabatan = $this->input->post('id_peg_jbt');
 		$nipp = $this->input->post('nipp');
+		$last_unit_tmt = $this->kepegawaian->get_latest_unit_by_nipp($nipp); 
 		
 		//upload file
 		
@@ -1164,6 +1177,20 @@ class Pekerja extends Application {
 						'p_jbt_update_by'	=> username(),
 					);
 				$this->kepegawaian->update_data_riwayat_jabatan($id_peg_jabatan,$data_jabatan);	
+				
+				if($tanggal_tmt_jbt > $last_unit_tmt)
+				{
+					$this->kepegawaian->update_tmt_end_latest_unit($nipp,$tanggal_tmt_jbt);
+					$data_unit = array(
+								"p_unt_nipp"		=>	$nipp,
+								"p_unt_kode_unit"	=>	$this->input->post('unit'),
+								"p_unt_tmt_start"	=>	$tanggal_tmt_jbt,
+								"p_unt_update_by"	=>	username(),
+						);
+					$this->kepegawaian->insert_data_pegawai_unit($data_unit);
+				}
+				
+				
 				redirect('pekerja/get_pegawai/'.$nipp);
 			}
 		} 
@@ -1180,6 +1207,19 @@ class Pekerja extends Application {
 						'p_jbt_update_by'	=> username(),
 					);
 				$this->kepegawaian->update_data_riwayat_jabatan($id_peg_jabatan,$data_jabatan);	
+				
+				if($tanggal_tmt_jbt > $last_unit_tmt)
+				{
+					$this->kepegawaian->update_tmt_end_latest_unit($nipp,$tanggal_tmt_jbt);
+					$data_unit = array(
+								"p_unt_nipp"		=>	$nipp,
+								"p_unt_kode_unit"	=>	$this->input->post('unit'),
+								"p_unt_tmt_start"	=>	$tanggal_tmt_jbt,
+								"p_unt_update_by"	=>	username(),
+						);
+					$this->kepegawaian->insert_data_pegawai_unit($data_unit);
+				}
+		
 				redirect('pekerja/get_pegawai/'.$nipp);
 		}
 	}
@@ -2374,6 +2414,10 @@ class Pekerja extends Application {
 		$data['data_anak'] = $this->kepegawaian->get_detail_pegawai_anak($nipp);
 		$data['data_jabatan'] = $this->kepegawaian->get_last_jabatan($nipp);
 		$data['data_jabatan_detail'] = $this->kepegawaian->get_detail_pegawai_jabatan($nipp);
+		$data['riwayat_jabatan'] = $this->kepegawaian->get_riwayat_jabatan($nipp);
+		$data['riwayat_golongan'] = $this->kepegawaian->get_riwayat_golongan($nipp);
+		$data['riwayat_sanksi'] = $this->kepegawaian->get_riwayat_sanksi($nipp);
+		
 		#count data
 		$data['jumlah_bahasa'] = $this->kepegawaian->count_result_bahasa($nipp);
 		
