@@ -619,13 +619,25 @@ class kepegawaian extends CI_Model
 				LIMIT 1
 		";	
 		$query = $this->db->query($query);
-		$result = $query->result_array();
+		$result = $query->result();
 		$last_unit_tmt = "0000-00-00";
 		foreach($result as $row)
 		{
 			$last_unit_tmt = $row->p_unt_tmt_start;
 		}
 		return $last_unit_tmt;
+	}
+	function get_latest_unit_pegawai_by_nipp($nipp)
+	{
+		$query = "
+				SELECT * FROM v3_peg_unit
+				WHERE p_unt_nipp = '$nipp'
+				AND p_unt_tmt_end = '0000-00-00'
+				ORDER BY p_unt_tmt_start DESC
+				LIMIT 1
+		";	
+		$query = $this->db->query($query);
+		return $query->result_array();
 	}
 	
 	function get_list_team()
@@ -1277,6 +1289,17 @@ class kepegawaian extends CI_Model
 		}
 		return $id_peg_tmt;
 	}
+	function get_latest_tmt_pegawai_by_nipp($nipp)
+	{
+		$query = "
+			SELECT * FROM v3_peg_tmt 
+			WHERE p_tmt_nipp ='$nipp' 
+			ORDER BY id_peg_tmt DESC
+			LIMIT 1
+		";
+		$query = $this->db->query($query);
+		return $query->result_array();
+	}
 	
 	function get_last_jabatan($nipp)
 	{
@@ -1285,6 +1308,16 @@ class kepegawaian extends CI_Model
 		$this->db->order_by('id_peg_jabatan', 'DESC');
 		$this->db->limit(1);
 		$query = $this->db->get('v3_peg_jabatan');
+		return $query->result_array();
+	}
+	
+	function get_last_grade_by_nipp($nipp)
+	{
+		$this->db->select('*');
+		$this->db->where('p_grd_nipp',$nipp);
+		$this->db->order_by('id_peg_grade', 'DESC');
+		$this->db->limit(1);
+		$query = $this->db->get('v3_peg_grade');
 		return $query->result_array();
 	}
 	

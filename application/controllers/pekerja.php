@@ -2431,6 +2431,30 @@ class Pekerja extends Application {
 	<?php
 	}
 	
+	function print_detail_pegawai_pdf($nipp)
+	{
+		$data['pegawai'] = $this->kepegawaian->get_data_pegawai_by_nipp($nipp);
+		$data['data_alamat'] = $this->kepegawaian->get_detail_pegawai_alamat($nipp);
+		$data['data_tmt'] = $this->kepegawaian->get_latest_tmt_pegawai_by_nipp($nipp);
+		$data['data_jabatan'] = $this->kepegawaian->get_last_jabatan($nipp);
+		$data['data_unit'] = $this->kepegawaian->get_latest_unit_pegawai_by_nipp($nipp);
+		$data['data_grade'] = $this->kepegawaian->get_last_grade_by_nipp($nipp);
+		$data['riwayat_jabatan'] = $this->kepegawaian->get_riwayat_jabatan($nipp);
+		$data['riwayat_golongan'] = $this->kepegawaian->get_riwayat_golongan($nipp);
+		$data['riwayat_sanksi'] = $this->kepegawaian->get_riwayat_sanksi($nipp);
+		$data['data_pendidikan'] = $this->kepegawaian->get_detail_pegawai_pendidikan($nipp);
+		$data['data_nstkp'] = $this->kepegawaian->get_detail_pegawai_nstkp($nipp);
+		$data['data_pasangan'] = $this->kepegawaian->get_detail_pegawai_pasangan($nipp);
+		$data['data_anak'] = $this->kepegawaian->get_detail_pegawai_anak($nipp);
+	
+		
+		$monthstring = "%m" ;
+		$yearstring = "%Y" ;
+		$time = time();
+		$data['month'] = mdate($monthstring, $time);
+		$data['year'] = mdate($yearstring, $time);
+		$this->load->view('kepegawaian/print/detail_pegawai_pdf',$data);	
+	}
 	
 	# Function untuk delete pegawai
 	public function submit_delete_pegawai()
