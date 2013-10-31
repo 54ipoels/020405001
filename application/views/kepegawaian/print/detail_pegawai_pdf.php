@@ -3,8 +3,8 @@
 <title>DATA PEGAWAI</title>
 <style type="text/css">
 body{ 
-	width : 21cm;
-	font-size:20px;
+	width : 20cm;
+	font-size:15px;
 	margin-left:5px;
 	margin-right:5px;
 }
@@ -28,6 +28,7 @@ h2{
 }
 #right{
 	float:right;
+	margin-right:30px;
 	width:20%;
 }
 #content{
@@ -60,7 +61,9 @@ table.withborder td{
 <br>
 <h2>I. KETERANGAN PEGAWAI</h2>
 <div id="content">
-	<div id="left">
+<table>
+<tr>
+<td>
 	<table>
 		<?php 
 		$peg_nama="";
@@ -148,7 +151,7 @@ table.withborder td{
 			<td><?php echo $peg_unit;?></td>
 		</tr>
 		<tr>
-			<td>Tempat, Tanggal Lahir</td>
+			<td valign="top">Tempat, Tanggal Lahir</td>
 			<td>:</td>
 			<td><?php echo $peg_tempatlahir.", ".$peg_tanggallahir;?></td>
 		</tr>
@@ -163,8 +166,8 @@ table.withborder td{
 			<td><?php echo $peg_jeniskelamin;?></td>
 		</tr>
 		<tr>
-			<td>Alamat Rumah</td>
-			<td>:</td>
+			<td style="vertical-align:top;">Alamat Rumah</td>
+			<td style="vertical-align:top;">:</td>
 			<td><?php echo $peg_alamatrumah;?></td>
 		</tr>
 		<tr>
@@ -173,10 +176,12 @@ table.withborder td{
 			<td><?php echo $peg_telephone;?></td>
 		</tr>
 	</table>
-	</div>
-	<div id="right">
-		<img src="<?php echo base_url()."/pegawai/foto/marsu.jpg" ?>" width="150px" height="200px">
-	</div>
+</td>
+<td style="vertical-align:top;">
+		<img src="<?php echo base_url()."pegawai/foto/$peg_nipp.jpg" ?>" width="150px" height="200px">
+</td>
+</tr>
+</table>	
 </div>
 <div class="clear"></div>
 <br>

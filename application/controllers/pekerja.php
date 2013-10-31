@@ -2453,7 +2453,17 @@ class Pekerja extends Application {
 		$time = time();
 		$data['month'] = mdate($monthstring, $time);
 		$data['year'] = mdate($yearstring, $time);
-		$this->load->view('kepegawaian/print/detail_pegawai_pdf',$data);	
+		
+		
+		$this->load->helper('skm_pdf');
+		$stream = TRUE; 
+		$papersize = 'letter'; 
+		$orientation = 'portrait';
+		$filename = "Curriculum Vitae  ".$nipp;
+		$stn = "DPS";
+		$html = $this->load->view('kepegawaian/print/detail_pegawai_pdf',$data, true); 
+     	pdf_create($html, $filename, $stream, $papersize, $orientation);
+		$full_filename = $filename . '.pdf';
 	}
 	
 	# Function untuk delete pegawai
