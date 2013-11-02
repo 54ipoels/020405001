@@ -79,9 +79,9 @@
 								$jum_pot_pegawai = 0;
 							} else {
 								foreach ($pot_pegawai as $pot_peg){	
-								$jum_pot_pegawai = $pot_peg['pot_peg_siperkasa'] + $pot_peg['pot_peg_kokarga'] + $pot_peg['pot_peg_kosigarden'] + $pot_peg['pot_peg_flexy'] + $pot_peg['pot_peg_other'] + $pot_peg['pot_peg_ggc'] + $pot_peg['pot_peg_jht'] + $pot_peg['pot_peg_tht'] + $pot_peg['pot_peg_pensiun'];}
+								$jum_pot_pegawai = $pot_peg['pot_peg_siperkasa'] + $pot_peg['pot_peg_kokarga'] + $pot_peg['pot_peg_kosigarden'] + $pot_peg['pot_peg_flexy'] + $pot_peg['pot_peg_other'] + $pot_peg['pot_peg_ggc'] + $pot_peg['pot_peg_jht'] + $pot_peg['pot_peg_tht'] + $pot_peg['pot_peg_pensiun']+ $pot_peg['pot_peg_siharta'] + $pot_peg['pot_peg_kokarasa'] + $pot_peg['pot_peg_koskargo'] + $pot_peg['pot_peg_kokagayo'];}
 							}
-							echo anchor('gaji/edit_pot_pegawai/'.$sd['pgj_id_peg'].'/'.$sd['pgj_bulan'].'/'.$sd['pgj_tahun'].'/'.$sd['id_pgj'], $jum_pot_pegawai);?>
+							echo anchor('gaji/edit_pot_pegawai/'.$sd['pgj_id_peg'].'/'.$sd['pgj_bulan'].'/'.$this->uri->segment(5).'/'.$sd['id_pgj'], $jum_pot_pegawai);?>
                             </div>
                         <div class="clear"></div>
                     </div>
@@ -96,7 +96,7 @@
 								foreach ($pot_perusahaan as $pot_per){	}
 								$jum_pot_perusahaan = $pot_per['pot_per_as_jiwa'] + $pot_per['pot_per_jk'] + $pot_per['pot_per_siharta'] + $pot_per['pot_per_other'] + $pot_per['pot_per_jht'] + $pot_per['pot_per_tht'] + $pot_per['pot_per_pensiun'];
 							}
-							echo anchor('gaji/edit_pot_perusahaan/'.$sd['pgj_id_peg'].'/'.$sd['pgj_bulan'].'/'.$sd['pgj_tahun'].'/'.$sd['id_pgj'], $jum_pot_perusahaan);?>
+							echo anchor('gaji/edit_pot_perusahaan/'.$sd['pgj_id_peg'].'/'.$sd['pgj_bulan'].'/'.$this->uri->segment(5).'/'.$sd['id_pgj'], $jum_pot_perusahaan);?>
                             </div>
                         <div class="clear"></div>
                     </div>

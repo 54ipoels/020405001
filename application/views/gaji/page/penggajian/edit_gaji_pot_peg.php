@@ -27,7 +27,7 @@
 							<?php
 							echo form_hidden('month', $this->uri->segment(4));
 							echo form_hidden('year',$this->uri->segment(5));
-							echo $bulan.' '. $sd['pgj_tahun'];
+							echo $bulan.' '.$this->uri->segment(5) ;
 							?>
                         </div>
                         <div class="clear"></div>
@@ -138,6 +138,56 @@
                             </div>
                         <div class="clear"></div>
                     </div>
+					
+					<div class="formRow">
+                        <label>SIHARTA:<span class="req"></span></label>
+                        <div class="formRight">
+							 <?php 
+								$pensiun = array(
+									'name'  => 'siharta', 
+									'id'    => 'siharta', 
+									);
+								echo form_input($pensiun,$pp['pot_peg_siharta']) ?>
+                            </div>
+                        <div class="clear"></div>
+                    </div>
+					<div class="formRow">
+                        <label>KOKARASA:<span class="req"></span></label>
+                        <div class="formRight">
+							 <?php 
+								$pensiun = array(
+									'name'  => 'kokarasa', 
+									'id'    => 'kokarasa', 
+									);
+								echo form_input($pensiun,$pp['pot_peg_kokarasa']) ?>
+                            </div>
+                        <div class="clear"></div>
+                    </div>
+					<div class="formRow">
+                        <label>KOSKARGO:<span class="req"></span></label>
+                        <div class="formRight">
+							 <?php 
+								$pensiun = array(
+									'name'  => 'koskargo', 
+									'id'    => 'koskargo', 
+									);
+								echo form_input($pensiun,$pp['pot_peg_koskargo']) ?>
+                            </div>
+                        <div class="clear"></div>
+                    </div>
+					<div class="formRow">
+                        <label>KOKAGAYO:<span class="req"></span></label>
+                        <div class="formRight">
+							 <?php 
+								$pensiun = array(
+									'name'  => 'kokagayo', 
+									'id'    => 'kokagayo', 
+									);
+								echo form_input($pensiun,$pp['pot_peg_kokagayo']) ?>
+                            </div>
+                        <div class="clear"></div>
+                    </div>
+					
 					<div class="formRow">
                         <label>OTHER:<span class="req"></span></label>
                         <div class="formRight">

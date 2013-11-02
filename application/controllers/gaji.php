@@ -83,7 +83,7 @@ class Gaji extends Application {
 		//ambil data unit
 		$data['showdata'] = $this->m_asset->ambil_data_unit();
 		$data['page'] = 'add_gaji_peg';		
-		$data['add_gaji_peg'] = 'class="this"';
+		$data['view_gaji_pegawai'] = 'class="this"';
 		$data['form_gaji'] = 'id="current"';
 		$this->load->view('gaji/index',$data);	
 	}
@@ -113,7 +113,7 @@ class Gaji extends Application {
 		$data['pembulatan'] = $data['gaji_nett'] - $gaji;
 		//$data['penerimaan'] = $row['pgj_terima'];
 		$data['page'] = 'view_detail_gaji_peg';		
-		$data['view_detail_gaji_peg'] = 'class="this"';
+		$data['view_gaji_pegawai'] = 'class="this"';
 		$data['form_gaji'] = 'id="current"';
 		$this->load->view('gaji/index',$data);
 	}
@@ -129,7 +129,7 @@ class Gaji extends Application {
 		$data['pot_pegawai'] = $this->m_gaji->ambil_data_pot_pegawai_id($row['pgj_id_peg']); 
 		$data['pot_perusahaan'] = $this->m_gaji->ambil_data_pot_perusahaan_id($row['pgj_id_peg']); 
 		$data['page'] = 'edit_gaji_peg';		
-		$data['edit_gaji_peg'] = 'class="this"';
+		$data['view_gaji_pegawai'] = 'class="this"';
 		$data['form_gaji'] = 'id="current"';
 		$data['bulan'] = $this->namabulan($this->uri->segment(4));
 		
@@ -152,7 +152,7 @@ class Gaji extends Application {
 		$data['pot_pegawai'] = $this->m_gaji->ambil_data_pot_pegawai_id($id_peg); 
 		
 		$data['page'] = 'edit potongan pegawai';		
-		$data['edit_gaji_peg'] = 'class="this"';
+		$data['view_gaji_pegawai'] = 'class="this"';
 		$data['form_gaji'] = 'id="current"';
 		$data['bulan'] = $this->namabulan($this->uri->segment(4));
 		
@@ -171,7 +171,7 @@ class Gaji extends Application {
 		$data['pot_perusahaan'] = $this->m_gaji->ambil_data_pot_perusahaan_id($id_peg); 
 		
 		$data['page'] = 'edit potongan perusahaan';		
-		$data['edit_gaji_peg'] = 'class="this"';
+		$data['view_gaji_pegawai'] = 'class="this"';
 		$data['form_gaji'] = 'id="current"';
 		$data['bulan'] = $this->namabulan($this->uri->segment(4));
 		
@@ -190,8 +190,9 @@ class Gaji extends Application {
 		$month = $this->input->post('month');
 		$year = $this->input->post('year'); 
 		$data['page'] = 'view_gaji_peg';		
-		$data['view_gaji_peg'] = 'class="this"';
+		$data['view_gaji_pegawai'] = 'class="this"';
 		$data['form_gaji'] = 'id="current"';
+		$data['year'] = $year;
 		
 		if ($this->input->post('unit') == 'all' OR $this->input->post('unit') == 'pilih')
 		{

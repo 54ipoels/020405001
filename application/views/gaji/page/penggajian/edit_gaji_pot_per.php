@@ -106,18 +106,6 @@
                         <label>THT:<span class="req"></span></label>
                         <div class="formRight">
 							 <?php 
-								$jht = array(
-									'name'  => 'tht', 
-									'id'    => 'tht', 
-									);
-								echo form_input($jht,$pr['pot_per_tht']) ?>
-                            </div>
-                        <div class="clear"></div>
-                    </div>
-					<div class="formRow">
-                        <label>THT:<span class="req"></span></label>
-                        <div class="formRight">
-							 <?php 
 								$tht = array(
 									'name'  => 'tht', 
 									'id'    => 'tht', 
