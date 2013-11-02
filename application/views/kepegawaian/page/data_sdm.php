@@ -98,7 +98,11 @@
 					{
 						$rowspan = 1;
 					}
-					$detail = anchor('pekerja/get_pegawai/'.$row_pegawai['peg_nipp'],$row_pegawai['peg_nipp']);  ?>
+					if($row_pegawai['peg_nipp']==""){
+						$detail = "";
+					} else {
+						$detail = anchor('pekerja/get_pegawai/'.$row_pegawai['peg_nipp'],$row_pegawai['peg_nipp']);  
+					}?>
 					<tr>
                         <td rowspan="<?php echo $rowspan;?>"><center><?php echo $number; ?></center></td>
 						<td rowspan="<?php echo $rowspan;?>"><center><?php echo $detail; ?></center></td>

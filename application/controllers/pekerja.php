@@ -922,7 +922,8 @@ class Pekerja extends Application {
 	function add_data_jabatan()
 	{
 		$data['page'] = 'Add data jabatan';
-		$data['page_karyawan'] = 'yes';
+		$data['view_master_jabatan'] = 'class="this"';
+		$data['form_master'] = 'id="current"';
 		
 		if (($this->uri->segment(3) == 'part_one') || ($this->uri->segment(3) == NULL)) 
 			{

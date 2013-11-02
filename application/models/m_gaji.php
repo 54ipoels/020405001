@@ -347,7 +347,7 @@ class M_gaji extends CI_Model
 					WHERE unit.p_unt_kode_unit = '$unit'
 					AND sch.fschpeg_month = '$month'
 					AND sch.fschpeg_year = '$year'
-					GROUP BY peg_nipp, fschpegabs_id DESC, id_peg_lembur DESC
+					GROUP BY peg_nipp, fschpegabs_id DESC
 					ORDER BY fschpegabs_id
 			";
 		

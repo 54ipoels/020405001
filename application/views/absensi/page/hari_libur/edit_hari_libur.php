@@ -13,7 +13,8 @@
                         <label>TANGGAL:<span class="req">*</span></label>
                         <div class="formRight">
 						<?php 
-						$date = array('name' => 'lnas_date', 'id'   => 'date', 'value' => $sd->lnas_date, 'class'=>'maskDate');
+						$lnas_date = $sd->lnas_date;
+						$date = array('name' => 'lnas_date', 'id'   => 'date', 'value' =>  mdate('%d-%m-%Y',strtotime($lnas_date)), 'class'=>'maskDate');
 						echo form_input($date) ?><br/>
 						<?php echo form_error('date')?></div>
                         <div class="clear"></div>

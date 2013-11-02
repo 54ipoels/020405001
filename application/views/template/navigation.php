@@ -34,9 +34,10 @@
                 <li <?php if(isset($view_hari_libur)){ echo $view_hari_libur; } ?>><?php echo anchor('c_absensi/hari_libur', 'Hari Libur' ); ?></li>
                 <li <?php if(isset($view_format_schedule)){ echo $view_format_schedule; } ?>><?php echo anchor('c_absensi/format_schedule', 'Format Schedule' ); ?></li>
                 <li <?php if(isset($view_cuti_pegawai)){ echo $view_cuti_pegawai; } ?>><?php echo anchor('c_absensi/cuti_pegawai', 'Cuti Pegawai' ); ?></li>
-                <li <?php //if(isset($view_master_gaji)){ echo $view_master_gaji; } ?>><?php //echo anchor('c_absensi/master_gaji', 'Master Gaji' ); 
+                <li <?php if(isset($view_master_gaji)){ echo $view_master_gaji; } ?>><?php echo anchor('gaji/master_gaji', 'Master Gaji' ); ?></li>
+                <?php /*<li <?php //if(isset($view_master_gaji)){ echo $view_master_gaji; } ?>><?php //echo anchor('c_absensi/master_gaji', 'Master Gaji' ); 
 						//echo anchor('gaji/master_gaji', 'Master Gaji' );
-				?></li>
+				?></li>*/ ?>
 				
 				<li <?php if(isset($view_master_jabatan)){ echo $view_master_jabatan; } ?>><?php echo anchor('pekerja/add_data_jabatan/part_one', 'Tambah Jabatan' ); ?></li>
 				<li <?php if(isset($view_master_lembur)){ echo $view_master_lembur; } ?>><?php echo anchor('gaji/master_lembur', 'Master Lembur' ); ?></li>

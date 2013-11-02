@@ -41,7 +41,7 @@ class C_absensi extends Application {
 	{
 		//pemanggillan sub view
 		$data['page'] = 'add_hari_libur';
-		$data['add_hari_libur'] = 'class="this"';
+		$data['view_hari_libur'] = 'class="this"';
 		$data['form_master'] = 'id="current"';
 		$this->load->view('absensi/index',$data);
 	}
@@ -61,7 +61,7 @@ class C_absensi extends Application {
 		$lnas_id = $this->uri->segment(3);
 		$data['showdata'] = $this->m_absensi->lnas_viewedit($lnas_id);
 		$data['page'] = 'edit_hari_libur';
-		$data['edit_hari_libur'] = 'class="this"';
+		$data['view_hari_libur'] = 'class="this"';
 		$data['form_master'] = 'id="current"';
 		$this->load->view('absensi/index',$data);
 	}
@@ -72,7 +72,7 @@ class C_absensi extends Application {
 		//submit dari Add Libur Nasional
 		if($this->input->post('submit_lnas_add'))
 		{
-			$lnas_date = $this->input->post('date');
+			$lnas_date = mdate('%Y-%m-%d',strtotime(str_replace('/','-',$this->input->post('lnas_date'))));;
 			$lnas_desc = $this->input->post('desc');
 			$lnas_user = 'admin';
 			
@@ -81,7 +81,9 @@ class C_absensi extends Application {
 			
 			if($check)
 			{
-				$data['lnas_date'] = $lnas_date; $data['lnas_desc'] = $lnas_desc;
+				echo "123123123asdad";
+				$data['lnas_date'] = $lnas_date; 
+				$data['lnas_desc'] = $lnas_desc;
 				$data['page'] = 'add_hari_libur';				
 				redirect('c_absensi/add_hari_libur');
 			}
@@ -95,7 +97,7 @@ class C_absensi extends Application {
 		else if($this->input->post('submit_lnas_edit'))
 		{
 			$lnas_id = $this->input->post('lnas_id');
-			$lnas_date = $this->input->post('lnas_date');
+			$lnas_date = mdate('%Y-%m-%d',strtotime(str_replace('/','-',$this->input->post('lnas_date'))));
 			$lnas_desc = $this->input->post('lnas_desc');
 			$lnas_user = 'admin';
 				
