@@ -244,8 +244,12 @@ class M_gaji extends CI_Model
 				'pot_peg_other' => $this->input->post('other'),
 				'pot_peg_jht' => $this->input->post('jht'),
 				'pot_peg_tht' => $this->input->post('tht'),
+				"pot_peg_siharta"		=>	$this->input->post('siharta'),
+				"pot_peg_kokarasa"		=>	$this->input->post('kokarasa'),
+				"pot_peg_koskargo"		=>	$this->input->post('kosakargo'),
+				"pot_peg_kokagayo"		=>	$this->input->post('kokagayo'),
 				'pot_peg_pensiun' => $this->input->post('pensiun'),
-				'pot_peg_update_by' => 'adminems',
+				'pot_peg_update_by' => 'admin',
 			);
 		$this->db->where('id_pot_gaji_pegawai',$id);
 		$this->db->update('v3_pot_gaji_pegawai_'.$this->input->post('year'), $data_pot_peg);
@@ -262,7 +266,7 @@ class M_gaji extends CI_Model
 				'pot_per_pensiun' => $this->input->post('pensiun'),
 				'pot_per_siharta' => $this->input->post('siharta'),
 				'pot_per_other' => $this->input->post('other'),
-				'pot_per_update_by' => 'adminems',
+				'pot_per_update_by' => 'admin',
 			);
 		$this->db->where('id_pot_gaji_perusahaan',$id);
 		$this->db->update('v3_pot_gaji_perusahaan_'.$this->input->post('year'), $data_pot_per);
