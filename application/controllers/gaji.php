@@ -193,6 +193,8 @@ class Gaji extends Application {
 		$data['view_gaji_pegawai'] = 'class="this"';
 		$data['form_gaji'] = 'id="current"';
 		$data['year'] = $year;
+		$data['unit'] = $unit;
+		$data['month'] = $month;
 		
 		if ($this->input->post('unit') == 'all' OR $this->input->post('unit') == 'pilih')
 		{
@@ -263,6 +265,7 @@ class Gaji extends Application {
 						"pgj_gaji_bruto"	=>  str_replace(",","",$data[7]),
 						"pgj_masa_bakti"	=>	$data[10],
 						"pgj_koreksi"		=>	$data[8],
+						"pgj_inflasi"		=>	$data[9],
 						"pgj_insentive"		=>	"",
 						"pgj_potongan"		=>	"",
 						"pgj_pembulatan"	=>	$data[15],
@@ -297,8 +300,8 @@ class Gaji extends Application {
 				$data_pot_perusahaan	= array (
 						"id_peg_pot_per_gaji"	=>	$id_peg,
 						"pot_per_as_jiwa"		=>	str_replace(",","",$data[36]),
-						"pot_per_jk"			=>	str_replace(",","",$data[33]),
-						"pot_per_jkk"			=>	str_replace(",","",$data[34]),
+						"pot_per_jk"			=>	str_replace(",","",$data[32]),
+						"pot_per_jkk"			=>	str_replace(",","",$data[33]),
 						"pot_per_siharta"		=>	str_replace(",","",$data[35]),
 						"pot_per_other"			=>	"",
 						"pot_per_jht"			=>	str_replace(",","",$data[31]),
@@ -507,7 +510,260 @@ class Gaji extends Application {
 		}
 	}
 	
+	function pdf_gaji()
+	{
+		$data['unit'] = $this->uri->segment(3);
+		$data['bulan'] = $this->uri->segment(4);
+		$data['tahun'] = $this->uri->segment(5);
+		if ($data['unit']== 'all')
+		{
+			$unit = '%';
+		} else {
+			$unit = $this->uri->segment(3);
+		} 
+		
+		$data['showdata'] = $this->m_gaji->ambil_data_penggajian_lengkap($unit,$data['bulan'],$data['tahun']);
+		
+		$monthstring = "%m" ;
+		$yearstring = "%Y" ;
+		$time = time();
+		$data['month'] = mdate($monthstring, $time);
+		$data['year'] = mdate($yearstring, $time);
+		$data['namabulan'] = $this->namabulan(($data['bulan']/1));
+		//$this->load->view('gaji/page/penggajian/view_gaji_peg_pdf',$data);
+		
+		$this->load->helper('skm_pdf');
+		$stream = TRUE; 
+		$papersize = 'A3'; 
+		$orientation = 'landscape';
+		$filename = "Rekap Gaji  ".$data['month'].' '.$data['year'];
+		$stn = "DPS";
+		$html = $this->load->view('gaji/page/penggajian/view_gaji_peg_pdf',$data, true); 
+     	pdf_create($html, $filename, $stream, $papersize, $orientation);
+		$full_filename = $filename . '.pdf';
+		
+	}
 	
+	function excel_gaji()
+	{
+		$unit = $this->uri->segment(3);
+		$bulan = $this->uri->segment(4);
+		$tahun = $this->uri->segment(5);
+		$namabulan = $this->namabulan($bulan);
+		
+		if ($unit == 'all')
+		{
+			$unit = '%';
+		} else {
+			$unit = $this->uri->segment(3);
+		} 
+		
+		
+		
+		//pengalokasian memory untuk run this function
+		ini_set("memory_limit","300M");
+		
+		$datestring = "%d %F %Y" ;
+		$time = time();
+		$tanggal = mdate($datestring, $time);
+		
+		$result = $this->m_gaji->ambil_data_penggajian_lengkap($unit,$bulan,$tahun);
+				
+		//load our new PHPExcel library
+		$this->load->library('excel');
+		//activate worksheet number 1
+		$this->excel->setActiveSheetIndex(0);
+		//name the worksheet
+		$this->excel->getActiveSheet()->setTitle("Data Gaji $namabulan $tahun ");
+		//set cell A1 content with some text
+		//JUDUL KOP
+		$this->excel->getActiveSheet()->setCellValue('A2', 'DAFTAR GAJI PEGAWAI');
+		$this->excel->getActiveSheet()->setCellValue('A3', 'PT. GAPURA ANGKASA CABANG BANDARA NGURAH RAI DENPASAR');
+		$this->excel->getActiveSheet()->setCellValue('A4', "BULAN $namabulan $tahun");
+		
+		$this->excel->getActiveSheet()->setCellValue('A6', "DICETAK TANGGAL :  $tanggal");
+		$this->excel->getActiveSheet()->setCellValue('A7', 'NO');
+		$this->excel->getActiveSheet()->setCellValue('B7', 'CABANG');
+		$this->excel->getActiveSheet()->setCellValue('C7', 'NAMA');
+		$this->excel->getActiveSheet()->setCellValue('D7', 'NIPP');
+		$this->excel->getActiveSheet()->setCellValue('E7', 'JABATAN');
+		$this->excel->getActiveSheet()->setCellValue('F7', 'GRADE');
+		$this->excel->getActiveSheet()->setCellValue('G7', 'GAJI BRUTO');
+		$this->excel->getActiveSheet()->setCellValue('H7', 'KOREKSI');
+		$this->excel->getActiveSheet()->setCellValue('I7', 'INFLASI');
+		$this->excel->getActiveSheet()->setCellValue('J7', 'MASA BAKTI');
+		$this->excel->getActiveSheet()->setCellValue('K7', 'THR');
+		$this->excel->getActiveSheet()->setCellValue('L7', 'BPAS');
+		$this->excel->getActiveSheet()->setCellValue('M7', 'BONUS');
+		$this->excel->getActiveSheet()->setCellValue('N7', 'TOTAL GAJI');
+		$this->excel->getActiveSheet()->setCellValue('O7', 'PEMBULATAN');
+		$this->excel->getActiveSheet()->setCellValue('P7', 'GAJI NETTO');
+		$this->excel->getActiveSheet()->setCellValue('Q7', 'POTONGAN PEGAWAI');
+		$this->excel->getActiveSheet()->setCellValue('AA7', 'TOTAL POTONGAN PEGAWAI');
+		$this->excel->getActiveSheet()->setCellValue('AB7', 'POTONGAN PERUSAHAAN');
+		$this->excel->getActiveSheet()->setCellValue('AJ7', 'TOTAL POTONGAN PERUSAHAAN');
+		
+		$this->excel->getActiveSheet()->setCellValue('Q8', 'PENSIUN');
+		$this->excel->getActiveSheet()->setCellValue('R8', 'THT');
+		$this->excel->getActiveSheet()->setCellValue('S8', 'JHT');
+		$this->excel->getActiveSheet()->setCellValue('T8', 'SIHARTA');
+		$this->excel->getActiveSheet()->setCellValue('U8', 'SIPERKASA');
+		$this->excel->getActiveSheet()->setCellValue('V8', 'KOKARGA');
+		$this->excel->getActiveSheet()->setCellValue('W8', 'KOKARASA');
+		$this->excel->getActiveSheet()->setCellValue('X8', 'KOSIGARDEN');
+		$this->excel->getActiveSheet()->setCellValue('Y8', 'KOSAKARGO');
+		$this->excel->getActiveSheet()->setCellValue('Z8', 'KOKAGAYO');
+		$this->excel->getActiveSheet()->setCellValue('AB8', 'PENSIUN');
+		$this->excel->getActiveSheet()->setCellValue('AC8', 'THT');
+		$this->excel->getActiveSheet()->setCellValue('AD8', 'JHT');
+		$this->excel->getActiveSheet()->setCellValue('AE8', 'JK');
+		$this->excel->getActiveSheet()->setCellValue('AF8', 'JKK');
+		$this->excel->getActiveSheet()->setCellValue('AG8', 'JAMSOSTEK (JHT+JK+JKK)');
+		$this->excel->getActiveSheet()->setCellValue('AH8', 'SIHARTA');
+		$this->excel->getActiveSheet()->setCellValue('AI8', 'AS JIWA');
+		
+		$i=8;
+		$number=0;
+		
+		foreach ($result as $row):
+		{ 
+			$i++;
+			$number++;
+			$total_gaji = $row['pgj_gaji_bruto'] - $row['pgj_koreksi'] + $row['pgj_inflasi'];
+			$tot_pot_peg = $row['pot_peg_pensiun'] + $row['pot_peg_tht'] + $row['pot_peg_jht'] + $row['pot_peg_siharta'] + $row['pot_peg_siperkasa'] + $row['pot_peg_kokarga'] + $row['pot_peg_kokarasa'] + $row['pot_peg_kosigarden'] + $row['pot_peg_koskargo'] + $row['pot_peg_kokagayo'] ;
+			$jamsostek = $row['pot_per_jht'] + $row['pot_per_jk'] + $row['pot_per_jkk']; 
+			$tot_pot_per = $row['pot_per_pensiun'] + $row['pot_per_tht'] + $row['pot_per_jht'] + $row['pot_per_jk'] + $row['pot_per_jkk'] + $row['pot_per_siharta'] + $row['pot_per_as_jiwa'];
+			//masukkan data ke tabel excel
+			$this->excel->getActiveSheet()->setCellValue("A$i", "$number");
+			$this->excel->getActiveSheet()->setCellValue("B$i", "DPS");
+			$this->excel->getActiveSheet()->setCellValue("C$i", strtoupper("$row[peg_nama]"));
+			$this->excel->getActiveSheet()->setCellValue("D$i", "$row[peg_nipp]");
+			$this->excel->getActiveSheet()->setCellValue("E$i", "$row[p_jbt_jabatan]");
+			$this->excel->getActiveSheet()->setCellValue("F$i", "$row[p_grd_grade]");
+			$this->excel->getActiveSheet()->setCellValue("G$i", "$row[pgj_gaji_bruto]");
+			$this->excel->getActiveSheet()->setCellValue("H$i", "$row[pgj_koreksi]");
+			$this->excel->getActiveSheet()->setCellValue("I$i", "$row[pgj_inflasi]");
+			$this->excel->getActiveSheet()->setCellValue("J$i", "$row[pgj_masa_bakti]");
+			//$this->excel->getActiveSheet()->setCellValue("K$i", "$row[pgj_thr]");
+			//$this->excel->getActiveSheet()->setCellValue("L$i", "$row[pgj_bpas]");
+			//$this->excel->getActiveSheet()->setCellValue("M$i", "$row[pgj_bonus]");
+			$this->excel->getActiveSheet()->setCellValue("N$i", "$total_gaji");
+			$this->excel->getActiveSheet()->setCellValue("O$i", "$row[pgj_pembulatan]");
+			$this->excel->getActiveSheet()->setCellValue("P$i", "$row[pgj_terima]");
+			$this->excel->getActiveSheet()->setCellValue("Q$i", "$row[pot_peg_pensiun]");
+			$this->excel->getActiveSheet()->setCellValue("R$i", "$row[pot_peg_tht]");
+			$this->excel->getActiveSheet()->setCellValue("S$i", "$row[pot_peg_jht]");
+			$this->excel->getActiveSheet()->setCellValue("T$i", "$row[pot_peg_siharta]");
+			$this->excel->getActiveSheet()->setCellValue("U$i", "$row[pot_peg_siperkasa]");
+			$this->excel->getActiveSheet()->setCellValue("V$i", "$row[pot_peg_kokarga]");
+			$this->excel->getActiveSheet()->setCellValue("W$i", "$row[pot_peg_kokarasa]");
+			$this->excel->getActiveSheet()->setCellValue("X$i", "$row[pot_peg_kosigarden]");
+			$this->excel->getActiveSheet()->setCellValue("Y$i", "$row[pot_peg_koskargo]");
+			$this->excel->getActiveSheet()->setCellValue("Z$i", "$row[pot_peg_kokagayo]");
+			$this->excel->getActiveSheet()->setCellValue("AA$i", "$tot_pot_peg");
+			$this->excel->getActiveSheet()->setCellValue("AB$i", "$row[pot_per_pensiun]");
+			$this->excel->getActiveSheet()->setCellValue("AC$i", "$row[pot_per_tht]");
+			$this->excel->getActiveSheet()->setCellValue("AD$i", "$row[pot_per_jht]");
+			$this->excel->getActiveSheet()->setCellValue("AE$i", "$row[pot_per_jk]");
+			$this->excel->getActiveSheet()->setCellValue("AF$i", "$row[pot_per_jkk]");
+			$this->excel->getActiveSheet()->setCellValue("AG$i", "$jamsostek");
+			$this->excel->getActiveSheet()->setCellValue("AH$i", "$row[pot_per_siharta]");
+			$this->excel->getActiveSheet()->setCellValue("AI$i", "$row[pot_per_as_jiwa]");
+			$this->excel->getActiveSheet()->setCellValue("AJ$i", "$tot_pot_per");
+		}endforeach;
+		
+		//change the font size
+		$this->excel->getActiveSheet()->getStyle("A2:A4")->getFont()->setSize(12);
+		$this->excel->getActiveSheet()->getStyle("A6")->getFont()->setSize(8);
+		$this->excel->getActiveSheet()->getStyle("A7:AJ8")->getFont()->setSize(10);
+		$this->excel->getActiveSheet()->getStyle("A9:AJ$i")->getFont()->setSize(8);
+		//make the font become bold
+		$this->excel->getActiveSheet()->getStyle('A2:A4')->getFont()->setBold(true);
+		$this->excel->getActiveSheet()->getStyle('A6')->getFont()->setBold(true);
+		$this->excel->getActiveSheet()->getStyle("A7:AJ8")->getFont()->setBold(true);
+		//merge cell A1 until D1
+		$this->excel->getActiveSheet()->mergeCells('A7:A8');
+		$this->excel->getActiveSheet()->mergeCells('B7:B8');
+		$this->excel->getActiveSheet()->mergeCells('C7:C8');
+		$this->excel->getActiveSheet()->mergeCells('D7:D8');
+		$this->excel->getActiveSheet()->mergeCells('E7:E8');
+		$this->excel->getActiveSheet()->mergeCells('F7:F8');
+		$this->excel->getActiveSheet()->mergeCells('G7:G8');
+		$this->excel->getActiveSheet()->mergeCells('H7:H8');
+		$this->excel->getActiveSheet()->mergeCells('I7:I8');
+		$this->excel->getActiveSheet()->mergeCells('J7:J8');
+		$this->excel->getActiveSheet()->mergeCells('K7:K8');
+		$this->excel->getActiveSheet()->mergeCells('L7:L8');
+		$this->excel->getActiveSheet()->mergeCells('M7:M8');
+		$this->excel->getActiveSheet()->mergeCells('N7:N8');
+		$this->excel->getActiveSheet()->mergeCells('O7:O8');
+		$this->excel->getActiveSheet()->mergeCells('P7:P8');
+		$this->excel->getActiveSheet()->mergeCells('Q7:Z7');
+		$this->excel->getActiveSheet()->mergeCells('AA7:AA8');
+		$this->excel->getActiveSheet()->mergeCells('AB7:AI7');
+		$this->excel->getActiveSheet()->mergeCells('AJ7:AJ8');
+		
+		$this->excel->getActiveSheet()->mergeCells('A2:AJ2');
+		$this->excel->getActiveSheet()->mergeCells('A3:AJ3');
+		$this->excel->getActiveSheet()->mergeCells('A4:AJ4');
+		
+		//set aligment to center for that merged cell (A1 to D1)
+		$this->excel->getActiveSheet()->getStyle('A7:AJ8')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$this->excel->getActiveSheet()->getStyle('A7:AJ8')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		$this->excel->getActiveSheet()->getStyle('A2:A4')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+		$this->excel->getActiveSheet()->getStyle('A2:A4')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		
+		//Set column widths                                                       
+		$this->excel->getActiveSheet()->getColumnDimension('A')->setWidth(5);  
+		$this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(6); 
+		$this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(20);    
+		$this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(8);  
+		$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(20); 
+		$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(5); 
+		$this->excel->getActiveSheet()->getColumnDimension('G')->setWidth(7); 
+		$this->excel->getActiveSheet()->getColumnDimension('H')->setWidth(7); 
+		$this->excel->getActiveSheet()->getColumnDimension('I')->setWidth(7); 
+		$this->excel->getActiveSheet()->getColumnDimension('J')->setWidth(7); 
+		$this->excel->getActiveSheet()->getColumnDimension('K')->setWidth(7); 
+		$this->excel->getActiveSheet()->getColumnDimension('L')->setWidth(7); 
+		$this->excel->getActiveSheet()->getColumnDimension('M')->setWidth(7); 
+		$this->excel->getActiveSheet()->getColumnDimension('N')->setWidth(7); 
+		$this->excel->getActiveSheet()->getColumnDimension('O')->setWidth(7); 
+		$this->excel->getActiveSheet()->getColumnDimension('P')->setWidth(7); 
+		$this->excel->getActiveSheet()->getColumnDimension('Q')->setWidth(7); 
+		$this->excel->getActiveSheet()->getColumnDimension('R')->setWidth(7); 
+		$this->excel->getActiveSheet()->getColumnDimension('S')->setWidth(7); 
+		$this->excel->getActiveSheet()->getColumnDimension('T')->setWidth(7); 
+		$this->excel->getActiveSheet()->getColumnDimension('U')->setWidth(7); 
+		$this->excel->getActiveSheet()->getColumnDimension('V')->setWidth(7); 
+		$this->excel->getActiveSheet()->getColumnDimension('W')->setWidth(7); 
+		$this->excel->getActiveSheet()->getColumnDimension('X')->setWidth(7); 
+		$this->excel->getActiveSheet()->getColumnDimension('Y')->setWidth(7); 
+		$this->excel->getActiveSheet()->getColumnDimension('Z')->setWidth(7); 
+		$this->excel->getActiveSheet()->getColumnDimension('AA')->setWidth(15.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('AB')->setWidth(15.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('AC')->setWidth(15.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('AD')->setWidth(15.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('AE')->setWidth(15.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('AF')->setWidth(15.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('AG')->setWidth(15.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('AH')->setWidth(15.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('AI')->setWidth(15.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('AJ')->setWidth(15.88); 
+		$this->excel->getActiveSheet()->getStyle('A7:AJ8')->getAlignment()->setWrapText(true); 
+		$this->excel->getActiveSheet()->getStyle("A9:AJ$i")->getAlignment()->setWrapText(true); 
+		
+		$filename="DPS_GAJI_".$namabulan."_".$tahun.".xls"; //save our workbook as this file name
+		header('Content-Type: application/vnd.ms-excel'); //mime type
+		header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
+		header('Cache-Control: max-age=0'); //no cache
+					 
+		//save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
+		//if you want to save it as .XLSX Excel 2007 format
+		$objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel5');  
+		//force user to download the Excel file without writing it to server's HD
+		$objWriter->save('php://output');
+	}
 	/*
 	======================================================================================================
 	 FUNCTION MASTER LEMBUR
