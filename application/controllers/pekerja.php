@@ -2467,6 +2467,8 @@ class Pekerja extends Application {
 		$full_filename = $filename . '.pdf';
 	}
 	
+	
+	
 	# Function untuk delete pegawai
 	public function submit_delete_pegawai()
 	{
@@ -3098,6 +3100,430 @@ class Pekerja extends Application {
 		//force user to download the Excel file without writing it to server's HD
 		$objWriter->save('php://output');
 		
+	}
+	
+	function export_detail_pegawai_word()
+	{
+		$nipp = $this->uri->segment(3);
+		$datestring = "%Y" ;
+		$time = time();
+		$tanggal = mdate($datestring, $time);
+		
+		$sdm = $this->kepegawaian->get_data_sdm_unlimited();
+						
+		//load our new PHPExcel library
+		$this->load->library('word');
+		// New Word Document
+		$PHPWord = new PHPWord();
+
+		// New portrait section
+		$section = $PHPWord->createSection();
+
+		
+		$pegawai = $this->kepegawaian->get_data_pegawai_by_nipp($nipp);
+		$data_alamat = $this->kepegawaian->get_detail_pegawai_alamat($nipp);
+		$data_tmt = $this->kepegawaian->get_latest_tmt_pegawai_by_nipp($nipp);
+		$data_jabatan = $this->kepegawaian->get_last_jabatan($nipp);
+		$data_unit = $this->kepegawaian->get_latest_unit_pegawai_by_nipp($nipp);
+		$data_grade = $this->kepegawaian->get_last_grade_by_nipp($nipp);
+		$riwayat_jabatan = $this->kepegawaian->get_riwayat_jabatan($nipp);
+		$riwayat_golongan = $this->kepegawaian->get_riwayat_golongan($nipp);
+		$riwayat_sanksi = $this->kepegawaian->get_riwayat_sanksi($nipp);
+		$data_pendidikan = $this->kepegawaian->get_detail_pegawai_pendidikan($nipp);
+		$data_nstkp = $this->kepegawaian->get_detail_pegawai_nstkp($nipp);
+		$data_pasangan = $this->kepegawaian->get_detail_pegawai_pasangan($nipp);
+		$data_anak = $this->kepegawaian->get_detail_pegawai_anak($nipp);
+	
+		
+		$peg_nama="";
+		$peg_nipp=$nipp;
+		$peg_tmt="";
+		$peg_golongan="";
+		$peg_jabatan="";
+		$peg_unit="";
+		$peg_tempatlahir ="";
+		$peg_tanggallahir ="";
+		$peg_usia ="";
+		$peg_jeniskelamin = "";
+		$peg_statusmenikah = "";
+		$peg_alamatrumah ="";
+		$peg_telephone ="";
+		foreach($pegawai as $row_pegawai){ 
+			$peg_nama=$row_pegawai['peg_nama'];
+			$peg_tempatlahir=$row_pegawai['peg_tmpt_lahir'];
+			$peg_tanggallahir=$row_pegawai['peg_tgl_lahir'];
+			if($row_pegawai['peg_jns_kelamin'] == "L")
+			{
+				$peg_jeniskelamin = "LAKI-LAKI";
+			} else if($row_pegawai['peg_jns_kelamin'] == "P")
+			{
+				$peg_jeniskelamin = "PEREMPUAN";
+			}
+			if($peg_tanggallahir > "0000-00-00")
+			{
+				$now = date('Y-m-d');
+				$peg_usia =  floor((strtotime($now) - strtotime($peg_tanggallahir)) / (365*24*60*60));
+				$peg_tanggallahir = mdate('%d-%m-%Y',strtotime($peg_tanggallahir));
+			}
+		}
+		foreach($data_alamat as $row_alamat)
+		{
+			$peg_alamatrumah = $peg_alamatrumah." ".$row_alamat['p_al_jalan']." ".$row_alamat['p_al_jalan']." ".$row_alamat['p_al_kelurahan']." ".$row_alamat['p_al_kelurahan']." ".$row_alamat['p_al_kecamatan']." ".$row_alamat['p_al_kabupaten']." ".$row_alamat['p_al_provinsi'].". ";
+			$peg_telephone = $peg_telephone." ".$row_alamat['p_al_no_telp']." . ";
+		}
+		foreach($data_tmt as $row_tmt)
+		{
+			if($row_tmt['p_tmt_tmt'] != "0000-00-00")
+			{
+				$peg_tmt = strtotime('%d %F %Y',strtotime($row_tmt['p_tmt_tmt']));
+			}
+		}
+		foreach($data_jabatan as $row_jabatan)
+		{
+			$peg_jabatan = $row_jabatan['p_jbt_jabatan'];
+		}
+		foreach($data_unit as $row_unit)
+		{
+			$peg_unit = $row_unit['p_unt_kode_unit'];
+		}
+		foreach($data_grade as $row_grade)
+		{
+			$peg_golongan = $row_grade['p_grd_grade'];
+		}
+		
+		// Add header
+		$PHPWord->addFontStyle('r_headerStyle', array('name'=>'Verdana','bold'=>true, 'size'=>16));
+		$PHPWord->addParagraphStyle('p_headerStyle', array('align'=>'left', 'spaceAfter'=>100));
+		$header = $section->createHeader();
+		$header->addText('CURRICULUM VITAE', 'r_headerStyle', 'p_headerStyle');
+		// Title Style
+		$PHPWord->addFontStyle('r_titleStyle', array('name'=>'Verdana','bold'=>true, 'size'=>12));
+		$PHPWord->addParagraphStyle('p_titleStyle', array('align'=>'left', 'spaceAfter'=>80));
+				
+		// Define table style arrays
+		$styleTable1 = array('cellMargin'=>30);
+		//$styleTable1 = array('borderSize'=>0, 'borderColor'=>'000000', 'cellMargin'=>30);
+		$styleFirstRow1 = array();
+
+		// Define cell style arrays
+		$styleCell = array('valign'=>'top');
+		
+		// Add table style
+		//$PHPWord->addTableStyle('TableStyle1', $styleTable1);
+		$PHPWord->addTableStyle('TableStyle1', $styleTable1, $styleFirstRow1);
+
+		$section->addTextBreak(1);
+		$section->addText('I. KETERANGAN PEGAWAI', 'r_titleStyle', 'p_titleStyle');
+		$section->addTextBreak(1);
+		// Add table
+		$table1 = $section->addTable('TableStyle1');
+
+		# Keterangan Pegawai
+		// Add row
+		$table1->addRow(80);
+		$table1->addCell(2000, $styleCell)->addText('NAMA LENGKAP');
+		$table1->addCell(200, $styleCell)->addText(':');
+		$table1->addCell(4400, $styleCell)->addText(strtoupper($peg_nama));
+		
+		$table1->addRow();
+		$table1->addCell(2000, $styleCell)->addText('NIP');
+		$table1->addCell(200, $styleCell)->addText(':');
+		$table1->addCell(4400, $styleCell)->addText(strtoupper($peg_nipp));
+		
+		$table1->addRow();
+		$table1->addCell(2000, $styleCell)->addText('T.M.T');
+		$table1->addCell(200, $styleCell)->addText(':');
+		$table1->addCell(4400, $styleCell)->addText(strtoupper($peg_tmt));
+		
+		$table1->addRow();
+		$table1->addCell(2000, $styleCell)->addText('PANGKAT / GOLONGAN');
+		$table1->addCell(200, $styleCell)->addText(':');
+		$table1->addCell(4400, $styleCell)->addText(strtoupper($peg_golongan));
+		
+		$table1->addRow();
+		$table1->addCell(2000, $styleCell)->addText('JABATAN');
+		$table1->addCell(200, $styleCell)->addText(':');
+		$table1->addCell(4400, $styleCell)->addText(strtoupper($peg_jabatan));
+		
+		$table1->addRow();
+		$table1->addCell(2000, $styleCell)->addText('UNIT KERJA');
+		$table1->addCell(200, $styleCell)->addText(':');
+		$table1->addCell(4400, $styleCell)->addText(strtoupper($peg_unit));
+		
+		$table1->addRow();
+		$table1->addCell(2000, $styleCell)->addText('TEMPAT, TANGGAL LAHIR');
+		$table1->addCell(200, $styleCell)->addText(':');
+		$table1->addCell(4400, $styleCell)->addText(strtoupper($peg_tempatlahir).", $peg_tanggallahir");
+		
+		$table1->addRow();
+		$table1->addCell(2000, $styleCell)->addText('USIA');
+		$table1->addCell(200, $styleCell)->addText(':');
+		$table1->addCell(4400, $styleCell)->addText("$peg_usia");
+		
+		$table1->addRow();
+		$table1->addCell(2000, $styleCell)->addText('JENIS KELAMIN');
+		$table1->addCell(200, $styleCell)->addText(':');
+		$table1->addCell(4400, $styleCell)->addText("$peg_jeniskelamin");
+		
+		$table1->addRow();
+		$table1->addCell(2000, $styleCell)->addText('ALAMAT RUMAH');
+		$table1->addCell(200, $styleCell)->addText(':');
+		$table1->addCell(4400, $styleCell)->addText(strtoupper($peg_alamatrumah));
+		
+		$table1->addRow();
+		$table1->addCell(2000, $styleCell)->addText('TELEPHONE');
+		$table1->addCell(200, $styleCell)->addText(':');
+		$table1->addCell(4400, $styleCell)->addText("$peg_telephone");
+		
+		/*
+		$image = base_url()."pegawai/foto/".$peg_nipp.".jpg";
+		$section->addImage("$image", array('width'=>100, 'height'=>100, 'align'=>'right'));	
+		*/
+		$section->addTextBreak(1);
+		
+
+# II. PENDIDIKAN FORMAL		
+		
+		// Define table style arrays
+		$styleTableBorder = array('borderSize'=>2, 'borderColor'=>'000000', 'cellMargin'=>30);
+		$styleFirstRow = array('borderBottomSize'=>2, 'borderBottomColor'=>'0000FF', 'bgColor'=>'AAAAAA');
+//'borderBottomSize'=>1,
+		// Define cell style arrays
+		$styleCellBorder = array('valign'=>'center');
+		//$styleCellBTLR = array('valign'=>'center', 'textDirection'=>PHPWord_Style_Cell::TEXT_DIR_BTLR);
+
+		// Define font style for first row
+		$fontStyle = array('bold'=>true, 'align'=>'center');
+
+		// Add table style
+		$PHPWord->addTableStyle('TableStyleBorder', $styleTableBorder, $styleFirstRow);
+		
+		$section->addText('II. PENDIDIKAN FORMAL', 'r_titleStyle', 'p_titleStyle');
+		
+		
+		// Add table
+		$table2 = $section->addTable('TableStyleBorder');
+
+		// Add row
+		$table2->addRow(300);
+
+		// Add cells
+		$table2->addCell(300, $styleCellBorder)->addText('NO', $fontStyle);
+		$table2->addCell(2000, $styleCellBorder)->addText('PENDIDIKAN', $fontStyle);
+		$table2->addCell(2000, $styleCellBorder)->addText('TAHUN', $fontStyle);
+		$table2->addCell(2000, $styleCellBorder)->addText('TEMPAT', $fontStyle);
+		$table2->addCell(3000, $styleCellBorder)->addText('KETERANGAN', $fontStyle);
+
+		$no = 0;
+		foreach($data_pendidikan as $row_pendidikan){ 
+		$no++;
+			$table2->addRow();
+			$table2->addCell(300)->addText("$no");
+			$table2->addCell(2000)->addText("$row_pendidikan[p_pdd_tingkat]");
+			$table2->addCell(1000)->addText("$row_pendidikan[p_pdd_masuk]");
+			$table2->addCell(2000)->addText("$row_pendidikan[p_pdd_lp]");
+			$table2->addCell(3000)->addText(" ");
+		}
+		$section->addTextBreak(1);
+		
+		
+# III. PENDIDIKAN INFORMAL		
+		$section->addText('III. PENDIDIKAN INFORMAL', 'r_titleStyle', 'p_titleStyle');
+		// Add table
+		$table3 = $section->addTable('TableStyleBorder');
+
+		// Add row
+		$table3->addRow(300);
+
+		// Add cells
+		$table3->addCell(300, $styleCellBorder)->addText('NO', $fontStyle);
+		$table3->addCell(2000, $styleCellBorder)->addText('PENDIDIKAN', $fontStyle);
+		$table3->addCell(1500, $styleCellBorder)->addText('TGL. MULAI', $fontStyle);
+		$table3->addCell(1500, $styleCellBorder)->addText('TGL. SELESAI', $fontStyle);
+		$table3->addCell(2000, $styleCellBorder)->addText('TEMPAT', $fontStyle);
+		$table3->addCell(2000, $styleCellBorder)->addText('KETERANGAN', $fontStyle);
+
+		$no = 0;
+		foreach($data_nstkp as $row_nstkp){ 
+			$p_nstkp_pelaksanaan = mdate('%d-%m-%Y',strtotime($row_nstkp['p_nstkp_pelaksanaan']) );
+			$p_nstkp_selesai = mdate('%d-%m-%Y',strtotime($row_nstkp['p_nstkp_selesai']) );
+			$no++;
+			$table3->addRow();
+			$table3->addCell(300)->addText("$no");
+			$table3->addCell(2000)->addText("$row_nstkp[p_nstkp_jenis]");
+			$table3->addCell(1500)->addText("$p_nstkp_pelaksanaan");
+			$table3->addCell(1500)->addText("$p_nstkp_selesai");
+			$table3->addCell(2000)->addText("$row_nstkp[p_nstkp_lembaga]");
+			$table3->addCell(2000)->addText('');
+		}
+		$section->addTextBreak(1);
+
+# IV. RIWAYAT GOLONGAN		
+		$section->addText('IV. RIWAYAT GOLONGAN', 'r_titleStyle', 'p_titleStyle');
+		// Add table
+		$table4 = $section->addTable('TableStyleBorder');
+
+		// Add row
+		$table4->addRow(300);
+
+		// Add cells
+		$table4->addCell(300, $styleCellBorder)->addText('NO', $fontStyle);
+		$table4->addCell(2000, $styleCellBorder)->addText('GOL/PANGKAT', $fontStyle);
+		$table4->addCell(5000, $styleCellBorder)->addText('SK-GOLONGAN', $fontStyle);
+		$table4->addCell(2000, $styleCellBorder)->addText('T.M.T GOLONGAN', $fontStyle);
+		
+		$no = 0;
+		foreach($riwayat_golongan as $row_riwayatgolongan){ 
+			if($row_riwayatgolongan['p_grd_tmt'] == "0000-00-00"){ $grade_tmt = "-";}
+			else{$grade_tmt = mdate('%d-%m-%Y',strtotime($row_riwayatgolongan['p_grd_tmt']));}
+			$no++;
+			$table4->addRow();
+			$table4->addCell(300, $styleCellBorder)->addText("$no");
+			$table4->addCell(2000, $styleCellBorder)->addText("$row_riwayatgolongan[p_grd_grade]");
+			$table4->addCell(5000, $styleCellBorder)->addText("$row_riwayatgolongan[p_grd_skno]");
+			$table4->addCell(2000, $styleCellBorder)->addText("$row_riwayatgolongan[p_grd_tmt]");
+		}
+		$section->addTextBreak(1);		
+
+# V. RIWAYAT JABATAN		
+		$section->addText('V. RIWAYAT JABATAN', 'r_titleStyle', 'p_titleStyle');
+		// Add table
+		$table5 = $section->addTable('TableStyleBorder');
+
+		// Add row
+		$table5->addRow(300);
+
+		// Add cells
+		$table5->addCell(300, $styleCellBorder)->addText('NO', $fontStyle);
+		$table5->addCell(2500, $styleCellBorder)->addText('JABATAN', $fontStyle);
+		$table5->addCell(2000, $styleCellBorder)->addText('DEPARTEMEN', $fontStyle);
+		$table5->addCell(3000, $styleCellBorder)->addText('SK', $fontStyle);
+		$table5->addCell(1500, $styleCellBorder)->addText('T.M.T', $fontStyle);
+		
+		$no = 0;
+		foreach($riwayat_jabatan as $row_riwayatjabatan){ 
+			if($row_riwayatjabatan['p_jbt_tmt_start'] == "0000-00-00"){ $jbt_tmt_start = "-";}
+			else{$jbt_tmt_start = mdate('%d-%m-%Y',strtotime($row_riwayatjabatan['p_jbt_tmt_start']));}
+			$no++;
+			$table5->addRow();
+			$table5->addCell(300, $styleCellBorder)->addText("$no");
+			$table5->addCell(2500, $styleCellBorder)->addText(strtoupper($row_riwayatjabatan['p_jbt_jabatan']));
+			$table5->addCell(2000, $styleCellBorder)->addText("$row_riwayatjabatan[p_jbt_unit]");
+			$table5->addCell(3000, $styleCellBorder)->addText(strtoupper($row_riwayatjabatan['p_jbt_skno']));
+			$table5->addCell(1500, $styleCellBorder)->addText("$jbt_tmt_start");
+		}
+		$section->addTextBreak(1);		
+		
+
+# VI. DATA KELUARGA		
+		$section->addText('VI. DATA KELUARGA', 'r_titleStyle', 'p_titleStyle');
+		// Add table
+		$table6 = $section->addTable('TableStyleBorder');
+
+		// Add row
+		$table6->addRow(300);
+
+		// Add cells
+		$table6->addCell(300, $styleCellBorder)->addText('NO', $fontStyle);
+		$table6->addCell(3000, $styleCellBorder)->addText('NAMA', $fontStyle);
+		$table6->addCell(2000, $styleCellBorder)->addText('TGL LAHIR', $fontStyle);
+		$table6->addCell(1000, $styleCellBorder)->addText('UMUR', $fontStyle);
+		$table6->addCell(3000, $styleCellBorder)->addText('HUBUNGAN', $fontStyle);
+		
+		$no = 0;
+		# PASANGAN
+		foreach($data_pasangan as $row_pasangan){ 
+			$no++;
+			if($row_pasangan['p_ps_jns_kelamin']=="L"){$status_pasangan = "SUAMI";}
+			else if($row_pasangan['p_ps_jns_kelamin']=="P"){$status_pasangan = "ISTRI";}
+			if($row_pasangan['p_ps_tgl_lahir']=="0000-00-00"){
+				$umur = "-";
+				$tgl_lahir_pasangan = "-";
+			}else{ 
+				$umur = floor((strtotime(date('Y-m-d'))-strtotime($row_pasangan['p_ps_tgl_lahir']))/(365*24*60*60));
+				$tgl_lahir_pasangan = mdate('%d-%m-%Y',strtotime($row_pasangan['p_ps_tgl_lahir']));
+			}
+			
+			$table6->addRow();
+			$table6->addCell(300, $styleCellBorder)->addText("$no");
+			$table6->addCell(3000, $styleCellBorder)->addText(strtoupper($row_pasangan['p_ps_nama']));
+			$table6->addCell(2000, $styleCellBorder)->addText("$tgl_lahir_pasangan");
+			$table6->addCell(1000, $styleCellBorder)->addText("$umur");
+			$table6->addCell(3000, $styleCellBorder)->addText("$status_pasangan");
+		}	
+		# ANAK
+		$anak = 0;
+		foreach($data_anak as $row_anak){ 
+			$no++;
+			$anak++;
+			if($row_anak['peg_ank_tgl_lahir']=="0000-00-00"){
+				$umur_anak = "-";
+				$tgl_lahir_anak = "-";
+			}else{ 
+				$umur_anak = floor((strtotime(date('Y-m-d'))-strtotime($row_anak['peg_ank_tgl_lahir']))/(365*24*60*60)); 
+				$tgl_lahir_anak = mdate('%d-%m-%Y',strtotime($row_anak['peg_ank_tgl_lahir']));
+			}
+			
+			$table6->addRow();
+			$table6->addCell(300, $styleCellBorder)->addText("$no");
+			$table6->addCell(3000, $styleCellBorder)->addText(strtoupper($row_anak['peg_ank_nama']));
+			$table6->addCell(2000, $styleCellBorder)->addText("$tgl_lahir_anak");
+			$table6->addCell(1000, $styleCellBorder)->addText("$umur_anak");
+			$table6->addCell(3000, $styleCellBorder)->addText("ANAK KE-$anak");
+		}	
+		$section->addTextBreak(1);		
+		
+
+# VII.  SANKSI JABATAN 		
+		$section->addText('VII. SANKSI JABATAN', 'r_titleStyle', 'p_titleStyle');
+		// Add table
+		$table7 = $section->addTable('TableStyleBorder');
+
+		// Add row
+		$table7->addRow(300);
+
+		// Add cells
+		$table7->addCell(300, $styleCellBorder)->addText('NO', $fontStyle);
+		$table7->addCell(3000, $styleCellBorder)->addText('JENIS SANKSI', $fontStyle);
+		$table7->addCell(2000, $styleCellBorder)->addText('NO SK ', $fontStyle);
+		$table7->addCell(1500, $styleCellBorder)->addText('AWAL', $fontStyle);
+		$table7->addCell(1500, $styleCellBorder)->addText('AKHIR', $fontStyle);
+		$table7->addCell(1000, $styleCellBorder)->addText('KETERANGAN', $fontStyle);
+		
+		$no = 0;
+		foreach($riwayat_sanksi as $row_sanksi){ 
+			$no++;
+			if($row_sanksi['p_snk_start'] == "0000-00-00"){$start = "-";}
+			else{$start = mdate('%d-%m-%Y',strtotime($row_sanksi['p_snk_start']));}
+			if($row_sanksi['p_snk_end'] == "0000-00-00"){$end = "-";}
+			else{$end = mdate('%d-%m-%Y',strtotime($row_sanksi['p_snk_end']));}
+			
+			
+			$table7->addRow();
+			$table7->addCell(300, $styleCellBorder)->addText("$no");
+			$table7->addCell(3000, $styleCellBorder)->addText(strtoupper($row_sanksi['p_snk_jenis']));
+			$table7->addCell(2000, $styleCellBorder)->addText("$row_sanksi[p_snk_no]");
+			$table7->addCell(1500, $styleCellBorder)->addText("$start");
+			$table7->addCell(1500, $styleCellBorder)->addText("$end");
+			$table7->addCell(1000, $styleCellBorder)->addText(strtoupper($row_sanksi['p_snk_keterangan']));
+			
+		}	
+		$section->addTextBreak(1);
+	
+	
+		// Save File
+		$objWriter = PHPWord_IOFactory::createWriter($PHPWord, 'Word2007');
+		$objWriter->save('TextXXXX.docx');
+		
+		$filename="TextXXXX.docx"; //save our workbook as this file name
+		header('Content-Type: application/vnd.ms-word');
+		header('Content-Disposition: attachment;filename="'.$filename.'"');
+		header('Cache-Control: max-age=0');
+
+		// output the file to the browser
+		$objWriter = PHPWord_IOFactory::createWriter($PHPWord, 'Word2007');
+		$objWriter->save('php://output');
+		exit; //you must have the exit!
 	}
 	
 	public function pegawai_keluar()

@@ -20,6 +20,7 @@
 						<td >Action</td>
 					</tr>
 				</thead>
+				<tfoot><tr><td colspan="13"><?php echo anchor('gaji/pdf_gaji/'.$unit.'/'.$month.'/'.$year,'[PDF]')." ".anchor('gaji/excel_gaji/'.$unit.'/'.$month.'/'.$year,'[Excel]'); ?></td></tr></tfoot>
 				<tbody>
 					<?php 
 						$i=0;

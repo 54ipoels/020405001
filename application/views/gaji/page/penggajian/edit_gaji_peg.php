@@ -49,6 +49,21 @@
                         <div class="clear"></div>
                     </div>
 					<div class="formRow">
+                        <label>INFLASI:<span class="req"></span></label>
+                        <div class="formRight">
+							<div id="tampil_data2">
+                            <?php 
+								$inflasi = array(
+									'name'  => 'inflasi', 
+									'id'    => 'inflasi', 
+									);
+								echo form_input($inflasi,$sd['pgj_inflasi']) ?><br/>
+							<?php echo form_error('inflasi')?>
+                            </div>
+                            </div>
+                        <div class="clear"></div>
+                    </div>
+					<div class="formRow">
                         <label>INSENTIVE:<span class="req"></span></label>
                         <div class="formRight">
 							<div id="tampil_data2">

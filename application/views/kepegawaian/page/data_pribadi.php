@@ -693,12 +693,12 @@ if( $tmt_reason==""){?>
 			<?php 
 					foreach ($pegawai as $row_pegawai){}; 
 					$nipp=$row_pegawai['peg_nipp'];
-					$attr=" target='_blank' title='Print' ";
-					$print = anchor('pekerja/print_detail_pegawai/'.$nipp,'[Print]',$attr);
+					$attr=" target='_blank' title='Export to Word' ";
+					$print = anchor('pekerja/export_detail_pegawai_word/'.$nipp,' [Word] ',$attr);
 					echo $print;
 					echo " ";
 					$attrpdf=" title='Export to PDF' alt='Export to PDF' ";
-					echo anchor('pekerja/print_detail_pegawai_pdf/'.$nipp,'[PDF]');
+					echo anchor('pekerja/print_detail_pegawai_pdf/'.$nipp,' [PDF] ',$attrpdf);
 					
 				?> 
         </div>

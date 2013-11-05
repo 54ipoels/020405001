@@ -55,7 +55,7 @@
 										  '2016' => '2016',
 										);
 						
-							echo form_dropdown('year', $year,  $sd['lmb_tahun']);
+							echo form_dropdown('year', $year,  $this->uri->segment(5));
 							?>
                         </div>
                         <div class="clear"></div>

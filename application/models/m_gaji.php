@@ -103,6 +103,38 @@ class M_gaji extends CI_Model
 				LEFT JOIN (SELECT * FROM v3_pot_gaji_perusahaan_$year) AS pot_per ON pegawai.id_pegawai = pot_per.id_peg_pot_per_gaji
 				WHERE unit.p_unt_kode_unit LIKE '$unit'
 				AND pgj_bulan='$month' 
+				AND pot_peg_bulan = '$month'
+				AND pot_per_bulan = '$month'
+		";
+		$query = $this->db->query($query);
+		
+		return  $query->result_array();
+	}
+	
+	function ambil_data_penggajian_lengkap($unit,$month,$year)
+	{		
+		$query="
+				SELECT * FROM v3_penggajian_2013  a
+				LEFT JOIN v3_pegawai b
+				ON b.id_pegawai = a.pgj_id_peg
+				LEFT JOIN v3_peg_unit c
+				ON c.p_unt_nipp = b.peg_nipp
+				LEFT JOIN v3_peg_grade d
+				ON d.p_grd_nipp = b.peg_nipp
+				LEFT JOIN v3_peg_jabatan e
+				ON e.p_jbt_nipp = b.peg_nipp
+				LEFT JOIN v3_pot_gaji_pegawai_2013 f
+				ON b.id_pegawai = f.id_peg_pot_peg_gaji
+				LEFT JOIN v3_pot_gaji_perusahaan_2013 g
+				ON b.id_pegawai = g.id_peg_pot_per_gaji
+				WHERE c.p_unt_kode_unit LIKE '%'
+				AND pgj_bulan = '$month' 
+				AND pot_peg_bulan = '$month'
+				AND pot_per_bulan = '$month'
+				AND c.id_peg_unit = ( SELECT MAX(ca.id_peg_unit) FROM v3_peg_unit ca WHERE ca.p_unt_nipp = b.peg_nipp  )
+				AND d.id_peg_grade = ( SELECT MAX(da.id_peg_grade) FROM v3_peg_grade da WHERE da.p_grd_nipp = b.peg_nipp  )
+				AND e.id_peg_jabatan = ( SELECT MAX(ea.id_peg_jabatan) FROM v3_peg_jabatan ea WHERE ea.p_jbt_nipp = b.peg_nipp  )
+				ORDER BY b.peg_nipp
 		";
 		$query = $this->db->query($query);
 		
@@ -206,7 +238,7 @@ class M_gaji extends CI_Model
 		$nipp = '';
 		foreach ($data as $row_penggajian) :
 		{
-			$pot_peg = $row_penggajian['pot_peg_siperkasa'] + $row_penggajian['pot_peg_kokarga'] + $row_penggajian['pot_peg_kosigarden'] + $row_penggajian['pot_peg_flexy'] + $row_penggajian['pot_peg_other'] + $row_penggajian['pot_peg_ggc'] + $row_penggajian['pot_peg_jht'] + $row_penggajian['pot_peg_tht'] + $row_penggajian['pot_peg_pensiun'];
+			$pot_peg = $row_penggajian['pot_peg_siperkasa'] + $row_penggajian['pot_peg_kokarga'] + $row_penggajian['pot_peg_kosigarden'] + $row_penggajian['pot_peg_flexy'] + $row_penggajian['pot_peg_other'] + $row_penggajian['pot_peg_ggc'] + $row_penggajian['pot_peg_jht'] + $row_penggajian['pot_peg_tht'] + $row_penggajian['pot_peg_pensiun'] + $row_penggajian['pot_peg_siharta'] + $row_penggajian['pot_peg_kokarasa'] + $row_penggajian['pot_peg_koskargo'] + $row_penggajian['pot_peg_kokagayo'];
 			$pot_per = $row_penggajian['pot_per_as_jiwa'] + $row_penggajian['pot_per_jk'] + $row_penggajian['pot_per_siharta'] + $row_penggajian['pot_per_other'] + $row_penggajian['pot_per_jht'] + $row_penggajian['pot_per_tht'] + $row_penggajian['pot_per_pensiun'];
 			$data = array(
 					'id_pgj'	=> $row_penggajian['id_pgj'],
@@ -276,6 +308,7 @@ class M_gaji extends CI_Model
 	{
 		$data = array(
 				'pgj_gaji_bruto' => $this->input->post('gaji_bruto'),
+				'pgj_inflasi' => $this->input->post('inflasi'),
 				'pgj_insentive' => $this->input->post('insentive'),
 				'pgj_update_by' =>"admin",
 				);
