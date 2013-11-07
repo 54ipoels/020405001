@@ -90,6 +90,18 @@
 		{
 			$this->load->view('diklat/page/report/report_non_stkp_bulanan');
 		}
+		elseif ($page == 'Rekap Training Bulanan')
+		{
+			$this->load->view('diklat/page/search_rekap_bulanan');
+		}
+		elseif ($page == 'Rekap STKP Bulanan')
+		{
+			$this->load->view('diklat/page/report/rekap_stkp_bulanan');
+		}
+		elseif ($page == 'Rekap NSTKP Bulanan')
+		{
+			$this->load->view('diklat/page/report/rekap_non_stkp_bulanan');
+		}
 		elseif ($page == 'STKP Bulanan')
 		{
 			$this->load->view('diklat/page/add/input_stkp_bulanan');

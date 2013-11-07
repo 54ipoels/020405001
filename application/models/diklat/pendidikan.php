@@ -132,6 +132,62 @@ class pendidikan extends CI_Model
 		return $query->result_array();
 	}
 	
+	function rekap_stkp_bulanan($bulan, $tahun, $jenis_stkp)
+	{
+		$jenis_stkp = str_replace('%20',' ',$jenis_stkp);
+		if (($tahun=="") OR ($tahun=="ALL")){
+			$selection = "WHERE peg_stkp.p_stkp_jenis LIKE '%$jenis_stkp%' ";
+		}else
+		if (($bulan=="" AND $tahun !=="") OR ($bulan=="ALL" AND $tahun !=="ALL") ){
+			$selection = "  WHERE YEAR(peg_stkp.p_stkp_pelaksanaan) = '$tahun'
+							AND peg_stkp.p_stkp_jenis LIKE '%$jenis_stkp%' ";
+		}else
+		{
+			$selection = "  WHERE MONTH(peg_stkp.p_stkp_pelaksanaan) = '$bulan'
+							AND YEAR(peg_stkp.p_stkp_pelaksanaan) = '$tahun'
+							AND peg_stkp.p_stkp_jenis LIKE '%$jenis_stkp%'
+							";
+		}
+		$query = ("
+			SELECT p_stkp_jenis, COUNT(p_stkp_jenis) AS jumlah, p_stkp_rating, p_stkp_pelaksanaan, p_stkp_selesai, p_stkp_lembaga FROM v3_peg_stkp AS peg_stkp
+			$selection 	
+			GROUP BY p_stkp_jenis, p_stkp_rating, p_stkp_pelaksanaan, p_stkp_selesai 
+			ORDER BY p_stkp_jenis, p_stkp_rating, p_stkp_pelaksanaan, p_stkp_selesai 			
+		");
+		$query = $this->db->query($query);
+		return $query->result_array();
+	}
+	
+	
+	function rekap_nstkp_bulanan($bulan, $tahun, $jenis)
+	{
+		$jenis = str_replace('%20',' ',$jenis);
+		if ($tahun==""){
+			$selection = "WHERE peg_stkp.p_nstkp_jenis LIKE '%$jenis%' ";
+		}else
+		if ($bulan=="" AND $tahun !=="" ){
+			$selection = "  WHERE YEAR(peg_stkp.p_nstkp_pelaksanaan) = '$tahun'
+							AND peg_stkp.p_nstkp_jenis LIKE '%$jenis%' ";
+		}else
+		{
+			$selection = "  WHERE MONTH(peg_stkp.p_nstkp_pelaksanaan) = '$bulan'
+							AND YEAR(peg_stkp.p_nstkp_pelaksanaan) = '$tahun'
+							AND peg_stkp.p_nstkp_jenis LIKE '%$jenis%'
+							";
+		}
+		
+		$query = ("
+			SELECT p_nstkp_jenis, COUNT(p_nstkp_jenis) AS jumlah, p_nstkp_pelaksanaan, p_nstkp_selesai, p_nstkp_lembaga FROM v3_peg_non_stkp AS peg_stkp
+			$selection 
+			GROUP BY peg_stkp.p_nstkp_jenis, p_nstkp_pelaksanaan, p_nstkp_selesai
+			ORDER BY peg_stkp.p_nstkp_jenis, p_nstkp_pelaksanaan, p_nstkp_selesai
+			
+		");
+		
+		$query = $this->db->query($query);
+		return $query->result_array();
+	}
+	
 	function search_report_nstkp_bulanan_sort_pelaksanaan_training($bulan, $tahun, $jenis)
 	{
 		$jenis = str_replace('%20',' ',$jenis);
