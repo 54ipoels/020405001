@@ -1484,6 +1484,22 @@ class kepegawaian extends CI_Model
 	{
 		$this->db->insert('v3_peg_sanksi',$data_sanksi);
 	}
+	function delete_riwayat_jabatan($id)
+	{
+		$this->db->where('id_peg_jabatan', $id);
+		$this->db->delete('v3_peg_jabatan');
+	}
+	function delete_riwayat_golongan($id)
+	{
+		$this->db->where('id_peg_grade', $id);
+		$this->db->delete('v3_peg_grade');
+	}
+	function delete_riwayat_sanksi($id)
+	{
+		$this->db->where('id_peg_sanksi', $id);
+		$this->db->delete('v3_peg_sanksi');
+	}
+	
 	function update_tmt_end_latest_unit($nipp,$tanggal_tmt_jbt)
 	{
 		$this->db->where('p_unt_nipp',$nipp);

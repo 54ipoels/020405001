@@ -13,6 +13,7 @@
 						<div class="formRight">
 							<?php 
 								$list_golongan = array(
+									" "			=>	" ",
 									"I"			=>	"I",
 									"II"		=>	"II",
 									"III"		=>	"III",
@@ -26,7 +27,8 @@
 									"XI"		=>	"XI",
 									"XII"		=>	"XII",
 								);
-								echo form_dropdown('golongan',$list_golongan);
+								//echo form_dropdown('golongan',$list_golongan);
+								echo form_input('golongan');
 							?>
 						</div>
 						<div class="clear"></div>

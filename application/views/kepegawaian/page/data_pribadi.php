@@ -562,6 +562,7 @@ if( $tmt_reason==""){?>
 										<td><?php 
 											echo anchor("pekerja/edit_riwayat_jabatan/$rj[id_peg_jabatan]", img(array('src'=>"images/icons/control/16/edit.png", 'alt'=>'Edit Riwayat Jabatan', 'title'=>'Edit Riwayat Jabatan')));
 											echo '&nbsp';	
+											echo anchor("pekerja/delete_riwayat_jabatan/$rj[id_peg_jabatan]/".$row_pegawai['peg_nipp'], img(array('src'=>"images/icons/control/16/busy.png", 'alt'=>'Delete Riwayat Jabatan', 'title'=>'Delete Riwayat Jabatan')));
 											?>
 										</td>
 									</tr>
@@ -638,6 +639,7 @@ if( $tmt_reason==""){?>
 										<td><?php 
 											echo anchor("pekerja/edit_riwayat_golongan/$rg[id_peg_grade]", img(array('src'=>"images/icons/control/16/edit.png", 'alt'=>'Edit Riwayat Golongan', 'title'=>'Edit Riwayat Golongan')));
 											echo '&nbsp';	
+											echo anchor("pekerja/delete_riwayat_golongan/$rg[id_peg_grade]/".$row_pegawai['peg_nipp'], img(array('src'=>"images/icons/control/16/busy.png", 'alt'=>'Delete Riwayat Golongan', 'title'=>'Delete Riwayat Golongan')));
 											?>
 										</td>
 									</tr>
@@ -680,6 +682,7 @@ if( $tmt_reason==""){?>
 										<td><?php 
 											echo anchor("pekerja/edit_riwayat_sanksi/$rs[id_peg_sanksi]", img(array('src'=>"images/icons/control/16/edit.png", 'alt'=>'Edit Riwayat Sanksi', 'title'=>'Edit Riwayat Sanksi')));
 											echo '&nbsp';	
+											echo anchor("pekerja/delete_riwayat_sanksi/$rs[id_peg_sanksi]/".$row_pegawai['peg_nipp'], img(array('src'=>"images/icons/control/16/busy.png", 'alt'=>'Delete Riwayat Sanksi', 'title'=>'Delete Riwayat Sanksi')));
 											?>
 										</td>
 									</tr>

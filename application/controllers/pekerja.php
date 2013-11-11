@@ -584,6 +584,7 @@ class Pekerja extends Application {
 			$data_jabatan = array(
 					'p_jbt_nipp' 		=> trim($this->input->post('nipp')),
 					'p_jbt_jabatan' 	=> $this->input->post('jabatan'),
+					'p_jbt_unit'		=> $this->input->post('unit'),
 					//'p_jbt_update_on'	=> $tanggal,
 					'p_jbt_update_by'	=> 'admin'
 				);
@@ -1224,6 +1225,13 @@ class Pekerja extends Application {
 				redirect('pekerja/get_pegawai/'.$nipp);
 		}
 	}
+	public function delete_riwayat_jabatan()
+	{
+		$id_jabatan = $this->uri->segment(3); 
+		$this->kepegawaian->delete_riwayat_jabatan($id_jabatan);
+		$nipp = $this->uri->segment(4);
+		redirect('pekerja/get_pegawai/'.$nipp);
+	}
 	
 	#riwayat golongan
 	public function add_riwayat_golongan()
@@ -1374,7 +1382,13 @@ class Pekerja extends Application {
 		}
 		redirect('pekerja/get_pegawai/'.$nipp);
 	}
-	
+	public function delete_riwayat_golongan()
+	{
+		$id_grade = $this->uri->segment(3); 
+		$this->kepegawaian->delete_riwayat_golongan($id_grade);
+		$nipp = $this->uri->segment(4);
+		redirect('pekerja/get_pegawai/'.$nipp);
+	}
 	#riwayat sanksi
 	public function add_riwayat_sanksi()
 	{		
@@ -1532,7 +1546,13 @@ class Pekerja extends Application {
 		}
 		redirect('pekerja/get_pegawai/'.$nipp);
 	}
-	
+	public function delete_riwayat_sanksi()
+	{
+		$id_sanksi = $this->uri->segment(3); 
+		$this->kepegawaian->delete_riwayat_sanksi($id_sanksi);
+		$nipp = $this->uri->segment(4);
+		redirect('pekerja/get_pegawai/'.$nipp);
+	}
 	#edit status pegawai
 	public function edit_status_pegawai($nipp)
 	{		
