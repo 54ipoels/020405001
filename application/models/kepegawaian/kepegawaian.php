@@ -159,7 +159,7 @@ class kepegawaian extends CI_Model
 		$tahun2=$tahun-1;
 		$query = ('
 			SELECT * FROM v3_pegawai AS peg 
-			LEFT JOIN (SELECT p_jbt_nipp, p_jbt_jabatan FROM v3_peg_jabatan ORDER BY id_peg_jabatan DESC) AS peg_jbt 
+			LEFT JOIN (SELECT p_jbt_nipp, p_jbt_jabatan FROM v3_peg_jabatan ORDER BY p_jbt_tmt_start DESC, id_peg_jabatan DESC) AS peg_jbt 
 			ON peg.peg_nipp = peg_jbt.p_jbt_nipp 
 			LEFT JOIN (SELECT p_tmt_nipp, p_tmt_tmt, p_tmt_end FROM v3_peg_tmt ORDER BY id_peg_tmt DESC) AS peg_tmt 
 			ON peg.peg_nipp = peg_tmt.p_tmt_nipp 
@@ -446,11 +446,11 @@ class kepegawaian extends CI_Model
 	{
 		$query = " 
 				SELECT * FROM  `v3_peg_jabatan` AS jabatan
-				LEFT JOIN (	SELECT * FROM  `v3_peg_unit` ORDER BY id_peg_unit DESC) AS unit 
+				LEFT JOIN (	SELECT * FROM  `v3_peg_unit` ORDER BY p_jbt_tmt_start DESC, id_peg_unit DESC) AS unit 
 				ON ( p_jbt_nipp = p_unt_nipp AND jabatan.p_jbt_tmt_start >= unit.p_unt_tmt_start ) 
 				WHERE p_jbt_nipp = '$nipp'
 				GROUP BY p_jbt_nipp,id_peg_jabatan,id_peg_unit
-				ORDER BY id_peg_jabatan, id_peg_unit
+				ORDER BY p_jbt_tmt_start DESC, id_peg_jabatan, id_peg_unit
 				";
 		$query = $this->db->query($query); 
 		return $query->result_array();
@@ -1305,6 +1305,7 @@ class kepegawaian extends CI_Model
 	{
 		$this->db->select('*');
 		$this->db->where('p_jbt_nipp',$nipp);
+		$this->db->order_by('p_jbt_tmt_start', 'DESC');
 		$this->db->order_by('id_peg_jabatan', 'DESC');
 		$this->db->limit(1);
 		$query = $this->db->get('v3_peg_jabatan');
@@ -1315,6 +1316,7 @@ class kepegawaian extends CI_Model
 	{
 		$this->db->select('*');
 		$this->db->where('p_grd_nipp',$nipp);
+		$this->db->order_by('p_grd_tmt', 'DESC');
 		$this->db->order_by('id_peg_grade', 'DESC');
 		$this->db->limit(1);
 		$query = $this->db->get('v3_peg_grade');
@@ -1418,6 +1420,7 @@ class kepegawaian extends CI_Model
 	{
 		$this->db->select('*');
 		$this->db->where('p_jbt_nipp',$nipp);
+		$this->db->order_by('p_jbt_tmt_start', 'DESC');
 		$this->db->order_by('id_peg_jabatan', 'DESC');
 		$query = $this->db->get('v3_peg_jabatan');
 		return $query->result_array();
@@ -1426,6 +1429,7 @@ class kepegawaian extends CI_Model
 	{
 		$this->db->select('*');
 		$this->db->where('p_grd_nipp',$nipp);
+		$this->db->order_by('p_grd_tmt', 'DESC');
 		$this->db->order_by('id_peg_grade', 'DESC');
 		$query = $this->db->get('v3_peg_grade');
 		return $query->result_array();
@@ -1434,6 +1438,7 @@ class kepegawaian extends CI_Model
 	{
 		$this->db->select('*');
 		$this->db->where('p_snk_nipp',$nipp);
+		$this->db->order_by('p_snk_start', 'DESC');
 		$this->db->order_by('id_peg_sanksi', 'DESC');
 		$query = $this->db->get('v3_peg_sanksi');
 		return $query->result_array();

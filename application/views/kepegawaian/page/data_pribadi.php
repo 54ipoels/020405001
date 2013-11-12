@@ -339,8 +339,11 @@ if( $tmt_reason==""){?>
 								</p></td></tr>
 						</tfoot>
                         <tbody>
-                            <tr><td width="30%">Jabatan Terakhir</td><td><?php echo $jabatan;?></td></tr>
-                            <tr><td>Terhitung Mulai Tanggal</td><td><?php echo $tmt_jabatan; #echo $tmt; ?></td></tr>
+                            <tr><td>T.M.T Kerja</td><td><?php echo $tmt;
+										echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+										//echo anchor('pekerja/add_tmt_pegawai/'.$row_pegawai['peg_nipp'],'[edit]');?></td></tr>
+							<tr><td width="30%">Jabatan Terakhir</td><td><?php echo $jabatan;?></td></tr>
+                            <tr><td>T.M.T Jabatan</td><td><?php echo $tmt_jabatan;  ?></td></tr>
 							<tr><td>Unit</td><td><?php echo $kode_unit;?></td></tr>
 							<tr><td>Sub Unit</td><td><?php echo $sub_unit;?></td></tr>
 							<tr><td>Team</td><td><?php echo $team;?></td></tr>

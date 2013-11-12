@@ -21,8 +21,8 @@
 						<select name="jabatan" data-placeholder="Pilih Jabatan..." class="chzn-select" tabindex="1" value="<?php echo $row['p_jbt_jabatan'];?>"><?php 
 						foreach ($list_jabatan as $row_jabatan) :
 						{ 
-							if ($row_jabatan['peg_tab_jab'] == $row_jbt_tmt['p_jbt_jabatan'])
-							{?>
+							if ($row_jabatan['peg_tab_jab'] == $row['p_jbt_jabatan'])
+							{ ?>
 								<option value="<?php echo $row_jabatan['peg_tab_jab'];?>" selected="selected"><?php echo $row_jabatan['peg_tab_jab']; ?></option>
 							
 						<?php }else{ ?>
@@ -38,6 +38,7 @@
                         <label>Unit :</label>
 						<div class="formRight">
 							<?php
+								$var_unit[""] = "";
 								foreach ($list_unit as $row_unit)
 								{
 									$unit_code = $row_unit['kode_unit'];

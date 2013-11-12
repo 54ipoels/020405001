@@ -1169,6 +1169,7 @@ class Pekerja extends Application {
 				$data_jabatan = array(
 						'p_jbt_nipp'		=> $nipp,
 						'p_jbt_jabatan'		=> $this->input->post('jabatan'),
+						'p_jbt_unit'		=>	$this->input->post('unit'),
 						'p_jbt_tmt_start'	=> $tanggal_tmt_jbt,
 						'p_jbt_tmt_end'		=> $tanggal_tmt_end,
 						'p_jbt_skno'		=> $no_sk,
@@ -1200,6 +1201,7 @@ class Pekerja extends Application {
 			$data_jabatan = array(
 						'p_jbt_nipp'		=> $nipp,
 						'p_jbt_jabatan'		=> $this->input->post('jabatan'),
+						'p_jbt_unit'		=>	$this->input->post('unit'),
 						'p_jbt_tmt_start'	=> $tanggal_tmt_jbt,
 						'p_jbt_tmt_end'		=> $tanggal_tmt_end,
 						'p_jbt_skno'		=> $no_sk,
@@ -2639,7 +2641,6 @@ class Pekerja extends Application {
 		$this->kepegawaian->insert_data_ppb($data);
 		redirect('pekerja/pegawai_ppb');
 	}
-	
 	
 	# Export Excel
 	function excel_data_pegawai()
