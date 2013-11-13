@@ -422,7 +422,7 @@ class Pekerja extends Application {
 			$data['data_status_keluarga'] = $this->kepegawaian->get_detail_pegawai_status_keluarga($nipp);
 			$data['data_tmt'] = $this->kepegawaian->get_detail_pegawai_tmt($nipp);
 			$data['data_unit'] = $this->kepegawaian->get_detail_pegawai_unit($nipp);
-			$data['data_grade'] = $this->kepegawaian->get_detail_pegawai_grade($nipp);
+			$data['data_grade'] = $this->kepegawaian->get_last_grade_by_nipp($nipp);
 			$data['data_stkp'] = $this->kepegawaian->get_detail_pegawai_stkp($nipp);		
 			$data['data_anak'] = $this->kepegawaian->get_detail_pegawai_anak($nipp);
 			$data['data_jabatan'] = $this->kepegawaian->get_last_jabatan($nipp);
