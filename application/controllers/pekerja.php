@@ -3811,6 +3811,177 @@ class Pekerja extends Application {
 		</html>
 		<?php 
 	}
+	
+	function rekapitulasi_pegawai()
+	{
+		#data preparing
+		$data['page'] = 'Rekapitulasi Pegawai';
+		$data['view_pekerja'] = 'class="this"';
+		$data['page_karyawan'] = 'yes';
+		
+		#calling view
+		$this->load->view('kepegawaian/index',$data);
+	}
+	
+	function excel_rekapitulasi_pegawai()
+	{
+		$jenis = $this->input->post('jenis');
+		if($jenis != ''){
+			//pengalokasian memory untuk run this function
+			ini_set("memory_limit","300M");
+			
+			$datestring = "%Y-%m-%d" ;
+			$time = time();
+			$tanggal = mdate($datestring, $time);
+			
+			$pegawai = $this->kepegawaian->get_data_pegawai_aktif_unlimited();
+					
+			//load our new PHPExcel library
+			$this->load->library('excel');
+			//activate worksheet number 1
+			$this->excel->setActiveSheetIndex(0);
+			//name the worksheet
+			$this->excel->getActiveSheet()->setTitle("Data Pegawai ");
+			//set cell A1 content with some text
+			//JUDUL KOP
+			$this->excel->getActiveSheet()->setCellValue('A2', 'DATA PEGAWAI');
+			$this->excel->getActiveSheet()->setCellValue('A3', 'PT. GAPURA ANGKASA CABANG BANDARA NGURAH RAI');
+			$this->excel->getActiveSheet()->setCellValue('A4', 'DENPASAR');
+			
+			$this->excel->getActiveSheet()->setCellValue('A6', 'No');
+			$this->excel->getActiveSheet()->setCellValue('B6', 'NIPP');
+			$this->excel->getActiveSheet()->setCellValue('C6', 'Nama');
+			$this->excel->getActiveSheet()->setCellValue('D6', 'Tempat Lahir');
+			$this->excel->getActiveSheet()->setCellValue('E6', 'Tanggal Lahir');
+			$this->excel->getActiveSheet()->setCellValue('F6', 'Jenis Kelamin');
+			$this->excel->getActiveSheet()->setCellValue('G6', 'Golongan Darah');
+			$this->excel->getActiveSheet()->setCellValue('H6', 'Agama');
+			$this->excel->getActiveSheet()->setCellValue('I6', 'No Telepon');
+			$this->excel->getActiveSheet()->setCellValue('J6', 'Email');
+			$this->excel->getActiveSheet()->setCellValue('K6', 'Alamat');
+			
+			$this->excel->getActiveSheet()->setCellValue('K7', 'Jalan');
+			$this->excel->getActiveSheet()->setCellValue('L7', 'Kelurahan');
+			$this->excel->getActiveSheet()->setCellValue('M7', 'Kecamatan');
+			$this->excel->getActiveSheet()->setCellValue('N7', 'Kabupaten');
+			$this->excel->getActiveSheet()->setCellValue('O7', 'Provinsi');
+			
+			$i=7;
+			$number=0;
+			$unit="kosong";
+			$sub_unit="kosong";
+			
+			$nipp = '';
+			foreach ($pegawai as $row_pegawai) :
+			{ 
+				$i++;
+				$number++;
+				if($row_pegawai['peg_jns_kelamin'] == "P"){ $jk="Perempuan"; }
+				else{$jk="Laki-Laki";}
+				if ($row_pegawai['peg_tgl_lahir'] == "0000-00-00" ){ $tgl_lahir = "-";}
+				else{$tgl_lahir = mdate("%d-%m-%Y",strtotime($row_pegawai['peg_tgl_lahir']));}
+				 
+				if($row_pegawai['p_unt_kode_unit'] !== $unit){
+					$this->excel->getActiveSheet()->setCellValue("C$i", strtoupper("$row_pegawai[nama_unit]"));
+					$this->excel->getActiveSheet()->getStyle("C$i")->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('ffff00');
+					$this->excel->getActiveSheet()->getStyle("C$i")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+					$this->excel->getActiveSheet()->getStyle("C$i")->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+					$this->excel->getActiveSheet()->getStyle("C$i")->getFont()->setBold(true);
+					$i++;
+				}
+				if($row_pegawai['p_unt_kode_sub_unit'] !== $sub_unit){
+					$this->excel->getActiveSheet()->setCellValue("C$i", strtoupper("$row_pegawai[su_sub_unit]"));
+					$this->excel->getActiveSheet()->getStyle("C$i")->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('ffff77');
+					$this->excel->getActiveSheet()->getStyle("C$i")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+					$this->excel->getActiveSheet()->getStyle("C$i")->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+					$this->excel->getActiveSheet()->getStyle("C$i")->getFont()->setBold(true);
+					$i++;
+				}
+				
+				//masukkan data ke tabel excel
+				$this->excel->getActiveSheet()->setCellValue("A$i", "$number");
+				$this->excel->getActiveSheet()->setCellValue("B$i", "$row_pegawai[peg_nipp]");
+				$this->excel->getActiveSheet()->setCellValue("C$i", strtoupper("$row_pegawai[peg_nama]"));
+				$this->excel->getActiveSheet()->setCellValue("D$i", "$row_pegawai[peg_tmpt_lahir]");
+				$this->excel->getActiveSheet()->setCellValue("E$i", "$tgl_lahir");
+				$this->excel->getActiveSheet()->setCellValue("F$i", "$jk");
+				$this->excel->getActiveSheet()->setCellValue("G$i", "$row_pegawai[peg_gol_darah]");
+				$this->excel->getActiveSheet()->setCellValue("H$i", "$row_pegawai[p_ag_agama]");
+				$this->excel->getActiveSheet()->setCellValue("I$i", "'$row_pegawai[p_al_no_telp]");
+				$this->excel->getActiveSheet()->setCellValue("J$i", "$row_pegawai[p_al_email]");
+				$this->excel->getActiveSheet()->setCellValue("K$i", "$row_pegawai[p_al_jalan]");
+				$this->excel->getActiveSheet()->setCellValue("L$i", "$row_pegawai[p_al_kelurahan]");
+				$this->excel->getActiveSheet()->setCellValue("M$i", "$row_pegawai[p_al_kecamatan]");
+				$this->excel->getActiveSheet()->setCellValue("N$i", "$row_pegawai[p_al_kabupaten]");
+				$this->excel->getActiveSheet()->setCellValue("O$i", "$row_pegawai[p_al_provinsi]");
+			
+				$unit = $row_pegawai['p_unt_kode_unit'];
+				$sub_unit = $row_pegawai['p_unt_kode_sub_unit'];
+			}endforeach;
+			
+			//change the font size
+			$this->excel->getActiveSheet()->getStyle("A2:A4")->getFont()->setSize(14);
+			$this->excel->getActiveSheet()->getStyle("A6:O7")->getFont()->setSize(12);
+			$this->excel->getActiveSheet()->getStyle("A8:O$i")->getFont()->setSize(8);
+			//make the font become bold
+			$this->excel->getActiveSheet()->getStyle('A2:A4')->getFont()->setBold(true);
+			$this->excel->getActiveSheet()->getStyle('A6:K6')->getFont()->setBold(true);
+			$this->excel->getActiveSheet()->getStyle('G7:H7')->getFont()->setBold(true);
+			//merge cell A1 until D1
+			$this->excel->getActiveSheet()->mergeCells('A6:A7');
+			$this->excel->getActiveSheet()->mergeCells('B6:B7');
+			$this->excel->getActiveSheet()->mergeCells('C6:C7');
+			$this->excel->getActiveSheet()->mergeCells('D6:D7');
+			$this->excel->getActiveSheet()->mergeCells('E6:E7');
+			$this->excel->getActiveSheet()->mergeCells('F6:F7');
+			$this->excel->getActiveSheet()->mergeCells('G6:G7');
+			$this->excel->getActiveSheet()->mergeCells('H6:H7');
+			$this->excel->getActiveSheet()->mergeCells('I6:I7');
+			$this->excel->getActiveSheet()->mergeCells('J6:J7');
+			$this->excel->getActiveSheet()->mergeCells('K6:O6');
+			$this->excel->getActiveSheet()->mergeCells('A2:H2');
+			$this->excel->getActiveSheet()->mergeCells('A3:H3');
+			$this->excel->getActiveSheet()->mergeCells('A4:H4');
+			
+			//set aligment to center for that merged cell (A1 to D1)
+			$this->excel->getActiveSheet()->getStyle('A6:O6')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			$this->excel->getActiveSheet()->getStyle('A6:O6')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+			$this->excel->getActiveSheet()->getStyle('A2:A4')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			$this->excel->getActiveSheet()->getStyle('A2:A4')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+			
+			//Set column widths                                                       
+			$this->excel->getActiveSheet()->getColumnDimension('A')->setWidth(5.54);  
+			$this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(10.75); 
+			$this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(26);    
+			$this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(20.5);  
+			$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(10.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(10.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('G')->setWidth(14.63); 
+			$this->excel->getActiveSheet()->getColumnDimension('H')->setWidth(8.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('I')->setWidth(14.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('J')->setWidth(25.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('K')->setWidth(35.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('L')->setWidth(15.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('M')->setWidth(15.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('N')->setWidth(15.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('O')->setWidth(15.88); 
+			
+			 
+			$filename="Data Pegawai.xls"; //save our workbook as this file name
+			header('Content-Type: application/vnd.ms-excel'); //mime type
+			header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
+			header('Cache-Control: max-age=0'); //no cache
+						 
+			//save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
+			//if you want to save it as .XLSX Excel 2007 format
+			$objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel5');  
+			//force user to download the Excel file without writing it to server's HD
+			$objWriter->save('php://output');
+		
+		}
+	}
+	
+	
 }
 
 /* End of file welcome.php */

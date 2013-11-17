@@ -1511,6 +1511,26 @@ class kepegawaian extends CI_Model
 		$this->db->where('p_unt_tmt_end',"0000-00-00");
 		$this->db->update('v3_peg_unit',array('p_unt_tmt_end' => $tanggal_tmt_jbt));	
 	}
+	
+	#rekapitulasi pegawai
+	function get_data_pegawai_aktif_unlimited($jenis)
+	{
+		
+		$query = "	SELECT * FROM v3_pegawai a 
+					LEFT JOIN ( SELECT * FROM v3_peg_unit ORDER BY p_unt_tmt_start DESC ) AS unit ON b.peg_nipp = unit.p_unt_nipp 
+					LEFT JOIN ( SELECT * FROM v3_peg_grade ORDER BY p_grd_tmt DESC ) AS grade ON b.peg_nipp = grade.p_grd_nipp 
+					LEFT JOIN ( SELECT * FROM v3_peg_jabatan ORDER BY p_jbt_tmt_start DESC , id_peg_jabatan DESC ) AS jabatan ON a.peg_nipp = jabatan.p_jbt_nipp 
+					LEFT JOIN v3_peg_tmt b ON b.p_tmt_nipp = a.peg_nipp WHERE b.id_peg_tmt = ( SELECT MAX( k.id_peg_tmt ) FROM v3_peg_tmt k WHERE k.p_tmt_nipp = a.peg_nipp ) 
+					AND p_tmt_status =  '$jenis' 
+					AND p_tmt_end =  '0000-00-00' 
+					GROUP BY peg_nipp 
+					ORDER BY b.p_tmt_tmt DESC 
+				";
+		$query = $this->db->query($query);
+		return $query->result_array();
+	}
+	
+	
 	/*
 	function copy_data_pegawai($nipp,$nipp_baru)
 	{
