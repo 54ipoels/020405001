@@ -1517,14 +1517,18 @@ class kepegawaian extends CI_Model
 	{
 		
 		$query = "	SELECT * FROM v3_pegawai a 
-					LEFT JOIN ( SELECT * FROM v3_peg_unit ORDER BY p_unt_tmt_start DESC ) AS unit ON b.peg_nipp = unit.p_unt_nipp 
-					LEFT JOIN ( SELECT * FROM v3_peg_grade ORDER BY p_grd_tmt DESC ) AS grade ON b.peg_nipp = grade.p_grd_nipp 
+					LEFT JOIN ( SELECT * FROM v3_peg_unit ORDER BY p_unt_tmt_start DESC, id_peg_unit DESC ) AS unit ON a.peg_nipp = unit.p_unt_nipp 
+					LEFT JOIN ( SELECT * FROM v3_peg_grade ORDER BY p_grd_tmt DESC, id_peg_grade DESC ) AS grade ON a.peg_nipp = grade.p_grd_nipp 
 					LEFT JOIN ( SELECT * FROM v3_peg_jabatan ORDER BY p_jbt_tmt_start DESC , id_peg_jabatan DESC ) AS jabatan ON a.peg_nipp = jabatan.p_jbt_nipp 
-					LEFT JOIN v3_peg_tmt b ON b.p_tmt_nipp = a.peg_nipp WHERE b.id_peg_tmt = ( SELECT MAX( k.id_peg_tmt ) FROM v3_peg_tmt k WHERE k.p_tmt_nipp = a.peg_nipp ) 
+					LEFT JOIN v3_peg_tmt b ON b.p_tmt_nipp = a.peg_nipp 
+					LEFT JOIN unit c ON c.kode_unit = unit.p_unt_kode_unit 
+					LEFT JOIN v3_sub_unit d ON d.su_kode_sub_unit = unit.p_unt_kode_sub_unit 
+					LEFT JOIN v3_subunit_team e ON e.sut_kode_team = unit.p_unt_team 
+					WHERE b.id_peg_tmt = ( SELECT MAX( k.id_peg_tmt ) FROM v3_peg_tmt k WHERE k.p_tmt_nipp = a.peg_nipp ) 
 					AND p_tmt_status =  '$jenis' 
 					AND p_tmt_end =  '0000-00-00' 
 					GROUP BY peg_nipp 
-					ORDER BY b.p_tmt_tmt DESC 
+					ORDER BY c.level,d.su_level,e.sut_level,a.peg_nipp DESC 
 				";
 		$query = $this->db->query($query);
 		return $query->result_array();

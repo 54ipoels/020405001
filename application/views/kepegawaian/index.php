@@ -195,6 +195,10 @@
 		if ($page == 'Upload')
 		{
 			$this->load->view('kepegawaian/page/add/import_file');
+		}else
+		if ($page == 'Rekapitulasi Pegawai')
+		{
+			$this->load->view('kepegawaian/page/rekapitulasi_pegawai');
 		}
 		
 		?>
