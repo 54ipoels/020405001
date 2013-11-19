@@ -13,6 +13,7 @@
 				<li <?php if(isset($view_ppb)){ echo $view_ppb; } ?>><?php echo anchor('pekerja/pegawai_ppb', 'PPB' ); ?></li>
 				<li <?php if(isset($view_mpp)){ echo $view_mpp; } ?>><?php echo anchor('pekerja/pegawai_mpp', 'MPP' ); ?></li>
 				<li <?php if(isset($view_sdm)){ echo $view_sdm; } ?>><?php echo anchor('pekerja/view_data_sdm', 'Data SDM & Keluarga' ); ?></li>
+				<li <?php if(isset($view_rekapitulasi_pegawai)){ echo $view_rekapitulasi_pegawai; } ?>><?php echo anchor('pekerja/rekapitulasi_pegawai', 'Rekapitulasi Pegawai' ); ?></li>
 				<li <?php if(isset($view_upload)){ echo $view_upload; } ?>><?php echo anchor('pekerja/upload/', 'Upload File' ); ?></li>
 				
 			 </ul>

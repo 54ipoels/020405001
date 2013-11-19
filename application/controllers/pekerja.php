@@ -3815,8 +3815,14 @@ class Pekerja extends Application {
 	function rekapitulasi_pegawai()
 	{
 		#data preparing
+		if($this->input->post('jenis') == NULL){
+			$data['jenispegawai'] = "ALL";
+		} else {
+			$data['jenispegawai'] = $this->input->post('jenis');
+		}
+		
 		$data['page'] = 'Rekapitulasi Pegawai';
-		$data['view_pekerja'] = 'class="this"';
+		$data['view_rekapitulasi_pegawai'] = 'class="this"';
 		$data['page_karyawan'] = 'yes';
 		
 		#calling view
@@ -3825,8 +3831,9 @@ class Pekerja extends Application {
 	
 	function excel_rekapitulasi_pegawai()
 	{
-		$jenis = $this->input->post('jenis');
-		if($jenis != ''){
+		//$jenis = $this->input->post('jenisrekap');
+		$jenis = $this->uri->segment(3);
+		if($jenis != 'ALL'){
 			//pengalokasian memory untuk run this function
 			ini_set("memory_limit","300M");
 			
@@ -3976,9 +3983,130 @@ class Pekerja extends Application {
 			$objWriter->save('php://output');
 		
 		}
+		
 	}
 	
-	
+	function excel_rekapitulasi_jumlah_pegawai_jenis_kelamin()
+	{
+		//$jenis = $this->input->post('jenisrekap');
+		$jenis = $this->uri->segment(3);
+		if($jenis != 'ALL'){
+			//pengalokasian memory untuk run this function
+			ini_set("memory_limit","300M");
+			
+			$datestring = "%Y-%m-%d" ;
+			$time = time();
+			$tanggal = mdate($datestring, $time);
+			
+			$pegawai = $this->kepegawaian->get_data_pegawai_aktif_unlimited($jenis);
+					
+			//load our new PHPExcel library
+			$this->load->library('excel');
+			//activate worksheet number 1
+			$this->excel->setActiveSheetIndex(0);
+			//name the worksheet
+			$this->excel->getActiveSheet()->setTitle("Data Pegawai ");
+			//set cell A1 content with some text
+			//JUDUL KOP
+			$this->excel->getActiveSheet()->setCellValue('A2', 'DATA JUMLAH PEGAWAI '.strtoupper($jenis).' BERDASARKAN JENIS KELAMIN');
+			$this->excel->getActiveSheet()->setCellValue('A3', 'PT. GAPURA ANGKASA CABANG BANDARA NGURAH RAI');
+			$this->excel->getActiveSheet()->setCellValue('A4', 'DENPASAR');
+			
+			$this->excel->getActiveSheet()->setCellValue('F5', 'Update : '.mdate('%d %F %Y',time()));
+			
+			$this->excel->getActiveSheet()->setCellValue('A6', 'NO');
+			$this->excel->getActiveSheet()->setCellValue('B6', 'UNIT');
+			$this->excel->getActiveSheet()->setCellValue('C6', 'LAKI-LAKI');
+			$this->excel->getActiveSheet()->setCellValue('D6', 'PEREMPUAN');
+			$this->excel->getActiveSheet()->setCellValue('E6', 'JUMLAH');
+			$this->excel->getActiveSheet()->setCellValue('F6', 'KET');
+			
+			
+			
+			$i=7;
+			$number=0;
+			$unitl=0;
+			$unitp=0;
+			$totall=0;
+			$totalp=0;
+			
+			$unit="kosong";
+			
+			$nipp = '';
+			foreach ($pegawai as $row_pegawai) :
+			{ 
+				
+				if($row_pegawai['p_unt_kode_unit'] !== $unit){
+					$i++;
+					$number++;
+					$this->excel->getActiveSheet()->setCellValue("A$i", "$number");
+					$this->excel->getActiveSheet()->setCellValue("B$i", strtoupper("$row_pegawai[nama_unit]"));
+					$this->excel->getActiveSheet()->setCellValue("C$i", $unitl);
+					$this->excel->getActiveSheet()->setCellValue("D$i", $unitp);
+					$this->excel->getActiveSheet()->setCellValue("E$i", $unitl+$unitp);
+					$unitl=0;
+					$unitp=0;
+				}else{
+					if($row_pegawai['peg_jns_kelamin']=='L'){
+						$unitl++;
+						$totall++;
+					} else 
+					if($row_pegawai['peg_jns_kelamin']=='P'){
+						$unitp++;
+						$totalp++;
+					}
+				}
+							
+			
+				$unit = $row_pegawai['p_unt_kode_unit'];
+				$sub_unit = $row_pegawai['p_unt_kode_sub_unit'];
+			}endforeach;
+			$this->excel->getActiveSheet()->setCellValue("A$i", "");
+			$this->excel->getActiveSheet()->setCellValue("B$i", "TOTAL");
+			$this->excel->getActiveSheet()->setCellValue("C$i", $totall);
+			$this->excel->getActiveSheet()->setCellValue("D$i", $totalp);
+			$this->excel->getActiveSheet()->setCellValue("E$i", $totall+$totalp);
+			
+			//change the font size
+			$this->excel->getActiveSheet()->getStyle("A2:A4")->getFont()->setSize(14);
+			$this->excel->getActiveSheet()->getStyle("A6:F7")->getFont()->setSize(8);
+			$this->excel->getActiveSheet()->getStyle("A8:F$i")->getFont()->setSize(8);
+			//make the font become bold
+			$this->excel->getActiveSheet()->getStyle('A2:A4')->getFont()->setBold(true);
+			$this->excel->getActiveSheet()->getStyle('A6:F6')->getFont()->setBold(true);
+			$this->excel->getActiveSheet()->mergeCells('A2:F2');
+			$this->excel->getActiveSheet()->mergeCells('A3:F3');
+			$this->excel->getActiveSheet()->mergeCells('A4:F4');
+			$this->excel->getActiveSheet()->getStyle("F5")->getFont()->setSize(7);
+			
+			//set aligment to center for that merged cell (A1 to D1)
+			$this->excel->getActiveSheet()->getStyle('A6:F6')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			$this->excel->getActiveSheet()->getStyle('A6:F6')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+			$this->excel->getActiveSheet()->getStyle('A2:A4')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			$this->excel->getActiveSheet()->getStyle('A2:A4')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+			$this->excel->getActiveSheet()->getStyle('A6:F6')->getAlignment()->setWrapText(true);
+			//Set column widths                                                       
+			$this->excel->getActiveSheet()->getColumnDimension('A')->setWidth(8.54);  
+			$this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(25.54); 
+			$this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(15.54);    
+			$this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(15.54);  
+			$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(15.54); 
+			$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(18.88); 
+			
+			 
+			$filename="Data Rekapitulasi Jumlah Pegawai $jenis Berdasarkan Jenis Kelamin.xls"; //save our workbook as this file name
+			header('Content-Type: application/vnd.ms-excel'); //mime type
+			header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
+			header('Cache-Control: max-age=0'); //no cache
+						 
+			//save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
+			//if you want to save it as .XLSX Excel 2007 format
+			$objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel5');  
+			//force user to download the Excel file without writing it to server's HD
+			$objWriter->save('php://output');
+		
+		}
+	}
 }
 
 /* End of file welcome.php */

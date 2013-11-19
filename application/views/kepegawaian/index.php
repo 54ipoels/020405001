@@ -200,7 +200,6 @@
 		{
 			$this->load->view('kepegawaian/page/rekapitulasi_pegawai');
 		}
-		
 		?>
 		
 	</div>
