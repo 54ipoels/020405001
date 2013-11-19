@@ -81,7 +81,7 @@
                     	<td colspan="3" align="left">
 							<?php 
 								$attr= array('target' => '_blank');
-								echo anchor('diklat/excel_non_stkp','Export to Excel',$attr);
+								echo anchor('diklat/excel_non_stkp/'.$data_unit.'/'.$data_subunit,'Export to Excel',$attr);
 						 	?>
                        	</td>
                         <td colspan="5"><div class="pagination"><?php echo $this->pagination->create_links();?></div></td>

@@ -284,7 +284,6 @@ class diklat extends Application {
 			$sub_unit = $this->input->post('sub_unit');
 		}
 		
-		
 		#pagination config
 		//$config['base_url'] = base_url().'index.php/diklat/sort_non_stkp/'.$stkp_search.'/'.$unit_search; //set the base url for pagination
 		$config['base_url'] = base_url().'index.php/diklat/sort_non_stkp/'.$unit.'/'.$sub_unit; //set the base url for pagination
@@ -301,6 +300,8 @@ class diklat extends Application {
 		$data['pegawai_with_stkp_and_unit'] = $this->pendidikan->search_data_nstkp_with_unit_and_name($config['per_page'],$page,$unit,$sub_unit);		
 		$data['page'] = 'Report Non STKP';
 		$data['page_diklat'] = 'yes';
+		$data['data_unit'] = $unit;
+		$data['data_subunit'] = $sub_unit;
 		
 		//print_r($config);
 		$this->load->view('diklat/index',$data);
@@ -916,8 +917,10 @@ class diklat extends Application {
 		$datestring = "%Y-%m-%d" ;
 		$time = time();
 		$tanggal = mdate($datestring, $time);
-		
-		$pegawai_with_stkp_and_unit = $this->pendidikan->get_data_nstkp_with_unit_and_name_unlimited();
+		$dataunit = $this->uri->segment(3);
+		$datasubunit = $this->uri->segment(4);
+		$pegawai_with_stkp_and_unit = $this->pendidikan->get_data_nstkp_with_unit_and_name_unlimited($dataunit,$datasubunit);
+		//$pegawai_with_stkp_and_unit = $this->pendidikan->get_data_nstkp_with_unit_and_name_unlimited();
 				
 		//load our new PHPExcel library
 		$this->load->library('excel');
@@ -982,7 +985,7 @@ class diklat extends Application {
 		}
 		
 		
-		$pegawai_with_stkp_and_unit = $this->pendidikan->get_data_nstkp_with_unit_and_name_and_status_unlimited();
+		$pegawai_with_stkp_and_unit = $this->pendidikan->get_data_nstkp_with_unit_and_name_and_status_unlimited($dataunit,$datasubunit);
 		
 		$n=0;
 		foreach ($pegawai_with_stkp_and_unit as $row_pegawai) :
