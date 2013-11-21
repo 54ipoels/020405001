@@ -42,7 +42,7 @@
 		</td>
 		<td>
 		<?php
-		echo anchor('pekerja/excel_rekapitulasi_jumlah_pegawai/'.$jenispegawai,"<input type='button'  value='Jumlah SDM' title='Rekapitulasi Jumlah SDM'>",$attribut);
+		//echo anchor('pekerja/excel_rekapitulasi_jumlah_pegawai/'.$jenispegawai,"<input type='button'  value='Jumlah SDM' title='Rekapitulasi Jumlah SDM'>",$attribut);
 		?>
 		</td>
 		<td>

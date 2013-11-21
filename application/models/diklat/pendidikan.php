@@ -564,7 +564,7 @@ class pendidikan extends CI_Model
 		}
 		$query = ("
 			SELECT * FROM v3_peg_non_stkp AS peg_stkp
-			LEFT JOIN (SELECT id_peg_unit, p_unt_nipp, p_unt_kode_unit, p_unt_kode_sub_unit,p_unt_tmt_end FROM v3_peg_unit ORDER BY id_peg_unit DESC ) AS peg_unt ON peg_stkp.p_nstkp_nipp = peg_unt.p_unt_nipp 
+			LEFT JOIN (SELECT id_peg_unit, p_unt_nipp, p_unt_kode_unit, p_unt_kode_sub_unit,p_unt_tmt_end FROM v3_peg_unit ORDER BY p_unt_tmt_start DESC,id_peg_unit DESC ) AS peg_unt ON peg_stkp.p_nstkp_nipp = peg_unt.p_unt_nipp 
 			LEFT JOIN (SELECT peg_nipp,peg_nama FROM v3_pegawai ORDER BY peg_nipp DESC) AS peg
 			ON peg_stkp.p_nstkp_nipp = peg.peg_nipp
 			LEFT JOIN (SELECT * FROM unit ORDER BY kode_unit DESC) AS unit
