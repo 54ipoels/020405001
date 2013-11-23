@@ -585,6 +585,7 @@ class Pekerja extends Application {
 					'p_jbt_nipp' 		=> trim($this->input->post('nipp')),
 					'p_jbt_jabatan' 	=> $this->input->post('jabatan'),
 					'p_jbt_unit'		=> $this->input->post('unit'),
+					'p_jbt_tmt_start'	=> mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tmt')))),
 					//'p_jbt_update_on'	=> $tanggal,
 					'p_jbt_update_by'	=> 'admin'
 				);
@@ -617,7 +618,7 @@ class Pekerja extends Application {
 					'p_tmt_nipp' 			=> trim($this->input->post('nipp')),
 					'p_tmt_status'			=> $this->input->post('stp'),
 					'p_tmt_provider'		=> $provider,
-					'p_tmt_tmt'				=> mdate($datestring, strtotime($this->input->post('tmt'))),
+					'p_tmt_tmt'				=> mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tmt')))),
 					//'p_tmt_update_on'		=> $tanggal,
 					'p_tmt_update_by'		=> 'admin'
 				);
@@ -628,7 +629,7 @@ class Pekerja extends Application {
 					'p_unt_nipp' 			=> trim($this->input->post('nipp')),
 					'p_unt_kode_unit'		=> $this->input->post('unit'),
 					'p_unt_kode_sub_unit'	=> $this->input->post('sub_unit'),
-					'p_unt_tmt_start'				=> mdate($datestring, strtotime($this->input->post('tmt'))),
+					'p_unt_tmt_start'				=> mdate($datestring, strtotime(str_replace('/','-',$this->input->post('tmt')))),
 					//'p_unt_update_on'		=> $tanggal,
 					'p_unt_update_by'		=> 'admin'
 				);
@@ -4137,22 +4138,13 @@ class Pekerja extends Application {
 			
 			$this->excel->getActiveSheet()->setCellValue('M5', 'Update : '.mdate('%d %F %Y',time()));
 			
-			$this->excel->getActiveSheet()->setCellValue('A6', 'NO URUT');
-			$this->excel->getActiveSheet()->setCellValue('B6', 'NO JLH');
-			$this->excel->getActiveSheet()->setCellValue('C6', 'NO UNIT');
-			$this->excel->getActiveSheet()->setCellValue('D6', 'NAMA PEGAWAI');
-			$this->excel->getActiveSheet()->setCellValue('E6', 'NIPP');
-			$this->excel->getActiveSheet()->setCellValue('F6', 'GRADE');
-			$this->excel->getActiveSheet()->setCellValue('G6', 'M.K.A');
-			$this->excel->getActiveSheet()->setCellValue('H6', 'T.M.T GA/GP');
-			$this->excel->getActiveSheet()->setCellValue('I6', 'JENIS KELAMIN');
-			$this->excel->getActiveSheet()->setCellValue('J6', 'TGL LAHIR');
-			$this->excel->getActiveSheet()->setCellValue('K6', 'UMUR');
-			$this->excel->getActiveSheet()->setCellValue('L6', 'T.M.T MUTASI');
-			$this->excel->getActiveSheet()->setCellValue('M6', 'JABATAN');
-			$this->excel->getActiveSheet()->setCellValue('N6', 'KET');
-			
-			
+			$this->excel->getActiveSheet()->setCellValue('A6', 'NO');
+			$this->excel->getActiveSheet()->setCellValue('B6', 'ALOKASI UNIT');
+			$this->excel->getActiveSheet()->setCellValue('C6', 'TETAP');
+			$this->excel->getActiveSheet()->setCellValue('D6', 'PKWT');
+			$this->excel->getActiveSheet()->setCellValue('E6', 'MPP');
+			$this->excel->getActiveSheet()->setCellValue('F6', 'JUMLAH');
+			$this->excel->getActiveSheet()->setCellValue('G6', 'KETERANGAN');
 			
 			$i=7;
 			$number=0;
