@@ -34,6 +34,7 @@
 	<?php  if($jenispegawai != "ALL"){ ?>
 	<table>
 	<tr>
+	<?php if($jenispegawai == 'Tetap' ){ ?>
 		<td>
 		<?php
 		$attribut="target='_blank'";
@@ -54,6 +55,28 @@
 		echo anchor('pekerja/excel_rekapitulasi_jumlah_pegawai_jenis_kelamin/'.$jenispegawai,"<input type='button'  value='Jumlah SDM II' title='Rekapitulasi Jumlah SDM Berdasarkan Jenis Kelamin'>",$attribut);
 		?>
 		</td>
+	<?php } else { ?>
+		<td>
+		<?php
+		$attribut="target='_blank'";
+		echo anchor('pekerja/excel_rekapitulasi_pegawai_kontrak/'.$jenispegawai,"  <input type='button'  value='Data Pegawai' title='Excel Rekapitulasi Pegawai'>",$attribut);
+		?>
+		</td>
+		<td>
+		<?php
+		echo anchor('pekerja/excel_kekuatan_sdm_kontrak/'.$jenispegawai,"<input type='button'  value='Kekuatan SDM' title='Rekapitulasi Kekuatan SDM'>",$attribut);?>
+		</td><td>
+		<?php
+		//echo anchor('pekerja/excel_rekapitulasi_jumlah_pegawai/'.$jenispegawai,"<input type='button'  value='Jumlah SDM' title='Rekapitulasi Jumlah SDM'>",$attribut);
+		?>
+		</td>
+		<td>
+		<?php
+		echo anchor('pekerja/excel_rekapitulasi_jumlah_pegawai_kontrak_jenis_kelamin/'.$jenispegawai,"<input type='button'  value='Jumlah SDM II' title='Rekapitulasi Jumlah SDM Berdasarkan Jenis Kelamin'>",$attribut);
+		?>
+		</td>
+	
+	<?php } ?>
 	</tr>
 	</table>
 	<?php 	}	 ?>
