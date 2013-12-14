@@ -1515,6 +1515,10 @@ class kepegawaian extends CI_Model
 	#rekapitulasi pegawai
 	function get_data_pegawai_aktif_unlimited($jenis)
 	{
+		$where = '';
+		if($jenis == 'Tetap'){
+			$where = " OR p_tmt_status =  '$jenis' "; 
+		}
 		
 		$query = "	SELECT * FROM v3_pegawai a 
 					LEFT JOIN ( SELECT * FROM v3_peg_unit ORDER BY p_unt_tmt_start DESC, id_peg_unit DESC ) AS unit ON a.peg_nipp = unit.p_unt_nipp 
@@ -1525,7 +1529,8 @@ class kepegawaian extends CI_Model
 					LEFT JOIN v3_sub_unit d ON d.su_kode_sub_unit = unit.p_unt_kode_sub_unit 
 					LEFT JOIN v3_subunit_team e ON e.sut_kode_team = unit.p_unt_team 
 					WHERE b.id_peg_tmt = ( SELECT MAX( k.id_peg_tmt ) FROM v3_peg_tmt k WHERE k.p_tmt_nipp = a.peg_nipp ) 
-					AND p_tmt_status =  '$jenis' 
+					AND p_tmt_status =  '$jenis'
+					$where 
 					AND p_tmt_end =  '0000-00-00' 
 					GROUP BY peg_nipp 
 					ORDER BY c.level,d.su_level,e.sut_level,a.peg_nipp DESC 
