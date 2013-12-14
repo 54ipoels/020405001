@@ -143,8 +143,16 @@ class kepegawaian extends CI_Model
 			ON peg.peg_nipp = alm.p_al_nipp
 			LEFT JOIN (SELECT p_ps_nipp, p_ps_nama, p_ps_tmpt_lahir, p_ps_tgl_lahir FROM v3_peg_pasangan) AS ps
 			ON peg.peg_nipp = ps.p_ps_nipp
+			LEFT JOIN (SELECT * FROM v3_peg_tmt ORDER BY p_tmt_tmt DESC) AS tmt
+			ON peg.peg_nipp = tmt.p_tmt_nipp
+			LEFT JOIN (SELECT * FROM v3_peg_unit ORDER BY p_unt_tmt_start DESC) AS pu
+			ON peg.peg_nipp = pu.p_unt_nipp  
+			LEFT JOIN unit
+			ON pu.p_unt_kode_unit = unit.kode_unit
+			WHERE tmt.p_tmt_end = '0000-00-00'
+			AND pu.p_unt_tmt_end = '0000-00-00'
 			GROUP BY id_pegawai
-			ORDER BY peg.peg_nipp ASC
+			ORDER BY unit.level ASC, peg.peg_nipp ASC
 		");
 		
 		/*$this->db->select('*');

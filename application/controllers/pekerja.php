@@ -3016,7 +3016,7 @@ class Pekerja extends Application {
 		
 		$i=2;
 		$number=0;
-		
+		$kodeunit = "";
 		$nipp = '';
 		foreach ($sdm as $row_sdm) :
 		{ 
@@ -3042,7 +3042,14 @@ class Pekerja extends Application {
 			$i++;
 			$number++;
 			$merge_start = $i;
-						
+			
+			if($kodeunit != $row_sdm['kode_unit']){
+				$this->excel->getActiveSheet()->setCellValue("B$i", " $row_sdm[nama_unit] ");
+				$this->excel->getActiveSheet()->getStyle("B$i")->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('ffff00');
+				$this->excel->getActiveSheet()->getStyle("B$i")->getFont()->setBold(true);
+				$this->excel->getActiveSheet()->mergeCells("B$i:L$i");
+				$i=$i+2;	
+			}	
 			//masukkan data ke tabel excel
 			//data pegawai
 			$this->excel->getActiveSheet()->setCellValue("A$i", "$number");
@@ -3055,7 +3062,7 @@ class Pekerja extends Application {
 			$this->excel->getActiveSheet()->setCellValue("H$i", strtoupper("PEGAWAI"));
 			$this->excel->getActiveSheet()->setCellValue("I$i", strtoupper("$row_sdm[p_stk_status_keluarga]"));
 			$this->excel->getActiveSheet()->setCellValue("J$i", strtoupper(" $row_sdm[p_al_jalan] $row_sdm[p_al_kelurahan] $row_sdm[p_al_kecamatan] $row_sdm[p_al_kabupaten] $row_sdm[p_al_provinsi]"));
-			$this->excel->getActiveSheet()->setCellValue("K$i", strtoupper("$row_sdm[p_al_no_telp]"));
+			$this->excel->getActiveSheet()->setCellValue("K$i", strtoupper("`$row_sdm[p_al_no_telp]"));
 			$this->excel->getActiveSheet()->setCellValue("L$i", strtoupper("$row_sdm[p_ag_agama]"));
 			//data pasangan
 			$i++;
@@ -3083,6 +3090,7 @@ class Pekerja extends Application {
 				$this->excel->getActiveSheet()->setCellValue("L$i", strtoupper("$row_sdm[p_ag_agama]"));
 				$num_anak++;
 			} 
+			$kodeunit = $row_sdm['kode_unit'];
 		$i++;
 		}endforeach;
 		
@@ -3130,8 +3138,6 @@ class Pekerja extends Application {
 		$datestring = "%Y" ;
 		$time = time();
 		$tanggal = mdate($datestring, $time);
-		
-		$sdm = $this->kepegawaian->get_data_sdm_unlimited();
 						
 		//load our new PHPExcel library
 		$this->load->library('word');
