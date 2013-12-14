@@ -3197,7 +3197,7 @@ class Pekerja extends Application {
 		{
 			if($row_tmt['p_tmt_tmt'] != "0000-00-00")
 			{
-				$peg_tmt = strtotime('%d %F %Y',strtotime($row_tmt['p_tmt_tmt']));
+				$peg_tmt = mdate('%d-%m-%Y',strtotime($row_tmt['p_tmt_tmt']));
 			}
 		}
 		foreach($data_jabatan as $row_jabatan)
@@ -3255,7 +3255,7 @@ class Pekerja extends Application {
 		$table1->addRow();
 		$table1->addCell(2000, $styleCell)->addText('T.M.T');
 		$table1->addCell(200, $styleCell)->addText(':');
-		$table1->addCell(4400, $styleCell)->addText(strtoupper($peg_tmt));
+		$table1->addCell(4400, $styleCell)->addText($peg_tmt);
 		
 		$table1->addRow();
 		$table1->addCell(2000, $styleCell)->addText('PANGKAT / GOLONGAN');
@@ -3535,9 +3535,9 @@ class Pekerja extends Application {
 	
 		// Save File
 		$objWriter = PHPWord_IOFactory::createWriter($PHPWord, 'Word2007');
-		$objWriter->save('TextXXXX.docx');
+		$objWriter->save("$peg_nipp.docx");
 		
-		$filename="TextXXXX.docx"; //save our workbook as this file name
+		$filename="$peg_nipp.docx"; //save our workbook as this file name
 		header('Content-Type: application/vnd.ms-word');
 		header('Content-Disposition: attachment;filename="'.$filename.'"');
 		header('Cache-Control: max-age=0');

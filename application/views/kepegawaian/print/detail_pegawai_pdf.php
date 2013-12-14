@@ -137,7 +137,7 @@ table.withborder td{
 		<tr>
 			<td>T.M.T</td>
 			<td>:</td>
-			<td><?php echo $peg_tmt;?></td>
+			<td><?php echo mdate('%d-%m-%Y',strtotime($peg_tmt));?></td>
 		</tr>
 		<tr>
 			<td>PANGKAT/GOLONGAN</td>
