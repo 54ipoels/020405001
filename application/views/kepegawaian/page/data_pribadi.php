@@ -146,15 +146,15 @@
 					<tr>
 						<td width="25%" rowspan="11"><img src="<?php echo base_url()?>pegawai/foto/<?php echo $row_pegawai['peg_nipp']; ?>.jpg" width="220px" ></td>
 						<td>NIPP</td><td><?php echo $row_pegawai['peg_nipp']; ?></td>
-						<tr><td>Nama</td><td><?php echo $row_pegawai['peg_nama']; ?></td></tr>
-						<tr><td>Tempat / Tanggal Lahir</td><td><?php echo $row_pegawai['peg_tmpt_lahir'].' / '.$tgl_lahir; ?></td></tr>
-						<tr><td>Jenis Kelamin</td><td><?php echo $kelamin; ?></td></tr>
-						<tr><td>Golongan Darah</td><td><?php echo $gol_darah; ?></td></tr>
-						<tr><td>Agama</td><td><?php echo $agama; ?></td></tr>
-						<tr><td>Tinggi</td><td><?php echo $tinggi.' cm'; ?></td></tr>
-						<tr><td>Berat</td><td><?php echo $berat.' kg'; ?></td></tr>
-						<tr><td>Nomor Telp</td><td><?php echo $telp; ?></td></tr>
-						<tr><td>Status Keluarga</td><td><?php echo $row_stk['p_stk_status_keluarga']; ?></td></tr>
+						<tr><td>NAMA</td><td><?php echo strtoupper($row_pegawai['peg_nama']); ?></td></tr>
+						<tr><td>TEMPAT / TANGGAL LAHIR</td><td><?php echo strtoupper($row_pegawai['peg_tmpt_lahir']).' / '.$tgl_lahir; ?></td></tr>
+						<tr><td>JENIS KELAMIN</td><td><?php echo strtoupper($kelamin); ?></td></tr>
+						<tr><td>GOLONGAN DARAH</td><td><?php echo strtoupper($gol_darah); ?></td></tr>
+						<tr><td>AGAMA</td><td><?php echo strtoupper($agama); ?></td></tr>
+						<tr><td>TINGGI</td><td><?php echo $tinggi.' cm'; ?></td></tr>
+						<tr><td>BERAT</td><td><?php echo $berat.' kg'; ?></td></tr>
+						<tr><td>NOMOR TELP</td><td><?php echo $telp; ?></td></tr>
+						<tr><td>STATUS KELUARGA</td><td><?php echo strtoupper($row_stk['p_stk_status_keluarga']); ?></td></tr>
                     </tr> 
                 </tbody>
             </table>
@@ -168,7 +168,7 @@
 if( $tmt_reason==""){?>
 <div class="oneThree">
 <div class="widget">
-<div class="title"><img src="<?php echo base_url()?>images/icons/dark/frames.png" alt="" class="titleIcon" /><h6>Delete Pegawai</h6></div>
+<div class="title"><img src="<?php echo base_url()?>images/icons/dark/frames.png" alt="" class="titleIcon" /><h6>DELETE PEGAWAI</h6></div>
 <?php echo form_open('pekerja/submit_delete_pegawai/'.$row_pegawai['peg_nipp']);?>
 <table cellpadding="0" cellspacing="0" width="100%" class="sTable">
 	<tr><td>Reason</td>
@@ -192,7 +192,7 @@ if( $tmt_reason==""){?>
 	?>
 	<div style="color:red; size:1pt"> Jika Pindah Cabang Mohon Isi Nama Cabang</div>
 	</td></tr>
-	<tr><td>Terhitung Mulai</td>
+	<tr><td>TERHITUNG MULAI</td>
 	<td><?php 
 	$tanggal = array(
 		'name' => 'tanggal',
@@ -200,7 +200,7 @@ if( $tmt_reason==""){?>
 		'class'=> 'maskDate'
 	);
 	echo form_input($tanggal)?></td></tr>
-	<tr><td>Keterangan</td>
+	<tr><td>KETERANGAN</td>
 	<td><?php 
 	$ket = array(
 		'name' => 'ket',
@@ -221,10 +221,10 @@ if( $tmt_reason==""){?>
 <?php } else {?>
 <div class="oneThree">
 <div class="widget">
-<div class="title"><img src="<?php echo base_url()?>images/icons/dark/frames.png" alt="" class="titleIcon" /><h6>Aktifkan Pegawai</h6></div>
+<div class="title"><img src="<?php echo base_url()?>images/icons/dark/frames.png" alt="" class="titleIcon" /><h6>AKTIFKAN PEGAWAI</h6></div>
 <?php echo form_open('pekerja/submit_aktifkan_pegawai/'.$row_pegawai['peg_nipp']);?>
 <table cellpadding="0" cellspacing="0" width="100%" class="sTable">
-	<tr><td>Terhitung Mulai</td>
+	<tr><td>TERHITUNG MULAI</td>
 	<td><?php 
 	$tanggal = array(
 		'name' => 'tanggal',
@@ -249,19 +249,19 @@ if( $tmt_reason==""){?>
 <?php } ?>
 
 <div class="twoOne2">
-	<div class="widget rightTabs" style="width:1020px;"> 
+	<div class="widget rightTabs" style="width:1150px;"> 
             <div class="title"><img src="<?php echo base_url()?>images/icons/dark/frames.png" alt="" class="titleIcon" /></div>     
             <ul class="tabs">
-                <li><a href="#tab1">Alamat</a></li>
-                <li><a href="#tab2">Pendidikan</a></li>
-				<li><a href="#tab3">Jabatan</a></li>
-				<li><a href="#tab4">Pasangan</a></li>
-				<li><a href="#tab8">Data Anak</a></li>
-				<li><a href="#tab5">Data Orang Tua</a></li>
-				<li><a href="#tab6">Data Mertua</a></li>
-        		<li><a href="#tab7">Riwayat Jabatan</a></li>
-				<li><a href="#tab9">Riwayat Golongan</a></li>
-            	<li><a href="#tab10">Sanksi Disiplin</a></li>
+                <li><a href="#tab1">ALAMAT</a></li>
+                <li><a href="#tab2">PENDIDIKAN</a></li>
+				<li><a href="#tab3">JABATAN</a></li>
+				<li><a href="#tab4">PASANGAN</a></li>
+				<li><a href="#tab8">DATA ANAK</a></li>
+				<li><a href="#tab5">DATA ORANG TUA</a></li>
+				<li><a href="#tab6">DATA MERTUA</a></li>
+        		<li><a href="#tab7">RIWAYAT JABATAN</a></li>
+				<li><a href="#tab9">RIWAYAT GOLONGAN</a></li>
+            	<li><a href="#tab10">SANKSI DISIPLIN</a></li>
             </ul>
             <div class="tab_container">
                 <div id="tab1" class="tab_content np">
@@ -273,12 +273,12 @@ if( $tmt_reason==""){?>
 							?></p></td></tr>
 						</tfoot>
                         <tbody>
-								<tr><td width="30%">Jalan</td><td><?php echo $jalan;?></td></tr>
-                                <tr><td>Kelurahan</td><td><?php echo $kelurahan;?></td></tr>
-								<tr><td>Kecamatan</td><td><?php echo $kecamatan;?></td></tr>
-								<tr><td>Kabupaten</td><td><?php echo $kabupaten;?></td></tr>
-								<tr><td>Provinsi</td><td><?php echo $provinsi;?></td></tr>
-                            	<tr><td>Email</td><td><?php echo $email;?></td></tr>
+								<tr><td width="30%">JALAN</td><td><?php echo strtoupper($jalan);?></td></tr>
+                                <tr><td>KELURAHAN</td><td><?php echo strtoupper($kelurahan);?></td></tr>
+								<tr><td>KECAMATAN</td><td><?php echo strtoupper($kecamatan);?></td></tr>
+								<tr><td>KABUPATEN</td><td><?php echo strtoupper($kabupaten);?></td></tr>
+								<tr><td>PROVINSI</td><td><?php echo strtoupper($provinsi);?></td></tr>
+                            	<tr><td>EMAIL</td><td><?php echo strtoupper($email);?></td></tr>
                             
                         </tbody>
                     </table>
@@ -294,14 +294,14 @@ if( $tmt_reason==""){?>
 							}?></p></td></tr>
 						</tfoot>
                         <tbody>
-                            <tr><td width="30%">Pendidikan Terakhir</td><td><?php echo $row_pdd['p_pdd_tingkat'];?></td></tr>
-                            <tr><td>Lembaga Pendidikan</td><td><?php echo $row_pdd['p_pdd_lp'];?></td></tr>
-							<tr><td>Tahun</td><td><?php echo $row_pdd['p_pdd_masuk'].' s/d '.$row_pdd['p_pdd_keluar'];?></td></tr>
+                            <tr><td width="30%">PENDIDIKAN TERAKHIR</td><td><?php echo strtoupper($row_pdd['p_pdd_tingkat']);?></td></tr>
+                            <tr><td>LEMBAGA PENDIDIKAN</td><td><?php echo strtoupper($row_pdd['p_pdd_lp']);?></td></tr>
+							<tr><td>TAHUN</td><td><?php echo $row_pdd['p_pdd_masuk'].' s/d '.$row_pdd['p_pdd_keluar'];?></td></tr>
 							<?php if ($jumlah_bahasa == 0)
 							{
 								$jumlah_bahasa = 1;
 							} ?>
-							<tr><td rowspan=<?php echo $jumlah_bahasa ?>>Bahasa yang dikuasai</td>
+							<tr><td rowspan=<?php echo $jumlah_bahasa ?>>BAHASA YANG DIKUASAI</td>
 							<?php 
 							$jumlah_bhs = 1;
 							if ($data_bahasa == NULL)
@@ -312,10 +312,10 @@ if( $tmt_reason==""){?>
 							{ 	
 							if ($jumlah_bhs == 1)
 							{?>
-								<td><?php echo $row_bhs['p_bhs_bahasa'];?></td>
+								<td><?php echo strtoupper($row_bhs['p_bhs_bahasa']);?></td>
 							<?php } else {
 							?>
-								<tr><td><?php echo $row_bhs['p_bhs_bahasa'];?></td></tr>
+								<tr><td><?php echo strtoupper($row_bhs['p_bhs_bahasa']);?></td></tr>
 							<?php }
 							$jumlah_bhs++;
 							}endforeach; ?>
@@ -339,20 +339,20 @@ if( $tmt_reason==""){?>
 								</p></td></tr>
 						</tfoot>
                         <tbody>
-                            <tr><td>T.M.T Kerja</td><td><?php echo $tmt;
+                            <tr><td>T.M.T KERJA</td><td><?php echo $tmt;
 										echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 										//echo anchor('pekerja/add_tmt_pegawai/'.$row_pegawai['peg_nipp'],'[edit]');?></td></tr>
-							<tr><td width="30%">Jabatan Terakhir</td><td><?php echo $jabatan;?></td></tr>
-                            <tr><td>T.M.T Jabatan</td><td><?php echo $tmt_jabatan;  ?></td></tr>
-							<tr><td>Unit</td><td><?php echo $kode_unit;?></td></tr>
-							<tr><td>Sub Unit</td><td><?php echo $sub_unit;?></td></tr>
-							<tr><td>Team</td><td><?php echo $team;?></td></tr>
-							<tr><td>Grade</td><td><?php echo $grade?></td></tr>
+							<tr><td width="30%">JABATAN TERAKHIR</td><td><?php echo strtoupper($jabatan);?></td></tr>
+                            <tr><td>T.M.T JABATAN</td><td><?php echo strtoupper($tmt_jabatan);  ?></td></tr>
+							<tr><td>UNIT</td><td><?php echo strtoupper($kode_unit);?></td></tr>
+							<tr><td>SUB UNIT</td><td><?php echo strtoupper($sub_unit);?></td></tr>
+							<tr><td>TEAM</td><td><?php echo strtoupper($team);?></td></tr>
+							<tr><td>GRADE</td><td><?php echo strtoupper($grade);?></td></tr>
 							<?php if($tmt_reason==""){?>
-							<tr><td>Status Pegawai</td><td><?php echo $status;?></td></tr>
-							<tr><td>Provider</td><td><?php echo $provider?></td></tr>
+							<tr><td>STATUS PEGAWAI</td><td><?php echo strtoupper($status);?></td></tr>
+							<tr><td>PROVIDER</td><td><?php echo strtoupper($provider);?></td></tr>
 							<?php }else{?>
-							<tr><td colspan="2"><?php echo $tmt_reason;?></td></tr>
+							<tr><td colspan="2"><?php echo strtoupper($tmt_reason);?></td></tr>
 							<?php }?>
 							
                         </tbody>
@@ -396,15 +396,15 @@ if( $tmt_reason==""){?>
 							}?></p></td></tr>
 						</tfoot>
                         <tbody>
-                            <tr><td width="30%">Nama</td><td><?php echo $row_pasangan['p_ps_nama'];?></td></tr>
-                            <tr><td>Tempat / Tanggal Lahir</td><td><?php echo $row_pasangan['p_ps_tmpt_lahir'].' / '.$ps_tgl_lahir;?></td></tr>
-							<tr><td>Tanggal Meninggal</td><td><?php echo $ps_tgl_meninggal;?></td></tr>
-							<tr><td>Alamat</td><td><?php echo $row_pasangan['p_ps_alamat'];?></td></tr>
-							<tr><td>Pekerjaan</td><td><?php echo $row_pasangan['p_ps_pekerjaan'];?></td></tr>
-                        	<tr><td>Agama</td><td><?php echo $row_pasangan['p_ps_agama'];?></td></tr>
-							<tr><td>Jenis Kelamin</td><td>
-								<?php 	if($row_pasangan['p_ps_jns_kelamin']=='L'){$jk='Laki-Laki';}
-										else if($row_pasangan['p_ps_jns_kelamin']=='P'){$jk='Perempuan';}
+                            <tr><td width="30%">NAMA</td><td><?php echo strtoupper($row_pasangan['p_ps_nama']);?></td></tr>
+                            <tr><td>TEMPAT / TANGGAL LAHIR</td><td><?php echo strtoupper($row_pasangan['p_ps_tmpt_lahir']).' / '.$ps_tgl_lahir;?></td></tr>
+							<tr><td>TANGGAL MENINGGAL</td><td><?php echo strtoupper($ps_tgl_meninggal);?></td></tr>
+							<tr><td>ALAMAT</td><td><?php echo strtoupper($row_pasangan['p_ps_alamat']);?></td></tr>
+							<tr><td>PEKERJAAN</td><td><?php echo strtoupper($row_pasangan['p_ps_pekerjaan']);?></td></tr>
+                        	<tr><td>AGAMA</td><td><?php echo strtoupper($row_pasangan['p_ps_agama']);?></td></tr>
+							<tr><td>JENIS KELAMIN</td><td>
+								<?php 	if($row_pasangan['p_ps_jns_kelamin']=='L'){$jk='LAKI-LAKI';}
+										else if($row_pasangan['p_ps_jns_kelamin']=='P'){$jk='PEREMPUAN';}
 										else {$jk='-';}
 										echo $jk;
 								?>
@@ -457,17 +457,17 @@ if( $tmt_reason==""){?>
 							{ echo anchor('pekerja/edit_ortu_pegawai/'.$row_pegawai['peg_nipp'],'[edit]'); }?></p></td></tr>
 						</tfoot>
                         <tbody>
-                            <tr><td width="30%">Nama Ayah</td><td><?php echo $row_ayah['p_ay_nama']; ?></td></tr>
-                            <tr><td>Tempat / Tanggal Lahir</td><td><?php echo $row_ayah['p_ay_tmpt_lahir'].' / '.$ay_tgl_lahir; ?></td></tr>
-							<tr><td>Tanggal Meninggal</td><td><?php echo $ay_tgl_meninggal; ?></td></tr>
-							<tr><td>Alamat</td><td><?php echo $row_ayah['p_ay_alamat']; ?></td></tr>
-							<tr><td>Pekerjaan</td><td><?php echo $row_ayah['p_ay_pekerjaan']; ?></td></tr>
+                            <tr><td width="30%">NAMA AYAH</td><td><?php echo strtoupper($row_ayah['p_ay_nama']); ?></td></tr>
+                            <tr><td>TEMPAT / TANGGAL LAHIR</td><td><?php echo strtoupper($row_ayah['p_ay_tmpt_lahir']).' / '.$ay_tgl_lahir; ?></td></tr>
+							<tr><td>TANGGAL MENINGGAL</td><td><?php echo $ay_tgl_meninggal; ?></td></tr>
+							<tr><td>ALAMAT</td><td><?php echo strtoupper($row_ayah['p_ay_alamat']); ?></td></tr>
+							<tr><td>PEKERJAAN</td><td><?php echo strtoupper($row_ayah['p_ay_pekerjaan']); ?></td></tr>
 							<tr><td colspan=2></td></tr>
-							<tr><td width="30%">Nama Ibu</td><td><?php echo $row_ibu['p_ibu_nama']; ?></td></tr>
-                            <tr><td>Tempat / Tanggal Lahir</td><td><?php echo $row_ibu['p_ibu_tmpt_lahir'].' / '.$ibu_tgl_lahir; ?></td></tr>
-							<tr><td>Tanggal Meninggal</td><td><?php echo $ibu_tgl_meninggal; ?></td></tr>
-							<tr><td>Alamat</td><td><?php echo $row_ibu['p_ibu_alamat']; ?></td></tr>
-							<tr><td>Pekerjaan</td><td><?php echo $row_ibu['p_ibu_pekerjaan']; ?></td></tr>
+							<tr><td width="30%">NAMA IBU</td><td><?php echo strtoupper($row_ibu['p_ibu_nama']); ?></td></tr>
+                            <tr><td>TEMPAT / TANGGAL LAHIR</td><td><?php echo strtoupper($row_ibu['p_ibu_tmpt_lahir']).' / '.$ibu_tgl_lahir; ?></td></tr>
+							<tr><td>TANGGAL MENINGGAL</td><td><?php echo $ibu_tgl_meninggal; ?></td></tr>
+							<tr><td>ALAMAT</td><td><?php echo strtoupper($row_ibu['p_ibu_alamat']); ?></td></tr>
+							<tr><td>PEKERJAAN</td><td><?php echo strtoupper($row_ibu['p_ibu_pekerjaan']); ?></td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -519,17 +519,17 @@ if( $tmt_reason==""){?>
 							}?></p></td></tr>
 						</tfoot>
                         <tbody>
-                            <tr><td width="30%">Nama Ayah Mertua</td><td><?php echo $row_m_ayah['p_may_nama']; ?></td></tr>
-                            <tr><td>Tempat / Tanggal Lahir</td><td><?php echo $row_m_ayah['p_may_tmpt_lahir'].' / '.$m_ay_tgl_lahir; ?></td></tr>
-							<tr><td>Tanggal Meninggal</td><td><?php echo $m_ay_tgl_meninggal; ?></td></tr>
-							<tr><td>Alamat</td><td><?php echo $row_m_ayah['p_may_alamat']; ?></td></tr>
-							<tr><td>Pekerjaan</td><td><?php echo $row_m_ayah['p_may_pekerjaan']; ?></td></tr>
+                            <tr><td width="30%">NAMA AYAH MERTUA</td><td><?php echo $row_m_ayah['p_may_nama']; ?></td></tr>
+                            <tr><td>TEMPAT / TANGGAL LAHIR</td><td><?php echo $row_m_ayah['p_may_tmpt_lahir'].' / '.$m_ay_tgl_lahir; ?></td></tr>
+							<tr><td>TANGGAL MENINGGAL</td><td><?php echo $m_ay_tgl_meninggal; ?></td></tr>
+							<tr><td>ALAMAT</td><td><?php echo $row_m_ayah['p_may_alamat']; ?></td></tr>
+							<tr><td>PEKERJAAN</td><td><?php echo $row_m_ayah['p_may_pekerjaan']; ?></td></tr>
 							<tr><td colspan=2></td></tr>
-							<tr><td width="30%">Nama Ibu Mertua</td><td><?php echo $row_m_ibu['p_mib_nama']; ?></td></tr>
-                            <tr><td>Tempat / Tanggal Lahir</td><td><?php echo $row_m_ibu['p_mib_tmpt_lahir'].' / '.$m_ibu_tgl_lahir; ?></td></tr>
-							<tr><td>Tanggal Meninggal</td><td><?php echo $m_ibu_tgl_meninggal; ?></td></tr>
-							<tr><td>Alamat</td><td><?php echo $row_m_ibu['p_mib_alamat']; ?></td></tr>
-							<tr><td>Pekerjaan</td><td><?php echo $row_m_ibu['p_mib_pekerjaan']; ?></td></tr>
+							<tr><td width="30%">NAMA IBU MERTUA</td><td><?php echo strtoupper($row_m_ibu['p_mib_nama']); ?></td></tr>
+                            <tr><td>TEMPAT / TANGGAL LAHIR</td><td><?php echo strtoupper($row_m_ibu['p_mib_tmpt_lahir']).' / '.$m_ibu_tgl_lahir; ?></td></tr>
+							<tr><td>TANGGAL MENINGGAL</td><td><?php echo strtoupper($m_ibu_tgl_meninggal); ?></td></tr>
+							<tr><td>ALAMAT</td><td><?php echo strtoupper($row_m_ibu['p_mib_alamat']); ?></td></tr>
+							<tr><td>PEKERJAAN</td><td><?php echo strtoupper($row_m_ibu['p_mib_pekerjaan']); ?></td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -538,12 +538,12 @@ if( $tmt_reason==""){?>
                     <table cellpadding="0" cellspacing="0" width="100%" class="sTable">
                         <thead>
 							<tr>
-								<td>Jabatan</td>
-								<td>Unit Kerja</td>
-								<td>Surat Keputusan</td>
+								<td>JABATAN</td>
+								<td>UNIT KERJA</td>
+								<td>SURAT KEPUTUSAN</td>
 								<td>TMT</td>
-								<td>Keterangan</td>
-								<td>Action</td>
+								<td>KETERANGAN</td>
+								<td>ACTION</td>
 							</tr>
 						</thead>
 						<tfoot><tr><td colspan="6" align="right"><?php echo anchor('pekerja/add_riwayat_jabatan/'.$row_pegawai['peg_nipp'],'[add]');?></td></tr></tfoot>
@@ -591,17 +591,17 @@ if( $tmt_reason==""){?>
 							if($row_anak['peg_ank_tgl_lahir']=='0000-00-00'){$tgl_lahir_anak="00-00-0000";}
 							else { $tgl_lahir_anak = mdate($datestring,strtotime($row_anak['peg_ank_tgl_lahir']));}
 							?>
-                            <tr><td width="5%" rowspan=7><?php echo $number ?></td><td width="25%">Nama</td><td><?php echo $row_anak['peg_ank_nama']; ?></td></tr>
-                            <tr><td>Tempat / Tanggal Lahir</td><td><?php echo $row_anak['peg_ank_tempat_lahir'].' / '.$tgl_lahir_anak; ?></td></tr>
-							<tr><td>Pendidikan</td><td><?php echo $row_anak['peg_ank_pendidikan']; ?></td></tr>
-							<tr><td>Jenis Kelamin</td><td><?php 
+                            <tr><td width="5%" rowspan=7><?php echo $number ?></td><td width="25%">NAMA</td><td><?php echo strtoupper($row_anak['peg_ank_nama']); ?></td></tr>
+                            <tr><td>TEMPAT / TANGGAL LAHIR</td><td><?php echo strtoupper($row_anak['peg_ank_tempat_lahir']).' / '.$tgl_lahir_anak; ?></td></tr>
+							<tr><td>PENDIDIKAN</td><td><?php echo strtoupper($row_anak['peg_ank_pendidikan']); ?></td></tr>
+							<tr><td>JENIS KELAMIN</td><td><?php 
 										if($row_anak['peg_ank_jns_kelamin']=='L'){$jk='Laki-Laki';}
 										else if($row_anak['peg_ank_jns_kelamin']=='P'){$jk='Perempuan';}
 										else {$jk='-';}
-										echo $jk;
+										echo strtoupper($jk);
 									?></td></tr>
-							<tr><td>Agama</td><td><?php echo $row_anak['peg_ank_agama']; ?></td></tr>
-							<tr><td>Status</td><td><?php echo $row_anak['peg_ank_status']; ?></td></tr>
+							<tr><td>AGAMA</td><td><?php echo strtoupper($row_anak['peg_ank_agama']); ?></td></tr>
+							<tr><td>STATUS</td><td><?php echo strtoupper($row_anak['peg_ank_status']); ?></td></tr>
 							<tr><td colspan="2"><?php echo anchor('pekerja/delete_data_anak/'.$row_anak['id_peg_anak'].'/'.$row_pegawai['peg_nipp'],'[delete]'); ?></td></tr>
 							<tr><td colspan="3"></td></tr>
 							<?php 
@@ -616,18 +616,18 @@ if( $tmt_reason==""){?>
                     <table cellpadding="0" cellspacing="0" width="100%" class="sTable">
                         <thead>
 							<tr>
-								<td>Golongan</td>
+								<td>GOLONGAN</td>
 								<td>TMT</td>
-								<td>Surat Keputusan</td>
-								<td>Keterangan</td>
-								<td>Action</td>
+								<td>SURAT KEPUTUSAN</td>
+								<td>KETERANGAN</td>
+								<td>ACTION</td>
 							</tr>
 						</thead>
 						<tfoot><tr><td colspan="5" align="right" ><?php echo anchor('pekerja/add_riwayat_golongan/'.$row_pegawai['peg_nipp'],'[add]');?></td></tr></tfoot>
 						<tbody>
 								<?php foreach($data_riwayat_golongan as $rg){ ?>
 									<tr>
-										<td><?php echo $rg['p_grd_grade'];?></td>
+										<td><?php echo strtoupper($rg['p_grd_grade']);?></td>
 										<td><?php if($rg['p_grd_tmt'] == "0000-00-00"){echo "-";}else{echo mdate('%d-%m-%Y',strtotime($rg['p_grd_tmt']));}?></td>
 										<td>
 											<?php 
@@ -638,7 +638,7 @@ if( $tmt_reason==""){?>
 												}
 											?>	
 										</td>
-										<td><?php echo $rg['p_grd_keterangan'];?></td>
+										<td><?php echo strtoupper($rg['p_grd_keterangan']);?></td>
 										<td><?php 
 											echo anchor("pekerja/edit_riwayat_golongan/$rg[id_peg_grade]", img(array('src'=>"images/icons/control/16/edit.png", 'alt'=>'Edit Riwayat Golongan', 'title'=>'Edit Riwayat Golongan')));
 											echo '&nbsp';	
@@ -655,15 +655,15 @@ if( $tmt_reason==""){?>
                     <table cellpadding="0" cellspacing="0" width="100%" class="sTable">
                         <thead>
 							<tr>
-								<td rowspan="2">Jenis Sanksi</td>
-								<td rowspan="2">No Surat</td>
-								<td colspan="2">Masa Sanksi</td>
-								<td rowspan="2">Keterangan</td>
-								<td rowspan="2">Action</td>
+								<td rowspan="2">JENIS SANKSI</td>
+								<td rowspan="2">NO SURAT</td>
+								<td colspan="2">MASA SANKSI</td>
+								<td rowspan="2">KETERANGAN</td>
+								<td rowspan="2">ACTION</td>
 							</tr>
 							<tr>
-								<td>Dari</td>
-								<td>Sampai</td>
+								<td>DARI</td>
+								<td>SAMPAI</td>
 							</tr>
 						</thead>
 						<tfoot><tr><td colspan="6" align="right"><?php echo anchor('pekerja/add_riwayat_sanksi/'.$row_pegawai['peg_nipp'],'[add]');?></td></tr></tfoot>
@@ -681,7 +681,7 @@ if( $tmt_reason==""){?>
 										</td>
 										<td><?php if($rs['p_snk_start'] == "0000-00-00"){echo "-";}else{ echo mdate('%d-%m-%Y',strtotime($rs['p_snk_start']));}?></td>
 										<td><?php if($rs['p_snk_end'] == "0000-00-00"){echo "-";}else{ echo mdate('%d-%m-%Y',strtotime($rs['p_snk_end']));}?></td>
-										<td><?php echo $rs['p_snk_keterangan'];?></td>
+										<td><?php echo strtoupper($rs['p_snk_keterangan']);?></td>
 										<td><?php 
 											echo anchor("pekerja/edit_riwayat_sanksi/$rs[id_peg_sanksi]", img(array('src'=>"images/icons/control/16/edit.png", 'alt'=>'Edit Riwayat Sanksi', 'title'=>'Edit Riwayat Sanksi')));
 											echo '&nbsp';	
