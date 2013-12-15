@@ -2667,23 +2667,23 @@ class Pekerja extends Application {
 		$this->excel->getActiveSheet()->setCellValue('A3', 'PT. GAPURA ANGKASA CABANG BANDARA NGURAH RAI');
 		$this->excel->getActiveSheet()->setCellValue('A4', 'DENPASAR');
 		
-		$this->excel->getActiveSheet()->setCellValue('A6', 'No');
+		$this->excel->getActiveSheet()->setCellValue('A6', 'NO');
 		$this->excel->getActiveSheet()->setCellValue('B6', 'NIPP');
-		$this->excel->getActiveSheet()->setCellValue('C6', 'Nama');
-		$this->excel->getActiveSheet()->setCellValue('D6', 'Tempat Lahir');
-		$this->excel->getActiveSheet()->setCellValue('E6', 'Tanggal Lahir');
-		$this->excel->getActiveSheet()->setCellValue('F6', 'Jenis Kelamin');
-		$this->excel->getActiveSheet()->setCellValue('G6', 'Golongan Darah');
-		$this->excel->getActiveSheet()->setCellValue('H6', 'Agama');
-		$this->excel->getActiveSheet()->setCellValue('I6', 'No Telepon');
-		$this->excel->getActiveSheet()->setCellValue('J6', 'Email');
-		$this->excel->getActiveSheet()->setCellValue('K6', 'Alamat');
+		$this->excel->getActiveSheet()->setCellValue('C6', 'NAMA');
+		$this->excel->getActiveSheet()->setCellValue('D6', 'TEMAPT LAHIR');
+		$this->excel->getActiveSheet()->setCellValue('E6', 'TANGGAL LAHIR');
+		$this->excel->getActiveSheet()->setCellValue('F6', 'JENIS KELAMIN');
+		$this->excel->getActiveSheet()->setCellValue('G6', 'GOLONGAN DARAH');
+		$this->excel->getActiveSheet()->setCellValue('H6', 'AGAMA');
+		$this->excel->getActiveSheet()->setCellValue('I6', 'NO TELEPON');
+		$this->excel->getActiveSheet()->setCellValue('J6', 'EMAIL');
+		$this->excel->getActiveSheet()->setCellValue('K6', 'ALAMAT');
 		
-		$this->excel->getActiveSheet()->setCellValue('K7', 'Jalan');
-		$this->excel->getActiveSheet()->setCellValue('L7', 'Kelurahan');
-		$this->excel->getActiveSheet()->setCellValue('M7', 'Kecamatan');
-		$this->excel->getActiveSheet()->setCellValue('N7', 'Kabupaten');
-		$this->excel->getActiveSheet()->setCellValue('O7', 'Provinsi');
+		$this->excel->getActiveSheet()->setCellValue('K7', 'JALAN');
+		$this->excel->getActiveSheet()->setCellValue('L7', 'KELURAHAN');
+		$this->excel->getActiveSheet()->setCellValue('M7', 'KECAMATAN');
+		$this->excel->getActiveSheet()->setCellValue('N7', 'KABUPATEN');
+		$this->excel->getActiveSheet()->setCellValue('O7', 'PROVINSI');
 		
 		$i=7;
 		$number=0;
@@ -2695,8 +2695,8 @@ class Pekerja extends Application {
 		{ 
 			$i++;
 			$number++;
-			if($row_pegawai['peg_jns_kelamin'] == "P"){ $jk="Perempuan"; }
-			else{$jk="Laki-Laki";}
+			if($row_pegawai['peg_jns_kelamin'] == "P"){ $jk="PEREMPUAN"; }
+			else{$jk="LAKI-LAKI";}
 			if ($row_pegawai['peg_tgl_lahir'] == "0000-00-00" ){ $tgl_lahir = "-";}
 			else{$tgl_lahir = mdate("%d-%m-%Y",strtotime($row_pegawai['peg_tgl_lahir']));}
 			 
@@ -2721,18 +2721,18 @@ class Pekerja extends Application {
 			$this->excel->getActiveSheet()->setCellValue("A$i", "$number");
 			$this->excel->getActiveSheet()->setCellValue("B$i", "$row_pegawai[peg_nipp]");
 			$this->excel->getActiveSheet()->setCellValue("C$i", strtoupper("$row_pegawai[peg_nama]"));
-			$this->excel->getActiveSheet()->setCellValue("D$i", "$row_pegawai[peg_tmpt_lahir]");
+			$this->excel->getActiveSheet()->setCellValue("D$i", strtoupper("$row_pegawai[peg_tmpt_lahir]"));
 			$this->excel->getActiveSheet()->setCellValue("E$i", "$tgl_lahir");
-			$this->excel->getActiveSheet()->setCellValue("F$i", "$jk");
+			$this->excel->getActiveSheet()->setCellValue("F$i", strtoupper("$jk"));
 			$this->excel->getActiveSheet()->setCellValue("G$i", "$row_pegawai[peg_gol_darah]");
-			$this->excel->getActiveSheet()->setCellValue("H$i", "$row_pegawai[p_ag_agama]");
-			$this->excel->getActiveSheet()->setCellValue("I$i", "'$row_pegawai[p_al_no_telp]");
+			$this->excel->getActiveSheet()->setCellValue("H$i", strtoupper("$row_pegawai[p_ag_agama]"));
+			$this->excel->getActiveSheet()->setCellValue("I$i", strtoupper("'$row_pegawai[p_al_no_telp]"));
 			$this->excel->getActiveSheet()->setCellValue("J$i", "$row_pegawai[p_al_email]");
-			$this->excel->getActiveSheet()->setCellValue("K$i", "$row_pegawai[p_al_jalan]");
-			$this->excel->getActiveSheet()->setCellValue("L$i", "$row_pegawai[p_al_kelurahan]");
-			$this->excel->getActiveSheet()->setCellValue("M$i", "$row_pegawai[p_al_kecamatan]");
-			$this->excel->getActiveSheet()->setCellValue("N$i", "$row_pegawai[p_al_kabupaten]");
-			$this->excel->getActiveSheet()->setCellValue("O$i", "$row_pegawai[p_al_provinsi]");
+			$this->excel->getActiveSheet()->setCellValue("K$i", strtoupper("$row_pegawai[p_al_jalan]"));
+			$this->excel->getActiveSheet()->setCellValue("L$i", strtoupper("$row_pegawai[p_al_kelurahan]"));
+			$this->excel->getActiveSheet()->setCellValue("M$i", strtoupper("$row_pegawai[p_al_kecamatan]"));
+			$this->excel->getActiveSheet()->setCellValue("N$i", strtoupper("$row_pegawai[p_al_kabupaten]"));
+			$this->excel->getActiveSheet()->setCellValue("O$i", strtoupper("$row_pegawai[p_al_provinsi]"));
 		
 			$unit = $row_pegawai['p_unt_kode_unit'];
 			$sub_unit = $row_pegawai['p_unt_kode_sub_unit'];
@@ -2939,14 +2939,14 @@ class Pekerja extends Application {
 			
 			$i++;
 			$number++;
-			if($row_supervisor['peg_jns_kelamin'] == "P"){ $jk="Perempuan"; }
-			else{$jk="Laki-Laki";}
+			if($row_supervisor['peg_jns_kelamin'] == "P"){ $jk="PEREMPUAN"; }
+			else{$jk="LAKI-LAKI";}
 			
 						
 			//masukkan data ke tabel excel
 			$this->excel->getActiveSheet()->setCellValue("A$i", "$number");
-			$this->excel->getActiveSheet()->setCellValue("B$i", "$row_supervisor[p_unt_kode_unit]");
-			$this->excel->getActiveSheet()->setCellValue("C$i", "$row_supervisor[peg_nipp]");
+			$this->excel->getActiveSheet()->setCellValue("B$i", strtoupper("$row_supervisor[p_unt_kode_unit]"));
+			$this->excel->getActiveSheet()->setCellValue("C$i", strtoupper("$row_supervisor[peg_nipp]"));
 			$this->excel->getActiveSheet()->setCellValue("D$i", strtoupper("$row_supervisor[peg_nama]"));
 			$this->excel->getActiveSheet()->setCellValue("E$i", "$grade");
 			$this->excel->getActiveSheet()->setCellValue("F$i", "$mka");
@@ -2955,7 +2955,7 @@ class Pekerja extends Application {
 			$this->excel->getActiveSheet()->setCellValue("I$i", mdate("%d-%m-%Y",strtotime($row_supervisor['peg_tgl_lahir'])));
 			$this->excel->getActiveSheet()->setCellValue("J$i", "$umur");
 			$this->excel->getActiveSheet()->setCellValue("K$i", "-");
-			$this->excel->getActiveSheet()->setCellValue("L$i", "$row_supervisor[p_jbt_jabatan]");
+			$this->excel->getActiveSheet()->setCellValue("L$i", strtoupper("$row_supervisor[p_jbt_jabatan]"));
 			
 			
 		}endforeach;
@@ -3070,8 +3070,8 @@ class Pekerja extends Application {
 			$this->excel->getActiveSheet()->setCellValue("D$i", strtoupper("$row_sdm[p_ps_tmpt_lahir]"));
 			$this->excel->getActiveSheet()->setCellValue("E$i", mdate($datestring,strtotime("$row_sdm[p_ps_tgl_lahir]")));
 			$this->excel->getActiveSheet()->setCellValue("F$i", "$umur_ps");
-			$this->excel->getActiveSheet()->setCellValue("G$i", "$sex_ps");
-			$this->excel->getActiveSheet()->setCellValue("H$i", "$status_ps");
+			$this->excel->getActiveSheet()->setCellValue("G$i", strtoupper("$sex_ps"));
+			$this->excel->getActiveSheet()->setCellValue("H$i", strtoupper("$status_ps"));
 			$this->excel->getActiveSheet()->setCellValue("I$i", strtoupper("$row_sdm[p_stk_status_keluarga]"));
 			$this->excel->getActiveSheet()->setCellValue("L$i", strtoupper("$row_sdm[p_ag_agama]"));
 			//data anak
@@ -3084,7 +3084,7 @@ class Pekerja extends Application {
 				$this->excel->getActiveSheet()->setCellValue("D$i", strtoupper("$row_anak[peg_ank_tempat_lahir]"));
 				$this->excel->getActiveSheet()->setCellValue("E$i", mdate($datestring,strtotime("$row_anak[peg_ank_tgl_lahir]")));
 				$this->excel->getActiveSheet()->setCellValue("F$i", "$umur_ank");
-				$this->excel->getActiveSheet()->setCellValue("G$i", "$sex_ps");
+				$this->excel->getActiveSheet()->setCellValue("G$i", strtoupper("$sex_ps"));
 				$this->excel->getActiveSheet()->setCellValue("H$i", "ANAK $num_anak");
 				$this->excel->getActiveSheet()->setCellValue("I$i", strtoupper("$row_sdm[p_stk_status_keluarga]"));
 				$this->excel->getActiveSheet()->setCellValue("L$i", strtoupper("$row_sdm[p_ag_agama]"));
@@ -3888,8 +3888,8 @@ class Pekerja extends Application {
 			{ 
 				$i++;
 				$number++;
-				if($row_pegawai['peg_jns_kelamin'] == "P"){ $jk="Perempuan"; }
-				else{$jk="Laki-Laki";}
+				if($row_pegawai['peg_jns_kelamin'] == "P"){ $jk="PEREMPUAN"; }
+				else{$jk="LAKI-LAKI";}
 				if ($row_pegawai['peg_tgl_lahir'] == "0000-00-00" ){ $tgl_lahir = "-";}
 				else{$tgl_lahir = mdate("%d-%m-%Y",strtotime($row_pegawai['peg_tgl_lahir']));}
 				 
@@ -3926,7 +3926,7 @@ class Pekerja extends Application {
 				$this->excel->getActiveSheet()->setCellValue("E$i", strtoupper("$row_pegawai[peg_nipp]"));
 				$this->excel->getActiveSheet()->setCellValue("F$i", strtoupper("$row_pegawai[p_grd_grade]"));
 				$this->excel->getActiveSheet()->setCellValue("G$i", $mka);
-				$this->excel->getActiveSheet()->setCellValue("H$i", "$row_pegawai[peg_jns_kelamin]");
+				$this->excel->getActiveSheet()->setCellValue("H$i", strtoupper("$row_pegawai[peg_jns_kelamin]"));
 				$this->excel->getActiveSheet()->setCellValue("I$i", "$row_pegawai[p_tmt_tmt]");
 				$this->excel->getActiveSheet()->setCellValue("J$i", mdate('%d-%M-%y',strtotime($row_pegawai['peg_tgl_lahir'])));
 				$this->excel->getActiveSheet()->setCellValue("K$i", $umur);
