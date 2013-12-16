@@ -111,13 +111,57 @@ class Gaji extends Application {
 		$data['month']=	$this->namabulan($this->uri->segment(4));
 		$data['year']=$this->uri->segment(5);
 		$data['pembulatan'] = $data['gaji_nett'] - $gaji;
+		$data['bulan'] = $this->uri->segment(4);
+		
 		//$data['penerimaan'] = $row['pgj_terima'];
 		$data['page'] = 'view_detail_gaji_peg';		
 		$data['view_gaji_pegawai'] = 'class="this"';
 		$data['form_gaji'] = 'id="current"';
 		$this->load->view('gaji/index',$data);
 	}
-	
+	function print_slip_gaji_pdf()
+	{	
+		//ambil data unit
+		$id=$this->uri->segment(3);
+		$month=$this->uri->segment(4);
+		$year=$this->uri->segment(5);
+		$nipp = $this->uri->segment(6);
+		$data['showdata'] = $this->m_asset->ambil_data_penggajian_by_id($id,$year); 
+		$show = $data['showdata'];
+		foreach ($show as $row){}
+		$data['pot_pegawai'] = $this->m_gaji->ambil_data_pot_pegawai_id($row['pgj_id_peg']); 
+		$data['pot_perusahaan'] = $this->m_gaji->ambil_data_pot_perusahaan_id($row['pgj_id_peg']); 
+		$pot_pegawai = $data['pot_pegawai'];
+		foreach ($data['pot_perusahaan'] as $pr){
+			$data['pot_per'] = $pr['pot_per_as_jiwa'] + $pr['pot_per_jk'] + $pr['pot_per_siharta'] + $pr['pot_per_other'] + $pr['pot_per_jht'] + $pr['pot_per_tht'] + $pr['pot_per_pensiun'];
+		}
+		foreach ($pot_pegawai as $pp){
+			$data['pot_peg'] = $pp['pot_peg_siperkasa'] + $pp['pot_peg_kokarga'] + $pp['pot_peg_kosigarden'] + $pp['pot_peg_flexy'] + $pp['pot_peg_other'] + $pp['pot_peg_ggc'] + $pp['pot_peg_jht'] + $pp['pot_peg_tht'] + $pp['pot_peg_pensiun'];
+		}
+		$gaji = $row['pgj_gaji_bruto'] + $row['pgj_insentive'] - round($data['pot_peg'],0);
+		$data['gaji_nett'] = ceil($gaji/100)*100;
+		$data['terbilang']= $this->terbilang($data['gaji_nett']);
+		$data['month']=	$this->namabulan($this->uri->segment(4));
+		$data['year']=$this->uri->segment(5);
+		$data['pembulatan'] = $data['gaji_nett'] - $gaji;
+		
+		$monthstring = "%m" ;
+		$yearstring = "%Y" ;
+		$time = time();
+		$data['month'] = mdate($monthstring, $time);
+		$data['year'] = mdate($yearstring, $time);
+		
+		
+		$this->load->helper('skm_pdf');
+		$stream = TRUE; 
+		$papersize = 'letter'; 
+		$orientation = 'portrait';
+		$filename = " Slip Gaji ".$nipp;
+		$stn = "DPS";
+		$html = $this->load->view('gaji/page/penggajian/print_slip_gaji_pdf',$data, true); 
+     	pdf_create($html, $filename, $stream, $papersize, $orientation);
+		$full_filename = $filename . '.pdf';
+	}
 	
 	function edit_penggajian()
 	{
