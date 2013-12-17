@@ -1,6 +1,6 @@
 <div class="twoOne">
 <div class="widget"> 
-          <div class="title"><img src="<?php echo base_url()?>images/icons/dark/frames.png" alt="" class="titleIcon" /><h6>Detail Pegawai</h6></div>
+          <div class="title"><img src="<?php echo base_url()?>images/icons/dark/frames.png" alt="" class="titleIcon" /><h6>DETAIL PEGAWAI</h6></div>
             <?php 
 				foreach ($pegawai as $row_pegawai) :
 				{ 
@@ -171,14 +171,14 @@ if( $tmt_reason==""){?>
 <div class="title"><img src="<?php echo base_url()?>images/icons/dark/frames.png" alt="" class="titleIcon" /><h6>DELETE PEGAWAI</h6></div>
 <?php echo form_open('pekerja/submit_delete_pegawai/'.$row_pegawai['peg_nipp']);?>
 <table cellpadding="0" cellspacing="0" width="100%" class="sTable">
-	<tr><td>Reason</td>
+	<tr><td>REASON</td>
 	<td><?php 
 	$reason = array(
-		'Pindah Cabang' => 'Pindah Cabang',
-		'Pensiun Dini' => 'Pensiun Dini',
-		'Pensiun' => 'Pensiun',
-		'PHK' => 'Pemutusan Hubungan Kerja',
-		'Other' => 'Other'
+		'Pindah Cabang' => 'PINDAH CABANG',
+		'Pensiun Dini' => 'PENSIUN DINI',
+		'Pensiun' => 'PENSIUN',
+		'PHK' => 'PEMUTUSAN HUBUNGAN KERJA',
+		'Other' => 'OTHER'
 		);
 	echo form_dropdown('reason',$reason); ?></td></tr>
 	<tr><td></td>
@@ -550,8 +550,8 @@ if( $tmt_reason==""){?>
 						<tbody>
 								<?php foreach($data_riwayat_jabatan as $rj){ ?>
 									<tr>
-										<td><?php echo $rj['p_jbt_jabatan'];?></td>
-										<td><?php echo $rj['p_jbt_unit'];?></td>
+										<td><?php echo strtoupper($rj['p_jbt_jabatan']);?></td>
+										<td><?php echo strtoupper($rj['p_jbt_unit']);?></td>
 										<td>
 											<?php if ($rj['p_jbt_skfile'] !== ""){
 													echo anchor("pekerja/view_skjabatanfile/".$rj['p_jbt_skfile'],$rj['p_jbt_skno']," target ='_blank' ");	
@@ -561,7 +561,7 @@ if( $tmt_reason==""){?>
 											?>	
 										</td>
 										<td><?php echo mdate('%d-%m-%Y',strtotime($rj['p_jbt_tmt_start']));?></td>
-										<td><?php echo $rj['p_jbt_keterangan'];?></td>
+										<td><?php echo strtoupper($rj['p_jbt_keterangan']);?></td>
 										<td><?php 
 											echo anchor("pekerja/edit_riwayat_jabatan/$rj[id_peg_jabatan]", img(array('src'=>"images/icons/control/16/edit.png", 'alt'=>'Edit Riwayat Jabatan', 'title'=>'Edit Riwayat Jabatan')));
 											echo '&nbsp';	
