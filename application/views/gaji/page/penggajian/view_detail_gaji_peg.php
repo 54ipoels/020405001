@@ -13,8 +13,8 @@
 				<tr><td colspan="6" align="center"><i><b><?php echo $month." ".$year;?></b></i></td></tr>
 				<tr><td colspan="6"> <br></td></tr>
 				<tr><td>Gaji Bruto</td><td>:</td><td><?php echo $row['pgj_gaji_bruto'];?></td><td> </td><td></td><td></td></tr>
-				<tr><td>Masa Bakti 20 thn</td><td>:</td><td><?php //echo $row['pgj_masa_bakti'];?></td><td> </td><td></td><td></td></tr>
-				<tr><td>Koreksi</td><td>:</td><td><?php //echo $row['pgj_koreksi'];?></td><td> </td><td></td><td></td></tr>
+				<tr><td>Masa Bakti 20 thn</td><td>:</td><td><?php echo $row['pgj_masa_bakti'];?></td><td> </td><td></td><td></td></tr>
+				<tr><td>Koreksi</td><td>:</td><td><?php echo $row['pgj_koreksi'];?></td><td> </td><td></td><td></td></tr>
 				<tr><td>Insentive</td><td>:</td><td><?php echo $row['pgj_insentive'];?></td><td> </td><td></td><td></td></tr>
 				<tr><td>Potongan Pegawai</td><td>:</td><td><?php echo round($pot_peg,0);?></td><td> </td><td></td><td></td></tr>
 				<tr><td>Potongan Perusahaan</td><td>:</td><td><?php echo round($pot_per,0);?></td><td> </td><td></td><td></td></tr>

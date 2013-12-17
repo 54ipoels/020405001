@@ -145,11 +145,8 @@ class Gaji extends Application {
 		$data['year']=$this->uri->segment(5);
 		$data['pembulatan'] = $data['gaji_nett'] - $gaji;
 		
-		$monthstring = "%m" ;
-		$yearstring = "%Y" ;
 		$time = time();
-		$data['month'] = mdate($monthstring, $time);
-		$data['year'] = mdate($yearstring, $time);
+		$data['tanggal_cetak'] = mdate("%d-%F-%Y",$time);
 		
 		
 		$this->load->helper('skm_pdf');
