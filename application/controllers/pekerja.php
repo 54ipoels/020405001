@@ -3539,10 +3539,6 @@ class Pekerja extends Application {
 		$section->addTextBreak(1);
 	
 	
-		// Save File
-		$objWriter = PHPWord_IOFactory::createWriter($PHPWord, 'Word2007');
-		$objWriter->save("$peg_nipp.docx");
-		
 		$filename="$peg_nipp.docx"; //save our workbook as this file name
 		header('Content-Type: application/vnd.ms-word');
 		header('Content-Disposition: attachment;filename="'.$filename.'"');
@@ -3552,6 +3548,7 @@ class Pekerja extends Application {
 		$objWriter = PHPWord_IOFactory::createWriter($PHPWord, 'Word2007');
 		$objWriter->save('php://output');
 		exit; //you must have the exit!
+		
 	}
 	
 	public function pegawai_keluar()
