@@ -819,6 +819,8 @@ class diklat extends Application {
 		$data['page'] = 'Report Non STKP';
 		$data['page_diklat'] = 'yes';
 		$data['view_nstkp'] = 'class="this"';
+		$data['data_unit'] = 'ALL';
+		$data['data_subunit'] = 'ALL';
 		
 		$this->load->view('diklat/index',$data);
 	}
