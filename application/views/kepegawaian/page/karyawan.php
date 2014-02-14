@@ -168,4 +168,9 @@
 			
         </div>
 		<?php $attr= array('target' => '_blank');
-			echo anchor('pekerja/excel_data_pegawai','Export to Excel',$attr); ?>
+			if($this->uri->segment(2) == 'sort_jenis_pegawai'){
+				echo anchor("$link_excel",'Export to Excel',$attr); 
+			} else {
+				echo anchor('pekerja/excel_data_pegawai','Export to Excel',$attr); 
+			}
+		?>

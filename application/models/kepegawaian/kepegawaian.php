@@ -1534,7 +1534,7 @@ class kepegawaian extends CI_Model
 	{
 		$where = '';
 		if($jenis == 'Tetap'){
-			$where = " OR p_tmt_status =  '$jenis' "; 
+			$where = " OR p_tmt_status =  'PKWT' "; 
 		}
 		
 		$query = "	SELECT * FROM v3_pegawai a 
@@ -1559,6 +1559,46 @@ class kepegawaian extends CI_Model
 	function get_all_unit()
 	{
 		$query = " SELECT * FROM unit ORDER BY level ";
+		$query = $this->db->query($query);
+		return $query->result_array();
+	}
+	
+	function get_data_pegawai_aktif_unlimited_excel($type,$unit,$kelamin,$stk,$sub_unit)
+	{
+		$where = '';
+		if($type != 'all'){
+			$where .= " AND p_tmt_status = '$type' ";
+		} 
+		if($unit != 'all'){
+			$where .= " AND p_unt_kode_unit = '$unit' ";
+		}
+		if($kelamin != 'all'){
+			$where .= " AND peg_jns_kelamin = '$kelamin' ";
+		}
+		if($stk != 'all'){
+			$where .= " AND p_stk_status_keluarga = '$stk' ";
+		}
+		if($sub_unit != 'all'){
+			$where .= " AND p_unt_kode_sub_unit = '$sub_unit' ";
+		}
+		
+		$query = "	SELECT * FROM v3_pegawai a 
+					LEFT JOIN ( SELECT * FROM v3_peg_unit ORDER BY p_unt_tmt_start DESC, id_peg_unit DESC ) AS unit ON a.peg_nipp = unit.p_unt_nipp 
+					LEFT JOIN ( SELECT * FROM v3_peg_grade ORDER BY p_grd_tmt DESC, id_peg_grade DESC ) AS grade ON a.peg_nipp = grade.p_grd_nipp 
+					LEFT JOIN ( SELECT * FROM v3_peg_jabatan ORDER BY p_jbt_tmt_start DESC , id_peg_jabatan DESC ) AS jabatan ON a.peg_nipp = jabatan.p_jbt_nipp 
+					LEFT JOIN ( SELECT * FROM v3_peg_status_keluarga WHERE p_stk_aktif = 1 ORDER BY id_peg_status_keluarga DESC ) AS stk ON a.peg_nipp = stk.p_stk_nipp
+					LEFT JOIN v3_peg_tmt b ON b.p_tmt_nipp = a.peg_nipp 
+					LEFT JOIN unit c ON c.kode_unit = unit.p_unt_kode_unit 
+					LEFT JOIN v3_sub_unit d ON d.su_kode_sub_unit = unit.p_unt_kode_sub_unit 
+					LEFT JOIN v3_subunit_team e ON e.sut_kode_team = unit.p_unt_team 
+					LEFT JOIN v3_peg_agama f ON a.peg_nipp = f.p_ag_nipp 
+					LEFT JOIN v3_peg_alamat g ON a.peg_nipp = g.p_al_nipp
+					WHERE b.id_peg_tmt = ( SELECT MAX( k.id_peg_tmt ) FROM v3_peg_tmt k WHERE k.p_tmt_nipp = a.peg_nipp ) 
+					$where 
+					AND p_tmt_end =  '0000-00-00' 
+					GROUP BY peg_nipp 
+					ORDER BY c.level,d.su_level,e.sut_level,a.peg_nipp DESC 
+				";
 		$query = $this->db->query($query);
 		return $query->result_array();
 	}

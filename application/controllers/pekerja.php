@@ -152,6 +152,7 @@ class Pekerja extends Application {
 		$data['count']	= $config['total_rows'];
 		$data['page'] = 'Pegawai';
 		$data['page_karyawan'] = 'yes';
+		$data['link_excel'] = 'pekerja/excel_data_pegawai/sort/'.$type.'/'.$unit.'/'.$kelamin.'/'.$stk.'/'.$sub_unit.'/';
 		
 		#calling view
 		$this->load->view('kepegawaian/index',$data);
@@ -2654,8 +2655,21 @@ class Pekerja extends Application {
 		$time = time();
 		$tanggal = mdate($datestring, $time);
 		
-		$pegawai = $this->kepegawaian->get_data_pegawai_unlimited();
-				
+		if($this->uri->segment(3) == "sort"){
+			$type = $this->uri->segment(4);
+			$unit = $this->uri->segment(5);
+			$kelamin = $this->uri->segment(6);
+			$stk = $this->uri->segment(7);
+			$sub_unit = $this->uri->segment(8);
+			$pegawai = $this->kepegawaian->get_data_pegawai_aktif_unlimited_excel($type,$unit,$kelamin,$stk,$sub_unit);
+		}else{
+			$type = "all";
+			$unit = "all";
+			$kelamin = "all";
+			$stk = "all";
+			$sub_unit = "all";
+			$pegawai = $this->kepegawaian->get_data_pegawai_aktif_unlimited_excel($type,$unit,$kelamin,$stk,$sub_unit);
+		}		
 		//load our new PHPExcel library
 		$this->load->library('excel');
 		//activate worksheet number 1
@@ -2671,7 +2685,7 @@ class Pekerja extends Application {
 		$this->excel->getActiveSheet()->setCellValue('A6', 'NO');
 		$this->excel->getActiveSheet()->setCellValue('B6', 'NIPP');
 		$this->excel->getActiveSheet()->setCellValue('C6', 'NAMA');
-		$this->excel->getActiveSheet()->setCellValue('D6', 'TEMAPT LAHIR');
+		$this->excel->getActiveSheet()->setCellValue('D6', 'TEMPAT LAHIR');
 		$this->excel->getActiveSheet()->setCellValue('E6', 'TANGGAL LAHIR');
 		$this->excel->getActiveSheet()->setCellValue('F6', 'JENIS KELAMIN');
 		$this->excel->getActiveSheet()->setCellValue('G6', 'GOLONGAN DARAH');
