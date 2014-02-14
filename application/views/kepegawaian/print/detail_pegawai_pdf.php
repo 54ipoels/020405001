@@ -33,6 +33,7 @@ h2{
 }
 #content{
 	margin-left:10px;
+	font-size:11px;
 }
 #photo{
 	float:right;

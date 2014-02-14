@@ -2,6 +2,11 @@
 	<div class="widget">
             <div class="title"><img src="<?php echo base_url()?>images/icons/dark/pencil.png" alt="" class="titleIcon" /><h6>Data Pendidikan Pegawai</h6></div>
 			<?php 
+			$row_pendidikan['p_pdd_tingkat'] = "" ;
+			$row_pendidikan['p_pdd_lp'] = "";
+			$row_pendidikan['p_pdd_masuk'] = "";
+			$row_pendidikan['p_pdd_keluar'] = "";
+			
 			foreach ($pendidikan as $row_pendidikan) : 
 			{} endforeach;
 			$attributes = array('class'=>'form','id'=>'wizard3');

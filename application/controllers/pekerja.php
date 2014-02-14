@@ -2305,6 +2305,7 @@ class Pekerja extends Application {
 					
 		$nipp = $this->uri->segment(3);
 		$data_pendidikan = array(
+				'p_pdd_nipp'		=> $nipp,
 				'p_pdd_tingkat'		=> $this->input->post('pendidikan'),
 				'p_pdd_lp'			=> $this->input->post('lp'),
 				'p_pdd_masuk'		=> $this->input->post('masuk'),
@@ -2313,7 +2314,8 @@ class Pekerja extends Application {
 				'p_pdd_update_by'	=> 'admin'
 			);
 		
-		$this->kepegawaian->update_data_pendidikan($data_pendidikan);
+		//$this->kepegawaian->update_data_pendidikan($data_pendidikan);
+		$this->kepegawaian->insert_data_pegawai_pendidikan($data_pendidikan);
 		
 		$data_id_bahasa = $this->kepegawaian->get_detail_pegawai_bahasa($nipp);
 		$nomer = 1;
@@ -2329,7 +2331,6 @@ class Pekerja extends Application {
 			$this->kepegawaian->update_data_bahasa($data_bahasa, $id_bahasa);
 		} endforeach;
 		#input data to table pegawai
-		$this->kepegawaian->update_data_pendidikan($data_pendidikan);
 		redirect('pekerja/get_pegawai/'.$nipp);
 	}
 	

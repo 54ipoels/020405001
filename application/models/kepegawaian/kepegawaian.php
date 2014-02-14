@@ -506,10 +506,19 @@ class kepegawaian extends CI_Model
 	
 	function get_detail_pegawai_pendidikan($nipp)
 	{
+		$query = "	SELECT * FROM v3_pegawai AS peg
+					LEFT JOIN (SELECT * FROM v3_peg_pendidikan ORDER BY p_pdd_masuk ASC, id_peg_pendidikan DESC) AS pdd ON peg_nipp = p_pdd_nipp
+					WHERE p_pdd_nipp = '$nipp'
+					GROUP BY p_pdd_tingkat
+				";
+		$query  = $this->db->query($query);
+		return $query->result_array();
+		/*
 		$this->db->select('*');
 		$this->db->where('p_pdd_nipp',$nipp);
 		$query = $this->db->get('v3_peg_pendidikan');
 		return $query->result_array();
+		*/
 	}
 	function get_detail_pegawai_pendidikan_full($nipp)
 	{
