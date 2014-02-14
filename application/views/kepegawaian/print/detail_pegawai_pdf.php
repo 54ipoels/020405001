@@ -13,7 +13,7 @@ h1{
 	font-size:30px; 
 }	
 h2{ 
-	font-size:20px; 
+	font-size:16px; 
 }
 .hr{
 	border: 0;
@@ -98,7 +98,7 @@ table.withborder td{
 			{
 				$now = date('Y-m-d');
 				$peg_usia =  floor((strtotime($now) - strtotime($peg_tanggallahir)) / (365*24*60*60));
-				$peg_tanggallahir = mdate('%d-%m-%Y',strtotime($peg_tanggallahir));
+				$peg_tanggallahir = mdate('%d-%M-%Y',strtotime($peg_tanggallahir));
 			}
 			
 		}
@@ -138,7 +138,7 @@ table.withborder td{
 		<tr>
 			<td>T.M.T</td>
 			<td>:</td>
-			<td><?php echo mdate('%d-%m-%Y',strtotime($peg_tmt));?></td>
+			<td><?php echo mdate('%d-%M-%Y',strtotime($peg_tmt));?></td>
 		</tr>
 		<tr>
 			<td>PANGKAT/GOLONGAN</td>
@@ -241,9 +241,9 @@ table.withborder td{
 			foreach($data_nstkp as $row_nstkp){ 
 			$no++;
 			if($row_nstkp['p_nstkp_pelaksanaan'] == "0000-00-00"){$tgl_mulai = "-";}
-			else{ $tgl_mulai = mdate('%d-%m-%Y',strtotime($row_nstkp['p_nstkp_pelaksanaan'])); }
+			else{ $tgl_mulai = mdate('%d-%M-%Y',strtotime($row_nstkp['p_nstkp_pelaksanaan'])); }
 			if($row_nstkp['p_nstkp_selesai'] == "0000-00-00"){$tgl_selesai = "-";}
-			else{ $tgl_selesai = mdate('%d-%m-%Y',strtotime($row_nstkp['p_nstkp_selesai'])); }
+			else{ $tgl_selesai = mdate('%d-%M-%Y',strtotime($row_nstkp['p_nstkp_selesai'])); }
 			?>	
 			<tr>
 				<td align="center"><?php echo $no;?></td>
@@ -276,7 +276,7 @@ table.withborder td{
 			foreach($riwayat_golongan as $row_riwayatgolongan){ 
 			$no++;
 			if($row_riwayatgolongan['p_grd_tmt'] == "0000-00-00"){$tgl_tmt_golongan = "-";}
-			else{ $tgl_tmt_golongan = mdate('%d-%m-%Y',strtotime($row_riwayatgolongan['p_grd_tmt'])); }
+			else{ $tgl_tmt_golongan = mdate('%d-%M-%Y',strtotime($row_riwayatgolongan['p_grd_tmt'])); }
 			?>	
 			<tr>
 				<td align="center"><?php echo $no;?></td>
@@ -313,7 +313,7 @@ table.withborder td{
 				<td><?php echo strtoupper($row_riwayatjabatan['p_jbt_jabatan']);?></td>
 				<td><?php echo $row_riwayatjabatan['p_jbt_unit'];?></td>
 				<td><?php echo strtoupper($row_riwayatjabatan['p_jbt_skno']);?></td>
-				<td align="center"><?php if($row_riwayatjabatan['p_jbt_tmt_start']=="0000-00-00"){echo "-";}else{echo mdate('%d-%m-%Y',strtotime($row_riwayatjabatan['p_jbt_tmt_start']));};?></td>
+				<td align="center"><?php if($row_riwayatjabatan['p_jbt_tmt_start']=="0000-00-00"){echo "-";}else{echo mdate('%d-%M-%Y',strtotime($row_riwayatjabatan['p_jbt_tmt_start']));};?></td>
 			</tr>
 		<?php } ?>
 		</tbody>
@@ -344,7 +344,7 @@ table.withborder td{
 			<tr>
 				<td align="center"><?php echo $no; ?></td>
 				<td><?php echo strtoupper($row_pasangan['p_ps_nama']); ?></td>
-				<td align="center"><?php if($row_pasangan['p_ps_tgl_lahir']=="0000-00-00"){echo "-";}else{echo mdate('%d-%m-%Y',strtotime($row_pasangan['p_ps_tgl_lahir']));} ?></td>
+				<td align="center"><?php if($row_pasangan['p_ps_tgl_lahir']=="0000-00-00"){echo "-";}else{echo mdate('%d-%M-%Y',strtotime($row_pasangan['p_ps_tgl_lahir']));} ?></td>
 				<td align="center"><?php if($row_pasangan['p_ps_tgl_lahir']=="0000-00-00"){echo "-";}else{echo floor((strtotime(date('Y-m-d'))-strtotime($row_pasangan['p_ps_tgl_lahir']))/(365*24*60*60));}?></td>
 				<td><?php if($row_pasangan['p_ps_jns_kelamin']=="L"){echo "SUAMI";}elseif($row_pasangan['p_ps_jns_kelamin']=="P"){echo "ISTRI";} ?></td>
 			</tr>
@@ -360,7 +360,7 @@ table.withborder td{
 			<tr>
 				<td align="center"><?php echo $no; ?></td>
 				<td><?php echo strtoupper($row_anak['peg_ank_nama']); ?></td>
-				<td align="center"><?php if($row_anak['peg_ank_tgl_lahir']=="0000-00-00"){echo "-";}else{echo mdate('%d-%m-%Y',strtotime($row_anak['peg_ank_tgl_lahir']));} ?></td>
+				<td align="center"><?php if($row_anak['peg_ank_tgl_lahir']=="0000-00-00"){echo "-";}else{echo mdate('%d-%M-%Y',strtotime($row_anak['peg_ank_tgl_lahir']));} ?></td>
 				<td align="center"><?php if($row_anak['peg_ank_tgl_lahir']=="0000-00-00"){echo "-";}else{echo floor((strtotime(date('Y-m-d'))-strtotime($row_anak['peg_ank_tgl_lahir']))/(365*24*60*60));}?></td>
 				<td><?php echo "ANAK KE-".$noanak; ?></td>
 			</tr>
@@ -396,8 +396,8 @@ table.withborder td{
 				<td align="center"><?php echo $no; ?></td>
 				<td><?php echo strtoupper($row_sanksi['p_snk_jenis']); ?></td>
 				<td><?php echo strtoupper($row_sanksi['p_snk_no']); ?></td>
-				<td align="center"><?php if($row_sanksi['p_snk_start']=="0000-00-00"){echo "-";}else{echo mdate('%d-%m-%Y',strtotime($row_sanksi['p_snk_start']));} ?></td>	
-				<td align="center"><?php if($row_sanksi['p_snk_end']=="0000-00-00"){echo "-";}else{echo mdate('%d-%m-%Y',strtotime($row_sanksi['p_snk_end']));} ?></td>
+				<td align="center"><?php if($row_sanksi['p_snk_start']=="0000-00-00"){echo "-";}else{echo mdate('%d-%M-%Y',strtotime($row_sanksi['p_snk_start']));} ?></td>	
+				<td align="center"><?php if($row_sanksi['p_snk_end']=="0000-00-00"){echo "-";}else{echo mdate('%d-%M-%Y',strtotime($row_sanksi['p_snk_end']));} ?></td>
 				<td><?php echo strtoupper($row_sanksi['p_snk_keterangan']); ?></td>
 				
 			</tr>
