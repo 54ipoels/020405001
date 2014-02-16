@@ -16,7 +16,7 @@ class Pekerja extends Application {
 		#pagination config
 		$config['base_url'] = base_url().'index.php/pekerja/index/'; 
 		$config['total_rows'] = $this->kepegawaian->count_pegawai_aktif(); 
-		$config['per_page'] = 10; 
+		$config['per_page'] = 40; 
 		$config['uri_segment'] = 3; 
 		$this->pagination->initialize($config);
 		$page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
@@ -41,12 +41,12 @@ class Pekerja extends Application {
 		$tanggal = mdate($datestring, $time);
 		
 		$type = '52';
-		$limit = '100';
+		$limit = '400';
 		
 		#pagination config
 		$config['base_url'] = base_url().'index.php/pekerja/pegawai_pensiun/'; //set the base url for pagination
 		$config['total_rows'] = $this->kepegawaian->countPegawaiPensiun($tanggal,$type, $limit); //total rows
-		$config['per_page'] = 10; //the number of per page for pagination
+		$config['per_page'] = 40; //the number of per page for pagination
 		$config['uri_segment'] = 3; //see from base_url. 3 for this case
 		$this->pagination->initialize($config);
 		$page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
@@ -75,7 +75,7 @@ class Pekerja extends Application {
 		//$config['base_url'] = base_url().'index.php/pekerja/pegawai_pensiun/'; //set the base url for pagination
 		$config['base_url'] = base_url().'index.php/pekerja/sort_tahun_pensiun/'.$tanggal.'/PPB'; //set the base url for pagination
 		$config['total_rows'] = $this->kepegawaian->countPegawaiPensiun($tanggal,$type, $limit); //total rows
-		$config['per_page'] = 10; //the number of per page for pagination
+		$config['per_page'] = 40; //the number of per page for pagination
 		$config['uri_segment'] = 3; //see from base_url. 3 for this case
 		$this->pagination->initialize($config);
 		$page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
@@ -104,7 +104,7 @@ class Pekerja extends Application {
 		//$config['base_url'] = base_url().'index.php/pekerja/pegawai_pensiun/'; //set the base url for pagination
 		$config['base_url'] = base_url().'index.php/pekerja/sort_tahun_pensiun/'.$tanggal.'/MPP'; //set the base url for pagination
 		$config['total_rows'] = $this->kepegawaian->countPegawaiPensiun($tanggal,$type, $limit); //total rows
-		$config['per_page'] = 10; //the number of per page for pagination
+		$config['per_page'] = 40; //the number of per page for pagination
 		$config['uri_segment'] = 3; //see from base_url. 3 for this case
 		$this->pagination->initialize($config);
 		$page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
@@ -140,7 +140,7 @@ class Pekerja extends Application {
 		#pagination config
 		$config['base_url'] = base_url().'index.php/pekerja/sort_jenis_pegawai/'.$type.'/'.$unit.'/'.$kelamin.'/'.$stk.'/'.$sub_unit.'/'; //set the base url for pagination
 		$config['total_rows'] = $this->kepegawaian->count_jenis_Pegawai($type,$unit,$kelamin,$stk,$sub_unit); //total rows
-		$config['per_page'] = 10; //the number of per page for pagination
+		$config['per_page'] = 40; //the number of per page for pagination
 		$config['uri_segment'] = 8; //see from base_url. 3 for this case
 		$this->pagination->initialize($config);
 		$page = ($this->uri->segment(8)) ? $this->uri->segment(8) : 0;
@@ -169,7 +169,7 @@ class Pekerja extends Application {
 		#pagination config
 		$config['base_url'] = base_url().'index.php/pekerja/get_supervisor/'; //set the base url for pagination
 		$config['total_rows'] = $this->kepegawaian->count_supervisor(); //total rows
-		$config['per_page'] = 10; //the number of per page for pagination
+		$config['per_page'] = 40; //the number of per page for pagination
 		$config['uri_segment'] = 3; //see from base_url. 3 for this case
 		$this->pagination->initialize($config);
 		$page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
@@ -188,7 +188,7 @@ class Pekerja extends Application {
 		#pagination config
 		$config['base_url'] = base_url().'index.php/pekerja/get_pindah_cabang/'; //set the base url for pagination
 		$config['total_rows'] = $this->kepegawaian->count_pindah_cabang(); //total rows
-		$config['per_page'] = 10; //the number of per page for pagination
+		$config['per_page'] = 40; //the number of per page for pagination
 		$config['uri_segment'] = 3; //see from base_url. 3 for this case
 		$this->pagination->initialize($config);
 		$page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
@@ -207,7 +207,7 @@ class Pekerja extends Application {
 		#pagination config
 		$config['base_url'] = base_url().'index.php/pekerja/get_pegawai_phk/'; //set the base url for pagination
 		$config['total_rows'] = $this->kepegawaian->count_phk(); //total rows
-		$config['per_page'] = 10; //the number of per page for pagination
+		$config['per_page'] = 40; //the number of per page for pagination
 		$config['uri_segment'] = 3; //see from base_url. 3 for this case
 		$this->pagination->initialize($config);
 		$page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
@@ -233,7 +233,7 @@ class Pekerja extends Application {
 		#pagination config
 		$config['base_url'] = base_url().'index.php/pekerja/search_pindah_cabang/'.$search_data.'/'; //set the base url for pagination
 		$config['total_rows'] = $this->kepegawaian->count_search_pindah_cabang($search_data); //total rows
-		$config['per_page'] = 10; //the number of per page for pagination
+		$config['per_page'] = 40; //the number of per page for pagination
 		$config['uri_segment'] = 4; //see from base_url. 3 for this case
 		$this->pagination->initialize($config);
 		$page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
@@ -259,7 +259,7 @@ class Pekerja extends Application {
 		#pagination config
 		$config['base_url'] = base_url().'index.php/pekerja/search_phk/'.$search_data.'/'; //set the base url for pagination
 		$config['total_rows'] = $this->kepegawaian->count_search_phk($search_data); //total rows
-		$config['per_page'] = 10; //the number of per page for pagination
+		$config['per_page'] = 40; //the number of per page for pagination
 		$config['uri_segment'] = 4; //see from base_url. 3 for this case
 		$this->pagination->initialize($config);
 		$page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
@@ -291,7 +291,7 @@ class Pekerja extends Application {
 		if ($type === 'ALL')
 		{
 			$jenis = '55';
-			$limit = '100';
+			$limit = '400';
 		}else
 		if ($type === 'MPP')
 		{
@@ -313,7 +313,7 @@ class Pekerja extends Application {
 		#pagination config
 		$config['base_url'] = base_url().'index.php/pekerja/sort_tahun_pensiun/'.$tanggal.'/'.$type.'/'; //set the base url for pagination
 		$config['total_rows'] = $this->kepegawaian->countPegawaiPensiun($tanggal, $jenis, $limit); //total rows
-		$config['per_page'] = 10; //the number of per page for pagination
+		$config['per_page'] = 40; //the number of per page for pagination
 		$config['uri_segment'] = 5; //see from base_url. 3 for this case
 		$this->pagination->initialize($config);
 		$page = ($this->uri->segment(5)) ? $this->uri->segment(5) : 0;
@@ -348,7 +348,7 @@ class Pekerja extends Application {
 		#pagination config
 		$config['base_url'] = base_url().'index.php/pekerja/sort_unit_pegawai/'.$unit.'/'; //set the base url for pagination
 		$config['total_rows'] = $this->kepegawaian->count_unit_Pegawai($unit); //total rows
-		$config['per_page'] = 10; //the number of per page for pagination
+		$config['per_page'] = 40; //the number of per page for pagination
 		$config['uri_segment'] = 4; //see from base_url. 3 for this case
 		$this->pagination->initialize($config);
 		$page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
@@ -385,7 +385,7 @@ class Pekerja extends Application {
 		#pagination config
 		$config['base_url'] = base_url().'index.php/pekerja/search_pegawai/'.$search_data.'/'; //set the base url for pagination
 		$config['total_rows'] = $this->kepegawaian->count_search_pegawai($search_data); //total rows
-		$config['per_page'] = 10; //the number of per page for pagination
+		$config['per_page'] = 40; //the number of per page for pagination
 		$config['uri_segment'] = 4; //see from base_url. 3 for this case
 		$this->pagination->initialize($config);
 		$page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
@@ -658,7 +658,7 @@ class Pekerja extends Application {
 			}
 			}
 		} else {
-			?><script>alert("Nipp tersebut sudah digunakan");window.history.back(-1);</script><?php	
+			?><script>alert("Nipp tersebut sudah digunakan");window.history.back(-4);</script><?php	
 		}
 	}
 	
@@ -1060,8 +1060,8 @@ class Pekerja extends Application {
 			$config['allowed_types'] = 'pdf|gif|jpg|png';
 			$config['max_size']  = '9999';
 			$config['overwrite']	=	TRUE;
-			//$filenamebantu = str_replace(' ','_',$no_sk)."-$id_peg_jabatan-".$update_on.".".$ext[1];
-			$filenamebantu = str_replace(' ','_',$no_sk).".".$ext[1]; //filenya ditindih dengan file baru
+			//$filenamebantu = str_replace(' ','_',$no_sk)."-$id_peg_jabatan-".$update_on.".".$ext[4];
+			$filenamebantu = str_replace(' ','_',$no_sk).".".$ext[4]; //filenya ditindih dengan file baru
 			$config['file_name']=$filenamebantu;
 			
 			
@@ -1154,8 +1154,8 @@ class Pekerja extends Application {
 			$config['allowed_types'] = 'pdf|gif|jpg|png';
 			$config['max_size']  = '9999';
 			$config['overwrite']	=	TRUE;
-			//$filenamebantu = str_replace(' ','_',$no_sk)."-$id_peg_jabatan-".$update_on.".".$ext[1];
-			$filenamebantu = str_replace(' ','_',$no_sk).".".$ext[1]; //filenya ditindih dengan file baru
+			//$filenamebantu = str_replace(' ','_',$no_sk)."-$id_peg_jabatan-".$update_on.".".$ext[4];
+			$filenamebantu = str_replace(' ','_',$no_sk).".".$ext[4]; //filenya ditindih dengan file baru
 			$config['file_name']=$filenamebantu;
 			
 			
@@ -1277,8 +1277,8 @@ class Pekerja extends Application {
 			$config['allowed_types'] = 'pdf|gif|jpg|png';
 			$config['max_size']  = '9999';
 			$config['overwrite']	=	TRUE;
-			//$filenamebantu = str_replace(' ','_',$no_sk)."-$id_peg_jabatan-".$update_on.".".$ext[1];
-			$filenamebantu = str_replace(' ','_',$no_sk).".".$ext[1]; //filenya ditindih dengan file baru
+			//$filenamebantu = str_replace(' ','_',$no_sk)."-$id_peg_jabatan-".$update_on.".".$ext[4];
+			$filenamebantu = str_replace(' ','_',$no_sk).".".$ext[4]; //filenya ditindih dengan file baru
 			$config['file_name']=$filenamebantu;
 			
 			
@@ -1347,8 +1347,8 @@ class Pekerja extends Application {
 			$config['allowed_types'] = 'pdf|gif|jpg|png';
 			$config['max_size']  = '9999';
 			$config['overwrite']	=	TRUE;
-			//$filenamebantu = str_replace(' ','_',$no_sk)."-$id_peg_jabatan-".$update_on.".".$ext[1];
-			$filenamebantu = str_replace(' ','_',$no_sk).".".$ext[1]; //filenya ditindih dengan file baru
+			//$filenamebantu = str_replace(' ','_',$no_sk)."-$id_peg_jabatan-".$update_on.".".$ext[4];
+			$filenamebantu = str_replace(' ','_',$no_sk).".".$ext[4]; //filenya ditindih dengan file baru
 			$config['file_name']=$filenamebantu;
 			
 			
@@ -1435,8 +1435,8 @@ class Pekerja extends Application {
 			$config['allowed_types'] = 'pdf|gif|jpg|png';
 			$config['max_size']  = '9999';
 			$config['overwrite']	=	TRUE;
-			//$filenamebantu = str_replace(' ','_',$no_sk)."-$id_peg_jabatan-".$update_on.".".$ext[1];
-			$filenamebantu = str_replace(' ','_',$no_sk).".".$ext[1]; //filenya ditindih dengan file baru
+			//$filenamebantu = str_replace(' ','_',$no_sk)."-$id_peg_jabatan-".$update_on.".".$ext[4];
+			$filenamebantu = str_replace(' ','_',$no_sk).".".$ext[4]; //filenya ditindih dengan file baru
 			$config['file_name']=$filenamebantu;
 			
 			
@@ -1509,8 +1509,8 @@ class Pekerja extends Application {
 			$config['allowed_types'] = 'pdf|gif|jpg|png';
 			$config['max_size']  = '9999';
 			$config['overwrite']	=	TRUE;
-			//$filenamebantu = str_replace(' ','_',$no_sk)."-$id_peg_jabatan-".$update_on.".".$ext[1];
-			$filenamebantu = str_replace(' ','_',$no_sk).".".$ext[1]; //filenya ditindih dengan file baru
+			//$filenamebantu = str_replace(' ','_',$no_sk)."-$id_peg_jabatan-".$update_on.".".$ext[4];
+			$filenamebantu = str_replace(' ','_',$no_sk).".".$ext[4]; //filenya ditindih dengan file baru
 			$config['file_name']=$filenamebantu;
 			
 			
@@ -1689,7 +1689,7 @@ class Pekerja extends Application {
 		$data_stk = array(
 					'p_stk_nipp' 			  => $nipp,
 					'p_stk_status_keluarga'   => $this->input->post('stk'),
-					'p_stk_aktif'			=>	'1',
+					'p_stk_aktif'			=>	'4',
 					//'p_stk_update_on'		  => $tanggal,
 					'p_stk_update_by'		  => 'admin'
 				);
@@ -2319,7 +2319,7 @@ class Pekerja extends Application {
 		$this->kepegawaian->insert_data_pegawai_pendidikan($data_pendidikan);
 		
 		$data_id_bahasa = $this->kepegawaian->get_detail_pegawai_bahasa($nipp);
-		$nomer = 1;
+		$nomer = 4;
 		foreach ($data_id_bahasa as $row_bahasa) :
 		{
 			$data_bahasa = array(
@@ -2340,7 +2340,7 @@ class Pekerja extends Application {
 		#pagination config
 		$config['base_url'] = base_url().'index.php/pekerja/view_data_sdm/'; //set the base url for pagination
 		$config['total_rows'] = $this->kepegawaian->countPegawai(); //total rows
-		$config['per_page'] = 10; //the number of per page for pagination
+		$config['per_page'] = 40; //the number of per page for pagination
 		$config['uri_segment'] = 3; //see from base_url. 3 for this case
 		$this->pagination->initialize($config);
 		$page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
@@ -2373,7 +2373,7 @@ class Pekerja extends Application {
 		$config['base_url'] = base_url().'index.php/pekerja/search_data_sdm/'.$search_unit.'/'.$search_data.'/'; //set the base url for pagination
 		#$config['total_rows'] = $this->kepegawaian->count_search_pegawai($search_data); //total rows
 		$config['total_rows'] = $this->kepegawaian->count_search_pegawai_unit($search_data,$search_unit); //total rows
-		$config['per_page'] = 10; //the number of per page for pagination
+		$config['per_page'] = 40; //the number of per page for pagination
 		$config['uri_segment'] = 5; //see from base_url. 3 for this case
 		$this->pagination->initialize($config);
 		$page = ($this->uri->segment(5)) ? $this->uri->segment(5) : 0;
@@ -2672,11 +2672,25 @@ class Pekerja extends Application {
 		}		
 		//load our new PHPExcel library
 		$this->load->library('excel');
-		//activate worksheet number 1
+		//activate worksheet number 4
 		$this->excel->setActiveSheetIndex(0);
 		//name the worksheet
 		$this->excel->getActiveSheet()->setTitle("Data Pegawai ");
-		//set cell A1 content with some text
+		//set cell A4 content with some text
+		
+		//Add Image
+		$objDrawing = new PHPExcel_Worksheet_Drawing();
+		$objDrawing->setName('logo');
+		$objDrawing->setDescription('logo_gapura');
+		$objDrawing->setPath('./images/gapura-angkasa.jpg');
+		$objDrawing->setOffsetX(8);    // setOffsetX works properly
+		$objDrawing->setOffsetY(300);  //setOffsetY has no effect
+		$objDrawing->setHeight(35); // logo height
+
+		// Insert picture
+		$objDrawing->setCoordinates('A2');
+		$objDrawing->setWorksheet($this->excel->getActiveSheet());
+		
 		//JUDUL KOP
 		$this->excel->getActiveSheet()->setCellValue('A2', 'DATA PEGAWAI');
 		$this->excel->getActiveSheet()->setCellValue('A3', 'PT. GAPURA ANGKASA CABANG BANDARA NGURAH RAI');
@@ -2754,14 +2768,14 @@ class Pekerja extends Application {
 		}endforeach;
 		
 		//change the font size
-		$this->excel->getActiveSheet()->getStyle("A2:A4")->getFont()->setSize(14);
-		$this->excel->getActiveSheet()->getStyle("A6:O7")->getFont()->setSize(12);
+		$this->excel->getActiveSheet()->getStyle("A2:A4")->getFont()->setSize(11);
+		$this->excel->getActiveSheet()->getStyle("A6:O7")->getFont()->setSize(8);
 		$this->excel->getActiveSheet()->getStyle("A8:O$i")->getFont()->setSize(8);
 		//make the font become bold
 		$this->excel->getActiveSheet()->getStyle('A2:A4')->getFont()->setBold(true);
 		$this->excel->getActiveSheet()->getStyle('A6:K6')->getFont()->setBold(true);
-		$this->excel->getActiveSheet()->getStyle('G7:H7')->getFont()->setBold(true);
-		//merge cell A1 until D1
+		$this->excel->getActiveSheet()->getStyle('G7:O7')->getFont()->setBold(true);
+		//merge cell A4 until D4
 		$this->excel->getActiveSheet()->mergeCells('A6:A7');
 		$this->excel->getActiveSheet()->mergeCells('B6:B7');
 		$this->excel->getActiveSheet()->mergeCells('C6:C7');
@@ -2773,11 +2787,11 @@ class Pekerja extends Application {
 		$this->excel->getActiveSheet()->mergeCells('I6:I7');
 		$this->excel->getActiveSheet()->mergeCells('J6:J7');
 		$this->excel->getActiveSheet()->mergeCells('K6:O6');
-		$this->excel->getActiveSheet()->mergeCells('A2:H2');
-		$this->excel->getActiveSheet()->mergeCells('A3:H3');
-		$this->excel->getActiveSheet()->mergeCells('A4:H4');
+		$this->excel->getActiveSheet()->mergeCells('A2:O2');
+		$this->excel->getActiveSheet()->mergeCells('A3:O3');
+		$this->excel->getActiveSheet()->mergeCells('A4:O4');
 		
-		//set aligment to center for that merged cell (A1 to D1)
+		//set aligment to center for that merged cell (A4 to D4)
 		$this->excel->getActiveSheet()->getStyle('A6:O6')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 		$this->excel->getActiveSheet()->getStyle('A6:O6')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 		$this->excel->getActiveSheet()->getStyle('A2:A4')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -2785,20 +2799,20 @@ class Pekerja extends Application {
 		
 		//Set column widths                                                       
 		$this->excel->getActiveSheet()->getColumnDimension('A')->setWidth(5.54);  
-		$this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(10.75); 
+		$this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(40.75); 
 		$this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(26);    
 		$this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(20.5);  
-		$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(10.88); 
-		$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(10.88); 
-		$this->excel->getActiveSheet()->getColumnDimension('G')->setWidth(14.63); 
+		$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(40.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(40.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('G')->setWidth(44.63); 
 		$this->excel->getActiveSheet()->getColumnDimension('H')->setWidth(8.88); 
-		$this->excel->getActiveSheet()->getColumnDimension('I')->setWidth(14.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('I')->setWidth(44.88); 
 		$this->excel->getActiveSheet()->getColumnDimension('J')->setWidth(25.88); 
 		$this->excel->getActiveSheet()->getColumnDimension('K')->setWidth(35.88); 
-		$this->excel->getActiveSheet()->getColumnDimension('L')->setWidth(15.88); 
-		$this->excel->getActiveSheet()->getColumnDimension('M')->setWidth(15.88); 
-		$this->excel->getActiveSheet()->getColumnDimension('N')->setWidth(15.88); 
-		$this->excel->getActiveSheet()->getColumnDimension('O')->setWidth(15.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('L')->setWidth(45.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('M')->setWidth(45.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('N')->setWidth(45.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('O')->setWidth(45.88); 
 		
 		 
 		$filename="Data Pegawai.xls"; //save our workbook as this file name
@@ -2821,29 +2835,48 @@ class Pekerja extends Application {
 		$tanggal = mdate($datestring, $time);
 		
 		$type = '52';
-		$limit = '100';
+		$limit = '400';
 		
-		$pegawai = $this->kepegawaian->get_data_pensiun_unlimited($tanggal,$type,$limit);
-				
+		if($this->uri->segment(3) == "search"){
+			$type_pegawai = $this->uri->segment(4);
+			$pegawai = $this->kepegawaian->get_data_pensiun_unlimited($tanggal,$type,$limit,$type_pegawai);
+		}else{
+			$type_pegawai = "ALL";
+			$pegawai = $this->kepegawaian->get_data_pensiun_unlimited($tanggal,$type,$limit,$type_pegawai);
+		}		
 		//load our new PHPExcel library
 		$this->load->library('excel');
-		//activate worksheet number 1
+		//activate worksheet number 4
 		$this->excel->setActiveSheetIndex(0);
 		//name the worksheet
-		$this->excel->getActiveSheet()->setTitle("Data Pegawai Pensiun ");
-		//set cell A1 content with some text
+		$this->excel->getActiveSheet()->setTitle("Data Pegawai Pensiun");
 		
-		$this->excel->getActiveSheet()->setCellValue('A1', 'NO');
-		$this->excel->getActiveSheet()->setCellValue('B1', 'NIPP');
-		$this->excel->getActiveSheet()->setCellValue('C1', 'NAMA');
-		$this->excel->getActiveSheet()->setCellValue('D1', 'TEMPAT LAHIR');
-		$this->excel->getActiveSheet()->setCellValue('E1', 'TANGGAL LAHIR');
-		$this->excel->getActiveSheet()->setCellValue('F1', 'JENIS KELAMIN');
-		$this->excel->getActiveSheet()->setCellValue('G1', 'GOLONGAN DARAH');
-		$this->excel->getActiveSheet()->setCellValue('H1', 'TMT');
+		//Add Image
+		$objDrawing = new PHPExcel_Worksheet_Drawing();
+		$objDrawing->setName('logo');
+		$objDrawing->setDescription('logo_gapura');
+		$objDrawing->setPath('./images/gapura-angkasa.jpg');
+		$objDrawing->setOffsetX(8);    // setOffsetX works properly
+		$objDrawing->setOffsetY(300);  //setOffsetY has no effect
+		$objDrawing->setHeight(35); // logo height
+
+		// Insert picture
+		$objDrawing->setCoordinates('A2');
+		$objDrawing->setWorksheet($this->excel->getActiveSheet());
+	
+		//set cell A4 content with some text
+		
+		$this->excel->getActiveSheet()->setCellValue('A4', 'NO');
+		$this->excel->getActiveSheet()->setCellValue('B4', 'NIPP');
+		$this->excel->getActiveSheet()->setCellValue('C4', 'NAMA');
+		$this->excel->getActiveSheet()->setCellValue('D4', 'TEMPAT LAHIR');
+		$this->excel->getActiveSheet()->setCellValue('E4', 'TANGGAL LAHIR');
+		$this->excel->getActiveSheet()->setCellValue('F4', 'JENIS KELAMIN');
+		$this->excel->getActiveSheet()->setCellValue('G4', 'GOLONGAN DARAH');
+		$this->excel->getActiveSheet()->setCellValue('H4', 'TMT');
 		
 		
-		$i=1;
+		$i=4;
 		$number=0;
 		
 		$nipp = '';
@@ -2853,7 +2886,6 @@ class Pekerja extends Application {
 			$number++;
 			if($row_pegawai['peg_jns_kelamin'] == "P"){ $jk="Perempuan"; }
 			else{$jk="Laki-Laki";}
-			
 						
 			//masukkan data ke tabel excel
 			$this->excel->getActiveSheet()->setCellValue("A$i", "$number");
@@ -2868,15 +2900,16 @@ class Pekerja extends Application {
 		}endforeach;
 		
 		//change the font size
-		$this->excel->getActiveSheet()->getStyle('A1:H1')->getFont()->setSize(14);
+		$this->excel->getActiveSheet()->getStyle('A4:H4')->getFont()->setSize(11);
+		$this->excel->getActiveSheet()->getStyle("A5:H$i")->getFont()->setSize(8);
 		//make the font become bold
-		$this->excel->getActiveSheet()->getStyle('A1:H1')->getFont()->setBold(true);
-		//merge cell A1 until D1
+		$this->excel->getActiveSheet()->getStyle('A4:H4')->getFont()->setBold(true);
+		//merge cell A4 until D4
 		
 		
-		//set aligment to center for that merged cell (A1 to D1)
-		$this->excel->getActiveSheet()->getStyle('A1:H1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-		$this->excel->getActiveSheet()->getStyle('A1:H1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		//set aligment to center for that merged cell (A4 to D4)
+		$this->excel->getActiveSheet()->getStyle('A4:H4')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$this->excel->getActiveSheet()->getStyle('A4:H4')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 		 
 		$filename="Data Pegawai Pensiun.xls"; //save our workbook as this file name
 		header('Content-Type: application/vnd.ms-excel'); //mime type
@@ -2888,7 +2921,7 @@ class Pekerja extends Application {
 		$objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel5');  
 		//force user to download the Excel file without writing it to server's HD
 		$objWriter->save('php://output');
-		
+	
 	}
 	
 	function excel_data_supervisor()
@@ -2901,27 +2934,40 @@ class Pekerja extends Application {
 				
 		//load our new PHPExcel library
 		$this->load->library('excel');
-		//activate worksheet number 1
+		//activate worksheet number 4
 		$this->excel->setActiveSheetIndex(0);
 		//name the worksheet
 		$this->excel->getActiveSheet()->setTitle("Data Supervisor ");
-		//set cell A1 content with some text
+		//set cell A4 content with some text
+	
+		//Add Image
+		$objDrawing = new PHPExcel_Worksheet_Drawing();
+		$objDrawing->setName('logo');
+		$objDrawing->setDescription('logo_gapura');
+		$objDrawing->setPath('./images/gapura-angkasa.jpg');
+		$objDrawing->setOffsetX(8);    // setOffsetX works properly
+		$objDrawing->setOffsetY(300);  //setOffsetY has no effect
+		$objDrawing->setHeight(35); // logo height
+
+		// Insert picture
+		$objDrawing->setCoordinates('A2');
+		$objDrawing->setWorksheet($this->excel->getActiveSheet());
+			
+		$this->excel->getActiveSheet()->setCellValue('A4', 'NO');
+		$this->excel->getActiveSheet()->setCellValue('B4', 'NO UNIT');
+		$this->excel->getActiveSheet()->setCellValue('C4', 'NIPP');
+		$this->excel->getActiveSheet()->setCellValue('D4', 'NAMA PEGAWAI');
+		$this->excel->getActiveSheet()->setCellValue('E4', 'GRADE');
+		$this->excel->getActiveSheet()->setCellValue('F4', 'M.K.A');
+		$this->excel->getActiveSheet()->setCellValue('G4', 'T.M.T GA/GS');
+		$this->excel->getActiveSheet()->setCellValue('H4', 'JENIS KELAMIN');
+		$this->excel->getActiveSheet()->setCellValue('I4', 'TGL LAHIR');
+		$this->excel->getActiveSheet()->setCellValue('J4', 'UMUR');
+		$this->excel->getActiveSheet()->setCellValue('K4', 'T.M.T MUTASI');
+		$this->excel->getActiveSheet()->setCellValue('L4', 'JABATAN');
 		
-		$this->excel->getActiveSheet()->setCellValue('A1', 'NO');
-		$this->excel->getActiveSheet()->setCellValue('B1', 'NO UNIT');
-		$this->excel->getActiveSheet()->setCellValue('C1', 'NIPP');
-		$this->excel->getActiveSheet()->setCellValue('D1', 'NAMA PEGAWAI');
-		$this->excel->getActiveSheet()->setCellValue('E1', 'GRADE');
-		$this->excel->getActiveSheet()->setCellValue('F1', 'M.K.A');
-		$this->excel->getActiveSheet()->setCellValue('G1', 'T.M.T GA/GS');
-		$this->excel->getActiveSheet()->setCellValue('H1', 'JENIS KELAMIN');
-		$this->excel->getActiveSheet()->setCellValue('I1', 'TGL LAHIR');
-		$this->excel->getActiveSheet()->setCellValue('J1', 'UMUR');
-		$this->excel->getActiveSheet()->setCellValue('K1', 'T.M.T MUTASI');
-		$this->excel->getActiveSheet()->setCellValue('L1', 'JABATAN');
 		
-		
-		$i=1;
+		$i=4;
 		$number=0;
 		
 		$nipp = '';
@@ -2976,15 +3022,16 @@ class Pekerja extends Application {
 		}endforeach;
 		
 		//change the font size
-		$this->excel->getActiveSheet()->getStyle('A1:L1')->getFont()->setSize(14);
+		$this->excel->getActiveSheet()->getStyle('A4:L4')->getFont()->setSize(11);
+		$this->excel->getActiveSheet()->getStyle("A5:L$i")->getFont()->setSize(8);
 		//make the font become bold
-		$this->excel->getActiveSheet()->getStyle('A1:L1')->getFont()->setBold(true);
-		//merge cell A1 until D1
+		$this->excel->getActiveSheet()->getStyle('A4:L4')->getFont()->setBold(true);
+		//merge cell A4 until D4
 		
 		
-		//set aligment to center for that merged cell (A1 to D1)
-		$this->excel->getActiveSheet()->getStyle('A1:L1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-		$this->excel->getActiveSheet()->getStyle('A1:L1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		//set aligment to center for that merged cell (A4 to D4)
+		$this->excel->getActiveSheet()->getStyle('A4:L4')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$this->excel->getActiveSheet()->getStyle('A4:L4')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 		 
 		$filename="Data Supervisor.xls"; //save our workbook as this file name
 		header('Content-Type: application/vnd.ms-excel'); //mime type
@@ -3009,27 +3056,40 @@ class Pekerja extends Application {
 						
 		//load our new PHPExcel library
 		$this->load->library('excel');
-		//activate worksheet number 1
+		//activate worksheet number 4
 		$this->excel->setActiveSheetIndex(0);
 		//name the worksheet
 		$this->excel->getActiveSheet()->setTitle("Data SDM ");
-		//set cell A1 content with some text
+		//set cell A4 content with some text
+
+		//Add Image
+		$objDrawing = new PHPExcel_Worksheet_Drawing();
+		$objDrawing->setName('logo');
+		$objDrawing->setDescription('logo_gapura');
+		$objDrawing->setPath('./images/gapura-angkasa.jpg');
+		$objDrawing->setOffsetX(8);    // setOffsetX works properly
+		$objDrawing->setOffsetY(300);  //setOffsetY has no effect
+		$objDrawing->setHeight(35); // logo height
+
+		// Insert picture
+		$objDrawing->setCoordinates('A2');
+		$objDrawing->setWorksheet($this->excel->getActiveSheet());
 		
-		$this->excel->getActiveSheet()->setCellValue('A1', 'NO');
-		$this->excel->getActiveSheet()->setCellValue('B1', 'NIPP');
-		$this->excel->getActiveSheet()->setCellValue('C1', 'NAMA');
-		$this->excel->getActiveSheet()->setCellValue('D1', 'TEMPAT LAHIR');
-		$this->excel->getActiveSheet()->setCellValue('E1', 'TANGGAL LAHIR');
-		$this->excel->getActiveSheet()->setCellValue('F1', 'UMUR');
-		$this->excel->getActiveSheet()->setCellValue('G1', 'JENIS KELAMIN');
-		$this->excel->getActiveSheet()->setCellValue('H1', 'STATUS');
-		$this->excel->getActiveSheet()->setCellValue('I1', 'STATUS KAWIN');
-		$this->excel->getActiveSheet()->setCellValue('J1', 'ALAMAT');
-		$this->excel->getActiveSheet()->setCellValue('K1', 'NO TELP');
-		$this->excel->getActiveSheet()->setCellValue('L1', 'AGAMA');
+		$this->excel->getActiveSheet()->setCellValue('A4', 'NO');
+		$this->excel->getActiveSheet()->setCellValue('B4', 'NIPP');
+		$this->excel->getActiveSheet()->setCellValue('C4', 'NAMA');
+		$this->excel->getActiveSheet()->setCellValue('D4', 'TEMPAT LAHIR');
+		$this->excel->getActiveSheet()->setCellValue('E4', 'TANGGAL LAHIR');
+		$this->excel->getActiveSheet()->setCellValue('F4', 'UMUR');
+		$this->excel->getActiveSheet()->setCellValue('G4', 'JENIS KELAMIN');
+		$this->excel->getActiveSheet()->setCellValue('H4', 'STATUS');
+		$this->excel->getActiveSheet()->setCellValue('I4', 'STATUS KAWIN');
+		$this->excel->getActiveSheet()->setCellValue('J4', 'ALAMAT');
+		$this->excel->getActiveSheet()->setCellValue('K4', 'NO TELP');
+		$this->excel->getActiveSheet()->setCellValue('L4', 'AGAMA');
 		
 		
-		$i=2;
+		$i=5;
 		$number=0;
 		$kodeunit = "";
 		$nipp = '';
@@ -3090,7 +3150,7 @@ class Pekerja extends Application {
 			$this->excel->getActiveSheet()->setCellValue("I$i", strtoupper("$row_sdm[p_stk_status_keluarga]"));
 			$this->excel->getActiveSheet()->setCellValue("L$i", strtoupper("$row_sdm[p_ag_agama]"));
 			//data anak
-			$num_anak = 1;
+			$num_anak = 4;
 			foreach ($anak as $row_anak)
 			{
 				$umur_ank=floor(($time - strtotime($row_anak['peg_ank_tgl_lahir']))/(365*24*60*60));
@@ -3110,29 +3170,30 @@ class Pekerja extends Application {
 		}endforeach;
 		
 		//change the font size
-		$this->excel->getActiveSheet()->getStyle('A1:L1')->getFont()->setSize(14);
+		$this->excel->getActiveSheet()->getStyle('A4:L4')->getFont()->setSize(11);
+		$this->excel->getActiveSheet()->getStyle("A6:L$i")->getFont()->setSize(8);
 		//make the font become bold
-		$this->excel->getActiveSheet()->getStyle('A1:L1')->getFont()->setBold(true);
-		//merge cell A1 until D1
+		$this->excel->getActiveSheet()->getStyle('A4:L4')->getFont()->setBold(true);
+		//merge cell A4 until D4
 		
 		
-		//set aligment to center for that merged cell (A1 to D1)
-		$this->excel->getActiveSheet()->getStyle('A1:L1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-		$this->excel->getActiveSheet()->getStyle('A1:L1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		//set aligment to center for that merged cell (A4 to D4)
+		$this->excel->getActiveSheet()->getStyle('A4:L4')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$this->excel->getActiveSheet()->getStyle('A4:L4')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 		
-		//merge cell A1 until D1
-		$this->excel->getActiveSheet()->mergeCells('A1:A2');
-		$this->excel->getActiveSheet()->mergeCells('B1:B2');
-		$this->excel->getActiveSheet()->mergeCells('C1:C2');
-		$this->excel->getActiveSheet()->mergeCells('D1:D2');
-		$this->excel->getActiveSheet()->mergeCells('E1:E2');
-		$this->excel->getActiveSheet()->mergeCells('F1:F2');
-		$this->excel->getActiveSheet()->mergeCells('G1:G2');
-		$this->excel->getActiveSheet()->mergeCells('H1:H2');
-		$this->excel->getActiveSheet()->mergeCells('I1:I2');
-		$this->excel->getActiveSheet()->mergeCells('J1:J2');
-		$this->excel->getActiveSheet()->mergeCells('K1:K2');
-		$this->excel->getActiveSheet()->mergeCells('L1:L2');
+		//merge cell A4 until D4
+		$this->excel->getActiveSheet()->mergeCells('A4:A5');
+		$this->excel->getActiveSheet()->mergeCells('B4:B5');
+		$this->excel->getActiveSheet()->mergeCells('C4:C5');
+		$this->excel->getActiveSheet()->mergeCells('D4:D5');
+		$this->excel->getActiveSheet()->mergeCells('E4:E5');
+		$this->excel->getActiveSheet()->mergeCells('F4:F5');
+		$this->excel->getActiveSheet()->mergeCells('G4:G5');
+		$this->excel->getActiveSheet()->mergeCells('H4:H5');
+		$this->excel->getActiveSheet()->mergeCells('I4:I5');
+		$this->excel->getActiveSheet()->mergeCells('J4:J5');
+		$this->excel->getActiveSheet()->mergeCells('K4:K5');
+		$this->excel->getActiveSheet()->mergeCells('L4:L5');
 		 
 		$filename="Data SDM.xls"; //save our workbook as this file name
 		header('Content-Type: application/vnd.ms-excel'); //mime type
@@ -3235,94 +3296,94 @@ class Pekerja extends Application {
 		}
 		
 		// Add header
-		$PHPWord->addFontStyle('r_headerStyle', array('name'=>'Verdana','bold'=>true, 'size'=>16));
-		$PHPWord->addParagraphStyle('p_headerStyle', array('align'=>'left', 'spaceAfter'=>100));
+		$PHPWord->addFontStyle('r_headerStyle', array('name'=>'Verdana','bold'=>true, 'size'=>46));
+		$PHPWord->addParagraphStyle('p_headerStyle', array('align'=>'left', 'spaceAfter'=>400));
 		$header = $section->createHeader();
 		$header->addText('CURRICULUM VITAE', 'r_headerStyle', 'p_headerStyle');
 		// Title Style
-		$PHPWord->addFontStyle('r_titleStyle', array('name'=>'Verdana','bold'=>true, 'size'=>12));
+		$PHPWord->addFontStyle('r_titleStyle', array('name'=>'Verdana','bold'=>true, 'size'=>42));
 		$PHPWord->addParagraphStyle('p_titleStyle', array('align'=>'left', 'spaceAfter'=>80));
 				
 		// Define table style arrays
-		$styleTable1 = array('cellMargin'=>30);
-		//$styleTable1 = array('borderSize'=>0, 'borderColor'=>'000000', 'cellMargin'=>30);
-		$styleFirstRow1 = array();
+		$styleTable4 = array('cellMargin'=>30);
+		//$styleTable4 = array('borderSize'=>0, 'borderColor'=>'000000', 'cellMargin'=>30);
+		$styleFirstRow4 = array();
 
 		// Define cell style arrays
 		$styleCell = array('valign'=>'top');
 		
 		// Add table style
-		//$PHPWord->addTableStyle('TableStyle1', $styleTable1);
-		$PHPWord->addTableStyle('TableStyle1', $styleTable1, $styleFirstRow1);
+		//$PHPWord->addTableStyle('TableStyle4', $styleTable4);
+		$PHPWord->addTableStyle('TableStyle4', $styleTable4, $styleFirstRow4);
 
-		$section->addTextBreak(1);
+		$section->addTextBreak(4);
 		$section->addText('I. KETERANGAN PEGAWAI', 'r_titleStyle', 'p_titleStyle');
-		$section->addTextBreak(1);
+		$section->addTextBreak(4);
 		// Add table
-		$table1 = $section->addTable('TableStyle1');
+		$table4 = $section->addTable('TableStyle4');
 
 		# Keterangan Pegawai
 		// Add row
-		$table1->addRow(80);
-		$table1->addCell(2000, $styleCell)->addText('NAMA LENGKAP');
-		$table1->addCell(200, $styleCell)->addText(':');
-		$table1->addCell(4400, $styleCell)->addText(strtoupper($peg_nama));
+		$table4->addRow(80);
+		$table4->addCell(2000, $styleCell)->addText('NAMA LENGKAP');
+		$table4->addCell(200, $styleCell)->addText(':');
+		$table4->addCell(4400, $styleCell)->addText(strtoupper($peg_nama));
 		
-		$table1->addRow();
-		$table1->addCell(2000, $styleCell)->addText('NIP');
-		$table1->addCell(200, $styleCell)->addText(':');
-		$table1->addCell(4400, $styleCell)->addText(strtoupper($peg_nipp));
+		$table4->addRow();
+		$table4->addCell(2000, $styleCell)->addText('NIP');
+		$table4->addCell(200, $styleCell)->addText(':');
+		$table4->addCell(4400, $styleCell)->addText(strtoupper($peg_nipp));
 		
-		$table1->addRow();
-		$table1->addCell(2000, $styleCell)->addText('T.M.T');
-		$table1->addCell(200, $styleCell)->addText(':');
-		$table1->addCell(4400, $styleCell)->addText($peg_tmt);
+		$table4->addRow();
+		$table4->addCell(2000, $styleCell)->addText('T.M.T');
+		$table4->addCell(200, $styleCell)->addText(':');
+		$table4->addCell(4400, $styleCell)->addText($peg_tmt);
 		
-		$table1->addRow();
-		$table1->addCell(2000, $styleCell)->addText('PANGKAT / GOLONGAN');
-		$table1->addCell(200, $styleCell)->addText(':');
-		$table1->addCell(4400, $styleCell)->addText(strtoupper($peg_golongan));
+		$table4->addRow();
+		$table4->addCell(2000, $styleCell)->addText('PANGKAT / GOLONGAN');
+		$table4->addCell(200, $styleCell)->addText(':');
+		$table4->addCell(4400, $styleCell)->addText(strtoupper($peg_golongan));
 		
-		$table1->addRow();
-		$table1->addCell(2000, $styleCell)->addText('JABATAN');
-		$table1->addCell(200, $styleCell)->addText(':');
-		$table1->addCell(4400, $styleCell)->addText(strtoupper($peg_jabatan));
+		$table4->addRow();
+		$table4->addCell(2000, $styleCell)->addText('JABATAN');
+		$table4->addCell(200, $styleCell)->addText(':');
+		$table4->addCell(4400, $styleCell)->addText(strtoupper($peg_jabatan));
 		
-		$table1->addRow();
-		$table1->addCell(2000, $styleCell)->addText('UNIT KERJA');
-		$table1->addCell(200, $styleCell)->addText(':');
-		$table1->addCell(4400, $styleCell)->addText(strtoupper($peg_unit));
+		$table4->addRow();
+		$table4->addCell(2000, $styleCell)->addText('UNIT KERJA');
+		$table4->addCell(200, $styleCell)->addText(':');
+		$table4->addCell(4400, $styleCell)->addText(strtoupper($peg_unit));
 		
-		$table1->addRow();
-		$table1->addCell(2000, $styleCell)->addText('TEMPAT, TANGGAL LAHIR');
-		$table1->addCell(200, $styleCell)->addText(':');
-		$table1->addCell(4400, $styleCell)->addText(strtoupper($peg_tempatlahir).", $peg_tanggallahir");
+		$table4->addRow();
+		$table4->addCell(2000, $styleCell)->addText('TEMPAT, TANGGAL LAHIR');
+		$table4->addCell(200, $styleCell)->addText(':');
+		$table4->addCell(4400, $styleCell)->addText(strtoupper($peg_tempatlahir).", $peg_tanggallahir");
 		
-		$table1->addRow();
-		$table1->addCell(2000, $styleCell)->addText('USIA');
-		$table1->addCell(200, $styleCell)->addText(':');
-		$table1->addCell(4400, $styleCell)->addText("$peg_usia");
+		$table4->addRow();
+		$table4->addCell(2000, $styleCell)->addText('USIA');
+		$table4->addCell(200, $styleCell)->addText(':');
+		$table4->addCell(4400, $styleCell)->addText("$peg_usia");
 		
-		$table1->addRow();
-		$table1->addCell(2000, $styleCell)->addText('JENIS KELAMIN');
-		$table1->addCell(200, $styleCell)->addText(':');
-		$table1->addCell(4400, $styleCell)->addText("$peg_jeniskelamin");
+		$table4->addRow();
+		$table4->addCell(2000, $styleCell)->addText('JENIS KELAMIN');
+		$table4->addCell(200, $styleCell)->addText(':');
+		$table4->addCell(4400, $styleCell)->addText("$peg_jeniskelamin");
 		
-		$table1->addRow();
-		$table1->addCell(2000, $styleCell)->addText('ALAMAT RUMAH');
-		$table1->addCell(200, $styleCell)->addText(':');
-		$table1->addCell(4400, $styleCell)->addText(strtoupper($peg_alamatrumah));
+		$table4->addRow();
+		$table4->addCell(2000, $styleCell)->addText('ALAMAT RUMAH');
+		$table4->addCell(200, $styleCell)->addText(':');
+		$table4->addCell(4400, $styleCell)->addText(strtoupper($peg_alamatrumah));
 		
-		$table1->addRow();
-		$table1->addCell(2000, $styleCell)->addText('TELEPHONE');
-		$table1->addCell(200, $styleCell)->addText(':');
-		$table1->addCell(4400, $styleCell)->addText("$peg_telephone");
+		$table4->addRow();
+		$table4->addCell(2000, $styleCell)->addText('TELEPHONE');
+		$table4->addCell(200, $styleCell)->addText(':');
+		$table4->addCell(4400, $styleCell)->addText("$peg_telephone");
 		
 		/*
 		$image = base_url()."pegawai/foto/".$peg_nipp.".jpg";
-		$section->addImage("$image", array('width'=>100, 'height'=>100, 'align'=>'right'));	
+		$section->addImage("$image", array('width'=>400, 'height'=>400, 'align'=>'right'));	
 		*/
-		$section->addTextBreak(1);
+		$section->addTextBreak(4);
 		
 
 # II. PENDIDIKAN FORMAL		
@@ -3330,7 +3391,7 @@ class Pekerja extends Application {
 		// Define table style arrays
 		$styleTableBorder = array('borderSize'=>2, 'borderColor'=>'000000', 'cellMargin'=>30);
 		$styleFirstRow = array('borderBottomSize'=>2, 'borderBottomColor'=>'0000FF', 'bgColor'=>'AAAAAA');
-//'borderBottomSize'=>1,
+//'borderBottomSize'=>4,
 		// Define cell style arrays
 		$styleCellBorder = array('valign'=>'center');
 		//$styleCellBTLR = array('valign'=>'center', 'textDirection'=>PHPWord_Style_Cell::TEXT_DIR_BTLR);
@@ -3363,11 +3424,11 @@ class Pekerja extends Application {
 			$table2->addRow();
 			$table2->addCell(300)->addText("$no");
 			$table2->addCell(2000)->addText("$row_pendidikan[p_pdd_tingkat]");
-			$table2->addCell(1000)->addText("$row_pendidikan[p_pdd_masuk]");
+			$table2->addCell(4000)->addText("$row_pendidikan[p_pdd_masuk]");
 			$table2->addCell(2000)->addText("$row_pendidikan[p_pdd_lp]");
 			$table2->addCell(3000)->addText(" ");
 		}
-		$section->addTextBreak(1);
+		$section->addTextBreak(4);
 		
 		
 # III. PENDIDIKAN INFORMAL		
@@ -3381,8 +3442,8 @@ class Pekerja extends Application {
 		// Add cells
 		$table3->addCell(300, $styleCellBorder)->addText('NO', $fontStyle);
 		$table3->addCell(2000, $styleCellBorder)->addText('PENDIDIKAN', $fontStyle);
-		$table3->addCell(1500, $styleCellBorder)->addText('TGL. MULAI', $fontStyle);
-		$table3->addCell(1500, $styleCellBorder)->addText('TGL. SELESAI', $fontStyle);
+		$table3->addCell(4500, $styleCellBorder)->addText('TGL. MULAI', $fontStyle);
+		$table3->addCell(4500, $styleCellBorder)->addText('TGL. SELESAI', $fontStyle);
 		$table3->addCell(2000, $styleCellBorder)->addText('TEMPAT', $fontStyle);
 		$table3->addCell(2000, $styleCellBorder)->addText('KETERANGAN', $fontStyle);
 
@@ -3394,12 +3455,12 @@ class Pekerja extends Application {
 			$table3->addRow();
 			$table3->addCell(300)->addText("$no");
 			$table3->addCell(2000)->addText("$row_nstkp[p_nstkp_jenis]");
-			$table3->addCell(1500)->addText("$p_nstkp_pelaksanaan");
-			$table3->addCell(1500)->addText("$p_nstkp_selesai");
+			$table3->addCell(4500)->addText("$p_nstkp_pelaksanaan");
+			$table3->addCell(4500)->addText("$p_nstkp_selesai");
 			$table3->addCell(2000)->addText("$row_nstkp[p_nstkp_lembaga]");
 			$table3->addCell(2000)->addText('');
 		}
-		$section->addTextBreak(1);
+		$section->addTextBreak(4);
 
 # IV. RIWAYAT GOLONGAN		
 		$section->addText('IV. RIWAYAT GOLONGAN', 'r_titleStyle', 'p_titleStyle');
@@ -3426,7 +3487,7 @@ class Pekerja extends Application {
 			$table4->addCell(5000, $styleCellBorder)->addText("$row_riwayatgolongan[p_grd_skno]");
 			$table4->addCell(2000, $styleCellBorder)->addText("$row_riwayatgolongan[p_grd_tmt]");
 		}
-		$section->addTextBreak(1);		
+		$section->addTextBreak(4);		
 
 # V. RIWAYAT JABATAN		
 		$section->addText('V. RIWAYAT JABATAN', 'r_titleStyle', 'p_titleStyle');
@@ -3441,7 +3502,7 @@ class Pekerja extends Application {
 		$table5->addCell(2500, $styleCellBorder)->addText('JABATAN', $fontStyle);
 		$table5->addCell(2000, $styleCellBorder)->addText('DEPARTEMEN', $fontStyle);
 		$table5->addCell(3000, $styleCellBorder)->addText('SK', $fontStyle);
-		$table5->addCell(1500, $styleCellBorder)->addText('T.M.T', $fontStyle);
+		$table5->addCell(4500, $styleCellBorder)->addText('T.M.T', $fontStyle);
 		
 		$no = 0;
 		foreach($riwayat_jabatan as $row_riwayatjabatan){ 
@@ -3453,9 +3514,9 @@ class Pekerja extends Application {
 			$table5->addCell(2500, $styleCellBorder)->addText(strtoupper($row_riwayatjabatan['p_jbt_jabatan']));
 			$table5->addCell(2000, $styleCellBorder)->addText("$row_riwayatjabatan[p_jbt_unit]");
 			$table5->addCell(3000, $styleCellBorder)->addText(strtoupper($row_riwayatjabatan['p_jbt_skno']));
-			$table5->addCell(1500, $styleCellBorder)->addText("$jbt_tmt_start");
+			$table5->addCell(4500, $styleCellBorder)->addText("$jbt_tmt_start");
 		}
-		$section->addTextBreak(1);		
+		$section->addTextBreak(4);		
 		
 
 # VI. DATA KELUARGA		
@@ -3470,7 +3531,7 @@ class Pekerja extends Application {
 		$table6->addCell(300, $styleCellBorder)->addText('NO', $fontStyle);
 		$table6->addCell(3000, $styleCellBorder)->addText('NAMA', $fontStyle);
 		$table6->addCell(2000, $styleCellBorder)->addText('TGL LAHIR', $fontStyle);
-		$table6->addCell(1000, $styleCellBorder)->addText('UMUR', $fontStyle);
+		$table6->addCell(4000, $styleCellBorder)->addText('UMUR', $fontStyle);
 		$table6->addCell(3000, $styleCellBorder)->addText('HUBUNGAN', $fontStyle);
 		
 		$no = 0;
@@ -3491,7 +3552,7 @@ class Pekerja extends Application {
 			$table6->addCell(300, $styleCellBorder)->addText("$no");
 			$table6->addCell(3000, $styleCellBorder)->addText(strtoupper($row_pasangan['p_ps_nama']));
 			$table6->addCell(2000, $styleCellBorder)->addText("$tgl_lahir_pasangan");
-			$table6->addCell(1000, $styleCellBorder)->addText("$umur");
+			$table6->addCell(4000, $styleCellBorder)->addText("$umur");
 			$table6->addCell(3000, $styleCellBorder)->addText("$status_pasangan");
 		}	
 		# ANAK
@@ -3511,10 +3572,10 @@ class Pekerja extends Application {
 			$table6->addCell(300, $styleCellBorder)->addText("$no");
 			$table6->addCell(3000, $styleCellBorder)->addText(strtoupper($row_anak['peg_ank_nama']));
 			$table6->addCell(2000, $styleCellBorder)->addText("$tgl_lahir_anak");
-			$table6->addCell(1000, $styleCellBorder)->addText("$umur_anak");
+			$table6->addCell(4000, $styleCellBorder)->addText("$umur_anak");
 			$table6->addCell(3000, $styleCellBorder)->addText("ANAK KE-$anak");
 		}	
-		$section->addTextBreak(1);		
+		$section->addTextBreak(4);		
 		
 
 # VII.  SANKSI JABATAN 		
@@ -3529,9 +3590,9 @@ class Pekerja extends Application {
 		$table7->addCell(300, $styleCellBorder)->addText('NO', $fontStyle);
 		$table7->addCell(3000, $styleCellBorder)->addText('JENIS SANKSI', $fontStyle);
 		$table7->addCell(2000, $styleCellBorder)->addText('NO SK ', $fontStyle);
-		$table7->addCell(1500, $styleCellBorder)->addText('AWAL', $fontStyle);
-		$table7->addCell(1500, $styleCellBorder)->addText('AKHIR', $fontStyle);
-		$table7->addCell(1000, $styleCellBorder)->addText('KETERANGAN', $fontStyle);
+		$table7->addCell(4500, $styleCellBorder)->addText('AWAL', $fontStyle);
+		$table7->addCell(4500, $styleCellBorder)->addText('AKHIR', $fontStyle);
+		$table7->addCell(4000, $styleCellBorder)->addText('KETERANGAN', $fontStyle);
 		
 		$no = 0;
 		foreach($riwayat_sanksi as $row_sanksi){ 
@@ -3546,12 +3607,12 @@ class Pekerja extends Application {
 			$table7->addCell(300, $styleCellBorder)->addText("$no");
 			$table7->addCell(3000, $styleCellBorder)->addText(strtoupper($row_sanksi['p_snk_jenis']));
 			$table7->addCell(2000, $styleCellBorder)->addText("$row_sanksi[p_snk_no]");
-			$table7->addCell(1500, $styleCellBorder)->addText("$start");
-			$table7->addCell(1500, $styleCellBorder)->addText("$end");
-			$table7->addCell(1000, $styleCellBorder)->addText(strtoupper($row_sanksi['p_snk_keterangan']));
+			$table7->addCell(4500, $styleCellBorder)->addText("$start");
+			$table7->addCell(4500, $styleCellBorder)->addText("$end");
+			$table7->addCell(4000, $styleCellBorder)->addText(strtoupper($row_sanksi['p_snk_keterangan']));
 			
 		}	
-		$section->addTextBreak(1);
+		$section->addTextBreak(4);
 	
 	
 		$filename="$peg_nipp.docx"; //save our workbook as this file name
@@ -3574,12 +3635,12 @@ class Pekerja extends Application {
 		
 		//$type = '52';
 		$type = '55';
-		$limit = '100';
+		$limit = '400';
 		
 		#pagination config
 		$config['base_url'] = base_url().'index.php/pekerja/pegawai_keluar/'; //set the base url for pagination
 		$config['total_rows'] = $this->kepegawaian->countPegawaiKeluar($tanggal,$type, $limit); //total rows
-		$config['per_page'] = 10; //the number of per page for pagination
+		$config['per_page'] = 40; //the number of per page for pagination
 		$config['uri_segment'] = 3; //see from base_url. 3 for this case
 		$this->pagination->initialize($config);
 		$page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
@@ -3598,9 +3659,14 @@ class Pekerja extends Application {
 	
 	public function search_pegawai_keluar()
 	{
+		if($this->input->post('type') == NULL){
+			$type_pegawai = $this->uri->segment(3);
+		}else{
+			$type_pegawai = $this->input->post('type');
+		}
 		if ($this->input->post('search') == NULL )
 		{
-			$search_data = str_replace('%20',' ',$this->uri->segment(3));
+			$search_data = str_replace('%20',' ',$this->uri->segment(4));
 		}else{
 			$search_data = $this->input->post('search');
 		}
@@ -3611,24 +3677,25 @@ class Pekerja extends Application {
 		
 		//$type = '52';
 		$type = '55';
-		$limit = '100';
+		$limit = '400';
 		
 		#pagination config
-		$config['base_url'] = base_url().'index.php/pekerja/search_pegawai_keluar/'.$search_data.'/'; //set the base url for pagination
-		$config['total_rows'] = $this->kepegawaian->countSearchPegawaiKeluar($tanggal, $type, $limit,$search_data); //total rows
-		$config['per_page'] = 10; //the number of per page for pagination
+		$config['base_url'] = base_url().'index.php/pekerja/search_pegawai_keluar/'.$type_pegawai.'/'.$search_data.'/'; //set the base url for pagination
+		$config['total_rows'] = $this->kepegawaian->countSearchPegawaiKeluar($tanggal, $type, $limit,$type_pegawai,$search_data); //total rows
+		$config['per_page'] = 40; //the number of per page for pagination
 		$config['uri_segment'] = 4; //see from base_url. 3 for this case
 		$this->pagination->initialize($config);
 		$page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
 		
 		#data preparing
-		$data['pegawai'] = $this->kepegawaian->search_data_pegawai_keluar($config['per_page'],$page, $tanggal, $type, $limit, $search_data);
+		$data['pegawai'] = $this->kepegawaian->search_data_pegawai_keluar($config['per_page'],$page, $tanggal, $type, $limit, $type_pegawai, $search_data);
 		$data['count'] = $config['total_rows'];
 		$data['page'] = 'Data Pegawai Keluar';
 		$data['tanggal'] = $tanggal;
 		$data['type'] = 'ALL';
 		$data['view_keluar'] = 'class="this"';
 		$data['page_karyawan'] = 'yes';
+		$data['link_excel'] = 'pekerja/excel_data_pensiun/search/'.$type_pegawai.'/'.$search_data;
 		#calling view
 		$this->load->view('kepegawaian/index',$data);
 	}
@@ -3647,8 +3714,8 @@ class Pekerja extends Application {
    {
       $config['upload_path'] = './pegawai/foto';
       $config['allowed_types'] = 'gif|jpg|png';
-      $config['max_size']  = '100';
-      $config['max_width']  = '1024';
+      $config['max_size']  = '400';
+      $config['max_width']  = '4024';
       $config['max_height']  = '768';
  
       
@@ -3675,8 +3742,8 @@ class Pekerja extends Application {
    {
       $config['upload_path'] = './pegawai/diklat/';
       $config['allowed_types'] = 'gif|jpg|png';
-      $config['max_size']  = '100';
-      $config['max_width']  = '1024';
+      $config['max_size']  = '400';
+      $config['max_width']  = '4024';
       $config['max_height']  = '768';
  
       
@@ -3731,8 +3798,8 @@ class Pekerja extends Application {
 			$config['allowed_types'] = 'pdf|gif|jpg|png';
 			$config['max_size']  = '9999';
 			$config['overwrite']	=	TRUE;
-			//$filenamebantu = str_replace(' ','_',$no_sk)."-$id_peg_jabatan-".$update_on.".".$ext[1];
-			$filenamebantu = str_replace(' ','_',$no_sk).".".$ext[1]; //filenya ditindih dengan file baru
+			//$filenamebantu = str_replace(' ','_',$no_sk)."-$id_peg_jabatan-".$update_on.".".$ext[4];
+			$filenamebantu = str_replace(' ','_',$no_sk).".".$ext[4]; //filenya ditindih dengan file baru
 			$config['file_name']=$filenamebantu;
 			
 			
@@ -3774,7 +3841,7 @@ class Pekerja extends Application {
 		<body align="center">
 		<?php
 		$file = base_url()."pegawai/skjabatan/".$nama_file;
-		echo "<embed src= '".$file."' width='1200' height='666' ></embed>";
+		echo "<embed src= '".$file."' width='4200' height='666' ></embed>";
 		?>
 		<br><br>
 		<!-- <input type="button" value="Back" onclick="goBack()"> -->
@@ -3798,7 +3865,7 @@ class Pekerja extends Application {
 		<body align="center">
 		<?php
 		$file = base_url()."pegawai/skgolongan/".$nama_file;
-		echo "<embed src= '".$file."' width='1200' height='666' ></embed>";
+		echo "<embed src= '".$file."' width='4200' height='666' ></embed>";
 		?>
 		<br><br>
 		<!-- <input type="button" value="Back" onclick="goBack()"> -->
@@ -3822,7 +3889,7 @@ class Pekerja extends Application {
 		<body align="center">
 		<?php
 		$file = base_url()."pegawai/sksanksi/".$nama_file;
-		echo "<embed src= '".$file."' width='1200' height='666' ></embed>";
+		echo "<embed src= '".$file."' width='4200' height='666' ></embed>";
 		?>
 		<br><br>
 		<!-- <input type="button" value="Back" onclick="goBack()"> -->
@@ -3853,16 +3920,29 @@ class Pekerja extends Application {
 	{
 		$jenis = $this->uri->segment(3);
 		if($jenis != 'ALL'){
-			ini_set("memory_limit","300M");
+			//ini_set("memory_limit","300M");
 			
 			$datestring = "%Y-%m-%d" ;
 			$time = time();
 			$tanggal = mdate($datestring, $time);
 			
 			$pegawai = $this->kepegawaian->get_data_pegawai_aktif_unlimited($jenis);
-					
+		
 			$this->load->library('excel');
 			$this->excel->setActiveSheetIndex(0);
+			//Add Image
+			$objDrawing = new PHPExcel_Worksheet_Drawing();
+			$objDrawing->setName('logo');
+			$objDrawing->setDescription('logo_gapura');
+			$objDrawing->setPath('./images/gapura-angkasa.jpg');
+			$objDrawing->setOffsetX(8);    // setOffsetX works properly
+			$objDrawing->setOffsetY(300);  //setOffsetY has no effect
+			$objDrawing->setHeight(35); // logo height
+
+			// Insert picture
+			$objDrawing->setCoordinates('A2');
+			$objDrawing->setWorksheet($this->excel->getActiveSheet());
+
 			$this->excel->getActiveSheet()->setTitle("Data Pegawai ");
 			//JUDUL KOP
 			$this->excel->getActiveSheet()->setCellValue('A2', 'REKAPITULASI DATA PEGAWAI '.strtoupper($jenis));
@@ -3938,8 +4018,8 @@ class Pekerja extends Application {
 				$this->excel->getActiveSheet()->setCellValue("E$i", strtoupper("$row_pegawai[peg_nipp]"));
 				$this->excel->getActiveSheet()->setCellValue("F$i", strtoupper("$row_pegawai[p_grd_grade]"));
 				$this->excel->getActiveSheet()->setCellValue("G$i", $mka);
-				$this->excel->getActiveSheet()->setCellValue("H$i", strtoupper("$row_pegawai[peg_jns_kelamin]"));
-				$this->excel->getActiveSheet()->setCellValue("I$i", "$row_pegawai[p_tmt_tmt]");
+				$this->excel->getActiveSheet()->setCellValue("H$i", mdate('%d-%M-%y',strtotime($row_pegawai['p_tmt_tmt'])));
+				$this->excel->getActiveSheet()->setCellValue("I$i", strtoupper("$row_pegawai[peg_jns_kelamin]"));
 				$this->excel->getActiveSheet()->setCellValue("J$i", mdate('%d-%M-%y',strtotime($row_pegawai['peg_tgl_lahir'])));
 				$this->excel->getActiveSheet()->setCellValue("K$i", $umur);
 				$this->excel->getActiveSheet()->setCellValue("L$i", "-");
@@ -3948,10 +4028,11 @@ class Pekerja extends Application {
 			
 				$unit = $row_pegawai['p_unt_kode_unit'];
 				$sub_unit = $row_pegawai['p_unt_kode_sub_unit'];
+			
 			}endforeach;
 			
 			//change the font size
-			$this->excel->getActiveSheet()->getStyle("A2:A4")->getFont()->setSize(14);
+			$this->excel->getActiveSheet()->getStyle("A2:A4")->getFont()->setSize(11);
 			$this->excel->getActiveSheet()->getStyle("A6:N7")->getFont()->setSize(8);
 			$this->excel->getActiveSheet()->getStyle("A8:N$i")->getFont()->setSize(8);
 			//make the font become bold
@@ -3962,7 +4043,7 @@ class Pekerja extends Application {
 			$this->excel->getActiveSheet()->mergeCells('A4:N4');
 			$this->excel->getActiveSheet()->getStyle("M5")->getFont()->setSize(7);
 			
-			//set aligment to center for that merged cell (A1 to D1)
+			//set aligment to center for that merged cell (A4 to D4)
 			$this->excel->getActiveSheet()->getStyle('A6:N6')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 			$this->excel->getActiveSheet()->getStyle('A6:N6')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 			$this->excel->getActiveSheet()->getStyle('A2:A4')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -3973,16 +4054,16 @@ class Pekerja extends Application {
 			$this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(5.54); 
 			$this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(5.54);    
 			$this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(26.5);  
-			$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(10.88); 
-			$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(10.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(40.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(40.88); 
 			$this->excel->getActiveSheet()->getColumnDimension('G')->setWidth(5.63); 
 			$this->excel->getActiveSheet()->getColumnDimension('H')->setWidth(8.88); 
-			$this->excel->getActiveSheet()->getColumnDimension('I')->setWidth(14.88); 
-			$this->excel->getActiveSheet()->getColumnDimension('J')->setWidth(10.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('I')->setWidth(44.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('J')->setWidth(40.88); 
 			$this->excel->getActiveSheet()->getColumnDimension('K')->setWidth(5.88); 
-			$this->excel->getActiveSheet()->getColumnDimension('L')->setWidth(15.88); 
-			$this->excel->getActiveSheet()->getColumnDimension('M')->setWidth(15.88); 
-			$this->excel->getActiveSheet()->getColumnDimension('N')->setWidth(15.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('L')->setWidth(45.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('M')->setWidth(45.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('N')->setWidth(45.88); 
 			
 			 
 			$filename="Data Rekapitulasi Pegawai $jenis.xls"; //save our workbook as this file name
@@ -4011,6 +4092,20 @@ class Pekerja extends Application {
 					
 			$this->load->library('excel');
 			$this->excel->setActiveSheetIndex(0);
+		/*
+			//Add Image
+			$objDrawing = new PHPExcel_Worksheet_Drawing();
+			$objDrawing->setName('logo');
+			$objDrawing->setDescription('logo_gapura');
+			$objDrawing->setPath('./images/gapura-angkasa.jpg');
+			$objDrawing->setOffsetX(8);    // setOffsetX works properly
+			$objDrawing->setOffsetY(300);  //setOffsetY has no effect
+			$objDrawing->setHeight(35); // logo height
+
+			// Insert picture
+			$objDrawing->setCoordinates('A2');
+			$objDrawing->setWorksheet($this->excel->getActiveSheet());
+ 		*/
 			$this->excel->getActiveSheet()->setTitle("Data Pegawai ");
 			//JUDUL KOP
 			$this->excel->getActiveSheet()->setCellValue('A2', 'DATA JUMLAH PEGAWAI '.strtoupper($jenis).' BERDASARKAN JENIS KELAMIN');
@@ -4070,7 +4165,7 @@ class Pekerja extends Application {
 			$this->excel->getActiveSheet()->setCellValue("D$i", $totalp);
 			$this->excel->getActiveSheet()->setCellValue("E$i", $totall+$totalp);
 			
-			$this->excel->getActiveSheet()->getStyle("A2:A4")->getFont()->setSize(14);
+			$this->excel->getActiveSheet()->getStyle("A2:A4")->getFont()->setSize(11);
 			$this->excel->getActiveSheet()->getStyle("A6:F7")->getFont()->setSize(8);
 			$this->excel->getActiveSheet()->getStyle("A8:F$i")->getFont()->setSize(8);
 			$this->excel->getActiveSheet()->getStyle('A2:A4')->getFont()->setBold(true);
@@ -4087,10 +4182,10 @@ class Pekerja extends Application {
 			$this->excel->getActiveSheet()->getStyle('A6:F6')->getAlignment()->setWrapText(true);
 			$this->excel->getActiveSheet()->getColumnDimension('A')->setWidth(8.54);  
 			$this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(25.54); 
-			$this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(15.54);    
-			$this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(15.54);  
-			$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(15.54); 
-			$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(18.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(45.54);    
+			$this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(45.54);  
+			$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(45.54); 
+			$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(48.88); 
 			
 			 
 			$filename="Data Rekapitulasi Jumlah Pegawai $jenis Berdasarkan Jenis Kelamin.xls"; //save our workbook as this file name
@@ -4100,7 +4195,6 @@ class Pekerja extends Application {
 						 
 			$objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel5');  
 			$objWriter->save('php://output');
-		
 		}
 	}
 	
@@ -4119,6 +4213,20 @@ class Pekerja extends Application {
 			$this->load->library('excel');
 			$this->excel->setActiveSheetIndex(0);
 			$this->excel->getActiveSheet()->setTitle("Data Kekuatan SDM ");
+			
+			//Add Image
+			$objDrawing = new PHPExcel_Worksheet_Drawing();
+			$objDrawing->setName('logo');
+			$objDrawing->setDescription('logo_gapura');
+			$objDrawing->setPath('./images/gapura-angkasa.jpg');
+			$objDrawing->setOffsetX(8);    // setOffsetX works properly
+			$objDrawing->setOffsetY(300);  //setOffsetY has no effect
+			$objDrawing->setHeight(35); // logo height
+
+			// Insert picture
+			$objDrawing->setCoordinates('A2');
+			$objDrawing->setWorksheet($this->excel->getActiveSheet());
+			
 			//JUDUL KOP
 			$this->excel->getActiveSheet()->setCellValue('A2', 'DATA KEKUATAN SDM');
 			$this->excel->getActiveSheet()->setCellValue('A3', 'PT. GAPURA ANGKASA CABANG BANDARA NGURAH RAI');
@@ -4201,7 +4309,7 @@ class Pekerja extends Application {
 			
 					
 			//change the font size
-			$this->excel->getActiveSheet()->getStyle("A2:A4")->getFont()->setSize(14);
+			$this->excel->getActiveSheet()->getStyle("A2:A4")->getFont()->setSize(11);
 			$this->excel->getActiveSheet()->getStyle("A6:F7")->getFont()->setSize(8);
 			$this->excel->getActiveSheet()->getStyle("A8:F$i")->getFont()->setSize(8);
 			//make the font become bold
@@ -4212,7 +4320,7 @@ class Pekerja extends Application {
 			$this->excel->getActiveSheet()->mergeCells('A4:F4');
 			$this->excel->getActiveSheet()->getStyle("F5")->getFont()->setSize(7);
 			
-			//set aligment to center for that merged cell (A1 to D1)
+			//set aligment to center for that merged cell (A4 to D4)
 			$this->excel->getActiveSheet()->getStyle('A6:F6')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 			$this->excel->getActiveSheet()->getStyle('A6:F6')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 			$this->excel->getActiveSheet()->getStyle('A2:A4')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -4221,9 +4329,9 @@ class Pekerja extends Application {
 			//Set column widths                                                       
 			$this->excel->getActiveSheet()->getColumnDimension('A')->setWidth(5.54);  
 			$this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(20.54); 
-			$this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(10.5);    
-			$this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(10.5);  
-			$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(10.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(40.5);    
+			$this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(40.5);  
+			$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(40.88); 
 			$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(20.88); 
 			
 			 
@@ -4255,6 +4363,20 @@ class Pekerja extends Application {
 			$this->load->library('excel');
 			$this->excel->setActiveSheetIndex(0);
 			$this->excel->getActiveSheet()->setTitle("Data Pegawai ");
+			
+			//Add Image
+			$objDrawing = new PHPExcel_Worksheet_Drawing();
+			$objDrawing->setName('logo');
+			$objDrawing->setDescription('logo_gapura');
+			$objDrawing->setPath('./images/gapura-angkasa.jpg');
+			$objDrawing->setOffsetX(8);    // setOffsetX works properly
+			$objDrawing->setOffsetY(300);  //setOffsetY has no effect
+			$objDrawing->setHeight(35); // logo height
+
+			// Insert picture
+			$objDrawing->setCoordinates('A2');
+			$objDrawing->setWorksheet($this->excel->getActiveSheet());
+			
 			//JUDUL KOP
 			$this->excel->getActiveSheet()->setCellValue('A2', 'REKAPITULASI DATA PEGAWAI KONTRAK SDM');
 			$this->excel->getActiveSheet()->setCellValue('A3', 'PT. GAPURA ANGKASA CABANG BANDARA NGURAH RAI');
@@ -4336,7 +4458,7 @@ class Pekerja extends Application {
 			}endforeach;
 			
 			//change the font size
-			$this->excel->getActiveSheet()->getStyle("A2:A4")->getFont()->setSize(14);
+			$this->excel->getActiveSheet()->getStyle("A2:A4")->getFont()->setSize(11);
 			$this->excel->getActiveSheet()->getStyle("A6:K7")->getFont()->setSize(8);
 			$this->excel->getActiveSheet()->getStyle("A8:K$i")->getFont()->setSize(8);
 			//make the font become bold
@@ -4347,7 +4469,7 @@ class Pekerja extends Application {
 			$this->excel->getActiveSheet()->mergeCells('A4:K4');
 			$this->excel->getActiveSheet()->getStyle("K5")->getFont()->setSize(7);
 			
-			//set aligment to center for that merged cell (A1 to D1)
+			//set aligment to center for that merged cell (A4 to D4)
 			$this->excel->getActiveSheet()->getStyle('A6:K6')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 			$this->excel->getActiveSheet()->getStyle('A6:K6')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 			$this->excel->getActiveSheet()->getStyle('A2:A4')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -4358,13 +4480,13 @@ class Pekerja extends Application {
 			$this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(5.54); 
 			$this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(5.54);    
 			$this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(26.5);  
-			$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(10.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(40.88); 
 			$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(7.77); 
-			$this->excel->getActiveSheet()->getColumnDimension('G')->setWidth(10.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('G')->setWidth(40.88); 
 			$this->excel->getActiveSheet()->getColumnDimension('H')->setWidth(8.88); 
 			$this->excel->getActiveSheet()->getColumnDimension('I')->setWidth(24.88); 
-			$this->excel->getActiveSheet()->getColumnDimension('J')->setWidth(18.88); 
-			$this->excel->getActiveSheet()->getColumnDimension('K')->setWidth(15.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('J')->setWidth(48.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('K')->setWidth(45.88); 
 			
 			
 			
@@ -4393,6 +4515,20 @@ class Pekerja extends Application {
 			$this->load->library('excel');
 			$this->excel->setActiveSheetIndex(0);
 			$this->excel->getActiveSheet()->setTitle("Data Kekuatan SDM ");
+			
+			//Add Image
+			$objDrawing = new PHPExcel_Worksheet_Drawing();
+			$objDrawing->setName('logo');
+			$objDrawing->setDescription('logo_gapura');
+			$objDrawing->setPath('./images/gapura-angkasa.jpg');
+			$objDrawing->setOffsetX(8);    // setOffsetX works properly
+			$objDrawing->setOffsetY(300);  //setOffsetY has no effect
+			$objDrawing->setHeight(35); // logo height
+
+			// Insert picture
+			$objDrawing->setCoordinates('A2');
+			$objDrawing->setWorksheet($this->excel->getActiveSheet());
+			
 			//JUDUL KOP
 			$this->excel->getActiveSheet()->setCellValue('A2', 'DATA KEKUATAN SDM PEG. KONTRAK SDM');
 			$this->excel->getActiveSheet()->setCellValue('A3', 'PT. GAPURA ANGKASA CABANG BANDARA NGURAH RAI');
@@ -4448,7 +4584,7 @@ class Pekerja extends Application {
 			$this->excel->getActiveSheet()->setCellValue("D$i", "");
 			
 					
-			$this->excel->getActiveSheet()->getStyle("A2:A4")->getFont()->setSize(14);
+			$this->excel->getActiveSheet()->getStyle("A2:A4")->getFont()->setSize(11);
 			$this->excel->getActiveSheet()->getStyle("A6:D7")->getFont()->setSize(8);
 			$this->excel->getActiveSheet()->getStyle("A8:D$i")->getFont()->setSize(8);
 			$this->excel->getActiveSheet()->getStyle('A2:A4')->getFont()->setBold(true);
@@ -4464,9 +4600,9 @@ class Pekerja extends Application {
 			$this->excel->getActiveSheet()->getStyle('A6:D6')->getAlignment()->setWrapText(true);
 			$this->excel->getActiveSheet()->getColumnDimension('A')->setWidth(5.54);  
 			$this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(20.54); 
-			$this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(10.5);    
-			$this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(10.5);  
-			$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(10.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(40.5);    
+			$this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(40.5);  
+			$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(40.88); 
 			$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(20.88); 
 			
 			 
@@ -4497,6 +4633,20 @@ class Pekerja extends Application {
 			$this->load->library('excel');
 			$this->excel->setActiveSheetIndex(0);
 			$this->excel->getActiveSheet()->setTitle("Data Pegawai ");
+		/*	
+			//Add Image
+			$objDrawing = new PHPExcel_Worksheet_Drawing();
+			$objDrawing->setName('logo');
+			$objDrawing->setDescription('logo_gapura');
+			$objDrawing->setPath('./images/gapura-angkasa.jpg');
+			$objDrawing->setOffsetX(8);    // setOffsetX works properly
+			$objDrawing->setOffsetY(300);  //setOffsetY has no effect
+			$objDrawing->setHeight(35); // logo height
+
+			// Insert picture
+			$objDrawing->setCoordinates('A2');
+			$objDrawing->setWorksheet($this->excel->getActiveSheet());
+		*/	
 			//JUDUL KOP
 			$this->excel->getActiveSheet()->setCellValue('A2', 'DATA JUMLAH PEGAWAI KONTRAK BERDASARKAN JENIS KELAMIN');
 			$this->excel->getActiveSheet()->setCellValue('A3', 'PT. GAPURA ANGKASA CABANG BANDARA NGURAH RAI');
@@ -4555,7 +4705,7 @@ class Pekerja extends Application {
 			$this->excel->getActiveSheet()->setCellValue("D$i", $totalp);
 			$this->excel->getActiveSheet()->setCellValue("E$i", $totall+$totalp);
 			
-			$this->excel->getActiveSheet()->getStyle("A2:A4")->getFont()->setSize(14);
+			$this->excel->getActiveSheet()->getStyle("A2:A4")->getFont()->setSize(11);
 			$this->excel->getActiveSheet()->getStyle("A6:F7")->getFont()->setSize(8);
 			$this->excel->getActiveSheet()->getStyle("A8:F$i")->getFont()->setSize(8);
 			$this->excel->getActiveSheet()->getStyle('A2:A4')->getFont()->setBold(true);
@@ -4572,10 +4722,10 @@ class Pekerja extends Application {
 			$this->excel->getActiveSheet()->getStyle('A6:F6')->getAlignment()->setWrapText(true);
 			$this->excel->getActiveSheet()->getColumnDimension('A')->setWidth(8.54);  
 			$this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(25.54); 
-			$this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(15.54);    
-			$this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(15.54);  
-			$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(15.54); 
-			$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(18.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(45.54);    
+			$this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(45.54);  
+			$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(45.54); 
+			$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(48.88); 
 			
 			 
 			$filename="Data Rekapitulasi Jumlah Pegawai $jenis Berdasarkan Jenis Kelamin.xls"; //save our workbook as this file name
@@ -4605,6 +4755,20 @@ class Pekerja extends Application {
 			$this->load->library('excel');
 			$this->excel->setActiveSheetIndex(0);
 			$this->excel->getActiveSheet()->setTitle("Data Pegawai ");
+			
+			//Add Image
+			$objDrawing = new PHPExcel_Worksheet_Drawing();
+			$objDrawing->setName('logo');
+			$objDrawing->setDescription('logo_gapura');
+			$objDrawing->setPath('./images/gapura-angkasa.jpg');
+			$objDrawing->setOffsetX(8);    // setOffsetX works properly
+			$objDrawing->setOffsetY(300);  //setOffsetY has no effect
+			$objDrawing->setHeight(35); // logo height
+
+			// Insert picture
+			$objDrawing->setCoordinates('A2');
+			$objDrawing->setWorksheet($this->excel->getActiveSheet());
+			
 			//JUDUL KOP
 			$this->excel->getActiveSheet()->setCellValue('A2', 'REKAPITULASI DATA PEGAWAI '.strtoupper($jenis));
 			$this->excel->getActiveSheet()->setCellValue('A3', 'PT. GAPURA ANGKASA CABANG BANDARA NGURAH RAI');
@@ -4692,7 +4856,7 @@ class Pekerja extends Application {
 			}endforeach;
 			
 			//change the font size
-			$this->excel->getActiveSheet()->getStyle("A2:A4")->getFont()->setSize(14);
+			$this->excel->getActiveSheet()->getStyle("A2:A4")->getFont()->setSize(11);
 			$this->excel->getActiveSheet()->getStyle("A6:N7")->getFont()->setSize(8);
 			$this->excel->getActiveSheet()->getStyle("A8:N$i")->getFont()->setSize(8);
 			//make the font become bold
@@ -4703,7 +4867,7 @@ class Pekerja extends Application {
 			$this->excel->getActiveSheet()->mergeCells('A4:N4');
 			$this->excel->getActiveSheet()->getStyle("M5")->getFont()->setSize(7);
 			
-			//set aligment to center for that merged cell (A1 to D1)
+			//set aligment to center for that merged cell (A4 to D4)
 			$this->excel->getActiveSheet()->getStyle('A6:N6')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 			$this->excel->getActiveSheet()->getStyle('A6:N6')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 			$this->excel->getActiveSheet()->getStyle('A2:A4')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -4714,16 +4878,16 @@ class Pekerja extends Application {
 			$this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(5.54); 
 			$this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(5.54);    
 			$this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(26.5);  
-			$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(10.88); 
-			$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(10.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(40.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(40.88); 
 			$this->excel->getActiveSheet()->getColumnDimension('G')->setWidth(5.63); 
 			$this->excel->getActiveSheet()->getColumnDimension('H')->setWidth(8.88); 
-			$this->excel->getActiveSheet()->getColumnDimension('I')->setWidth(14.88); 
-			$this->excel->getActiveSheet()->getColumnDimension('J')->setWidth(10.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('I')->setWidth(44.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('J')->setWidth(40.88); 
 			$this->excel->getActiveSheet()->getColumnDimension('K')->setWidth(5.88); 
-			$this->excel->getActiveSheet()->getColumnDimension('L')->setWidth(15.88); 
-			$this->excel->getActiveSheet()->getColumnDimension('M')->setWidth(15.88); 
-			$this->excel->getActiveSheet()->getColumnDimension('N')->setWidth(15.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('L')->setWidth(45.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('M')->setWidth(45.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('N')->setWidth(45.88); 
 			
 			 
 			$filename="Data Rekapitulasi Pegawai $jenis.xls"; //save our workbook as this file name

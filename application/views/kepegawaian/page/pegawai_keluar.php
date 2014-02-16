@@ -2,17 +2,43 @@
 
 <div class="widget">
 <fieldset class="step" id="w2first"><br> 
-<table><tr><td width='30px'></td><td width = "740px">    
+<table>
+<tr>
+	<td width='30px'></td><td width = "740px">    
 				<div class="searchWidget1">
 					<a href="<?php echo base_url().'index.php/pekerja/pegawai_pensiun' ;?>"><input type="button" name="Pensiun" value="Pensiun" class="blueB m110"/></a>
 					<a href="<?php echo base_url().'index.php/pekerja/get_pindah_cabang' ;?>"><input type="button" name="Pindah" value="Pindah Cabang" class="blueB m110"/></a>
 					<a href="<?php echo base_url().'index.php/pekerja/get_pegawai_phk' ;?>"><input type="button" name="PHK" value="PHK" class="blueB m110"/></a>
 				</div>
             </td>
-	<td width="250px"><div class="searchWidget1"><?php echo form_open('pekerja/search_pegawai_keluar');?>
-                        <input type="text" name="search"  placeholder="Enter search text..." />
-                        <input type="submit" name="find" value="" class="blueB m110"/></div>
-                    </form></td></tr>
+	<td width="450px"><?php echo form_open('pekerja/search_pegawai_keluar');?>
+                        <table>
+						<tr>
+							<td width="180px" valign="top">
+								<div class="searchWidget1">
+								<?php 
+									$type = array(
+												'ALL'	=>	'ALL',
+												'Tetap'	=>	'Tetap',
+												'PKWT'	=>	'PKWT',
+												'Outsource'	=>	'Outsource'
+											);
+									echo form_dropdown('type',$type);
+								?>
+								</div>
+							</td>
+							<td width="20px"> </td>
+							<td width="250px">
+								<div class="searchWidget1">
+								<input type="text" name="search"  placeholder="Enter search text..." />
+								<input type="submit" name="find" value="" class="blueB m110"/>
+								</div>
+							</td>
+						</tr>
+						</table>
+                    </form>
+	</td>
+</tr>
 
 </div></div></table></fieldset>
 </div>
@@ -101,4 +127,9 @@
             </table>
 		</div>
 		<?php $attr= array('target' => '_blank');
-				echo anchor('pekerja/excel_data_pensiun','Export to Excel',$attr); ?>
+			if($this->uri->segment(2) == 'search_pegawai_keluar'){
+				echo anchor("$link_excel",'Export to Excel',$attr); 
+			} else {
+				echo anchor('pekerja/excel_data_pensiun','Export to Excel',$attr);
+			}
+		?>

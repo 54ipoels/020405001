@@ -220,8 +220,12 @@ class kepegawaian extends CI_Model
 		return $query->num_rows();
 	}
 	
-	function search_data_pegawai_keluar($num, $offset, $tahun, $type, $limit, $search)
+	function search_data_pegawai_keluar($num, $offset, $tahun, $type, $limit, $type_pegawai, $search)
 	{
+		$where = "";
+		if($type_pegawai != 'ALL'){
+			$where .= ' AND p_tmt_status = \''.$type_pegawai.'\' ';
+		}
 		$search=str_replace("'", '', $search);
 		$query = ('
 					SELECT * FROM v3_pegawai AS peg
@@ -232,6 +236,7 @@ class kepegawaian extends CI_Model
 					AND \''.$tahun.'\' - YEAR(peg.peg_tgl_lahir) < \''.$limit.'\'
 					AND peg_tmt.p_tmt_end = \'0000-00-00\')  OR ((peg_tmt.p_tmt_reason = \'Pindah Cabang\') AND (peg_tmt.p_tmt_ket <> \'aktif\') ))
 					AND ((peg_nipp LIKE \'%'.$search.'%\')  OR  (peg_nama LIKE \'%'.$search.'%\') )
+					'.$where.'
 					GROUP BY peg.id_pegawai
 					ORDER BY peg.peg_tgl_lahir DESC
 					LIMIT '.$offset.' , '.$num
@@ -239,8 +244,12 @@ class kepegawaian extends CI_Model
 		$query = $this->db->query($query); 
 		return $query->result_array();
 	}
-	function countSearchPegawaiKeluar( $tahun, $type, $limit, $search)
+	function countSearchPegawaiKeluar( $tahun, $type, $limit, $type_pegawai, $search)
 	{
+		$where = "";
+		if($type_pegawai != 'ALL'){
+			$where .= ' AND p_tmt_status = \''.$type_pegawai.'\' ';
+		}
 		$search=str_replace("'", '', $search);
 		$query = ('
 					SELECT * FROM v3_pegawai AS peg
@@ -251,6 +260,7 @@ class kepegawaian extends CI_Model
 					AND \''.$tahun.'\' - YEAR(peg.peg_tgl_lahir) < \''.$limit.'\'
 					AND peg_tmt.p_tmt_end = \'0000-00-00\')  OR ((peg_tmt.p_tmt_reason = \'Pindah Cabang\') AND (peg_tmt.p_tmt_ket <> \'aktif\') ))
 					AND ((peg_nipp LIKE \'%'.$search.'%\')  OR  (peg_nama LIKE \'%'.$search.'%\') )
+					'.$where.'
 					GROUP BY peg.id_pegawai
 					ORDER BY peg.peg_tgl_lahir DESC
 		');
@@ -706,16 +716,19 @@ class kepegawaian extends CI_Model
 	function get_supervisor($num, $offset)
 	{
 		$supervisor = '%Supervisor%';
-		$query = ('SELECT peg_nipp, peg_nama, peg_jns_kelamin, peg_tgl_lahir, p_jbt_jabatan, p_unt_kode_unit, p_tmt_tmt, p_grd_grade FROM v3_pegawai AS peg
-			LEFT JOIN (SELECT p_jbt_nipp, p_jbt_jabatan FROM v3_peg_jabatan) AS peg_jbt
+		$query = ('SELECT peg_nipp, peg_nama, peg_jns_kelamin, peg_tgl_lahir, p_jbt_jabatan, p_jbt_tmt_end, p_unt_kode_unit, p_tmt_tmt, p_grd_grade FROM v3_pegawai AS peg
+			LEFT JOIN (SELECT id_peg_jabatan, p_jbt_nipp, p_jbt_jabatan, p_jbt_tmt_end  FROM v3_peg_jabatan) AS peg_jbt
 			ON peg.peg_nipp = peg_jbt.p_jbt_nipp 
-			LEFT JOIN (SELECT p_unt_nipp, p_unt_kode_unit FROM v3_peg_unit) AS peg_unt
+			LEFT JOIN (SELECT id_peg_unit, p_unt_nipp, p_unt_kode_unit FROM v3_peg_unit) AS peg_unt
 			ON peg.peg_nipp = peg_unt.p_unt_nipp 
 			LEFT JOIN (SELECT p_tmt_nipp, p_tmt_end, p_tmt_tmt FROM v3_peg_tmt) AS peg_tmt
 			ON peg.peg_nipp = peg_tmt.p_tmt_nipp 
 			LEFT JOIN (SELECT p_grd_nipp, p_grd_grade FROM v3_peg_grade) AS peg_grd
 			ON peg.peg_nipp = peg_grd.p_grd_nipp 
-			WHERE peg_jbt.p_jbt_jabatan LIKE \''.$supervisor.'\'
+			WHERE  peg_jbt.id_peg_jabatan = ( SELECT MAX( k.id_peg_jabatan ) FROM v3_peg_jabatan k WHERE k.p_jbt_nipp = peg.peg_nipp ) 
+			AND peg_unt.id_peg_unit = ( SELECT MAX( l.id_peg_unit ) FROM v3_peg_unit l WHERE l.p_unt_nipp = peg.peg_nipp ) 
+			AND peg_jbt.p_jbt_jabatan LIKE \''.$supervisor.'\'
+			AND peg_jbt.p_jbt_tmt_end = \'0000-00-00\'
 			AND peg_tmt.p_tmt_end = \'0000-00-00\'
 			ORDER BY peg_unt.p_unt_kode_unit
 			LIMIT '.$offset.' , '.$num.'');
@@ -850,18 +863,21 @@ class kepegawaian extends CI_Model
 	function count_supervisor()
 	{
 		$supervisor = '%Supervisor%';
-		$query = ('SELECT peg_nipp, peg_nama, peg_jns_kelamin, peg_tgl_lahir, p_jbt_jabatan, p_unt_kode_unit, p_tmt_tmt, p_grd_grade FROM v3_pegawai AS peg
-			LEFT JOIN (SELECT p_jbt_nipp, p_jbt_jabatan FROM v3_peg_jabatan) AS peg_jbt
+		$query = ('SELECT peg_nipp, peg_nama, peg_jns_kelamin, peg_tgl_lahir, p_jbt_jabatan, p_jbt_tmt_end, p_unt_kode_unit, p_tmt_tmt, p_grd_grade FROM v3_pegawai AS peg
+			LEFT JOIN (SELECT id_peg_jabatan, p_jbt_nipp, p_jbt_jabatan, p_jbt_tmt_end  FROM v3_peg_jabatan) AS peg_jbt
 			ON peg.peg_nipp = peg_jbt.p_jbt_nipp 
-			LEFT JOIN (SELECT p_unt_nipp, p_unt_kode_unit FROM v3_peg_unit) AS peg_unt
+			LEFT JOIN (SELECT id_peg_unit, p_unt_nipp, p_unt_kode_unit FROM v3_peg_unit) AS peg_unt
 			ON peg.peg_nipp = peg_unt.p_unt_nipp 
 			LEFT JOIN (SELECT p_tmt_nipp, p_tmt_end, p_tmt_tmt FROM v3_peg_tmt) AS peg_tmt
 			ON peg.peg_nipp = peg_tmt.p_tmt_nipp 
 			LEFT JOIN (SELECT p_grd_nipp, p_grd_grade FROM v3_peg_grade) AS peg_grd
 			ON peg.peg_nipp = peg_grd.p_grd_nipp 
-			WHERE peg_jbt.p_jbt_jabatan LIKE \''.$supervisor.'\'
+			WHERE  peg_jbt.id_peg_jabatan = ( SELECT MAX( k.id_peg_jabatan ) FROM v3_peg_jabatan k WHERE k.p_jbt_nipp = peg.peg_nipp ) 
+			AND peg_unt.id_peg_unit = ( SELECT MAX( l.id_peg_unit ) FROM v3_peg_unit l WHERE l.p_unt_nipp = peg.peg_nipp ) 
+			AND peg_jbt.p_jbt_jabatan LIKE \''.$supervisor.'\'
+			AND peg_jbt.p_jbt_tmt_end = \'0000-00-00\'
 			AND peg_tmt.p_tmt_end = \'0000-00-00\'
-			ORDER BY peg_unt.p_unt_kode_unit');
+			');
 		
 		$query = $this->db->query($query); 
 		return $query->num_rows();
@@ -1253,17 +1269,23 @@ class kepegawaian extends CI_Model
 		return $query->result_array();
 	}
 	
-	function get_data_pensiun_unlimited($tahun, $type, $limit)
+	function get_data_pensiun_unlimited($tahun, $type, $limit, $type_pegawai)
 	{
+		$where = " ";
+		if($type_pegawai != 'ALL'){
+			$where .= ' AND p_tmt_status = \''.$type_pegawai.'\' ';
+		} 
 		$query='
 			SELECT * FROM v3_pegawai AS peg 
 			LEFT JOIN (SELECT p_jbt_nipp, p_jbt_jabatan FROM v3_peg_jabatan) AS peg_jbt 
 			ON peg.peg_nipp = peg_jbt.p_jbt_nipp 
-			LEFT JOIN (SELECT p_tmt_nipp, p_tmt_tmt, p_tmt_end FROM v3_peg_tmt) AS peg_tmt 
+			LEFT JOIN (SELECT p_tmt_nipp, p_tmt_status, p_tmt_tmt, p_tmt_end FROM v3_peg_tmt) AS peg_tmt 
 			ON peg.peg_nipp = peg_tmt.p_tmt_nipp 
 			WHERE \''.$tahun.'\' - YEAR(peg.peg_tgl_lahir) > \''.$type.'\'
 			AND \''.$tahun.'\' - YEAR(peg.peg_tgl_lahir) < \''.$limit.'\'
 			AND peg_tmt.p_tmt_end = \'0000-00-00\'
+			'.$where.'
+			GROUP BY peg.peg_nipp
 			ORDER BY peg.peg_tgl_lahir DESC
 		';
 		$query = $this->db->query($query);
@@ -1273,16 +1295,19 @@ class kepegawaian extends CI_Model
 	function get_data_spv_unlimited()
 	{
 		$supervisor = '%Supervisor%';
-		$query = ('SELECT peg_nipp, peg_nama, peg_jns_kelamin, peg_tgl_lahir, p_jbt_jabatan, p_unt_kode_unit, p_tmt_tmt, p_grd_grade FROM v3_pegawai AS peg
-			LEFT JOIN (SELECT p_jbt_nipp, p_jbt_jabatan FROM v3_peg_jabatan) AS peg_jbt
+		$query = ('SELECT peg_nipp, peg_nama, peg_jns_kelamin, peg_tgl_lahir, p_jbt_jabatan, p_jbt_tmt_end, p_unt_kode_unit, p_tmt_tmt, p_grd_grade FROM v3_pegawai AS peg
+			LEFT JOIN (SELECT id_peg_jabatan, p_jbt_nipp, p_jbt_jabatan, p_jbt_tmt_end  FROM v3_peg_jabatan) AS peg_jbt
 			ON peg.peg_nipp = peg_jbt.p_jbt_nipp 
-			LEFT JOIN (SELECT p_unt_nipp, p_unt_kode_unit FROM v3_peg_unit) AS peg_unt
+			LEFT JOIN (SELECT id_peg_unit, p_unt_nipp, p_unt_kode_unit FROM v3_peg_unit) AS peg_unt
 			ON peg.peg_nipp = peg_unt.p_unt_nipp 
 			LEFT JOIN (SELECT p_tmt_nipp, p_tmt_end, p_tmt_tmt FROM v3_peg_tmt) AS peg_tmt
 			ON peg.peg_nipp = peg_tmt.p_tmt_nipp 
 			LEFT JOIN (SELECT p_grd_nipp, p_grd_grade FROM v3_peg_grade) AS peg_grd
 			ON peg.peg_nipp = peg_grd.p_grd_nipp 
-			WHERE peg_jbt.p_jbt_jabatan LIKE \''.$supervisor.'\'
+			WHERE  peg_jbt.id_peg_jabatan = ( SELECT MAX( k.id_peg_jabatan ) FROM v3_peg_jabatan k WHERE k.p_jbt_nipp = peg.peg_nipp ) 
+			AND peg_unt.id_peg_unit = ( SELECT MAX( l.id_peg_unit ) FROM v3_peg_unit l WHERE l.p_unt_nipp = peg.peg_nipp ) 
+			AND peg_jbt.p_jbt_jabatan LIKE \''.$supervisor.'\'
+			AND peg_jbt.p_jbt_tmt_end = \'0000-00-00\'
 			AND peg_tmt.p_tmt_end = \'0000-00-00\'
 			ORDER BY peg_unt.p_unt_kode_unit
 			');
@@ -1544,13 +1569,15 @@ class kepegawaian extends CI_Model
 					LEFT JOIN v3_peg_tmt b ON b.p_tmt_nipp = a.peg_nipp 
 					LEFT JOIN unit c ON c.kode_unit = unit.p_unt_kode_unit 
 					LEFT JOIN v3_sub_unit d ON d.su_kode_sub_unit = unit.p_unt_kode_sub_unit 
-					LEFT JOIN v3_subunit_team e ON e.sut_kode_team = unit.p_unt_team 
+					LEFT JOIN v3_subunit_team e ON e.sut_kode_team = unit.p_unt_team
+					LEFT JOIN v3_peg_tab_jabatan f ON jabatan.p_jbt_jabatan = f.peg_tab_jab  	
 					WHERE b.id_peg_tmt = ( SELECT MAX( k.id_peg_tmt ) FROM v3_peg_tmt k WHERE k.p_tmt_nipp = a.peg_nipp ) 
-					AND p_tmt_status =  '$jenis'
-					$where 
+					AND ( p_tmt_status =  '$jenis'
+					$where ) 
 					AND p_tmt_end =  '0000-00-00' 
+					AND unit.p_unt_kode_unit IS NOT NULL
 					GROUP BY peg_nipp 
-					ORDER BY c.level,d.su_level,e.sut_level,a.peg_nipp DESC 
+					ORDER BY c.level,d.su_level,e.sut_level, f.peg_tab_jab_level DESC,a.peg_nipp DESC 
 				";
 		$query = $this->db->query($query);
 		return $query->result_array();
@@ -1593,11 +1620,12 @@ class kepegawaian extends CI_Model
 					LEFT JOIN v3_subunit_team e ON e.sut_kode_team = unit.p_unt_team 
 					LEFT JOIN v3_peg_agama f ON a.peg_nipp = f.p_ag_nipp 
 					LEFT JOIN v3_peg_alamat g ON a.peg_nipp = g.p_al_nipp
+					LEFT JOIN v3_peg_tab_jabatan h ON jabatan.p_jbt_jabatan = h.peg_tab_jab  	
 					WHERE b.id_peg_tmt = ( SELECT MAX( k.id_peg_tmt ) FROM v3_peg_tmt k WHERE k.p_tmt_nipp = a.peg_nipp ) 
 					$where 
 					AND p_tmt_end =  '0000-00-00' 
 					GROUP BY peg_nipp 
-					ORDER BY c.level,d.su_level,e.sut_level,a.peg_nipp DESC 
+					ORDER BY c.level,d.su_level,e.sut_level, h.peg_tab_jab_level DESC ,a.peg_nipp DESC 
 				";
 		$query = $this->db->query($query);
 		return $query->result_array();

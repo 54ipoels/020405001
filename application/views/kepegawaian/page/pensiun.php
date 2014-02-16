@@ -18,7 +18,7 @@
 		'2015' => '2015',
 		);
 	echo form_input('tahun',$tanggal);?></form>&nbsp
-	</form> </div></td><td width="340px">
+	</form> </div></td><td width="300px">
 <div class="formBaru"><label>Jenis: &nbsp </label>
 <?php $jenis = array(
 		'ALL'     => 'ALL',
@@ -26,7 +26,17 @@
 		'Pensiun' => 'Pensiun',
 		'PPB'     => 'Pelatihan Purna Bakti',
 		);
-	echo form_dropdown('jenis',$jenis, $type); ?></div></td><td width="100"><div class="formBaru">&nbsp 
+	echo form_dropdown('jenis',$jenis, $type); ?></div></td>
+	<td width="200px">
+	<div class="formBaru"><label> </label>
+	<?php $type_pegawai = array(
+		'ALL'   		=> 'ALL',
+		'Tetap'     	=> 'Tetap',
+		'PKWT' 			=> 'PKWT',
+		'Outsource'     => 'Outsource',
+		);
+	echo form_dropdown('type_pegawai',$type_pegawai); ?></div></td>
+	<td width="100"><div class="formBaru">&nbsp 
 	<?php $submit = array(
 		'class' => 'blueB m110',
 		'id'	=> 'next2',
