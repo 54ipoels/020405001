@@ -96,6 +96,18 @@
                         <div class="clear"></div>
                     </div>
 					<div class="formRow">
+                        <label>Lama Pelatihan (Menit) :<span class="req">*</span></label>
+                        <div class="formRight"><?php 
+						$lama_pelatihan = array(
+							'name' => 'lama_pelatihan',
+							'id'   => 'lama_pelatihan',
+							'style'=> 'width:30%',
+						);
+						echo form_input($lama_pelatihan) ?><br/>
+						<?php echo form_error('lama_pelatihan')?></div>
+                        <div class="clear"></div>
+                    </div>
+					<div class="formRow">
                         <label>STKP :<span class="req">*</span></label>
                         <div class="formRight"><?php 
 						$license = array(

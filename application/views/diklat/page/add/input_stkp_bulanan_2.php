@@ -29,6 +29,7 @@
 				echo form_hidden('lp', $lp);
 				echo form_hidden('instruktur', $instruktur);
 				echo form_hidden('instruktur_from', $instruktur_from);
+				echo form_hidden('lama_pelatihan',$lama_pelatihan);
 				for($i=1;$i<=$jumlah;$i++)
 					{ 
 					echo '<tr>';

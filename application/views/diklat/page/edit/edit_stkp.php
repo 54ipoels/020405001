@@ -89,6 +89,18 @@
                         <div class="clear"></div>
                     </div>
 					<div class="formRow">
+                        <label>Lama Pelatihan (Menit):</label>
+                        <div class="formRight">
+						<?php 
+						$lama_pelatihan = array(
+							'name' => 'lama_pelatihan',
+							'id'   => 'lama_pelatihan',
+							'style'=> 'width:20%'
+						);
+						echo form_input($lama_pelatihan,$row_stkp['p_stkp_waktu']) ?></div>
+                        <div class="clear"></div>
+                    </div>
+					<div class="formRow">
                         <label>Validity:</label>
                         <div class="formRight">
 						<?php 
