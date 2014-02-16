@@ -1545,7 +1545,7 @@ class diklat extends Application {
 		$time = time();
 		$tanggal = mdate($datestring, $time);
 		
-		$jenis_stkp=$this->uri->segment(3);
+		$jenis_stkp=$this->uri->segment(4);
 		
 		$search = "ALL";
 		$jenis 	= "ALL";
