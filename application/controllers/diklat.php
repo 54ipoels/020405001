@@ -221,7 +221,8 @@ class diklat extends Application {
 		$data['page'] = 'Report STKP';
 		$data['page_diklat'] = 'yes';
 		$data['view_stkp'] = 'class="this"';
-				
+		$data['link_excel'] = 'diklat/excel_stkp/sort/'.$jenis_search.'/'.$unit_search.'/'.$stkp_search.'/';
+		
 		$this->load->view('diklat/index',$data);
 	}
 	
@@ -346,6 +347,7 @@ class diklat extends Application {
 			$data['page'] = 'Report Training Bulanan';
 			$data['view_report_bulanan'] = 'class="this"';
 			$data['page_diklat'] = 'yes';
+			$data['list_unit'] = $this->pendidikan->get_list_unit();
 			$this->load->view('diklat/index', $data);
 		} else
 		if ($this->uri->segment(3) == 'part_two')
@@ -355,22 +357,26 @@ class diklat extends Application {
 			if ($this->input->post('jenis') == 'STKP')
 			{
 				$data['page'] = 'Report STKP Bulanan';
-				$data['pegawai_with_stkp_and_unit'] = $this->pendidikan->search_report_stkp_bulanan($this->input->post('bulan'), $this->input->post('tahun'), $this->input->post('jenis_stkp'));
+				$data['pegawai_with_stkp_and_unit'] = $this->pendidikan->search_report_stkp_bulanan($this->input->post('bulan'), $this->input->post('tahun'), $this->input->post('jenis_pegawai'), $this->input->post('unit'), $this->input->post('jenis_stkp'));
 				$data['bulan'] = $this->input->post('bulan');
 				$data['year'] = $this->input->post('tahun');
 				//$data['rating'] = $this->input->post('rating');
 				$data['jenis_stkp'] = $this->input->post('jenis_stkp');
+				$data['jenis_pegawai'] = $this->input->post('jenis_pegawai');
+				$data['unit'] = $this->input->post('unit');
 				$this->load->view('diklat/index', $data);
 			} else
 			if ($this->input->post('jenis') == 'NSTKP')
 			{
 				$data['page'] = 'Report NSTKP Bulanan';
-				$data['pegawai_with_stkp_and_unit'] = $this->pendidikan->search_report_nstkp_bulanan($this->input->post('bulan'), $this->input->post('tahun'), $this->input->post('jenis_stkp'));
+				$data['pegawai_with_stkp_and_unit'] = $this->pendidikan->search_report_nstkp_bulanan($this->input->post('bulan'), $this->input->post('tahun'), $this->input->post('jenis_pegawai'), $this->input->post('unit'), $this->input->post('jenis_stkp'));
 				$data['bulan'] = $this->input->post('bulan');
 				$data['year'] = $this->input->post('tahun');
 				//$data['rating'] = $this->input->post('rating');
 				$data['training'] = $this->input->post('jenis_stkp');
 				$data['url_training']= $this->pendidikan->myUrlEncode($data['training']);
+				$data['jenis_pegawai'] = $this->input->post('jenis_pegawai');
+				$data['unit'] = $this->input->post('unit');
 				$this->load->view('diklat/index', $data);
 			}
 		}
@@ -399,6 +405,7 @@ class diklat extends Application {
 			$data['lp'] = $this->input->post('lp');
 			$data['instruktur'] = $this->input->post('instruktur');
 			$data['instruktur_from'] = $this->input->post('instruktur_from');
+			$data['lama_pelatihan']	= $this->input->post('lama_pelatihan');
 			$data['view_input_stkp'] = 'class="this"';
 			$data['page_diklat'] = 'yes';
 			
@@ -412,7 +419,7 @@ class diklat extends Application {
 		$jumlah = $this->input->post('jumlah');
 		$tanggal_start = $this->input->post('tanggal_start');
 		$tanggal_end = $this->input->post('tanggal_end');
-		
+		$lama_pelatihan = $this->input->post('lama_pelatihan');
 		$datestring = "%Y-%m-%d" ;
 		$time = time();
 				
@@ -420,9 +427,9 @@ class diklat extends Application {
 		//print_r(mdate($datestring, strtotime(str_replace('/','-',$tanggal_stkp))));
 		if ($this->input->post('license') == 'yes')
 		{
-			$this->pendidikan->input_nilai_stkp($stkp, $jumlah, $tanggal_start, $tanggal_end, username());
+			$this->pendidikan->input_nilai_stkp($stkp, $jumlah, $tanggal_start, $tanggal_end, $lama_pelatihan, username());
 		} else {
-			$this->pendidikan->input_nilai_nstkp($stkp, $jumlah, $tanggal_start, $tanggal_end, username());
+			$this->pendidikan->input_nilai_nstkp($stkp, $jumlah, $tanggal_start, $tanggal_end, $lama_pelatihan, username());
 		}
 		redirect('diklat/input_stkp_bulanan/part_one');
 	}
@@ -497,6 +504,7 @@ class diklat extends Application {
 					'p_nstkp_no_license'	=> $this->input->post('license'),
 					'p_nstkp_pelaksanaan'	=> $tanggal_start,
 					'p_nstkp_selesai'		=> $tanggal_end,
+					'p_nstkp_waktu'			=> $this->input->post('lama_pelatihan'),
 					'p_nstkp_image'			=> $filenamebantu,
 					'p_nstkp_instruktur'	=> $this->input->post('instruktur'),
 					'p_nstkp_instruktur_from' => $this->input->post('instruktur_from'),
@@ -511,6 +519,7 @@ class diklat extends Application {
 					'p_nstkp_no_license'	=> $this->input->post('license'),
 					'p_nstkp_pelaksanaan'	=> $tanggal_start,
 					'p_nstkp_selesai'		=> $tanggal_end,
+					'p_nstkp_waktu'			=> $this->input->post('lama_pelatihan'),
 					'p_nstkp_instruktur'	=> $this->input->post('instruktur'),
 					'p_nstkp_instruktur_from' => $this->input->post('instruktur_from'),
 					'p_nstkp_update_by'		=> username(),
@@ -604,6 +613,7 @@ class diklat extends Application {
 						'p_stkp_selesai'		=> $selesai,
 						'p_stkp_mulai'			=> $validitas_awal,
 						'p_stkp_finish'			=> $validitas_akhir,
+						'p_stkp_waktu'			=> $this->input->post('lama_pelatihan'),
 						'p_stkp_rating'			=> $this->input->post('rating'),
 						'p_stkp_image'			=> $filenamebantu,
 						'p_stkp_instruktur'		=> $this->input->post('instruktur'),
@@ -628,6 +638,7 @@ class diklat extends Application {
 					'p_stkp_selesai'		=> $selesai,
 					'p_stkp_mulai'			=> $validitas_awal,
 					'p_stkp_finish'			=> $validitas_akhir,
+					'p_stkp_waktu'			=> $this->input->post('lama_pelatihan'),
 					'p_stkp_rating'			=> $this->input->post('rating'),
 					'p_stkp_instruktur'		=> $this->input->post('instruktur'),
 					'p_stkp_instruktur_from'=> $this->input->post('instruktur_from'),
@@ -776,10 +787,8 @@ class diklat extends Application {
 		$data['page'] = 'Report STKP';
 		$data['page_diklat'] = 'yes';
 		$data['view_stkp'] = 'class="this"';
+		$data['link_excel'] = 'diklat/excel_stkp/search/'.$search_data.'/';
 		
-		
-		//print_r($data);
-		//print_r($search);
 		#calling view
 		$this->load->view('diklat/index', $data);
 	}
@@ -945,6 +954,20 @@ class diklat extends Application {
 		
 			$this->excel->setActiveSheetIndex($n);
 			$this->excel->getActiveSheet()->setTitle("Diklat Non STKP $status");
+			
+			//Add Image
+			$objDrawing = new PHPExcel_Worksheet_Drawing();
+			$objDrawing->setName('logo');
+			$objDrawing->setDescription('logo_gapura');
+			$objDrawing->setPath('./images/gapura-angkasa.jpg');
+			$objDrawing->setOffsetX(8);    // setOffsetX works properly
+			$objDrawing->setOffsetY(300);  //setOffsetY has no effect
+			$objDrawing->setHeight(35); // logo height
+
+			// Insert picture
+			$objDrawing->setCoordinates('A2');
+			$objDrawing->setWorksheet($this->excel->getActiveSheet());
+		
 			//set cell A1 content with some text
 		
 			$this->excel->getActiveSheet()->setCellValue('A6', 'NO');
@@ -1062,7 +1085,7 @@ class diklat extends Application {
 			}
 			else
 			{
-				$pelaksanaan = $row_pegawai['p_nstkp_pelaksanaan'];
+				$pelaksanaan = mdate('%d-%M-%y',strtotime($row_pegawai['p_nstkp_pelaksanaan']));
 			}
 			if ($row_pegawai['p_nstkp_selesai'] == '0000-00-00')
 			{
@@ -1070,7 +1093,7 @@ class diklat extends Application {
 			}
 			else
 			{
-				$stkp_selesai = mdate($datestring,strtotime($row_pegawai['p_nstkp_selesai']));
+				$stkp_selesai = mdate('%d-%M-%y',strtotime($row_pegawai['p_nstkp_selesai']));
 			}
 			
 					
@@ -1078,13 +1101,13 @@ class diklat extends Application {
 			$this->excel->getActiveSheet()->setCellValue("A$i", "$number");
 			$this->excel->getActiveSheet()->setCellValue("B$i", "$nipp");
 			$this->excel->getActiveSheet()->setCellValue("C$i", strtoupper("$nama"));
-			$this->excel->getActiveSheet()->setCellValue("D$i", "$row_pegawai[p_nstkp_jenis]");
-			$this->excel->getActiveSheet()->setCellValue("E$i", "$row_pegawai[p_nstkp_no_license]");
+			$this->excel->getActiveSheet()->setCellValue("D$i", strtoupper("$row_pegawai[p_nstkp_jenis]"));
+			$this->excel->getActiveSheet()->setCellValue("E$i", strtoupper("$row_pegawai[p_nstkp_no_license]"));
 			$this->excel->getActiveSheet()->setCellValue("F$i", "$pelaksanaan");
 			$this->excel->getActiveSheet()->setCellValue("G$i", "$stkp_selesai");
-			$this->excel->getActiveSheet()->setCellValue("H$i", "$row_pegawai[p_nstkp_lembaga]");
-			$this->excel->getActiveSheet()->setCellValue("I$i", "$row_pegawai[p_nstkp_instruktur]");
-			$this->excel->getActiveSheet()->setCellValue("J$i", "$row_pegawai[p_nstkp_instruktur_from]");
+			$this->excel->getActiveSheet()->setCellValue("H$i", strtoupper("$row_pegawai[p_nstkp_lembaga]"));
+			$this->excel->getActiveSheet()->setCellValue("I$i", strtoupper("$row_pegawai[p_nstkp_instruktur]"));
+			$this->excel->getActiveSheet()->setCellValue("J$i", strtoupper("$row_pegawai[p_nstkp_instruktur_from]"));
 					
 			if($row_pegawai['p_tmt_status'] == "Tetap"){
 				$tetap = $i;
@@ -1185,8 +1208,7 @@ class diklat extends Application {
 		$time = time();
 		$tanggal = mdate($datestring, $time);
 		
-		$pegawai_with_stkp_and_unit = $this->pendidikan->search_report_nstkp_bulanan_sort_pelaksanaan_training( $this->uri->segment(3), $this->uri->segment(4), $this->uri->segment(5));
-		
+		$pegawai_with_stkp_and_unit = $this->pendidikan->search_report_nstkp_bulanan_sort_pelaksanaan_training( $this->uri->segment(3), $this->uri->segment(4), $this->uri->segment(5), $this->uri->segment(6), $this->uri->segment(7));
 		
 		//load our new PHPExcel library
 		$this->load->library('excel');
@@ -1194,6 +1216,19 @@ class diklat extends Application {
 		$this->excel->setActiveSheetIndex(0);
 		//name the worksheet
 		$this->excel->getActiveSheet()->setTitle("Diklat Non STKP ");
+		//Add Image
+		$objDrawing = new PHPExcel_Worksheet_Drawing();
+		$objDrawing->setName('logo');
+		$objDrawing->setDescription('logo_gapura');
+		$objDrawing->setPath('./images/gapura-angkasa.jpg');
+		$objDrawing->setOffsetX(8);    // setOffsetX works properly
+		$objDrawing->setOffsetY(300);  //setOffsetY has no effect
+		$objDrawing->setHeight(35); // logo height
+
+		// Insert picture
+		$objDrawing->setCoordinates('A2');
+		$objDrawing->setWorksheet($this->excel->getActiveSheet());
+		
 		//set cell A1 content with some text
 		$this->excel->getActiveSheet()->setCellValue('A6', 'NO');
 		$this->excel->getActiveSheet()->setCellValue('B6', 'NIPP');
@@ -1512,7 +1547,20 @@ class diklat extends Application {
 		
 		$jenis_stkp=$this->uri->segment(3);
 		
-		$pegawai_with_stkp_and_unit = $this->pendidikan->get_data_stkp_with_unit_and_name_unlimited();
+		$search = "ALL";
+		$jenis 	= "ALL";
+		$type 	= "ALL";
+		$unit 	= "ALL";
+		if($this->uri->segment(3) == "sort"){
+			$jenis 	= $this->uri->segment(4);
+			$type 	= $this->uri->segment(5);
+			$unit 	= $this->uri->segment(6);
+		}
+		if($this->uri->segment(3) == "search"){
+			$search = $this->uri->segment(4);
+		}
+		
+		$pegawai_with_stkp_and_unit = $this->pendidikan->get_data_stkp_with_unit_and_name_unlimited($search,$jenis,$type,$unit);
 				
 		//load our new PHPExcel library
 		$this->load->library('excel');
@@ -1521,6 +1569,18 @@ class diklat extends Application {
 		//name the worksheet
 		$this->excel->getActiveSheet()->setTitle("Diklat STKP $jenis_stkp ");
 		//set cell A1 content with some text
+		//Add Image
+		$objDrawing = new PHPExcel_Worksheet_Drawing();
+		$objDrawing->setName('logo');
+		$objDrawing->setDescription('logo_gapura');
+		$objDrawing->setPath('./images/gapura-angkasa.jpg');
+		$objDrawing->setOffsetX(8);    // setOffsetX works properly
+		$objDrawing->setOffsetY(300);  //setOffsetY has no effect
+		$objDrawing->setHeight(35); // logo height
+
+		// Insert picture
+		$objDrawing->setCoordinates('A2');
+		$objDrawing->setWorksheet($this->excel->getActiveSheet());
 		
 		$this->excel->getActiveSheet()->setCellValue('A2', "$jenis_stkp LICENSE HOLDER");
 		$this->excel->getActiveSheet()->setCellValue('A3', 'PT. GAPURA ANGKASA CABANG BANDARA NGURAH RAI');
@@ -1569,7 +1629,7 @@ class diklat extends Application {
 			}
 			else
 			{
-				$pelaksanaan = $row_pegawai['p_stkp_pelaksanaan'];
+				$pelaksanaan = mdate('%d-%M-%y',strtotime($row_pegawai['p_stkp_pelaksanaan']));
 			}
 			if ($row_pegawai['p_stkp_mulai'] == '0000-00-00')
 			{
@@ -1577,7 +1637,7 @@ class diklat extends Application {
 			}
 			else
 			{
-				$stkp_mulai = mdate($datestring,strtotime($row_pegawai['p_stkp_mulai']));
+				$stkp_mulai = mdate('%d-%M-%y',strtotime($row_pegawai['p_stkp_mulai']));
 			}
 			if ($row_pegawai['p_stkp_finish'] == '0000-00-00')
 			{
@@ -1585,7 +1645,7 @@ class diklat extends Application {
 			}
 			else
 			{
-				$stkp_selesai = mdate($datestring,strtotime($row_pegawai['p_stkp_finish']));
+				$stkp_selesai = mdate('%d-%M-%y',strtotime($row_pegawai['p_stkp_finish']));
 			}
 			if ($row_pegawai['p_stkp_selesai'] == '0000-00-00')
 			{
@@ -1593,7 +1653,7 @@ class diklat extends Application {
 			}
 			else
 			{
-				$selesai = mdate($datestring,strtotime( $row_pegawai['p_stkp_selesai']));
+				$selesai = mdate('%d-%M-%y',strtotime( $row_pegawai['p_stkp_selesai']));
 			}
 			
 			//masukkan data ke tabel excel
@@ -1687,8 +1747,8 @@ class diklat extends Application {
 		$time = time();
 		$tanggal = mdate($datestring, $time);
 		
-		$jenis_stkp=$this->uri->segment(5);
-		$pegawai_with_stkp_and_unit = $this->pendidikan->search_report_stkp_bulanan($this->uri->segment(3), $this->uri->segment(4), $this->uri->segment(5));
+		$jenis_stkp=$this->uri->segment(7);
+		$pegawai_with_stkp_and_unit = $this->pendidikan->search_report_stkp_bulanan($this->uri->segment(3), $this->uri->segment(4), $this->uri->segment(5), $this->uri->segment(6), $this->uri->segment(7));
 				
 		//load our new PHPExcel library
 		$this->load->library('excel');
@@ -1697,6 +1757,19 @@ class diklat extends Application {
 		//name the worksheet
 		$this->excel->getActiveSheet()->setTitle("Diklat STKP $jenis_stkp");
 		//set cell A1 content with some text
+		
+		//Add Image
+		$objDrawing = new PHPExcel_Worksheet_Drawing();
+		$objDrawing->setName('logo');
+		$objDrawing->setDescription('logo_gapura');
+		$objDrawing->setPath('./images/gapura-angkasa.jpg');
+		$objDrawing->setOffsetX(8);    // setOffsetX works properly
+		$objDrawing->setOffsetY(300);  //setOffsetY has no effect
+		$objDrawing->setHeight(35); // logo height
+
+		// Insert picture
+		$objDrawing->setCoordinates('A2');
+		$objDrawing->setWorksheet($this->excel->getActiveSheet());
 		
 		$this->excel->getActiveSheet()->setCellValue('A2', "$jenis_stkp LICENSE HOLDER");
 		$this->excel->getActiveSheet()->setCellValue('A3', 'PT. GAPURA ANGKASA CABANG BANDARA NGURAH RAI');
@@ -1746,7 +1819,7 @@ class diklat extends Application {
 			}
 			else
 			{
-				$pelaksanaan = $row_pegawai['p_stkp_pelaksanaan'];
+				$pelaksanaan = mdate("%d-%M-%y",strtotime($row_pegawai['p_stkp_pelaksanaan']));
 			}
 			if ($row_pegawai['p_stkp_mulai'] == '0000-00-00')
 			{
@@ -1754,7 +1827,7 @@ class diklat extends Application {
 			}
 			else
 			{
-				$stkp_mulai = mdate($datestring,strtotime($row_pegawai['p_stkp_mulai']));
+				$stkp_mulai = mdate("%d-%M-%y",strtotime($row_pegawai['p_stkp_mulai']));
 			}
 			if ($row_pegawai['p_stkp_finish'] == '0000-00-00')
 			{
@@ -1762,7 +1835,7 @@ class diklat extends Application {
 			}
 			else
 			{
-				$stkp_selesai = mdate($datestring,strtotime($row_pegawai['p_stkp_finish']));
+				$stkp_selesai = mdate("%d-%M-%y",strtotime($row_pegawai['p_stkp_finish']));
 			}
 			if ($row_pegawai['p_stkp_selesai'] == '0000-00-00')
 			{
@@ -1770,24 +1843,24 @@ class diklat extends Application {
 			}
 			else
 			{
-				$selesai = mdate($datestring,strtotime( $row_pegawai['p_stkp_selesai']));
+				$selesai = mdate("%d-%M-%y",strtotime( $row_pegawai['p_stkp_selesai']));
 			}
 			
 			//masukkan data ke tabel excel
 			$this->excel->getActiveSheet()->setCellValue("A$i", "$number");
 			$this->excel->getActiveSheet()->setCellValue("B$i", "$nipp");
 			$this->excel->getActiveSheet()->setCellValue("C$i", strtoupper("$nama"));
-			$this->excel->getActiveSheet()->setCellValue("D$i", "$row_pegawai[p_stkp_jenis]");
-			$this->excel->getActiveSheet()->setCellValue("E$i", "$row_pegawai[p_stkp_rating]");
-			$this->excel->getActiveSheet()->setCellValue("F$i", "$row_pegawai[p_stkp_no_license]");
+			$this->excel->getActiveSheet()->setCellValue("D$i", strtoupper("$row_pegawai[p_stkp_jenis]"));
+			$this->excel->getActiveSheet()->setCellValue("E$i", strtoupper("$row_pegawai[p_stkp_rating]"));
+			$this->excel->getActiveSheet()->setCellValue("F$i", strtoupper("$row_pegawai[p_stkp_no_license]"));
 			$this->excel->getActiveSheet()->setCellValue("G$i", "$stkp_mulai");
 			$this->excel->getActiveSheet()->setCellValue("H$i", "$stkp_selesai");
-			$this->excel->getActiveSheet()->setCellValue("I$i", "$row_pegawai[p_stkp_lembaga]");
+			$this->excel->getActiveSheet()->setCellValue("I$i", strtoupper("$row_pegawai[p_stkp_lembaga]"));
 			$this->excel->getActiveSheet()->setCellValue("J$i", "$pelaksanaan");
 			$this->excel->getActiveSheet()->setCellValue("K$i", "$selesai");
-			$this->excel->getActiveSheet()->setCellValue("L$i", "$row_pegawai[p_stkp_type]");
-			$this->excel->getActiveSheet()->setCellValue("M$i", "$row_pegawai[p_stkp_instruktur]");
-			$this->excel->getActiveSheet()->setCellValue("N$i", "$row_pegawai[p_stkp_instruktur_from]");
+			$this->excel->getActiveSheet()->setCellValue("L$i", strtoupper("$row_pegawai[p_stkp_type]"));
+			$this->excel->getActiveSheet()->setCellValue("M$i", strtoupper("$row_pegawai[p_stkp_instruktur]"));
+			$this->excel->getActiveSheet()->setCellValue("N$i", strtoupper("$row_pegawai[p_stkp_instruktur_from]"));
 			
 			$nipp = $row_pegawai['peg_nipp'];
 			
@@ -1910,12 +1983,29 @@ class diklat extends Application {
 		$this->excel->setActiveSheetIndex(0);
 		//name the worksheet
 		$this->excel->getActiveSheet()->setTitle("Rekapitulasi Non STKP ");
+		
+		//Add Image
+		$objDrawing = new PHPExcel_Worksheet_Drawing();
+		$objDrawing->setName('logo');
+		$objDrawing->setDescription('logo_gapura');
+		$objDrawing->setPath('./images/gapura-angkasa.jpg');
+		$objDrawing->setOffsetX(8);    // setOffsetX works properly
+		$objDrawing->setOffsetY(300);  //setOffsetY has no effect
+		$objDrawing->setHeight(35); // logo height
+
+		// Insert picture
+		$objDrawing->setCoordinates('A2');
+		$objDrawing->setWorksheet($this->excel->getActiveSheet());
+		
+		
 		//set cell A1 content with some text
 		$this->excel->getActiveSheet()->setCellValue('A6', 'NO');
 		$this->excel->getActiveSheet()->setCellValue('B6', 'TRAINING');
 		$this->excel->getActiveSheet()->setCellValue('C6', 'PELAKSANAAN');
-		$this->excel->getActiveSheet()->setCellValue('E6', 'LEMBAGA PELAKSANAAN');
-		$this->excel->getActiveSheet()->setCellValue('F6', 'JUMLAH');
+		$this->excel->getActiveSheet()->setCellValue('E6', 'JUMLAH PESERTA');
+		$this->excel->getActiveSheet()->setCellValue('F6', 'JUMLAH JAM');
+		$this->excel->getActiveSheet()->setCellValue('G6', 'TOTAL JAM DIKLAT');
+		$this->excel->getActiveSheet()->setCellValue('H6', 'LEMBAGA PELAKSANAAN');
 		$this->excel->getActiveSheet()->setCellValue('C7', 'MULAI');
 		$this->excel->getActiveSheet()->setCellValue('D7', 'SELESAI');
 		
@@ -1928,6 +2018,8 @@ class diklat extends Application {
 		$number=0;
 		//$unit="kosong";
 		//$sub_unit="kosong";
+		$jumlah_peserta = 0;
+		$jumlah_jam = 0;
 		
 		$nipp = '';
 		foreach ($pegawai_with_stkp_and_unit as $row_pegawai) :
@@ -1936,6 +2028,9 @@ class diklat extends Application {
 			$i++;
 			$number++;
 			
+			$jumlah_peserta = $jumlah_peserta + $row_pegawai['jumlah'];
+			$jumlah_jam = $jumlah_jam + $row_pegawai['p_nstkp_waktu'] ;
+			
 			
 			if ($row_pegawai['p_nstkp_pelaksanaan'] == '0000-00-00')
 			{
@@ -1943,7 +2038,7 @@ class diklat extends Application {
 			}
 			else
 			{
-				$pelaksanaan = mdate($datestring,strtotime($row_pegawai['p_nstkp_pelaksanaan']));
+				$pelaksanaan = mdate('%d-%M-%y',strtotime($row_pegawai['p_nstkp_pelaksanaan']));
 			}
 			if ($row_pegawai['p_nstkp_selesai'] == '0000-00-00')
 			{
@@ -1951,20 +2046,40 @@ class diklat extends Application {
 			}
 			else
 			{
-				$stkp_selesai = mdate($datestring,strtotime($row_pegawai['p_nstkp_selesai']));
+				$stkp_selesai = mdate('%d-%M-%y',strtotime($row_pegawai['p_nstkp_selesai']));
 			}
 					
 			//masukkan data ke tabel excel
 			$this->excel->getActiveSheet()->setCellValue("A$i", "$number");
-			$this->excel->getActiveSheet()->setCellValue("B$i", "$row_pegawai[p_nstkp_jenis]");
+			$this->excel->getActiveSheet()->setCellValue("B$i", strtoupper("$row_pegawai[p_nstkp_jenis]"));
 			$this->excel->getActiveSheet()->setCellValue("C$i", "$pelaksanaan");
 			$this->excel->getActiveSheet()->setCellValue("D$i", "$stkp_selesai");
-			$this->excel->getActiveSheet()->setCellValue("E$i", "$row_pegawai[p_nstkp_lembaga]");
-			$this->excel->getActiveSheet()->setCellValue("F$i", "$row_pegawai[jumlah]");
+			$this->excel->getActiveSheet()->setCellValue("E$i", "$row_pegawai[jumlah]");
+			$this->excel->getActiveSheet()->setCellValue("F$i", number_format(($row_pegawai['p_nstkp_waktu']/60),2,'.',''));
+			$this->excel->getActiveSheet()->setCellValue("G$i", number_format(($row_pegawai['jumlah'] * $row_pegawai['p_nstkp_waktu'] / 60 ),2,'.',''));
+			$this->excel->getActiveSheet()->setCellValue("H$i", strtoupper("$row_pegawai[p_nstkp_lembaga]"));
 					
 			//$sub_unit = $row_pegawai['p_unt_kode_sub_unit'];
 			
 		}endforeach;
+			
+			$i++;
+			$this->excel->getActiveSheet()->setCellValue("A$i", "TOTAL");
+			$this->excel->getActiveSheet()->setCellValue("E$i", $jumlah_peserta);
+			$this->excel->getActiveSheet()->setCellValue("F$i", number_format(($jumlah_jam/60),2,'.',''));
+			$this->excel->getActiveSheet()->setCellValue("G$i", number_format(($jumlah_peserta * $jumlah_jam / 60 ),2,'.',''));
+			$this->excel->getActiveSheet()->mergeCells("A$i:D$i");
+			$this->excel->getActiveSheet()->getStyle("A$i:D$i")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			$this->excel->getActiveSheet()->getStyle("A$i:D$i")->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+			$this->excel->getActiveSheet()->getStyle("A$i:H$i")->getFont()->setBold(true);
+			
+			$i++;
+			$this->excel->getActiveSheet()->setCellValue("A$i", "INDIKATOR PENDIDIKAN & PELATIHAN SDM");
+			$this->excel->getActiveSheet()->mergeCells("A$i:D$i");
+			$this->excel->getActiveSheet()->getStyle("A$i:D$i")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			$this->excel->getActiveSheet()->getStyle("A$i:D$i")->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+			$this->excel->getActiveSheet()->getStyle("A$i:H$i")->getFont()->setBold(true);
+			
 		
 		//change the font size
 		$this->excel->getActiveSheet()->getStyle("A2:A4")->getFont()->setSize(12);
@@ -1981,33 +2096,37 @@ class diklat extends Application {
 		$this->excel->getActiveSheet()->mergeCells('C6:D6');
 		$this->excel->getActiveSheet()->mergeCells('E6:E7');
 		$this->excel->getActiveSheet()->mergeCells('F6:F7');
+		$this->excel->getActiveSheet()->mergeCells('G6:G7');
+		$this->excel->getActiveSheet()->mergeCells('H6:H7');
 		
 		$this->excel->getActiveSheet()->mergeCells('A2:H2');
 		$this->excel->getActiveSheet()->mergeCells('A3:H3');
 		$this->excel->getActiveSheet()->mergeCells('A4:H4');
 		
 		//set aligment to center for that merged cell (A1 to D1)
-		$this->excel->getActiveSheet()->getStyle('A6:F6')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-		$this->excel->getActiveSheet()->getStyle('A6:F6')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		$this->excel->getActiveSheet()->getStyle('A6:H6')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		$this->excel->getActiveSheet()->getStyle('A6:H6')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 		$this->excel->getActiveSheet()->getStyle('C7:D7')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 		$this->excel->getActiveSheet()->getStyle('C7:D7')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 		$this->excel->getActiveSheet()->getStyle('A2:A4')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 		$this->excel->getActiveSheet()->getStyle('A2:A4')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 		
 		// change cells color
-		$this->excel->getActiveSheet()->getStyle("A6:F7")->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('FFD000');
+		$this->excel->getActiveSheet()->getStyle("A6:H7")->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('FFD000');
 	
 		//Set Border
-		$this->excel->getActiveSheet()->getStyle('A6:F6')->getBorders()->getAllBorders()->setColor(new PHPExcel_Style_Color(PHPExcel_Style_Color::COLOR_RED));
-		$this->excel->getActiveSheet()->getStyle('A7:F7')->getBorders()->getAllBorders()->setColor(new PHPExcel_Style_Color(PHPExcel_Style_Color::COLOR_RED));
+		$this->excel->getActiveSheet()->getStyle('A6:H6')->getBorders()->getAllBorders()->setColor(new PHPExcel_Style_Color(PHPExcel_Style_Color::COLOR_RED));
+		$this->excel->getActiveSheet()->getStyle('A7:H7')->getBorders()->getAllBorders()->setColor(new PHPExcel_Style_Color(PHPExcel_Style_Color::COLOR_RED));
 		
 		//Set column widths                                                       
 		$this->excel->getActiveSheet()->getColumnDimension('A')->setWidth(5.54);  
 		$this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(30.75); 
 		$this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(16);    
 		$this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(16);  
-		$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(28.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(14.63); 
 		$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(14.63); 
+		$this->excel->getActiveSheet()->getColumnDimension('G')->setWidth(14.63); 
+		$this->excel->getActiveSheet()->getColumnDimension('H')->setWidth(28.88); 
 		
 		$filename="Rekap Non STKP Bulan ".$this->uri->segment(3)."-".$this->uri->segment(4).".xls"; //save our workbook as this file name
 		header('Content-Type: application/vnd.ms-excel'); //mime type
@@ -2023,7 +2142,7 @@ class diklat extends Application {
 	
 	public function excel_rekap_stkp_bulanan()
 	{
-		$datestring = "%d-%m-%Y" ;
+		$datestring = "%d-%M-%y" ;
 		$time = time();
 		$tanggal = mdate($datestring, $time);
 		
@@ -2036,6 +2155,21 @@ class diklat extends Application {
 		$this->excel->setActiveSheetIndex(0);
 		//name the worksheet
 		$this->excel->getActiveSheet()->setTitle("Rekapitulasi STKP ");
+		
+		//Add Image
+		$objDrawing = new PHPExcel_Worksheet_Drawing();
+		$objDrawing->setName('logo');
+		$objDrawing->setDescription('logo_gapura');
+		$objDrawing->setPath('./images/gapura-angkasa.jpg');
+		$objDrawing->setOffsetX(8);    // setOffsetX works properly
+		$objDrawing->setOffsetY(300);  //setOffsetY has no effect
+		$objDrawing->setHeight(35); // logo height
+
+		// Insert picture
+		$objDrawing->setCoordinates('A2');
+		$objDrawing->setWorksheet($this->excel->getActiveSheet());
+		
+		
 		//set cell A1 content with some text
 		$this->excel->getActiveSheet()->setCellValue('A6', 'NO');
 		$this->excel->getActiveSheet()->setCellValue('B6', 'JENIS');
@@ -2046,7 +2180,7 @@ class diklat extends Application {
 		$this->excel->getActiveSheet()->setCellValue('E7', 'SELESAI');
 		
 		//JUDUL KOP
-		$this->excel->getActiveSheet()->setCellValue('A2', 'DATA NON STKP');
+		$this->excel->getActiveSheet()->setCellValue('A2', 'DATA STKP');
 		$this->excel->getActiveSheet()->setCellValue('A3', 'PT. GAPURA ANGKASA CABANG BANDARA NGURAH RAI');
 		$this->excel->getActiveSheet()->setCellValue('A4', 'DENPASAR');
 				
@@ -2083,8 +2217,8 @@ class diklat extends Application {
 			//masukkan data ke tabel excel
 			
 			$this->excel->getActiveSheet()->setCellValue("A$i", "$number");
-			$this->excel->getActiveSheet()->setCellValue("B$i", "$row_pegawai[p_stkp_jenis]");
-			$this->excel->getActiveSheet()->setCellValue("C$i", "$row_pegawai[p_stkp_rating]");
+			$this->excel->getActiveSheet()->setCellValue("B$i", strtoupper("$row_pegawai[p_stkp_jenis]"));
+			$this->excel->getActiveSheet()->setCellValue("C$i", strtoupper("$row_pegawai[p_stkp_rating]"));
 			$this->excel->getActiveSheet()->setCellValue("D$i", "$pelaksanaan");
 			$this->excel->getActiveSheet()->setCellValue("E$i", "$stkp_selesai");
 			$this->excel->getActiveSheet()->setCellValue("F$i", "$row_pegawai[jumlah]");

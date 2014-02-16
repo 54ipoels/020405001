@@ -28,7 +28,9 @@
 								$attr= array('target' => '_blank');
 								if($year == ""){$year ="ALL";}
 								if($bulan == ""){$bulan ="ALL";}
-								echo anchor('diklat/excel_stkp_bulanan/'.$bulan.'/'.$year.'/'.$jenis_stkp,'Export to Excel',$attr); 
+								if($jenis_pegawai == ""){$jenis_pegawai ="ALL";}
+								if($unit == ""){$unit ="ALL";}
+								echo anchor('diklat/excel_stkp_bulanan/'.$bulan.'/'.$year.'/'.$jenis_pegawai.'/'.$unit.'/'.$jenis_stkp,'Export to Excel',$attr); 
 								?></td>
                         <td colspan="5"><div class="pagination"><?php echo $this->pagination->create_links();?></div></td>
                         <td colspan="4" align="right">EMS 2.0.1 | developed by www.studiokami.com</td>

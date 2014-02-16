@@ -24,7 +24,9 @@
 								$attr= array('target' => '_blank');
 								if($year == ""){$year ="ALL";}
 								if($bulan == ""){$bulan ="ALL";}
-								echo anchor('diklat/excel_non_stkp_bulanan/'.$bulan.'/'.$year.'/'.$url_training,'Export to Excel',$attr);
+								if($jenis_pegawai == ""){$jenis_pegawai ="ALL";}
+								if($unit == ""){$unit ="ALL";}
+								echo anchor('diklat/excel_non_stkp_bulanan/'.$bulan.'/'.$year.'/'.$jenis_pegawai.'/'.$unit.'/'.$url_training,'Export to Excel',$attr);
 						 	?>
                        	</td>
                         <td colspan="3"><div class="pagination"><?php echo $this->pagination->create_links();?></div></td>

@@ -57,6 +57,33 @@
 						?></div>
                         <div class="clear"></div>
                     </div>
+					<div class="formRow">
+                        <label> Jenis Pegawai :</label>
+                        <div class="formRight"><?php 
+						 
+						$jenis_pegawai = array(
+							'ALL' 		=> 'ALL',
+							'Tetap' 	=> 'Tetap',
+							'PKWT' 		=> 'PKWT',
+							'Outsource' => 'Outsource',
+						); 
+						echo form_dropdown('jenis_pegawai',$jenis_pegawai); 
+						?></div>
+                        <div class="clear"></div>
+                    </div>
+					<div class="formRow">
+                        <label> Unit Kerja :</label>
+                        <div class="formRight"><?php 
+						$unit = array();
+						$unit['ALL'] = 'ALL';
+						foreach ($list_unit as $row_unit) :
+							{
+								$unit[$row_unit['kode_unit']] = ($row_unit['nama_unit']);
+							} endforeach; 
+						echo form_dropdown('unit',$unit); 
+						?></div>
+                        <div class="clear"></div>
+                    </div>
 				</fieldset>
 				<div class="wizButtons"> 
                     <div class="status" id="status2"></div>

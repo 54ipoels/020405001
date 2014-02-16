@@ -104,10 +104,10 @@
 					<tr>
                     	<td colspan='4' align="left"><?php 
 								$attr= array('target' => '_blank');
-								if($this->uri->segment(2) == "sort_stkp" ){
-									if($jenis_search !== 'all'){
-										echo anchor('diklat/excel_stkp/'.$jenis_search,'Export to Excel',$attr); 
-									}
+								if(($this->uri->segment(2) == "sort_stkp") OR ($this->uri->segment(2) == "search_stkp")){
+									echo anchor($link_excel,'Export to Excel',$attr); 
+								}else{
+									echo anchor('diklat/excel_stkp/','Export to Excel',$attr); 
 								}
 								?></td>
                         <td colspan="7"><div class="pagination"><?php echo $this->pagination->create_links();?></div></td>

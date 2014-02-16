@@ -67,7 +67,7 @@ class pendidikan extends CI_Model
 		return $query->result_array();
 	}
 	
-	function search_report_stkp_bulanan($bulan, $tahun, $jenis_stkp)
+	function search_report_stkp_bulanan($bulan, $tahun, $jenis_pegawai, $unit, $jenis_stkp)
 	{
 		$jenis_stkp = str_replace('%20',' ',$jenis_stkp);
 		if (($tahun=="") OR ($tahun=="ALL")){
@@ -83,23 +83,34 @@ class pendidikan extends CI_Model
 							AND peg_stkp.p_stkp_jenis LIKE '%$jenis_stkp%'
 							";
 		}
+		$where = " ";
+		if($jenis_pegawai != 'ALL'){
+			$where .= " AND a.p_tmt_status = '$jenis_pegawai' "; 
+		}
+		if($unit != 'ALL'){
+			$where .= " AND peg_unt.p_unt_kode_unit = '$jenis_pegawai' "; 
+		}
+		
 		$query = ("
 			SELECT * FROM v3_peg_stkp AS peg_stkp
-			LEFT JOIN (SELECT id_peg_unit,p_unt_nipp, p_unt_kode_unit FROM v3_peg_unit ORDER BY id_peg_unit DESC ) AS peg_unt 
+			LEFT JOIN (SELECT id_peg_unit,p_unt_nipp, p_unt_kode_unit, p_unt_tmt_end FROM v3_peg_unit ORDER BY id_peg_unit DESC ) AS peg_unt 
 			ON peg_stkp.p_stkp_nipp = peg_unt.p_unt_nipp 
 			LEFT JOIN (SELECT peg_nipp,peg_nama FROM v3_pegawai ORDER BY id_pegawai DESC) AS peg
 			ON peg_stkp.p_stkp_nipp = peg.peg_nipp
+			LEFT JOIN v3_peg_tmt a ON a.p_tmt_nipp = peg_stkp.p_stkp_nipp 
 			$selection 	
+			$where
+			AND a.p_tmt_end = '0000-00-00'
+			AND peg_unt.p_unt_tmt_end = '0000-00-00'
 			GROUP BY peg_stkp.id_peg_stkp 
 			ORDER BY peg_stkp.p_stkp_nipp,  peg_stkp.p_stkp_pelaksanaan ASC
-			
 		");
 		$query = $this->db->query($query);
 		return $query->result_array();
 	}
 	
 	
-	function search_report_nstkp_bulanan($bulan, $tahun, $jenis)
+	function search_report_nstkp_bulanan($bulan, $tahun, $jenis_pegawai, $unit, $jenis)
 	{
 		$jenis = str_replace('%20',' ',$jenis);
 		if ($tahun==""){
@@ -116,9 +127,17 @@ class pendidikan extends CI_Model
 							";
 		}
 		
+		$where = " ";
+		if($jenis_pegawai != 'ALL'){
+			$where .= " AND a.p_tmt_status = '$jenis_pegawai' "; 
+		}
+		if($unit != 'ALL'){
+			$where .= " AND peg_unt.p_unt_kode_unit = '$jenis_pegawai' "; 
+		}
+		
 		$query = ("
 			SELECT * FROM v3_peg_non_stkp AS peg_stkp
-			LEFT JOIN (SELECT id_peg_unit, p_unt_nipp, p_unt_kode_unit, p_unt_kode_sub_unit FROM v3_peg_unit ORDER BY id_peg_unit DESC ) AS peg_unt 
+			LEFT JOIN (SELECT id_peg_unit, p_unt_nipp, p_unt_kode_unit, p_unt_kode_sub_unit, p_unt_tmt_end FROM v3_peg_unit ORDER BY id_peg_unit DESC ) AS peg_unt 
 			ON peg_stkp.p_nstkp_nipp = peg_unt.p_unt_nipp 
 			LEFT JOIN (SELECT peg_nipp,peg_nama FROM v3_pegawai ORDER BY peg_nipp DESC) AS peg
 			ON peg_stkp.p_nstkp_nipp = peg.peg_nipp
@@ -126,7 +145,11 @@ class pendidikan extends CI_Model
 			ON unit.kode_unit = peg_unt.p_unt_kode_unit
 			LEFT JOIN (SELECT * FROM v3_sub_unit ORDER BY su_kode_sub_unit DESC) AS sub_unit
 			ON sub_unit.su_kode_sub_unit = peg_unt.p_unt_kode_sub_unit
+			LEFT JOIN v3_peg_tmt a ON a.p_tmt_nipp = peg_stkp.p_nstkp_nipp 
 			$selection 
+			$where
+			AND a.p_tmt_end = '0000-00-00'
+			AND peg_unt.p_unt_tmt_end = '0000-00-00'
 			GROUP BY peg_stkp.id_peg_non_stkp
 			ORDER BY unit.kode_unit,sub_unit.su_kode_sub_unit,peg_stkp.p_nstkp_nipp, peg_stkp.p_nstkp_pelaksanaan ASC
 			
@@ -153,7 +176,7 @@ class pendidikan extends CI_Model
 							";
 		}
 		$query = ("
-			SELECT p_stkp_jenis, COUNT(p_stkp_jenis) AS jumlah, p_stkp_rating, p_stkp_pelaksanaan, p_stkp_selesai, p_stkp_lembaga FROM v3_peg_stkp AS peg_stkp
+			SELECT p_stkp_jenis, COUNT(p_stkp_jenis) AS jumlah, p_stkp_rating, p_stkp_pelaksanaan, p_stkp_selesai, p_stkp_waktu, p_stkp_lembaga FROM v3_peg_stkp AS peg_stkp
 			$selection 	
 			GROUP BY p_stkp_jenis, p_stkp_rating, p_stkp_pelaksanaan, p_stkp_selesai 
 			ORDER BY p_stkp_jenis, p_stkp_rating, p_stkp_pelaksanaan, p_stkp_selesai 			
@@ -181,7 +204,7 @@ class pendidikan extends CI_Model
 		}
 		
 		$query = ("
-			SELECT p_nstkp_jenis, COUNT(p_nstkp_jenis) AS jumlah, p_nstkp_pelaksanaan, p_nstkp_selesai, p_nstkp_lembaga FROM v3_peg_non_stkp AS peg_stkp
+			SELECT p_nstkp_jenis, COUNT(p_nstkp_jenis) AS jumlah, p_nstkp_pelaksanaan, p_nstkp_selesai, p_nstkp_waktu, p_nstkp_lembaga FROM v3_peg_non_stkp AS peg_stkp
 			$selection 
 			GROUP BY peg_stkp.p_nstkp_jenis, p_nstkp_pelaksanaan, p_nstkp_selesai
 			ORDER BY peg_stkp.p_nstkp_jenis, p_nstkp_pelaksanaan, p_nstkp_selesai
@@ -192,7 +215,7 @@ class pendidikan extends CI_Model
 		return $query->result_array();
 	}
 	
-	function search_report_nstkp_bulanan_sort_pelaksanaan_training($bulan, $tahun, $jenis)
+	function search_report_nstkp_bulanan_sort_pelaksanaan_training($bulan, $tahun, $jenis_pegawai, $unit, $jenis)
 	{
 		$jenis = str_replace('%20',' ',$jenis);
 		if ($tahun == "ALL"){
@@ -208,14 +231,28 @@ class pendidikan extends CI_Model
 							AND peg_stkp.p_nstkp_jenis LIKE '%$jenis%'
 							";
 		}
-	
+		$where = " ";
+		if($jenis_pegawai != 'ALL'){
+			$where .= " AND a.p_tmt_status = '$jenis_pegawai' "; 
+		}
+		if($unit != 'ALL'){
+			$where .= " AND peg_unt.p_unt_kode_unit = '$jenis_pegawai' "; 
+		}
+		
 		$query = ("
 			SELECT * FROM v3_peg_non_stkp AS peg_stkp
+			LEFT JOIN (SELECT id_peg_unit,p_unt_nipp, p_unt_kode_unit, p_unt_tmt_end FROM v3_peg_unit ORDER BY id_peg_unit DESC ) AS peg_unt 
+			ON peg_stkp.p_nstkp_nipp = peg_unt.p_unt_nipp 
 			LEFT JOIN (SELECT peg_nipp,peg_nama FROM v3_pegawai ORDER BY peg_nipp DESC) AS peg
 			ON peg_stkp.p_nstkp_nipp = peg.peg_nipp
+			LEFT JOIN v3_peg_tmt a ON a.p_tmt_nipp = peg_stkp.p_nstkp_nipp 
 			$selection 
+			$where
+			AND a.p_tmt_end = '0000-00-00'
+			AND peg_unt.p_unt_tmt_end = '0000-00-00'
 			GROUP BY peg_stkp.id_peg_non_stkp
 			ORDER BY peg_stkp.p_nstkp_pelaksanaan,peg_stkp.p_nstkp_jenis,peg_stkp.p_nstkp_nipp ASC
+						
 		");
 		//return $query;
 		$query = $this->db->query($query);
@@ -307,7 +344,7 @@ class pendidikan extends CI_Model
 		$this->db->insert('v3_peg_stkp',$data_stkp);
 	}
 
-	function input_nilai_stkp($stkp, $jumlah, $tanggal_start, $tanggal_end, $user)
+	function input_nilai_stkp($stkp, $jumlah, $tanggal_start, $tanggal_end, $lama_pelatihan, $user)
 	{
 		$datestring = "%Y-%m-%d" ;
 		$time = time();
@@ -351,6 +388,7 @@ class pendidikan extends CI_Model
 				'p_stkp_selesai'		=> $tanggal_end,
 				'p_stkp_mulai'			=> $valid_start,
 				'p_stkp_finish'			=> $valid_end,
+				'p_stkp_waktu'			=> $lama_pelatihan,
 				//'p_stkp_update_on'		=> $tanggal,
 				'p_stkp_update_by'		=> $user,
 			);
@@ -360,7 +398,7 @@ class pendidikan extends CI_Model
 		}
 	}
 
-	function input_nilai_nstkp($stkp, $jumlah, $tanggal_start, $tanggal_end, $user)
+	function input_nilai_nstkp($stkp, $jumlah, $tanggal_start, $tanggal_end, $lama_pelatihan, $user)
 	{
 		$datestring = "%Y-%m-%d" ;
 		$time = time();
@@ -401,6 +439,7 @@ class pendidikan extends CI_Model
 				'p_nstkp_no_license'	=> $mand,
 				'p_nstkp_pelaksanaan'	=> $tanggal_start,
 				'p_nstkp_selesai'		=> $tanggal_end,
+				'p_nstkp_waktu'			=>	$lama_pelatihan,
 				//'p_nstkp_update_on'		=> $tanggal,
 				'p_nstkp_update_by'		=> $user,
 			);
@@ -613,22 +652,34 @@ class pendidikan extends CI_Model
 		return $query->result_array();
 	}
 	
-	function get_data_stkp_with_unit_and_name_unlimited()
+	function get_data_stkp_with_unit_and_name_unlimited($search,$jenis,$type,$unit)
 	{
-		
-		$jenis_search=$this->uri->segment(3);
-		$query = ('
+		$where = " ";
+		if( $search != 'ALL' ){
+			$where .= " AND ( peg.peg_nipp = '$search' OR peg.peg_nama LIKE '%$search%' ) "; 
+		}
+		if( $jenis != 'ALL' ){
+			$where .= " AND ( peg_stkp.p_stkp_jenis = '$jenis' ) "; 
+		}
+		if( $type != 'ALL' ){
+			$where .= " AND ( peg_stkp.p_stkp_rating = '$type' ) "; 
+		}
+		if( $unit != 'ALL' ){
+			$where .= " AND ( peg_unt.p_unt_kode_unit = '$unit' ) "; 
+		}
+		//$jenis_search=$this->uri->segment(3);
+		$query = ("
 			SELECT * FROM v3_peg_stkp AS peg_stkp
 			LEFT JOIN (SELECT p_unt_nipp, p_unt_kode_unit FROM v3_peg_unit ORDER BY id_peg_unit DESC) AS peg_unt 
 			ON peg_stkp.p_stkp_nipp = peg_unt.p_unt_nipp 
 			LEFT JOIN (SELECT peg_nipp,peg_nama FROM v3_pegawai ORDER BY id_pegawai DESC) AS peg
 			ON peg_stkp.p_stkp_nipp = peg.peg_nipp
 			LEFT JOIN (SELECT * from v3_peg_tmt ORDER BY id_peg_tmt DESC) AS tmt ON tmt.p_tmt_nipp = peg.peg_nipp
-			WHERE peg_stkp.p_stkp_jenis = \''.$jenis_search.'\'
-			AND tmt.p_tmt_end = \'0000-00-00\'
+			WHERE  tmt.p_tmt_end = '0000-00-00'
+			$where
 			GROUP BY peg.peg_nipp, peg_stkp.id_peg_stkp
 			ORDER BY peg_stkp.p_stkp_nipp
-		');
+		");
 		
 		$query = $this->db->query($query); 
 		return $query->result_array();
@@ -778,7 +829,6 @@ class pendidikan extends CI_Model
 	
 	function search_stkp($num, $offset, $search)
 	{
-		
 		$query = ("
 			SELECT * FROM v3_peg_stkp AS peg_stkp
 			LEFT JOIN (SELECT p_unt_nipp, p_unt_kode_unit FROM v3_peg_unit ORDER BY id_peg_unit DESC) AS peg_unt 
@@ -789,7 +839,6 @@ class pendidikan extends CI_Model
 			GROUP BY peg_stkp.id_peg_stkp
 			ORDER BY peg_stkp.p_stkp_nipp ASC, peg_stkp.p_stkp_rating ASC, peg_stkp.p_stkp_pelaksanaan ASC
 			LIMIT $offset , $num
-			
 		");
 		
 		$query = $this->db->query($query); 
