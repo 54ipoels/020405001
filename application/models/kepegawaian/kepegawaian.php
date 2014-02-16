@@ -131,8 +131,12 @@ class kepegawaian extends CI_Model
 		return $query->result_array();
 	}
 	
-	function get_data_sdm_unlimited()
+	function get_data_sdm_unlimited($unit)
 	{
+		$where = " ";
+		if($unit != 'ALL'){
+			$where .= " AND p_unt_kode_unit = '$unit' "; 
+		}
 		$query = ("
 			SELECT * FROM v3_pegawai AS peg
 			LEFT JOIN (SELECT p_stk_nipp, p_stk_status_keluarga FROM v3_peg_status_keluarga ORDER BY id_peg_status_keluarga DESC) AS stk
@@ -151,6 +155,7 @@ class kepegawaian extends CI_Model
 			ON pu.p_unt_kode_unit = unit.kode_unit
 			WHERE tmt.p_tmt_end = '0000-00-00'
 			AND pu.p_unt_tmt_end = '0000-00-00'
+			$where
 			GROUP BY id_pegawai
 			ORDER BY unit.level ASC, peg.peg_nipp ASC
 		");

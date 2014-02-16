@@ -2384,6 +2384,8 @@ class Pekerja extends Application {
 		#$data['pegawai'] = $this->kepegawaian->search_data_pegawai_full($config['per_page'],$page,$search_data);
 		$data['pegawai'] = $this->kepegawaian->search_data_pegawai_full_unit($config['per_page'],$page,$search_data,$search_unit);
 		$data['list_unit'] = $this->kepegawaian->get_list_unit();
+		$data['link_excel'] = 'pekerja/excel_data_sdm/search/'.$search_unit.'/';
+	
 		//print_r($data['pegawai']);
 		$this->load->view('kepegawaian/index', $data);
 	}
@@ -3052,7 +3054,13 @@ class Pekerja extends Application {
 		$time = time();
 		$tanggal = mdate($datestring, $time);
 		
-		$sdm = $this->kepegawaian->get_data_sdm_unlimited();
+		if($this->uri->segment(3) == "search"){
+			$unit = $this->uri->segment(4);
+			$sdm = $this->kepegawaian->get_data_sdm_unlimited($unit);
+		}else{
+			$unit = "ALL";
+			$sdm = $this->kepegawaian->get_data_sdm_unlimited($unit);
+		}		
 						
 		//load our new PHPExcel library
 		$this->load->library('excel');
