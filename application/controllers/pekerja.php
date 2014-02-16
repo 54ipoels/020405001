@@ -291,7 +291,7 @@ class Pekerja extends Application {
 		if ($type === 'ALL')
 		{
 			$jenis = '55';
-			$limit = '400';
+			$limit = '100';
 		}else
 		if ($type === 'MPP')
 		{
@@ -658,7 +658,7 @@ class Pekerja extends Application {
 			}
 			}
 		} else {
-			?><script>alert("Nipp tersebut sudah digunakan");window.history.back(-4);</script><?php	
+			?><script>alert("Nipp tersebut sudah digunakan");window.history.back(-1);</script><?php	
 		}
 	}
 	
@@ -1060,8 +1060,8 @@ class Pekerja extends Application {
 			$config['allowed_types'] = 'pdf|gif|jpg|png';
 			$config['max_size']  = '9999';
 			$config['overwrite']	=	TRUE;
-			//$filenamebantu = str_replace(' ','_',$no_sk)."-$id_peg_jabatan-".$update_on.".".$ext[4];
-			$filenamebantu = str_replace(' ','_',$no_sk).".".$ext[4]; //filenya ditindih dengan file baru
+			//$filenamebantu = str_replace(' ','_',$no_sk)."-$id_peg_jabatan-".$update_on.".".$ext[1];
+			$filenamebantu = str_replace(' ','_',$no_sk).".".$ext[1]; //filenya ditindih dengan file baru
 			$config['file_name']=$filenamebantu;
 			
 			
@@ -1154,8 +1154,8 @@ class Pekerja extends Application {
 			$config['allowed_types'] = 'pdf|gif|jpg|png';
 			$config['max_size']  = '9999';
 			$config['overwrite']	=	TRUE;
-			//$filenamebantu = str_replace(' ','_',$no_sk)."-$id_peg_jabatan-".$update_on.".".$ext[4];
-			$filenamebantu = str_replace(' ','_',$no_sk).".".$ext[4]; //filenya ditindih dengan file baru
+			//$filenamebantu = str_replace(' ','_',$no_sk)."-$id_peg_jabatan-".$update_on.".".$ext[1];
+			$filenamebantu = str_replace(' ','_',$no_sk).".".$ext[1]; //filenya ditindih dengan file baru
 			$config['file_name']=$filenamebantu;
 			
 			
@@ -1277,8 +1277,8 @@ class Pekerja extends Application {
 			$config['allowed_types'] = 'pdf|gif|jpg|png';
 			$config['max_size']  = '9999';
 			$config['overwrite']	=	TRUE;
-			//$filenamebantu = str_replace(' ','_',$no_sk)."-$id_peg_jabatan-".$update_on.".".$ext[4];
-			$filenamebantu = str_replace(' ','_',$no_sk).".".$ext[4]; //filenya ditindih dengan file baru
+			//$filenamebantu = str_replace(' ','_',$no_sk)."-$id_peg_jabatan-".$update_on.".".$ext[1];
+			$filenamebantu = str_replace(' ','_',$no_sk).".".$ext[1]; //filenya ditindih dengan file baru
 			$config['file_name']=$filenamebantu;
 			
 			
@@ -1347,8 +1347,8 @@ class Pekerja extends Application {
 			$config['allowed_types'] = 'pdf|gif|jpg|png';
 			$config['max_size']  = '9999';
 			$config['overwrite']	=	TRUE;
-			//$filenamebantu = str_replace(' ','_',$no_sk)."-$id_peg_jabatan-".$update_on.".".$ext[4];
-			$filenamebantu = str_replace(' ','_',$no_sk).".".$ext[4]; //filenya ditindih dengan file baru
+			//$filenamebantu = str_replace(' ','_',$no_sk)."-$id_peg_jabatan-".$update_on.".".$ext[1];
+			$filenamebantu = str_replace(' ','_',$no_sk).".".$ext[1]; //filenya ditindih dengan file baru
 			$config['file_name']=$filenamebantu;
 			
 			
@@ -1435,8 +1435,8 @@ class Pekerja extends Application {
 			$config['allowed_types'] = 'pdf|gif|jpg|png';
 			$config['max_size']  = '9999';
 			$config['overwrite']	=	TRUE;
-			//$filenamebantu = str_replace(' ','_',$no_sk)."-$id_peg_jabatan-".$update_on.".".$ext[4];
-			$filenamebantu = str_replace(' ','_',$no_sk).".".$ext[4]; //filenya ditindih dengan file baru
+			//$filenamebantu = str_replace(' ','_',$no_sk)."-$id_peg_jabatan-".$update_on.".".$ext[1];
+			$filenamebantu = str_replace(' ','_',$no_sk).".".$ext[1]; //filenya ditindih dengan file baru
 			$config['file_name']=$filenamebantu;
 			
 			
@@ -1509,8 +1509,8 @@ class Pekerja extends Application {
 			$config['allowed_types'] = 'pdf|gif|jpg|png';
 			$config['max_size']  = '9999';
 			$config['overwrite']	=	TRUE;
-			//$filenamebantu = str_replace(' ','_',$no_sk)."-$id_peg_jabatan-".$update_on.".".$ext[4];
-			$filenamebantu = str_replace(' ','_',$no_sk).".".$ext[4]; //filenya ditindih dengan file baru
+			//$filenamebantu = str_replace(' ','_',$no_sk)."-$id_peg_jabatan-".$update_on.".".$ext[1];
+			$filenamebantu = str_replace(' ','_',$no_sk).".".$ext[1]; //filenya ditindih dengan file baru
 			$config['file_name']=$filenamebantu;
 			
 			
@@ -1689,7 +1689,7 @@ class Pekerja extends Application {
 		$data_stk = array(
 					'p_stk_nipp' 			  => $nipp,
 					'p_stk_status_keluarga'   => $this->input->post('stk'),
-					'p_stk_aktif'			=>	'4',
+					'p_stk_aktif'			=>	'1',
 					//'p_stk_update_on'		  => $tanggal,
 					'p_stk_update_by'		  => 'admin'
 				);
@@ -2319,7 +2319,7 @@ class Pekerja extends Application {
 		$this->kepegawaian->insert_data_pegawai_pendidikan($data_pendidikan);
 		
 		$data_id_bahasa = $this->kepegawaian->get_detail_pegawai_bahasa($nipp);
-		$nomer = 4;
+		$nomer = 1;
 		foreach ($data_id_bahasa as $row_bahasa) :
 		{
 			$data_bahasa = array(
@@ -2672,11 +2672,11 @@ class Pekerja extends Application {
 		}		
 		//load our new PHPExcel library
 		$this->load->library('excel');
-		//activate worksheet number 4
+		//activate worksheet number 1
 		$this->excel->setActiveSheetIndex(0);
 		//name the worksheet
 		$this->excel->getActiveSheet()->setTitle("Data Pegawai ");
-		//set cell A4 content with some text
+		//set cell A1 content with some text
 		
 		//Add Image
 		$objDrawing = new PHPExcel_Worksheet_Drawing();
@@ -2799,20 +2799,20 @@ class Pekerja extends Application {
 		
 		//Set column widths                                                       
 		$this->excel->getActiveSheet()->getColumnDimension('A')->setWidth(5.54);  
-		$this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(40.75); 
+		$this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(10.75); 
 		$this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(26);    
 		$this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(20.5);  
-		$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(40.88); 
-		$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(40.88); 
-		$this->excel->getActiveSheet()->getColumnDimension('G')->setWidth(44.63); 
+		$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(10.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(10.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('G')->setWidth(14.63); 
 		$this->excel->getActiveSheet()->getColumnDimension('H')->setWidth(8.88); 
-		$this->excel->getActiveSheet()->getColumnDimension('I')->setWidth(44.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('I')->setWidth(14.88); 
 		$this->excel->getActiveSheet()->getColumnDimension('J')->setWidth(25.88); 
 		$this->excel->getActiveSheet()->getColumnDimension('K')->setWidth(35.88); 
-		$this->excel->getActiveSheet()->getColumnDimension('L')->setWidth(45.88); 
-		$this->excel->getActiveSheet()->getColumnDimension('M')->setWidth(45.88); 
-		$this->excel->getActiveSheet()->getColumnDimension('N')->setWidth(45.88); 
-		$this->excel->getActiveSheet()->getColumnDimension('O')->setWidth(45.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('L')->setWidth(15.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('M')->setWidth(15.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('N')->setWidth(15.88); 
+		$this->excel->getActiveSheet()->getColumnDimension('O')->setWidth(15.88); 
 		
 		 
 		$filename="Data Pegawai.xls"; //save our workbook as this file name
@@ -2835,7 +2835,7 @@ class Pekerja extends Application {
 		$tanggal = mdate($datestring, $time);
 		
 		$type = '52';
-		$limit = '400';
+		$limit = '100';
 		
 		if($this->uri->segment(3) == "search"){
 			$type_pegawai = $this->uri->segment(4);
@@ -2846,7 +2846,7 @@ class Pekerja extends Application {
 		}		
 		//load our new PHPExcel library
 		$this->load->library('excel');
-		//activate worksheet number 4
+		//activate worksheet number 1
 		$this->excel->setActiveSheetIndex(0);
 		//name the worksheet
 		$this->excel->getActiveSheet()->setTitle("Data Pegawai Pensiun");
@@ -3150,7 +3150,7 @@ class Pekerja extends Application {
 			$this->excel->getActiveSheet()->setCellValue("I$i", strtoupper("$row_sdm[p_stk_status_keluarga]"));
 			$this->excel->getActiveSheet()->setCellValue("L$i", strtoupper("$row_sdm[p_ag_agama]"));
 			//data anak
-			$num_anak = 4;
+			$num_anak = 1;
 			foreach ($anak as $row_anak)
 			{
 				$umur_ank=floor(($time - strtotime($row_anak['peg_ank_tgl_lahir']))/(365*24*60*60));
@@ -3296,94 +3296,94 @@ class Pekerja extends Application {
 		}
 		
 		// Add header
-		$PHPWord->addFontStyle('r_headerStyle', array('name'=>'Verdana','bold'=>true, 'size'=>46));
-		$PHPWord->addParagraphStyle('p_headerStyle', array('align'=>'left', 'spaceAfter'=>400));
+		$PHPWord->addFontStyle('r_headerStyle', array('name'=>'Verdana','bold'=>true, 'size'=>16));
+		$PHPWord->addParagraphStyle('p_headerStyle', array('align'=>'left', 'spaceAfter'=>100));
 		$header = $section->createHeader();
 		$header->addText('CURRICULUM VITAE', 'r_headerStyle', 'p_headerStyle');
 		// Title Style
-		$PHPWord->addFontStyle('r_titleStyle', array('name'=>'Verdana','bold'=>true, 'size'=>42));
+		$PHPWord->addFontStyle('r_titleStyle', array('name'=>'Verdana','bold'=>true, 'size'=>12));
 		$PHPWord->addParagraphStyle('p_titleStyle', array('align'=>'left', 'spaceAfter'=>80));
 				
 		// Define table style arrays
-		$styleTable4 = array('cellMargin'=>30);
-		//$styleTable4 = array('borderSize'=>0, 'borderColor'=>'000000', 'cellMargin'=>30);
-		$styleFirstRow4 = array();
+		$styleTable1 = array('cellMargin'=>30);
+		//$styleTable1 = array('borderSize'=>0, 'borderColor'=>'000000', 'cellMargin'=>30);
+		$styleFirstRow1 = array();
 
 		// Define cell style arrays
 		$styleCell = array('valign'=>'top');
 		
 		// Add table style
-		//$PHPWord->addTableStyle('TableStyle4', $styleTable4);
-		$PHPWord->addTableStyle('TableStyle4', $styleTable4, $styleFirstRow4);
+		//$PHPWord->addTableStyle('TableStyle1', $styleTable1);
+		$PHPWord->addTableStyle('TableStyle1', $styleTable1, $styleFirstRow1);
 
-		$section->addTextBreak(4);
+		$section->addTextBreak(1);
 		$section->addText('I. KETERANGAN PEGAWAI', 'r_titleStyle', 'p_titleStyle');
-		$section->addTextBreak(4);
+		$section->addTextBreak(1);
 		// Add table
-		$table4 = $section->addTable('TableStyle4');
+		$table1 = $section->addTable('TableStyle1');
 
 		# Keterangan Pegawai
 		// Add row
-		$table4->addRow(80);
-		$table4->addCell(2000, $styleCell)->addText('NAMA LENGKAP');
-		$table4->addCell(200, $styleCell)->addText(':');
-		$table4->addCell(4400, $styleCell)->addText(strtoupper($peg_nama));
+		$table1->addRow(80);
+		$table1->addCell(2000, $styleCell)->addText('NAMA LENGKAP');
+		$table1->addCell(200, $styleCell)->addText(':');
+		$table1->addCell(4400, $styleCell)->addText(strtoupper($peg_nama));
 		
-		$table4->addRow();
-		$table4->addCell(2000, $styleCell)->addText('NIP');
-		$table4->addCell(200, $styleCell)->addText(':');
-		$table4->addCell(4400, $styleCell)->addText(strtoupper($peg_nipp));
+		$table1->addRow();
+		$table1->addCell(2000, $styleCell)->addText('NIP');
+		$table1->addCell(200, $styleCell)->addText(':');
+		$table1->addCell(4400, $styleCell)->addText(strtoupper($peg_nipp));
 		
-		$table4->addRow();
-		$table4->addCell(2000, $styleCell)->addText('T.M.T');
-		$table4->addCell(200, $styleCell)->addText(':');
-		$table4->addCell(4400, $styleCell)->addText($peg_tmt);
+		$table1->addRow();
+		$table1->addCell(2000, $styleCell)->addText('T.M.T');
+		$table1->addCell(200, $styleCell)->addText(':');
+		$table1->addCell(4400, $styleCell)->addText($peg_tmt);
 		
-		$table4->addRow();
-		$table4->addCell(2000, $styleCell)->addText('PANGKAT / GOLONGAN');
-		$table4->addCell(200, $styleCell)->addText(':');
-		$table4->addCell(4400, $styleCell)->addText(strtoupper($peg_golongan));
+		$table1->addRow();
+		$table1->addCell(2000, $styleCell)->addText('PANGKAT / GOLONGAN');
+		$table1->addCell(200, $styleCell)->addText(':');
+		$table1->addCell(4400, $styleCell)->addText(strtoupper($peg_golongan));
 		
-		$table4->addRow();
-		$table4->addCell(2000, $styleCell)->addText('JABATAN');
-		$table4->addCell(200, $styleCell)->addText(':');
-		$table4->addCell(4400, $styleCell)->addText(strtoupper($peg_jabatan));
+		$table1->addRow();
+		$table1->addCell(2000, $styleCell)->addText('JABATAN');
+		$table1->addCell(200, $styleCell)->addText(':');
+		$table1->addCell(4400, $styleCell)->addText(strtoupper($peg_jabatan));
 		
-		$table4->addRow();
-		$table4->addCell(2000, $styleCell)->addText('UNIT KERJA');
-		$table4->addCell(200, $styleCell)->addText(':');
-		$table4->addCell(4400, $styleCell)->addText(strtoupper($peg_unit));
+		$table1->addRow();
+		$table1->addCell(2000, $styleCell)->addText('UNIT KERJA');
+		$table1->addCell(200, $styleCell)->addText(':');
+		$table1->addCell(4400, $styleCell)->addText(strtoupper($peg_unit));
 		
-		$table4->addRow();
-		$table4->addCell(2000, $styleCell)->addText('TEMPAT, TANGGAL LAHIR');
-		$table4->addCell(200, $styleCell)->addText(':');
-		$table4->addCell(4400, $styleCell)->addText(strtoupper($peg_tempatlahir).", $peg_tanggallahir");
+		$table1->addRow();
+		$table1->addCell(2000, $styleCell)->addText('TEMPAT, TANGGAL LAHIR');
+		$table1->addCell(200, $styleCell)->addText(':');
+		$table1->addCell(4400, $styleCell)->addText(strtoupper($peg_tempatlahir).", $peg_tanggallahir");
 		
-		$table4->addRow();
-		$table4->addCell(2000, $styleCell)->addText('USIA');
-		$table4->addCell(200, $styleCell)->addText(':');
-		$table4->addCell(4400, $styleCell)->addText("$peg_usia");
+		$table1->addRow();
+		$table1->addCell(2000, $styleCell)->addText('USIA');
+		$table1->addCell(200, $styleCell)->addText(':');
+		$table1->addCell(4400, $styleCell)->addText("$peg_usia");
 		
-		$table4->addRow();
-		$table4->addCell(2000, $styleCell)->addText('JENIS KELAMIN');
-		$table4->addCell(200, $styleCell)->addText(':');
-		$table4->addCell(4400, $styleCell)->addText("$peg_jeniskelamin");
+		$table1->addRow();
+		$table1->addCell(2000, $styleCell)->addText('JENIS KELAMIN');
+		$table1->addCell(200, $styleCell)->addText(':');
+		$table1->addCell(4400, $styleCell)->addText("$peg_jeniskelamin");
 		
-		$table4->addRow();
-		$table4->addCell(2000, $styleCell)->addText('ALAMAT RUMAH');
-		$table4->addCell(200, $styleCell)->addText(':');
-		$table4->addCell(4400, $styleCell)->addText(strtoupper($peg_alamatrumah));
+		$table1->addRow();
+		$table1->addCell(2000, $styleCell)->addText('ALAMAT RUMAH');
+		$table1->addCell(200, $styleCell)->addText(':');
+		$table1->addCell(4400, $styleCell)->addText(strtoupper($peg_alamatrumah));
 		
-		$table4->addRow();
-		$table4->addCell(2000, $styleCell)->addText('TELEPHONE');
-		$table4->addCell(200, $styleCell)->addText(':');
-		$table4->addCell(4400, $styleCell)->addText("$peg_telephone");
+		$table1->addRow();
+		$table1->addCell(2000, $styleCell)->addText('TELEPHONE');
+		$table1->addCell(200, $styleCell)->addText(':');
+		$table1->addCell(4400, $styleCell)->addText("$peg_telephone");
 		
 		/*
 		$image = base_url()."pegawai/foto/".$peg_nipp.".jpg";
-		$section->addImage("$image", array('width'=>400, 'height'=>400, 'align'=>'right'));	
+		$section->addImage("$image", array('width'=>100, 'height'=>100, 'align'=>'right'));	
 		*/
-		$section->addTextBreak(4);
+		$section->addTextBreak(1);
 		
 
 # II. PENDIDIKAN FORMAL		
@@ -3391,7 +3391,7 @@ class Pekerja extends Application {
 		// Define table style arrays
 		$styleTableBorder = array('borderSize'=>2, 'borderColor'=>'000000', 'cellMargin'=>30);
 		$styleFirstRow = array('borderBottomSize'=>2, 'borderBottomColor'=>'0000FF', 'bgColor'=>'AAAAAA');
-//'borderBottomSize'=>4,
+//'borderBottomSize'=>1,
 		// Define cell style arrays
 		$styleCellBorder = array('valign'=>'center');
 		//$styleCellBTLR = array('valign'=>'center', 'textDirection'=>PHPWord_Style_Cell::TEXT_DIR_BTLR);
@@ -3424,11 +3424,11 @@ class Pekerja extends Application {
 			$table2->addRow();
 			$table2->addCell(300)->addText("$no");
 			$table2->addCell(2000)->addText("$row_pendidikan[p_pdd_tingkat]");
-			$table2->addCell(4000)->addText("$row_pendidikan[p_pdd_masuk]");
+			$table2->addCell(1000)->addText("$row_pendidikan[p_pdd_masuk]");
 			$table2->addCell(2000)->addText("$row_pendidikan[p_pdd_lp]");
 			$table2->addCell(3000)->addText(" ");
 		}
-		$section->addTextBreak(4);
+		$section->addTextBreak(1);
 		
 		
 # III. PENDIDIKAN INFORMAL		
@@ -3442,8 +3442,8 @@ class Pekerja extends Application {
 		// Add cells
 		$table3->addCell(300, $styleCellBorder)->addText('NO', $fontStyle);
 		$table3->addCell(2000, $styleCellBorder)->addText('PENDIDIKAN', $fontStyle);
-		$table3->addCell(4500, $styleCellBorder)->addText('TGL. MULAI', $fontStyle);
-		$table3->addCell(4500, $styleCellBorder)->addText('TGL. SELESAI', $fontStyle);
+		$table3->addCell(1500, $styleCellBorder)->addText('TGL. MULAI', $fontStyle);
+		$table3->addCell(1500, $styleCellBorder)->addText('TGL. SELESAI', $fontStyle);
 		$table3->addCell(2000, $styleCellBorder)->addText('TEMPAT', $fontStyle);
 		$table3->addCell(2000, $styleCellBorder)->addText('KETERANGAN', $fontStyle);
 
@@ -3455,12 +3455,12 @@ class Pekerja extends Application {
 			$table3->addRow();
 			$table3->addCell(300)->addText("$no");
 			$table3->addCell(2000)->addText("$row_nstkp[p_nstkp_jenis]");
-			$table3->addCell(4500)->addText("$p_nstkp_pelaksanaan");
-			$table3->addCell(4500)->addText("$p_nstkp_selesai");
+			$table3->addCell(1500)->addText("$p_nstkp_pelaksanaan");
+			$table3->addCell(1500)->addText("$p_nstkp_selesai");
 			$table3->addCell(2000)->addText("$row_nstkp[p_nstkp_lembaga]");
 			$table3->addCell(2000)->addText('');
 		}
-		$section->addTextBreak(4);
+		$section->addTextBreak(1);
 
 # IV. RIWAYAT GOLONGAN		
 		$section->addText('IV. RIWAYAT GOLONGAN', 'r_titleStyle', 'p_titleStyle');
@@ -3487,7 +3487,7 @@ class Pekerja extends Application {
 			$table4->addCell(5000, $styleCellBorder)->addText("$row_riwayatgolongan[p_grd_skno]");
 			$table4->addCell(2000, $styleCellBorder)->addText("$row_riwayatgolongan[p_grd_tmt]");
 		}
-		$section->addTextBreak(4);		
+		$section->addTextBreak(1);		
 
 # V. RIWAYAT JABATAN		
 		$section->addText('V. RIWAYAT JABATAN', 'r_titleStyle', 'p_titleStyle');
@@ -3502,7 +3502,7 @@ class Pekerja extends Application {
 		$table5->addCell(2500, $styleCellBorder)->addText('JABATAN', $fontStyle);
 		$table5->addCell(2000, $styleCellBorder)->addText('DEPARTEMEN', $fontStyle);
 		$table5->addCell(3000, $styleCellBorder)->addText('SK', $fontStyle);
-		$table5->addCell(4500, $styleCellBorder)->addText('T.M.T', $fontStyle);
+		$table5->addCell(1500, $styleCellBorder)->addText('T.M.T', $fontStyle);
 		
 		$no = 0;
 		foreach($riwayat_jabatan as $row_riwayatjabatan){ 
@@ -3514,9 +3514,9 @@ class Pekerja extends Application {
 			$table5->addCell(2500, $styleCellBorder)->addText(strtoupper($row_riwayatjabatan['p_jbt_jabatan']));
 			$table5->addCell(2000, $styleCellBorder)->addText("$row_riwayatjabatan[p_jbt_unit]");
 			$table5->addCell(3000, $styleCellBorder)->addText(strtoupper($row_riwayatjabatan['p_jbt_skno']));
-			$table5->addCell(4500, $styleCellBorder)->addText("$jbt_tmt_start");
+			$table5->addCell(1500, $styleCellBorder)->addText("$jbt_tmt_start");
 		}
-		$section->addTextBreak(4);		
+		$section->addTextBreak(1);		
 		
 
 # VI. DATA KELUARGA		
@@ -3531,7 +3531,7 @@ class Pekerja extends Application {
 		$table6->addCell(300, $styleCellBorder)->addText('NO', $fontStyle);
 		$table6->addCell(3000, $styleCellBorder)->addText('NAMA', $fontStyle);
 		$table6->addCell(2000, $styleCellBorder)->addText('TGL LAHIR', $fontStyle);
-		$table6->addCell(4000, $styleCellBorder)->addText('UMUR', $fontStyle);
+		$table6->addCell(1000, $styleCellBorder)->addText('UMUR', $fontStyle);
 		$table6->addCell(3000, $styleCellBorder)->addText('HUBUNGAN', $fontStyle);
 		
 		$no = 0;
@@ -3552,7 +3552,7 @@ class Pekerja extends Application {
 			$table6->addCell(300, $styleCellBorder)->addText("$no");
 			$table6->addCell(3000, $styleCellBorder)->addText(strtoupper($row_pasangan['p_ps_nama']));
 			$table6->addCell(2000, $styleCellBorder)->addText("$tgl_lahir_pasangan");
-			$table6->addCell(4000, $styleCellBorder)->addText("$umur");
+			$table6->addCell(1000, $styleCellBorder)->addText("$umur");
 			$table6->addCell(3000, $styleCellBorder)->addText("$status_pasangan");
 		}	
 		# ANAK
@@ -3572,10 +3572,10 @@ class Pekerja extends Application {
 			$table6->addCell(300, $styleCellBorder)->addText("$no");
 			$table6->addCell(3000, $styleCellBorder)->addText(strtoupper($row_anak['peg_ank_nama']));
 			$table6->addCell(2000, $styleCellBorder)->addText("$tgl_lahir_anak");
-			$table6->addCell(4000, $styleCellBorder)->addText("$umur_anak");
+			$table6->addCell(1000, $styleCellBorder)->addText("$umur_anak");
 			$table6->addCell(3000, $styleCellBorder)->addText("ANAK KE-$anak");
 		}	
-		$section->addTextBreak(4);		
+		$section->addTextBreak(1);		
 		
 
 # VII.  SANKSI JABATAN 		
@@ -3590,9 +3590,9 @@ class Pekerja extends Application {
 		$table7->addCell(300, $styleCellBorder)->addText('NO', $fontStyle);
 		$table7->addCell(3000, $styleCellBorder)->addText('JENIS SANKSI', $fontStyle);
 		$table7->addCell(2000, $styleCellBorder)->addText('NO SK ', $fontStyle);
-		$table7->addCell(4500, $styleCellBorder)->addText('AWAL', $fontStyle);
-		$table7->addCell(4500, $styleCellBorder)->addText('AKHIR', $fontStyle);
-		$table7->addCell(4000, $styleCellBorder)->addText('KETERANGAN', $fontStyle);
+		$table7->addCell(1500, $styleCellBorder)->addText('AWAL', $fontStyle);
+		$table7->addCell(1500, $styleCellBorder)->addText('AKHIR', $fontStyle);
+		$table7->addCell(1000, $styleCellBorder)->addText('KETERANGAN', $fontStyle);
 		
 		$no = 0;
 		foreach($riwayat_sanksi as $row_sanksi){ 
@@ -3607,12 +3607,12 @@ class Pekerja extends Application {
 			$table7->addCell(300, $styleCellBorder)->addText("$no");
 			$table7->addCell(3000, $styleCellBorder)->addText(strtoupper($row_sanksi['p_snk_jenis']));
 			$table7->addCell(2000, $styleCellBorder)->addText("$row_sanksi[p_snk_no]");
-			$table7->addCell(4500, $styleCellBorder)->addText("$start");
-			$table7->addCell(4500, $styleCellBorder)->addText("$end");
-			$table7->addCell(4000, $styleCellBorder)->addText(strtoupper($row_sanksi['p_snk_keterangan']));
+			$table7->addCell(1500, $styleCellBorder)->addText("$start");
+			$table7->addCell(1500, $styleCellBorder)->addText("$end");
+			$table7->addCell(1000, $styleCellBorder)->addText(strtoupper($row_sanksi['p_snk_keterangan']));
 			
 		}	
-		$section->addTextBreak(4);
+		$section->addTextBreak(1);
 	
 	
 		$filename="$peg_nipp.docx"; //save our workbook as this file name
@@ -3666,7 +3666,7 @@ class Pekerja extends Application {
 		}
 		if ($this->input->post('search') == NULL )
 		{
-			$search_data = str_replace('%20',' ',$this->uri->segment(4));
+			$search_data = str_replace('%20',' ',$this->uri->segment(3));
 		}else{
 			$search_data = $this->input->post('search');
 		}
@@ -3677,7 +3677,7 @@ class Pekerja extends Application {
 		
 		//$type = '52';
 		$type = '55';
-		$limit = '400';
+		$limit = '100';
 		
 		#pagination config
 		$config['base_url'] = base_url().'index.php/pekerja/search_pegawai_keluar/'.$type_pegawai.'/'.$search_data.'/'; //set the base url for pagination
@@ -3714,8 +3714,8 @@ class Pekerja extends Application {
    {
       $config['upload_path'] = './pegawai/foto';
       $config['allowed_types'] = 'gif|jpg|png';
-      $config['max_size']  = '400';
-      $config['max_width']  = '4024';
+      $config['max_size']  = '100';
+      $config['max_width']  = '1024';
       $config['max_height']  = '768';
  
       
@@ -3742,8 +3742,8 @@ class Pekerja extends Application {
    {
       $config['upload_path'] = './pegawai/diklat/';
       $config['allowed_types'] = 'gif|jpg|png';
-      $config['max_size']  = '400';
-      $config['max_width']  = '4024';
+      $config['max_size']  = '100';
+      $config['max_width']  = '1024';
       $config['max_height']  = '768';
  
       
@@ -3798,8 +3798,8 @@ class Pekerja extends Application {
 			$config['allowed_types'] = 'pdf|gif|jpg|png';
 			$config['max_size']  = '9999';
 			$config['overwrite']	=	TRUE;
-			//$filenamebantu = str_replace(' ','_',$no_sk)."-$id_peg_jabatan-".$update_on.".".$ext[4];
-			$filenamebantu = str_replace(' ','_',$no_sk).".".$ext[4]; //filenya ditindih dengan file baru
+			//$filenamebantu = str_replace(' ','_',$no_sk)."-$id_peg_jabatan-".$update_on.".".$ext[1];
+			$filenamebantu = str_replace(' ','_',$no_sk).".".$ext[1]; //filenya ditindih dengan file baru
 			$config['file_name']=$filenamebantu;
 			
 			
@@ -3841,7 +3841,7 @@ class Pekerja extends Application {
 		<body align="center">
 		<?php
 		$file = base_url()."pegawai/skjabatan/".$nama_file;
-		echo "<embed src= '".$file."' width='4200' height='666' ></embed>";
+		echo "<embed src= '".$file."' width='1200' height='666' ></embed>";
 		?>
 		<br><br>
 		<!-- <input type="button" value="Back" onclick="goBack()"> -->
@@ -3889,7 +3889,7 @@ class Pekerja extends Application {
 		<body align="center">
 		<?php
 		$file = base_url()."pegawai/sksanksi/".$nama_file;
-		echo "<embed src= '".$file."' width='4200' height='666' ></embed>";
+		echo "<embed src= '".$file."' width='1200' height='666' ></embed>";
 		?>
 		<br><br>
 		<!-- <input type="button" value="Back" onclick="goBack()"> -->
@@ -4054,16 +4054,16 @@ class Pekerja extends Application {
 			$this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(5.54); 
 			$this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(5.54);    
 			$this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(26.5);  
-			$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(40.88); 
-			$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(40.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(10.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(10.88); 
 			$this->excel->getActiveSheet()->getColumnDimension('G')->setWidth(5.63); 
 			$this->excel->getActiveSheet()->getColumnDimension('H')->setWidth(8.88); 
-			$this->excel->getActiveSheet()->getColumnDimension('I')->setWidth(44.88); 
-			$this->excel->getActiveSheet()->getColumnDimension('J')->setWidth(40.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('I')->setWidth(14.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('J')->setWidth(10.88); 
 			$this->excel->getActiveSheet()->getColumnDimension('K')->setWidth(5.88); 
-			$this->excel->getActiveSheet()->getColumnDimension('L')->setWidth(45.88); 
-			$this->excel->getActiveSheet()->getColumnDimension('M')->setWidth(45.88); 
-			$this->excel->getActiveSheet()->getColumnDimension('N')->setWidth(45.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('L')->setWidth(15.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('M')->setWidth(15.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('N')->setWidth(15.88); 
 			
 			 
 			$filename="Data Rekapitulasi Pegawai $jenis.xls"; //save our workbook as this file name
@@ -4182,10 +4182,10 @@ class Pekerja extends Application {
 			$this->excel->getActiveSheet()->getStyle('A6:F6')->getAlignment()->setWrapText(true);
 			$this->excel->getActiveSheet()->getColumnDimension('A')->setWidth(8.54);  
 			$this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(25.54); 
-			$this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(45.54);    
-			$this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(45.54);  
-			$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(45.54); 
-			$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(48.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(15.54);    
+			$this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(15.54);  
+			$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(15.54); 
+			$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(18.88); 
 			
 			 
 			$filename="Data Rekapitulasi Jumlah Pegawai $jenis Berdasarkan Jenis Kelamin.xls"; //save our workbook as this file name
@@ -4329,9 +4329,9 @@ class Pekerja extends Application {
 			//Set column widths                                                       
 			$this->excel->getActiveSheet()->getColumnDimension('A')->setWidth(5.54);  
 			$this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(20.54); 
-			$this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(40.5);    
-			$this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(40.5);  
-			$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(40.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(10.5);    
+			$this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(10.5);  
+			$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(10.88); 
 			$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(20.88); 
 			
 			 
@@ -4480,13 +4480,13 @@ class Pekerja extends Application {
 			$this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(5.54); 
 			$this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(5.54);    
 			$this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(26.5);  
-			$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(40.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(10.88); 
 			$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(7.77); 
-			$this->excel->getActiveSheet()->getColumnDimension('G')->setWidth(40.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('G')->setWidth(10.88); 
 			$this->excel->getActiveSheet()->getColumnDimension('H')->setWidth(8.88); 
 			$this->excel->getActiveSheet()->getColumnDimension('I')->setWidth(24.88); 
-			$this->excel->getActiveSheet()->getColumnDimension('J')->setWidth(48.88); 
-			$this->excel->getActiveSheet()->getColumnDimension('K')->setWidth(45.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('J')->setWidth(18.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('K')->setWidth(15.88); 
 			
 			
 			
@@ -4600,9 +4600,9 @@ class Pekerja extends Application {
 			$this->excel->getActiveSheet()->getStyle('A6:D6')->getAlignment()->setWrapText(true);
 			$this->excel->getActiveSheet()->getColumnDimension('A')->setWidth(5.54);  
 			$this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(20.54); 
-			$this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(40.5);    
-			$this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(40.5);  
-			$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(40.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(10.5);    
+			$this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(10.5);  
+			$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(10.88); 
 			$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(20.88); 
 			
 			 
@@ -4722,10 +4722,10 @@ class Pekerja extends Application {
 			$this->excel->getActiveSheet()->getStyle('A6:F6')->getAlignment()->setWrapText(true);
 			$this->excel->getActiveSheet()->getColumnDimension('A')->setWidth(8.54);  
 			$this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(25.54); 
-			$this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(45.54);    
-			$this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(45.54);  
-			$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(45.54); 
-			$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(48.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(15.54);    
+			$this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(15.54);  
+			$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(15.54); 
+			$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(18.88); 
 			
 			 
 			$filename="Data Rekapitulasi Jumlah Pegawai $jenis Berdasarkan Jenis Kelamin.xls"; //save our workbook as this file name
@@ -4878,16 +4878,16 @@ class Pekerja extends Application {
 			$this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(5.54); 
 			$this->excel->getActiveSheet()->getColumnDimension('C')->setWidth(5.54);    
 			$this->excel->getActiveSheet()->getColumnDimension('D')->setWidth(26.5);  
-			$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(40.88); 
-			$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(40.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('E')->setWidth(10.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('F')->setWidth(10.88); 
 			$this->excel->getActiveSheet()->getColumnDimension('G')->setWidth(5.63); 
 			$this->excel->getActiveSheet()->getColumnDimension('H')->setWidth(8.88); 
-			$this->excel->getActiveSheet()->getColumnDimension('I')->setWidth(44.88); 
-			$this->excel->getActiveSheet()->getColumnDimension('J')->setWidth(40.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('I')->setWidth(14.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('J')->setWidth(10.88); 
 			$this->excel->getActiveSheet()->getColumnDimension('K')->setWidth(5.88); 
-			$this->excel->getActiveSheet()->getColumnDimension('L')->setWidth(45.88); 
-			$this->excel->getActiveSheet()->getColumnDimension('M')->setWidth(45.88); 
-			$this->excel->getActiveSheet()->getColumnDimension('N')->setWidth(45.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('L')->setWidth(15.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('M')->setWidth(15.88); 
+			$this->excel->getActiveSheet()->getColumnDimension('N')->setWidth(15.88); 
 			
 			 
 			$filename="Data Rekapitulasi Pegawai $jenis.xls"; //save our workbook as this file name
